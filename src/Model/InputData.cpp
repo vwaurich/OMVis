@@ -1,0 +1,241 @@
+/*
+* Copyright (C) 2016, Volker Waurich
+*
+* This file is part of OMVis.
+*
+* OMVis is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* OMVis is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+
+/*
+ * InputData.cpp
+ *
+ *  Created on: 17.02.2016
+ *      Author: mf
+ */
+
+#include <iostream>
+#include <string>
+#include "Input.hpp"
+#include "Model/InputData.hpp"
+#include "Util/Logger.hpp"
+
+namespace Model
+{
+
+    InputData::InputData()
+            : _data(),
+              _keyToInputMap(),
+              _keyboardToKeyMap()
+    {
+    }
+
+    InputData::InputData(const InputData& ipd)
+            : _data(ipd._data),
+              _keyToInputMap(ipd._keyToInputMap),
+              _keyboardToKeyMap(ipd._keyboardToKeyMap)
+    {
+    }
+
+    void InputData::initializeInputs(fmi1_import_t* fmu)
+    {
+        // init data
+        // ------------------
+        fmi1_import_variable_list_t* allVariables = fmi1_import_get_variable_list(fmu);
+        //comparison function ptr
+        int (*causalityCheck)(fmi1_import_variable_t* vl, void* enumIdx);
+        causalityCheck = &causalityEqual;
+        int (*baseTypeCheck)(fmi1_import_variable_t* vl, void* refBaseType);
+        baseTypeCheck = &baseTypeEqual;
+        //all vars per type
+        //fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (int*)fmi1_causality_enu_input);
+        fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (void*)fmi1_causality_enu_input);
+
+        fmi1_import_variable_list_t* realInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_real);
+        fmi1_import_variable_list_t* integerInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_int);
+        fmi1_import_variable_list_t* booleanInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_bool);
+        fmi1_import_variable_list_t* stringInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_str);
+        //all vrs per type
+        _data._vrReal = fmi1_import_get_value_referece_list(realInputs);
+        _data._vrInteger = fmi1_import_get_value_referece_list(integerInputs);
+        _data._vrBoolean = fmi1_import_get_value_referece_list(booleanInputs);
+        _data._vrString = fmi1_import_get_value_referece_list(stringInputs);
+        //the number of inputs per type
+        _data._numReal = fmi1_import_get_variable_list_size(realInputs);
+        _data._numInteger = fmi1_import_get_variable_list_size(integerInputs);
+        _data._numBoolean = fmi1_import_get_variable_list_size(booleanInputs);
+        _data._numString = fmi1_import_get_variable_list_size(stringInputs);
+		//the variable names
+		getVariableNames(realInputs, _data._numReal, &_data.namesReal);
+		getVariableNames(integerInputs, _data._numInteger, &_data.namesInteger);
+		getVariableNames(booleanInputs, _data._numBoolean, &_data.namesBool);
+		getVariableNames(stringInputs, _data._numString, &_data.namesString);
+		std::cout << "reals: " << _data.namesReal.size()<<std::endl;
+		std::cout << "ints: " << _data.namesInteger.size() << std::endl;
+
+		std::cout << "bools: " << _data.namesBool.size() << std::endl;
+
+		std::cout << "strings: " << _data.namesString.size() << std::endl;
+
+        LOGGER_WRITE(std::string("There are ") + std::to_string(_data._numBoolean) + std::string(" boolean inputs, ")
+                                               + std::to_string(_data._numReal) + std::string(" real inputs, ")
+                                               + std::to_string(_data._numInteger) + std::string(" integer inputs and ")
+                                               + std::to_string(_data._numString) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
+        //std::cout << "There are " << _data._numBoolean << " boolean inputs " << _data._numReal << " real inputs " << _data._numInteger << " integer inputs " << _data._numString << " string inputs" << std::endl;
+
+        // the values for the inputs per type
+        _data._valuesReal = (fmi1_real_t*) calloc(_data._numReal, sizeof(fmi1_real_t));
+        _data._valuesInteger = (fmi1_integer_t*) calloc(_data._numInteger, sizeof(fmi1_integer_t));
+        _data._valuesBoolean = (fmi1_boolean_t*) calloc(_data._numBoolean, sizeof(fmi1_boolean_t));
+        _data._valuesString = (fmi1_string_t*) calloc(_data._numString, sizeof(fmi1_string_t));
+        // malloc attributes
+        _data._attrReal = (attributes_real*) calloc(_data._numReal, sizeof(attributes_real));
+
+        // init keymap and attributes
+        // ------------------
+        _keyboardToKeyMap[119] = KEY_W;
+        _keyboardToKeyMap[97] = KEY_A;
+        _keyboardToKeyMap[115] = KEY_S;
+        _keyboardToKeyMap[100] = KEY_D;
+
+        inputKey keys_real[2] = { JOY_1_X, JOY_1_Y };
+        inputKey keys_bool[4] = { KEY_W, KEY_A, KEY_S, KEY_D };
+        int k = 0;
+        //make map from keys to input values
+        for (unsigned int r = 0; r < _data._numReal; ++r)
+        {
+            KeyMapValue mapValue = { fmi1_base_type_real, r };
+            _keyToInputMap[keys_real[r]] = mapValue;
+            LOGGER_WRITE(std::string("Assign realinput ") + std::to_string(r) + std::string(" to key ") + std::to_string(keys_real[r]), Util::LC_INIT, Util::LL_INFO);
+            //std::cout << "assign realinput " << r << " to key " << keys_real[r] << std::endl;
+            fmi1_import_real_variable_t* var = fmi1_import_get_variable_as_real(fmi1_import_get_variable(realInputs, r));
+            _data._attrReal[r]._max = fmi1_import_get_real_variable_max(var);
+            _data._attrReal[r]._min = fmi1_import_get_real_variable_min(var);
+            _data._attrReal[r]._start = fmi1_import_get_real_variable_start(var);
+            _data._attrReal[r]._nominal = fmi1_import_get_real_variable_nominal(var);
+            std::cout << "min " << _data._attrReal[r]._min << " max " << _data._attrReal[r]._max << std::endl;
+            ++k;
+        }
+        for (unsigned int i = 0; i < _data._numInteger; ++i)
+        {
+            KeyMapValue mapValue = { fmi1_base_type_int, i };
+            _keyToInputMap[keys_real[k]] = mapValue;
+            ++k;
+        }
+        for (unsigned int b = 0; b < _data._numBoolean; ++b)
+        {
+            KeyMapValue mapValue = { fmi1_base_type_bool, b };
+            _keyToInputMap[keys_bool[b]] = mapValue;
+            std::cout << "assign boolinput " << b << " to key " << keys_bool[b] << std::endl;
+            ++k;
+        }
+        for (unsigned int s = 0; s < _data._numString; ++s)
+        {
+            KeyMapValue mapValue = { fmi1_base_type_str, s };
+            _keyToInputMap[keys_real[k]] = mapValue;
+            ++k;
+        }
+
+        for (keyMapIter iter = _keyToInputMap.begin(); iter != _keyToInputMap.end(); ++iter)
+            std::cout << "Key: " << iter->first << "  -->  " << "Values:" << iter->second._baseType << iter->second._valueIdx << std::endl;
+    }
+
+    void InputData::setInputsInFMU(fmi1_import_t* fmu)
+    {
+        fmi1_status_t status = fmi1_import_set_real(fmu, _data._vrReal, _data._numReal, _data._valuesReal);
+        status = fmi1_import_set_integer(fmu, _data._vrInteger, _data._numInteger, _data._valuesInteger);
+        status = fmi1_import_set_boolean(fmu, _data._vrBoolean, _data._numBoolean, _data._valuesBoolean);
+        status = fmi1_import_set_string(fmu, _data._vrBoolean, _data._numBoolean, _data._valuesString);
+    }
+
+    void InputData::printValues()
+    {
+		for (unsigned int r = 0; r < _data._numReal; ++r)
+		{
+			std::cout << "realinput " << r << " (" << _data.namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
+		}
+        for (unsigned int i = 0; i < _data._numInteger; ++i)
+		{
+			std::cout << "integer input " << i << " (" << _data.namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
+		}
+		for (unsigned int b = 0; b < _data._numBoolean; ++b)
+		{
+			std::cout << "bool input " << b << " (" << _data.namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
+		}
+        for (unsigned int s = 0; s < _data._numString; ++s)
+            std::cout << "string input " << s <<" (" << _data.namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
+    }
+
+    void InputData::resetInputValues()
+    {
+        //reset real input values to 0
+        for (unsigned int r = 0; r < _data._numReal; ++r)
+            _data._valuesReal[r] = 0.0;
+        //reset integer input values to 0
+        for (unsigned int i = 0; i < _data._numInteger; ++i)
+            _data._valuesInteger[i] = 0;
+        //reset boolean input values to 0
+        for (unsigned int b = 0; b < _data._numBoolean; ++b)
+            _data._valuesBoolean[b] = false;
+        //reset string input values to 0
+        for (unsigned int s = 0; s < _data._numString; ++s)
+            _data._valuesString[s] = "";
+    }
+
+    bool setRealInputValueForInputKey(inputKey key, double value, InputData data)
+    {
+        keyMapIter iter = data._keyToInputMap.find(key);
+
+        if (iter != data._keyToInputMap.end())
+        {
+            KeyMapValue iterValue = iter->second;
+            int baseTypeIdx = iterValue._baseType;
+            if (baseTypeIdx == fmi1_base_type_real)
+            {
+                int realIdx = iterValue._valueIdx;
+                //value
+                double min = data._data._attrReal[realIdx]._min;
+                double max = data._data._attrReal[realIdx]._max;
+                double val = value / 32767.0;
+                data._data._valuesReal[iterValue._valueIdx] = val;
+                //std::cout<<"set the value "<<val<<std::endl;
+                return true;
+            }
+            else
+            {
+                std::cout << "the value is not for a real input" << std::endl;
+                return false;
+            }
+        }
+        else
+            return false;
+
+        return false;
+    }
+
+
+	void InputData::getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames)
+	{
+		for (int idx = 0; idx < numVars; idx++)
+		{
+			fmi1_import_variable_t* var = fmi1_import_get_variable(varLst, idx);
+			const char* na = fmi1_import_get_variable_name(var);
+			std::string name = "";
+			name.assign(na);
+			varNames->push_back(name);
+		}
+	}
+
+
+}  // End namespace Model
