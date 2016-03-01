@@ -35,37 +35,39 @@
 
 namespace Initialization
 {
-//    Factory::Factory(Util::CommandLineArgs* cLArgs)
-//            : _useFMU(cLArgs->_useFMU),
-//              _modelName(cLArgs->_modelName),
-//              _modelPath(cLArgs->_modelPath)
-//    {
-//    }
 
     Model::OMVisualizerAbstract* Factory::createVisualizationFromCLargs(const Util::CommandLineArgs& cLArgs)
     {
-        return createVisualizationObjects(cLArgs._modelName, cLArgs._modelPath, cLArgs._useFMU);
+        return createVisualizationObject(cLArgs._modelName, cLArgs._modelPath, cLArgs._useFMU);
     }
 
-	Model::OMVisualizerAbstract* Factory::createVisualizationObjects(std::string modelName, std::string pathName, bool useFMU)
-	{
-		Model::OMVisualizerAbstract* result;
+    Model::OMVisualizerAbstract* Factory::createVisualizationObject(const std::string modelName, const std::string pathName, const bool useFMU)
+    {
+        Model::OMVisualizerAbstract* result;
 
-		//FMU based visualisation
-		if (useFMU)
-		{
-			result = (Model::OMVisualizerAbstract*)(new Model::OMVisualizerFMU(modelName, pathName));
-			LOGGER_WRITE("Initialize OMVisalizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
-		}
-		//Mat-file based visualisation
-		else
-		{
-			result = (Model::OMVisualizerAbstract*)(new Model::OMVisualizerMAT(modelName, pathName));
-			LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
-		}
-		return result;
-	}
+        // Command line is empty. Model has to be loaded via GUI. Return pointer to base class object.
+        if (modelName.empty() && pathName.empty())
+        {
+            result = new Model::OMVisualizerAbstract();
+            LOGGER_WRITE("Initialize OMVisalizerAbstract.", Util::LC_LOADER, Util::LL_DEBUG);
+        }
+        else
+        {
+            //FMU based visualisation
+            if (useFMU)
+            {
+                result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerFMU(modelName, pathName));
+                LOGGER_WRITE("Initialize OMVisalizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
+            }
+            //Mat-file based visualisation
+            else
+            {
+                result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerMAT(modelName, pathName));
+                LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
+            }
+        }
+        return result;
+    }
 
 }  // End namespace Initialization
-
 
