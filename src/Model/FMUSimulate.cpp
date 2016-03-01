@@ -1,22 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <iostream>
 #include "Model/FMUSimulate.hpp"
@@ -151,13 +150,17 @@ namespace Model
         }
     }
 
-	fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(std::string typeString)
-	{
-		if (!typeString.compare("real")) return fmi1_base_type_real;
-		else if (!typeString.compare("bool")) return fmi1_base_type_bool;
-		else if (!typeString.compare("inte")) return fmi1_base_type_int;
-		else if (!typeString.compare("stri")) return fmi1_base_type_str;
-		else std::cout << "getFMI1baseTypeFor4CharString failed" << std::endl;
-	}
-
+    fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(std::string typeString)
+    {
+        if (!typeString.compare("real"))
+            return fmi1_base_type_real;
+        else if (!typeString.compare("bool"))
+            return fmi1_base_type_bool;
+        else if (!typeString.compare("inte"))
+            return fmi1_base_type_int;
+        else if (!typeString.compare("stri"))
+            return fmi1_base_type_str;
+        else
+            std::cout << "getFMI1baseTypeFor4CharString failed" << std::endl;
+    }
 }  // End namespace Model
