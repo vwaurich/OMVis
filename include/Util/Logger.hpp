@@ -38,7 +38,6 @@
 #include <string>
 #include <tuple>
 #include <vector>
-
 #include <iostream>
 
 namespace Util
@@ -73,10 +72,11 @@ namespace Util
 
         /**
          * Create a new object for logger settings. All categories are set to the warning level by default.
+         * \todo The number of logger categories is explicitly used in this function. Make it more generic.
          */
         LogSettings()
         {
-            modes = std::vector<LogLevel>(5, LL_DEBUG);
+            modes = std::vector<LogLevel>(7, LL_DEBUG);
         }
         /**
          * Set all categories at once to the given level.
