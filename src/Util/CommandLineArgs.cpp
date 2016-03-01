@@ -42,9 +42,9 @@ namespace Util
 		namespace po = boost::program_options;
 		po::options_description desc("Options");
 		desc.add_options()("help", "Prints help message.")
-			("path", boost::program_options::value<std::string>()->required(),
+			("path", boost::program_options::value<std::string>(),
 				"Path where the model file is stored in.")
-			("model,M", boost::program_options::value<std::string>()->required(),
+			("model,M", boost::program_options::value<std::string>(),
 				"Name of the model file which should be visualized.")
 			("useFMU,U", boost::program_options::bool_switch()->default_value(false),
 				"OMVIS uses a FMU if specified for visualization.")
@@ -70,13 +70,13 @@ namespace Util
 
 			if (vm.count("path"))
 				result._modelPath = vm["path"].as<std::string>();
-			else
-				throw std::runtime_error("Path to visualization model required, but missing.");
+//			else
+//				throw std::runtime_error("Path to visualization model required, but missing.");
 
 			if (vm.count("model"))
 				result._modelName = vm["model"].as<std::string>();
-			else
-				throw std::runtime_error("Model file required, but missing.");
+//			else
+//				throw std::runtime_error("Model file required, but missing.");
 
 			//Set value of useFMU
 			result._useFMU = vm["useFMU"].as<bool>();
