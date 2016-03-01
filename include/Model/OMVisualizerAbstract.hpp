@@ -98,19 +98,19 @@ namespace Model
          * \remark All classes that derive from OMVisualizerAbstract
          * @param omvm
          */
-        virtual void updateVisAttributes(double time) { };
+        virtual void updateVisAttributes(const double time) { };
 
         /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
          *
          * \remark All classes that derive from OMVisualizerAbstract
          */
-        virtual void initializeVisAttributes(double time) { };
+        virtual void initializeVisAttributes(const double time) { };
 
         /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
          *
          * \remark All classes that derive from OMVisualizerAbstract
          */
-        virtual void updateScene(double time) { };
+        virtual void updateScene(const double time) { };
 
 		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
 		*/
@@ -140,8 +140,8 @@ namespace Model
         OMVisualBase* _baseData;
         /// \todo: Can this attr. be private?
         View::OMVisualViewer* _viewerStuff;
-        UpdateVisitor* nodeUpdater;
-        View::OMVManager* omvManager;
+        UpdateVisitor* _nodeUpdater;
+        View::OMVManager* _omvManager;
     };
 
 }  // End namespace Model

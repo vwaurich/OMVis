@@ -42,34 +42,32 @@ namespace Model
      public:
         OMVisualizerMAT() = delete;
 
-        OMVisualizerMAT(std::string model, std::string path);
+        OMVisualizerMAT(const std::string model, const std::string path);
 
         virtual ~OMVisualizerMAT() = default;
 
         OMVisualizerMAT(const OMVisualizerMAT& omvm) = delete;
         OMVisualizerMAT& operator=(const OMVisualizerMAT& omvm) = delete;
 
-        void readMat(std::string modelString, std::string dirString);
+        void readMat(const std::string modelString, const std::string dirString);
 
         virtual void initData();
 
-        virtual void simulate(View::OMVManager& omvm)
-        {
-        }
+        virtual void simulate(View::OMVManager& omvm) { }
 
 		/*! \brief Implementation for OMVisualizerAbstract::updateVisAttributes to update all visualization attributes based on a mat file
 		*
 		* @param time - the point of time
 		*/
-		void updateVisAttributes(double time);
+		void updateVisAttributes(const double time);
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		*/
-		void initializeVisAttributes(double time);
+		void initializeVisAttributes(const double time);
 
 		/*! \brief For MAT-file based visualization, nothing has to be done. Just get the visualizationAttributes
 		*/
-		void updateScene(double time);
+		void updateScene(const double time);
 
 		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
 		*/

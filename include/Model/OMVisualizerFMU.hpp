@@ -63,11 +63,11 @@ namespace Model
         OMVisualizerFMU& operator=(const OMVisualizerFMU& omvf) = delete;
 
         /// Loads and initializes FMU file.
-        void loadFMU(std::string model, std::string dir);
+        void loadFMU(const std::string model, const std::string dir);
 
         virtual void simulate(View::OMVManager& omvm);
 
-        double simulateStep(double time);
+        double simulateStep(const double time);
 
         /// \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
         void initData();
@@ -80,15 +80,15 @@ namespace Model
 		/*! \brief This method updates the actual data for the visuaslization bodies by using variables from the fmu.
 		*
 		*/
-		void updateVisAttributes(double time);
+		void updateVisAttributes(const double time);
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		*/
-		void initializeVisAttributes(double time);
+		void initializeVisAttributes(const double time);
 
 		/*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
 		*/
-		void updateScene(double time);
+		void updateScene(const double time);
 
         /*! \brief The input values and the controller device are connected so that the user can control the simulation.
          *

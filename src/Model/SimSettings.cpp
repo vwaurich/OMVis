@@ -42,59 +42,59 @@ namespace Model
     {
     }
 
-    void SimSettings::set_tend(fmi1_real_t t)
+    void SimSettings::set_tend(const fmi1_real_t t)
     {
         _tend = t;
     }
 
-    void SimSettings::set_tstart(fmi1_real_t t)
+    void SimSettings::set_tstart(const fmi1_real_t t)
     {
         _tstart = t;
     }
 
-    void SimSettings::set_hdef(fmi1_real_t h)
+    void SimSettings::set_hdef(const fmi1_real_t h)
     {
         _hdef = h;
     }
 
-    void SimSettings::set_relativeTolerance(fmi1_real_t t)
+    void SimSettings::set_relativeTolerance(const fmi1_real_t t)
     {
         _relativeTolerance = t;
     }
 
     fmi1_real_t SimSettings::get_tend()
     {
-        return (_tend);
+        return _tend;
     }
 
     fmi1_real_t SimSettings::get_tstart()
     {
-        return (_tstart);
+        return _tstart;
     }
 
     fmi1_real_t SimSettings::get_hdef()
     {
-        return (_hdef);
+        return _hdef;
     }
 
     fmi1_real_t SimSettings::get_relativeTolerance()
     {
-        return (_relativeTolerance);
+        return _relativeTolerance;
     }
 
     fmi1_boolean_t SimSettings::get_toleranceControlled()
     {
-        return (_toleranceControlled);
+        return _toleranceControlled;
     }
 
     fmi1_boolean_t SimSettings::get_callEventUpdate()
     {
-        return (_callEventUpdate);
+        return _callEventUpdate;
     }
 
     fmi1_boolean_t SimSettings::get_intermediateResults()
     {
-        return (_intermediateResults);
+        return _intermediateResults;
     }
 
 }  // End namespace Model

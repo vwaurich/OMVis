@@ -144,7 +144,7 @@ QWidget* MainWidget::setupTimeSliderWidget(QSlider* timeSlider)
     //the slider row
     int value = -1;
     timeSlider->setFixedHeight(30);
-    timeSlider->setSliderPosition(_omVisualizer->omvManager->getTimeProgress());
+    timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
     LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ") + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
     value = timeSlider->sliderPosition();
 
@@ -283,13 +283,13 @@ void MainWidget::updateScene()
 
 void MainWidget::updateGUIelements()
 {
-    _timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->omvManager->_visTime)).append(QString(" sec")));
-    _timeSlider->setSliderPosition(_omVisualizer->omvManager->getTimeProgress());
+    _timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->_omvManager->_visTime)).append(QString(" sec")));
+    _timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
 }
 
 void MainWidget::setVisTimeSlotFunction(int val)
 {
-    _omVisualizer->omvManager->_visTime = (_omVisualizer->omvManager->_endTime - _omVisualizer->omvManager->_startTime) * (float) (val / 100.0);
+    _omVisualizer->_omvManager->_visTime = (_omVisualizer->_omvManager->_endTime - _omVisualizer->_omvManager->_startTime) * (float) (val / 100.0);
     _omVisualizer->sceneUpdate();
 }
 
@@ -355,7 +355,7 @@ void MainWidget::openDialogInputMapper()
 		}
 		for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numReal; inputIdx++)
 		{
-			std::string var = fmuData->_inputData._data.namesReal.at(inputIdx);
+			std::string var = fmuData->_inputData._data._namesReal.at(inputIdx);
 
 			QHBoxLayout* inputRow = createInputMapperRow(inputIdx,var,"real");
 			valueLayout->addLayout(inputRow);
@@ -368,7 +368,7 @@ void MainWidget::openDialogInputMapper()
 		}
 		for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numBoolean; inputIdx++)
 		{
-			QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data.namesBool.at(inputIdx), "bool");
+			QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesBool.at(inputIdx), "bool");
 			valueLayout->addLayout(inputRow);
 		}
 		//integer inputs
@@ -379,13 +379,13 @@ void MainWidget::openDialogInputMapper()
 		}
 		for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numInteger; inputIdx++)
 		{
-			QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data.namesInteger.at(inputIdx), "integer");
+			QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesInteger.at(inputIdx), "integer");
 			valueLayout->addLayout(inputRow);
 		}
 		//string inputs 
 		for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numString; inputIdx++)
 		{
-			QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data.namesString.at(inputIdx), "string");
+			QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesString.at(inputIdx), "string");
 			valueLayout->addLayout(inputRow);
 		}
 	}

@@ -1,22 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * OMVisualizerFMU.cpp
@@ -26,6 +25,7 @@
  */
 
 #include <iostream>
+#include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisualViewer.hpp"
 #include "View/OMVManager.hpp"
@@ -42,7 +42,7 @@ namespace Model
     {
     }
 
-    void OMVisualizerFMU::loadFMU(std::string model, std::string dir)
+    void OMVisualizerFMU::loadFMU(const std::string model, const std::string dir)
     {
         //setup fmu-simulation stuff
         //_simSettings = new SimSettings;
@@ -50,13 +50,15 @@ namespace Model
 
         //load and initialize fmu
         _fmul = load(dir.c_str(), fmuFileName.c_str());
-        std::cout << "LOADED!!!!!!!!!!!" << std::endl;
+        LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_INIT, Util::LL_DEBUG);
+        //std::cout << "LOADED!!!!!!!!!!!" << std::endl;
 
         _fmuData = initializeFMU(_fmul._fmu, _simSettings);
-        std::cout << "INITIALIZED!!!!!!!!!!!" << std::endl;
+        LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_INIT, Util::LL_DEBUG);
+        //std::cout << "INITIALIZED!!!!!!!!!!!" << std::endl;
 
         _inputData.initializeInputs(_fmul._fmu);
-		_inputData.printValues();
+        _inputData.printValues();
 
         //assign interactive inputs
         //for (unsigned int i = 0; i < inputs.n_inputs; i++){
@@ -78,7 +80,7 @@ namespace Model
         }
     }
 
-    double OMVisualizerFMU::simulateStep(double time)
+    double OMVisualizerFMU::simulateStep(const double time)
     {
         //tcur = settings.tstart;
         //hcur = settings.hdef;
@@ -92,7 +94,8 @@ namespace Model
             if (_fmuData._eventIndicators[k] * _fmuData._eventIndicatorsPrev[k] < 0)
             {
                 zero_crossning_event = 1;
-                std::cout << "AN EVENT at " << _fmuData._tcur << std::endl;
+                LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: Event occurred at ") + std::to_string(_fmuData._tcur), Util::LC_CTR, Util::LL_DEBUG);
+                //std::cout << "AN EVENT at " << _fmuData._tcur << std::endl;
                 break;
             }
         }
@@ -133,8 +136,8 @@ namespace Model
 
         /* Solve system */
         _fmuData._fmiStatus = fmi1_import_get_derivatives(_fmul._fmu, _fmuData._statesDer, _fmuData._nStates);
-		
-		//print out some values for debugging:
+
+        //print out some values for debugging:
         //std::cout<<"DO EULER at "<<data.tcur<<std::endl;
         //fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmul._fmu, "prismatic.s");
         //const fmi1_value_reference_t vr  = fmi1_import_get_variable_vr(var);
@@ -152,7 +155,7 @@ namespace Model
         _fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmul._fmu, &_simSettings->_callEventUpdate);
 
         _inputData.resetInputValues();
-		return _fmuData._tcur;
+        return _fmuData._tcur;
     }
 
     void OMVisualizerFMU::initData()
@@ -160,7 +163,7 @@ namespace Model
         OMVisualizerAbstract::initData();
         loadFMU(_baseData->_modelName, _baseData->_dirName);
         linkInputsToEventHandler();
-        _simSettings->set_tend(omvManager->_endTime);
+        _simSettings->set_tend(_omvManager->_endTime);
         _simSettings->set_hdef(0.001);
     }
 
@@ -187,69 +190,67 @@ namespace Model
         _viewerStuff->_viewer.addEventHandler(kbEventHandler);
     }
 
-	void OMVisualizerFMU::updateVisAttributes(double time)
-	{
-		// Update all shapes
-		rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
-		unsigned int shapeIdx = 0;
-		for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
-		{
-			// get the values for the scene graph objects
-			_baseData->_visAttr._type = getShapeType(shapeNode);
-			_baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time,_fmul._fmu);
-			_baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmul._fmu);
-			rAndT rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T,
-				_baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
-			_baseData->_visAttr._r = rT._r;
-			_baseData->_visAttr._T = rT._T;
+    void OMVisualizerFMU::updateVisAttributes(const double time)
+    {
+        // Update all shapes
+        rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
+        unsigned int shapeIdx = 0;
+        for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+        {
+            // get the values for the scene graph objects
+            _baseData->_visAttr._type = getShapeType(shapeNode);
+            _baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmul._fmu);
+            _baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmul._fmu);
+            rAndT rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
+            _baseData->_visAttr._r = rT._r;
+            _baseData->_visAttr._T = rT._T;
 
-			_baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
+            _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
 
-			//update the shapes
-			nodeUpdater->_visAttr = _baseData->_visAttr;
-			//updater.visAttr.dumpVisAttributes();
+            //update the shapes
+            _nodeUpdater->_visAttr = _baseData->_visAttr;
+            //updater.visAttr.dumpVisAttributes();
 
-			//get the scene graph nodes and stuff
-			osg::ref_ptr<osg::Node> child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
-			child->accept(*nodeUpdater);
-			shapeIdx++;
-		} //end while
-	}  //end function
+            //get the scene graph nodes and stuff
+            osg::ref_ptr<osg::Node> child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
+            child->accept(*_nodeUpdater);
+            shapeIdx++;
+        }  //end while
+    }  //end function
 
-	void OMVisualizerFMU::initializeVisAttributes(double time)
-	{
-		_fmuData = initializeFMU(_fmul._fmu, _simSettings);
-		omvManager->_visTime = omvManager->_startTime;
-		omvManager->_simTime = omvManager->_startTime;
-		updateVisAttributes(omvManager->_visTime);
-	}
+    void OMVisualizerFMU::initializeVisAttributes(const double time)
+    {
+        _fmuData = initializeFMU(_fmul._fmu, _simSettings);
+        _omvManager->_visTime = _omvManager->_startTime;
+        _omvManager->_simTime = _omvManager->_startTime;
+        updateVisAttributes(_omvManager->_visTime);
+    }
 
-	void OMVisualizerFMU::updateScene(double time)
-	{
-		omvManager->_simTime = omvManager->_visTime;
-		double nextStep = omvManager->_visTime + omvManager->_hVisual;
+    void OMVisualizerFMU::updateScene(const double time)
+    {
+        _omvManager->_simTime = _omvManager->_visTime;
+        double nextStep = _omvManager->_visTime + _omvManager->_hVisual;
 
-		while (omvManager->_simTime < nextStep)
-		{
-		    //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
-		    //_inputData.printValues();
-		    omvManager->_simTime = simulateStep(omvManager->_simTime);
-		}
-		updateVisAttributes(omvManager->_visTime);
-	}
+        while (_omvManager->_simTime < nextStep)
+        {
+            //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
+            //_inputData.printValues();
+            _omvManager->_simTime = simulateStep(_omvManager->_simTime);
+        }
+        updateVisAttributes(_omvManager->_visTime);
+    }
 
-	int OMVisualizerFMU::getDataTypeID()
-	{
-		return 1;
-	}
-
+    int OMVisualizerFMU::getDataTypeID()
+    {
+        return 1;
+    }
 
 }  // End namespace Model
 

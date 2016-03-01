@@ -20,43 +20,43 @@
 #include <iostream>
 #include <SDL.h>
 #include "Input.hpp"
-//#include "InputData.hpp"
-//#include "JoystickDevice.hpp"
-
+#include "Util/Logger.hpp"
 
 int causalityEqual(fmi1_import_variable_t* var, void* enumIdx)
 {
+    // Get causality attribute, i.e., fmi1_causality_enu_input, fmi1_causality_enu_output, etc.
     fmi1_causality_enu_t causality = fmi1_import_get_causality(var);
-    int isEqual = 0;
+    // Use static cast to "convert" void* to fmi1_causality_enu_t*. With that, we can compare the attributes.
+    fmi1_causality_enu_t* toComp = static_cast<fmi1_causality_enu_t*>(enumIdx);
 
-    /// \todo Check this cast: void * to an int
-    //MF: You cast an void * to an int? Can this work???
-	//VW: For me it works. Its the definition of the callback used in fmi1_import_filter_variables(). Feel free to bring in some type-control.
-    int enumIdxInt = (int) enumIdx;
-    if (enumIdxInt == causality)
+    LOGGER_WRITE(std::string("causalityEqual: fmi1_causality_enu_t causality is ") + std::to_string(causality) + " and enumIdx has attribute " + std::to_string(*toComp) + std::string("."), Util::LC_INIT, Util::LL_INFO);
+    if (*toComp == causality)
     {
-    		isEqual = 1;
-    		//std::cout<<"the input var: "<<fmi1_import_get_variable_name(var)<<std::endl;
+        LOGGER_WRITE(std::string("They are equal!"), Util::LC_INIT, Util::LL_INFO);
+        //std::cout << "the input var: " << fmi1_import_get_variable_name(var) << std::endl;
+        return 1;
     }
-    //std::cout<<"check the causality: "<<causality<<" is it an input "<<isEqual<<std::endl;
-    return isEqual;
+    else
+    {
+        LOGGER_WRITE(std::string("They are not equal!"), Util::LC_INIT, Util::LL_INFO);
+        return 0;
+    }
 }
 
 int baseTypeEqual(fmi1_import_variable_t* var, void* refBaseType)
 {
     fmi1_base_type_enu_t baseType = fmi1_import_get_variable_base_type(var);
-    int isEqual = 0;
+    fmi1_base_type_enu_t* toComp = static_cast<fmi1_base_type_enu_t*>(refBaseType);
 
-    /// \todo Check this cast: void * to an int
-    //MF: You cast an void * to an int? Can this work???
-	//VW: For me it works. Its the definition of the callback used in fmi1_import_filter_variables(). Feel free to bring in some type-control.
-
-    int refBaseType1 = (int)(refBaseType);
-    if (refBaseType1 == baseType)
+    LOGGER_WRITE(std::string("baseTypeEqual: fmi1_base_type_enu_t baseType is ") + std::to_string(baseType) + " and refBaseType is of type" + std::to_string(*toComp) + std::string("."), Util::LC_INIT, Util::LL_INFO);
+    if (*toComp == baseType)
     {
-    		isEqual = 1;
-    		//std::cout<<"the input var: "<<fmi1_import_get_variable_name(var)<<std::endl;
+        LOGGER_WRITE(std::string("They are equal!"), Util::LC_INIT, Util::LL_INFO);
+        return 1;
     }
-
-    return isEqual;
+    else
+    {
+        LOGGER_WRITE(std::string("They are not equal!"), Util::LC_INIT, Util::LL_INFO);
+        return 0;
+    }
 }

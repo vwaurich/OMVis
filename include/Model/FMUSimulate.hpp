@@ -66,7 +66,7 @@ namespace Model
 
     fmul_t load(const char* FMUPath, const char* modelName);
 
-    fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(std::string typeString);
+    fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string typeString);
 
 }  // End namespace Model
 

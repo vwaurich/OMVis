@@ -79,16 +79,16 @@ namespace Model
         _data._numString = fmi1_import_get_variable_list_size(stringInputs);
 		
 		//the variable names
-		getVariableNames(realInputs, _data._numReal, &_data.namesReal);
-		getVariableNames(integerInputs, _data._numInteger, &_data.namesInteger);
-		getVariableNames(booleanInputs, _data._numBoolean, &_data.namesBool);
-		getVariableNames(stringInputs, _data._numString, &_data.namesString);
-		std::cout << "reals: " << _data.namesReal.size()<<std::endl;
-		std::cout << "ints: " << _data.namesInteger.size() << std::endl;
+		getVariableNames(realInputs, _data._numReal, &_data._namesReal);
+		getVariableNames(integerInputs, _data._numInteger, &_data._namesInteger);
+		getVariableNames(booleanInputs, _data._numBoolean, &_data._namesBool);
+		getVariableNames(stringInputs, _data._numString, &_data._namesString);
+		std::cout << "reals: " << _data._namesReal.size()<<std::endl;
+		std::cout << "ints: " << _data._namesInteger.size() << std::endl;
 
-		std::cout << "bools: " << _data.namesBool.size() << std::endl;
+		std::cout << "bools: " << _data._namesBool.size() << std::endl;
 
-		std::cout << "strings: " << _data.namesString.size() << std::endl;
+		std::cout << "strings: " << _data._namesString.size() << std::endl;
 
         LOGGER_WRITE(std::string("There are ") + std::to_string(_data._numBoolean) + std::string(" boolean inputs, ")
                                                + std::to_string(_data._numReal) + std::string(" real inputs, ")
@@ -162,13 +162,13 @@ namespace Model
     void InputData::printValues()
     {
         for (unsigned int r = 0; r < _data._numReal; ++r)
-			std::cout << "realinput " << r << " (" << _data.namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
+			std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
         for (unsigned int i = 0; i < _data._numInteger; ++i)
-            std::cout << "integer input " << i << " (" << _data.namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
+            std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
         for (unsigned int b = 0; b < _data._numBoolean; ++b)
-            std::cout << "bool input " << b << " (" << _data.namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
+            std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
 		for (unsigned int s = 0; s < _data._numString; ++s)
-            std::cout << "string input " << s <<" (" << _data.namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
+            std::cout << "string input " << s <<" (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
     }
 
     void InputData::resetInputValues()
@@ -187,7 +187,9 @@ namespace Model
             _data._valuesString[s] = "";
     }
 
-    bool setRealInputValueForInputKey(inputKey key, double value, InputData data)
+    /// \todo: The attributes of the object 'data' are changed in line 206, but we pass not by reference. Thus,
+    /// this update has no effect on the original object.
+    bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data)
     {
         keyMapIter iter = data._keyToInputMap.find(key);
 

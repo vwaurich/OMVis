@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * InputValues.hpp
@@ -58,10 +58,10 @@ namespace Model
                   _valuesInteger(nullptr),
                   _valuesBoolean(nullptr),
                   _valuesString(nullptr),
-				  namesReal(),
-			   	  namesInteger(),
-				  namesBool(),
-				  namesString(),
+                  _namesReal(),
+                  _namesInteger(),
+                  _namesBool(),
+                  _namesString(),
                   _numReal(0),
                   _numInteger(0),
                   _numBoolean(0),
@@ -86,10 +86,10 @@ namespace Model
         fmi1_integer_t* _valuesInteger;
         fmi1_boolean_t* _valuesBoolean;
         fmi1_string_t* _valuesString;
-		std::vector<std::string> namesReal;
-		std::vector<std::string> namesInteger;
-		std::vector<std::string> namesBool;
-		std::vector<std::string> namesString;
+        std::vector<std::string> _namesReal;
+        std::vector<std::string> _namesInteger;
+        std::vector<std::string> _namesBool;
+        std::vector<std::string> _namesString;
         unsigned int _numReal;
         unsigned int _numInteger;
         unsigned int _numBoolean;
