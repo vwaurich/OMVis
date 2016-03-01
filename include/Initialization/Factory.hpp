@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * Factory.hpp
@@ -30,13 +30,16 @@
 #include <string>
 
 // Forward declarations
-namespace Model{
+namespace Model
+{
     class OMVisualizerAbstract;
 }
-namespace Util{
+namespace Util
+{
     class CommandLineArgs;
 }
-namespace View{
+namespace View
+{
     class OMVManager;
 }
 
@@ -55,19 +58,37 @@ namespace Initialization
          * @param cLArgs Command line arguments.
          */
         //Factory(Util::CommandLineArgs& cLArgs);
-
         ~Factory() = default;
         Factory(const Factory& f) = delete;
         Factory& operator=(const Factory& f) = delete;
 
+        /*! \brief Creates concrete abstract visualization object.
+         *
+         * This method is used, if the model is not configured via command line argument, but will be selected via
+         * File-open dialog in the GUI.
+         *
+         * @return Visualization object of type OMVisualizationAbstract.
+         */
+        //Model::OMVisualizerAbstract* createVisualization();
+        /*! \brief Creates concrete Visualization object according to the command line arguments.
+         *
+         * @param cLArgs The parsed command line arguments.
+         * @return Visualization object of type OMVisualizationMAT or OMVisualizationFMU.
+         */
         Model::OMVisualizerAbstract* createVisualizationFromCLargs(const Util::CommandLineArgs& cLArgs);
 
-		Model::OMVisualizerAbstract* createVisualizationObjects(std::string modelName, std::string pathName, bool useFMU);
-
-//     private:
-//        bool _useFMU;
-//        std::string _modelName;
-//        std::string _modelPath;
+        /*! \brief Creates new visualization object accordingt to the given command line parameters.
+         *
+         * According to the command line parameters, a OMVisualizerFMU or OMVisualizerMAT object ist created an a pointer to this
+         * object is returned. If the command line is empty, i.e., only OMVIS is called, than we create a object of base class
+         * OMVisualizerAbstract and return a appropriate pointer.
+         *
+         * @param modelName
+         * @param pathName
+         * @param useFMU
+         * @return
+         */
+        Model::OMVisualizerAbstract* createVisualizationObject(const std::string modelName = "", const std::string pathName = "", const bool useFMU = false);
     };
 
 }  // End namespace Initialization
