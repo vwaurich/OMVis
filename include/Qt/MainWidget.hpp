@@ -57,9 +57,12 @@
 #include <osgQt/GraphicsWindowQt>
 
 #include "Model/OMVisualizerAbstract.hpp"
-#include "Model/OMVisualizerFMU.hpp"
-#include "Model/InputData.hpp"
 
+// Forward declarations
+namespace Controller
+{
+    class GUIController;
+}
 class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QSignalMapper)
@@ -69,14 +72,16 @@ class MainWidget : public QMainWindow, public osgViewer::CompositeViewer
 {
 Q_OBJECT
  public:
-    QMenu *fileMenu;
-    QMenu *settingsMenu;
-    QMenu *inputMenu;
-    QWidget* osgViewerWidget;
-    QWidget* controlElementWidget;
-    QWidget* timeSliderWidget;
+    QMenu* _fileMenu;
+    QMenu* _settingsMenu;
+    QMenu* _inputMenu;
+    QWidget* _osgViewerWidget;
+    QWidget* _controlElementWidget;
+    QWidget* _timeSliderWidget;
 
     /*! \brief Constructs MainWidget object from arguments.
+     *
+     * A empty GUI is created and the model has to be loaded via file open dialog.
      *
      * @param parent Parent for initialization of QWidget Baseclass.
      * @param flags Window flags for initialization of QWidget Baseclass.
@@ -92,6 +97,13 @@ Q_OBJECT
      * @return The widget for the osg-viewer.
      */
     QWidget* addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene);
+
+    /*! \brief Adds an empty view-widget to the main-widget
+     *
+     * @param gw The graphical window.
+     * @return The widget for the osg-viewer.
+     */
+    QWidget* addViewWidgetDefault(osgQt::GraphicsWindowQt* gw);
 
     /*! \brief Creates a osgQt::createGraphicsWindow
      *
@@ -120,13 +132,26 @@ Q_OBJECT
      */
     QWidget* setupOSGViewerWidget();
 
+    /*! \brief Creates a default osg-viewer-widget
+     */
+    QWidget* setupOSGViewerWidgetDefault();
+
     /*! \brief Creates the control widget (play, pause,...)
      */
     QWidget* setupControlElementWidget();
 
     /*! \brief Creates the time slider widget
      */
-	QWidget* setupTimeSliderWidget(QSlider*);
+    QWidget* setupTimeSliderWidget(QSlider*);
+
+    /// Just init. slider.
+    QWidget* setupTimeSliderWidgetDefault(QSlider*);
+
+    /*! \brief This methods shows the window to choose the model file.
+     *
+     * The member variables _modelName, _modelPath and _useFMU are set according to the users chosen model.
+     */
+    QString modelSelectionDialog();
 
 	/*! \brief Creates a gui elemnt to set the mapping for a input value.
 	*/
@@ -161,21 +186,26 @@ Q_OBJECT
      */
     void setVisTimeSlotFunction(int val);
 
-    /*! \brief Function that opens a file dialog
+    /*! \brief Function that loads a new model from file for visualization.
+     *
+     * The model which should be loaded is chosen via a file open dialog. The user can specify whether
+     * to load a FMU or a MAT file for visualization.
+     *
+     * @param visFMU
      */
-    void openFileDialogGetFileName();
+    void loadModel(/*bool& visFMU*/);
 
-	/*! \brief Function that opens the input mapper dialog
-	*/
-	void openDialogInputMapper();
+    /*! \brief Function that opens the input mapper dialog
+     */
+    void openDialogInputMapper();
 
-	/*! \brief Function that opens the settings dialog
-	*/
-	void openDialogSettings();
+    /*! \brief Function that opens the settings dialog
+     */
+    void openDialogSettings();
 
-	/*! \brief Changes the Background colour in the osg::viewer
-	*/		
-	void changeBGColourInOSGViewer(int colorIdx);
+    /*! \brief Changes the Background color in the osg::viewer
+     */
+    void changeBGColourInOSGViewer(int colorIdx);
 
 	/*! \brief Updates the key-input-map
 	*/
@@ -188,6 +218,13 @@ Q_OBJECT
     QTimer _visTimer;  //!< Brief Triggers a new scene-update.
     Model::OMVisualizerAbstract* _omVisualizer;
 
+    /// The GUIController object will take the users input from GUI and handle it.
+    Controller::GUIController* _guiController;
+
+    /// \todo: Remove
+   // bool _visFMU;  ///< True, if we visualize a FMU, otherwise false and we vis. a MAT file
+   // std::string _modelName;
+   // std::string _pathName;
 };
 
 #endif /* INCLUDE_MAINWIDGET_HPP_ */
