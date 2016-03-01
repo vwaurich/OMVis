@@ -32,7 +32,7 @@
 namespace Controller
 {
 
-    KeyboardEventHandler::KeyboardEventHandler(Model::InputData inputs)
+    KeyboardEventHandler::KeyboardEventHandler(Model::InputData* inputs)
             : _inputs(inputs)
     {
     }
@@ -44,14 +44,14 @@ namespace Controller
             case (osgGA::GUIEventAdapter::KEYDOWN):
             {
                 unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
-                keyBoardMapIter keyboardmapValue = _inputs._keyboardToKeyMap.find((unsigned int) keyboardValue);
-                if (keyboardmapValue != _inputs._keyboardToKeyMap.end())
+                keyBoardMapIter keyboardmapValue = _inputs->_keyboardToKeyMap.find((unsigned int) keyboardValue);
+                if (keyboardmapValue != _inputs->_keyboardToKeyMap.end())
                 {
                     //std::cout<<"pressed key "<<keyboardValue<<". Thats the input key: "<<keyboardmapValue->second<<std::endl;
                     //its a assigned key
-                    keyMapIter iter = _inputs._keyToInputMap.find((inputKey) keyboardmapValue->second);
+                    keyMapIter iter = _inputs->_keyToInputMap.find((inputKey) keyboardmapValue->second);
                     //this key is not assigned as input
-                    if (iter == _inputs._keyToInputMap.end())
+                    if (iter == _inputs->_keyToInputMap.end())
                         std::cout << "wrong key: " << keyboardValue << std::endl;
                     //set the input variable
                     else
@@ -62,16 +62,16 @@ namespace Controller
                         switch (baseTypeIdx)
                         {
                             case (0):
-                                _inputs._data._valuesReal[iterValue._valueIdx] = 1.0;
+                                _inputs->_data._valuesReal[iterValue._valueIdx] = 1.0;
                                 break;
                             case (1):
-                                _inputs._data._valuesInteger[iterValue._valueIdx] = 1;
+                                _inputs->_data._valuesInteger[iterValue._valueIdx] = 1;
                                 break;
                             case (2):
-                                _inputs._data._valuesBoolean[iterValue._valueIdx] = true;
+                                _inputs->_data._valuesBoolean[iterValue._valueIdx] = true;
                                 break;
                             case (3):
-                                _inputs._data._valuesString[iterValue._valueIdx] = "";
+                                _inputs->_data._valuesString[iterValue._valueIdx] = "";
                                 break;
                         }
                     }

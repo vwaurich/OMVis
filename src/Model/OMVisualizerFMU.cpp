@@ -183,7 +183,7 @@ namespace Model
     void OMVisualizerFMU::linkInputsToEventHandler()
     {
         //start eventhandler and link to inputs
-        Controller::KeyboardEventHandler* kbEventHandler = new Controller::KeyboardEventHandler(_inputData);
+        Controller::KeyboardEventHandler* kbEventHandler = new Controller::KeyboardEventHandler(&_inputData);
         _viewerStuff->_viewer.addEventHandler(kbEventHandler);
     }
 

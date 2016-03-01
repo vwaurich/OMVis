@@ -342,19 +342,19 @@ QHBoxLayout* MainWidget::createInputMapperRow(int inputIdx, std::string varName,
 	{
 		QObject::connect(inputText, SIGNAL(currentIndexChanged(QString)), SLOT(updateKeyMapValue(QString)));
 
-		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_W"));
-		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_A"));
-		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_S"));
-		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_D"));
+		inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_W"));
+		inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_A"));
+		inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_S"));
+		inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_D"));
 	}
 	else if (type == "real")
 	{
 		QObject::connect(inputText, SIGNAL(currentIndexChanged(QString)), SLOT(updateKeyMapValue(QString)));
 
-		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_1_X")));
-		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_1_Y")));
-		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_2_X")));
-		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_2_Y")));
+		inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_1_X")));
+		inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_1_Y")));
+		inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_2_X")));
+		inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_2_Y")));
 
 	}
 	else
@@ -432,7 +432,25 @@ void MainWidget::changeBGColourInOSGViewer(int colorIdx)
     _omVisualizer->_viewerStuff->_viewer.getCamera()->setClearColor(colVec);
 }
 
-void MainWidget::updateKeyMapValue(QString key)
+void MainWidget::updateKeyMapValue(QString varToKey)
 {
-	std::cout << "KEYSELECT " << key.toStdString() << std::endl;
+	const int lengthOfTypeStr = 4;
+	Model::OMVisualizerFMU* fmuVisualizer = (Model::OMVisualizerFMU*)_omVisualizer;
+
+
+	std::string varToKeyString = varToKey.toStdString();
+	int posKey = varToKeyString.find(" -> ");
+	std::string typeString = varToKeyString.substr(0, lengthOfTypeStr);
+	std::string idxString = varToKeyString.substr(lengthOfTypeStr, posKey- lengthOfTypeStr);
+	std::string keyString = varToKeyString.substr(posKey+std::string(" -> ").length(),varToKeyString.length());
+	std::cout << "type: " << typeString << std::endl;
+	std::cout << "idx: " << idxString << std::endl;
+	std::cout << "key: " << keyString << std::endl;
+	fmi1_base_type_enu_t type = Model::getFMI1baseTypeFor4CharString(typeString);
+
+	KeyMapValue mapValue = { type, std::stoi(idxString) };
+	fmuVisualizer->_inputData._keyToInputMap[Model::getInputDataKeyForString(keyString)] = mapValue;
+	//remove current mapping!!
+
+	fmuVisualizer->_inputData.printKeyToInputMap();
 }

@@ -58,6 +58,7 @@
 
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Model/OMVisualizerFMU.hpp"
+#include "Model/InputData.hpp"
 
 class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)

@@ -34,6 +34,9 @@
 namespace Model
 {
 
+	const inputKey keys_real[4] = { JOY_1_X, JOY_1_Y , JOY_2_X , JOY_2_Y };
+	const inputKey keys_bool[4] = { KEY_W, KEY_A, KEY_S, KEY_D };
+
     InputData::InputData()
             : _data(),
               _keyToInputMap(),
@@ -109,8 +112,6 @@ namespace Model
         _keyboardToKeyMap[115] = KEY_S;
         _keyboardToKeyMap[100] = KEY_D;
 
-        inputKey keys_real[2] = { JOY_1_X, JOY_1_Y };
-        inputKey keys_bool[4] = { KEY_W, KEY_A, KEY_S, KEY_D };
         int k = 0;
         //make map from keys to input values
         for (unsigned int r = 0; r < _data._numReal; ++r)
@@ -237,5 +238,33 @@ namespace Model
 		}
 	}
 
+	void InputData::printKeyToInputMap()
+	{
+		std::cout << "KEY TO INPUT MAP" << std::endl;
+		for (std::map<inputKey, KeyMapValue >::const_iterator it = _keyToInputMap.begin();
+		it != _keyToInputMap.end(); ++it)
+		{
+			std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
+		}
+	}
+
+	inputKey getInputDataKeyForString(std::string keyString)
+	{
+		if (!keyString.compare("JOY_1_X")) return JOY_1_X;
+		else if (!keyString.compare("JOY_1_Y")) return JOY_1_Y;
+		else if (!keyString.compare("JOY_2_X")) return JOY_2_X;
+		else if (!keyString.compare("JOY_2_Y")) return JOY_2_Y;
+		else if (!keyString.compare("KEY_W")) return KEY_W;
+		else if (!keyString.compare("KEY_A")) return KEY_A;
+		else if (!keyString.compare("KEY_S")) return KEY_S;
+		else if (!keyString.compare("KEY_D")) return KEY_D;
+		else std::cout << "getInputKeyForString  failed" << std::endl;
+	}
+
+	std::string keyMapValueToString(KeyMapValue val)
+	{
+		return std::string(fmi1_base_type_to_string(val._baseType)).append(std::to_string(val._valueIdx));
+			
+	}
 
 }  // End namespace Model

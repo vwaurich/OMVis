@@ -33,9 +33,11 @@
 
 enum inputKey
 {
-    KEY_W,
     JOY_1_X,
     JOY_1_Y,
+	JOY_2_X,
+	JOY_2_Y,
+	KEY_W,
     KEY_A,
     KEY_S,
     KEY_D
@@ -90,6 +92,10 @@ namespace Model
 
 		/*! \brief Gets the names of the variables*/
 		void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames);
+
+		/*! \brief Prints the keyToInputMap*/
+		void printKeyToInputMap();
+
 	public:
         /// \todo Can this attribute be private?
         InputValues _data;
@@ -100,6 +106,11 @@ namespace Model
     };
 
     bool setRealInputValueForInputKey(inputKey key, double value, InputData data);
+
+	/*! \brief Conversion from std::string to inputKey enum */
+	inputKey getInputDataKeyForString(std::string keyString);
+
+	std::string keyMapValueToString(KeyMapValue);
 
 }  // End namespace Model
 

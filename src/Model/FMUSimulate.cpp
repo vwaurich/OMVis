@@ -151,4 +151,13 @@ namespace Model
         }
     }
 
+	fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(std::string typeString)
+	{
+		if (!typeString.compare("real")) return fmi1_base_type_real;
+		else if (!typeString.compare("bool")) return fmi1_base_type_bool;
+		else if (!typeString.compare("inte")) return fmi1_base_type_int;
+		else if (!typeString.compare("stri")) return fmi1_base_type_str;
+		else std::cout << "getFMI1baseTypeFor4CharString failed" << std::endl;
+	}
+
 }  // End namespace Model

@@ -46,7 +46,7 @@ namespace Controller
          *
          * @param inputs
          */
-        KeyboardEventHandler(Model::InputData inputs);
+        KeyboardEventHandler(Model::InputData* inputs);
 
         /// Let the compiler provide the destructor.
         ~KeyboardEventHandler() = default;
@@ -60,7 +60,7 @@ namespace Controller
         virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
      private:
-        Model::InputData _inputs;
+        Model::InputData* _inputs;
     };
 
 }  // End namespace controller
