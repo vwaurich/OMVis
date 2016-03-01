@@ -62,13 +62,11 @@ namespace Model
         int (*baseTypeCheck)(fmi1_import_variable_t* vl, void* refBaseType);
         baseTypeCheck = &baseTypeEqual;
         //all vars per type
-        //fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (int*)fmi1_causality_enu_input);
         fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (void*)fmi1_causality_enu_input);
-
-        fmi1_import_variable_list_t* realInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_real);
-        fmi1_import_variable_list_t* integerInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_int);
-        fmi1_import_variable_list_t* booleanInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_bool);
-        fmi1_import_variable_list_t* stringInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (int*) fmi1_base_type_str);
+        fmi1_import_variable_list_t* realInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_real);
+        fmi1_import_variable_list_t* integerInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_int);
+        fmi1_import_variable_list_t* booleanInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_bool);
+        fmi1_import_variable_list_t* stringInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_str);
         //all vrs per type
         _data._vrReal = fmi1_import_get_value_referece_list(realInputs);
         _data._vrInteger = fmi1_import_get_value_referece_list(integerInputs);
@@ -79,6 +77,7 @@ namespace Model
         _data._numInteger = fmi1_import_get_variable_list_size(integerInputs);
         _data._numBoolean = fmi1_import_get_variable_list_size(booleanInputs);
         _data._numString = fmi1_import_get_variable_list_size(stringInputs);
+		
 		//the variable names
 		getVariableNames(realInputs, _data._numReal, &_data.namesReal);
 		getVariableNames(integerInputs, _data._numInteger, &_data.namesInteger);
@@ -162,19 +161,13 @@ namespace Model
 
     void InputData::printValues()
     {
-		for (unsigned int r = 0; r < _data._numReal; ++r)
-		{
+        for (unsigned int r = 0; r < _data._numReal; ++r)
 			std::cout << "realinput " << r << " (" << _data.namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
-		}
         for (unsigned int i = 0; i < _data._numInteger; ++i)
-		{
-			std::cout << "integer input " << i << " (" << _data.namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
-		}
-		for (unsigned int b = 0; b < _data._numBoolean; ++b)
-		{
-			std::cout << "bool input " << b << " (" << _data.namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
-		}
-        for (unsigned int s = 0; s < _data._numString; ++s)
+            std::cout << "integer input " << i << " (" << _data.namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
+        for (unsigned int b = 0; b < _data._numBoolean; ++b)
+            std::cout << "bool input " << b << " (" << _data.namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
+		for (unsigned int s = 0; s < _data._numString; ++s)
             std::cout << "string input " << s <<" (" << _data.namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
     }
 
