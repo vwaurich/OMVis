@@ -56,7 +56,7 @@ namespace Model
      public:
         OMVisualizerFMU() = delete;
 
-        OMVisualizerFMU(std::string modelName, std::string modelPath);
+        OMVisualizerFMU(const std::string modelName, const std::string modelPath);
 
         virtual ~OMVisualizerFMU() = default;
         OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
@@ -101,12 +101,14 @@ namespace Model
 		*/
 		int getDataTypeID();
 
-		InputData _inputData;
-
      private:
         fmul_t _fmul;
         fmuData _fmuData;
         SimSettings* _simSettings;
+
+     public:
+        /// \ todo Make it private again.
+        InputData _inputData;
 
         /// \todo Remove, we do not need it because we have inputData.
         Controller::JoystickDevice _joystick;
