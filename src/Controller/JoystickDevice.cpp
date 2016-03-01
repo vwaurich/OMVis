@@ -60,7 +60,6 @@ namespace Controller
     void JoystickDevice::detectContinuousInputEvents(Model::InputData inputInfo)
     {
         SDL_PollEvent(&_inputEvent);
-//  if( SDL_PollEvent( &inputEvent ))
 
         if (_inputEvent.type == SDL_JOYAXISMOTION)
         {

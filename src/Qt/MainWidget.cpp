@@ -340,17 +340,22 @@ QHBoxLayout* MainWidget::createInputMapperRow(int inputIdx, std::string varName,
 	QComboBox* inputText = new QComboBox();
 	if (type == "bool")
 	{
-		inputText->addItem("KEY_A", "KEY_A");
-		inputText->addItem("KEY_B", "KEY_B");
-		inputText->addItem("KEY_C", "KEY_C");
-		inputText->addItem("KEY_D", "KEY_D");
+		QObject::connect(inputText, SIGNAL(currentIndexChanged(QString)), SLOT(updateKeyMapValue(QString)));
+
+		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_W"));
+		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_A"));
+		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_S"));
+		inputText->addItem(QString("input").append(QString::number(inputIdx)).append(" -> KEY_D"));
 	}
 	else if (type == "real")
 	{
-		inputText->addItem("JOY1_X", "JOY1_X");
-		inputText->addItem("JOY1_Y", "JOY1_Y");
-		inputText->addItem("JOY2_X", "JOY2_X");
-		inputText->addItem("JOY2_Y", "JOY2_Y");
+		QObject::connect(inputText, SIGNAL(currentIndexChanged(QString)), SLOT(updateKeyMapValue(QString)));
+
+		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_1_X")));
+		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_1_Y")));
+		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_2_X")));
+		inputText->addItem((QString("input").append(QString::number(inputIdx)).append(" -> JOY_2_Y")));
+
 	}
 	else
 	{
@@ -425,4 +430,9 @@ void MainWidget::changeBGColourInOSGViewer(int colorIdx)
             break;  //black
     }
     _omVisualizer->_viewerStuff->_viewer.getCamera()->setClearColor(colVec);
+}
+
+void MainWidget::updateKeyMapValue(QString key)
+{
+	std::cout << "KEYSELECT " << key.toStdString() << std::endl;
 }

@@ -176,6 +176,9 @@ Q_OBJECT
 	*/		
 	void changeBGColourInOSGViewer(int colorIdx);
 
+	/*! \brief Updates the key-input-map
+	*/
+	void updateKeyMapValue(QString key);
 
  protected:
     QSlider* _timeSlider;
