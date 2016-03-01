@@ -27,14 +27,21 @@
  @version 0.1
  */
 
+
 #include "Qt/MainWidget.hpp"
+#include "Util/Logger.hpp"
+#include "Controller/GUIController.hpp"
+#include "Model/OMVisualizerFMU.hpp"
+#include "Model/FMUSimulate.hpp"
+
 
 MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase::ThreadingModel threadingModel, Model::OMVisualizerAbstract* omv)
         : QMainWindow(parent, f),
           _timeDisplay(new QLabel),
           _omVisualizer(omv),
-          _timeSlider(new QSlider(Qt::Horizontal))
-
+          _timeSlider(new QSlider(Qt::Horizontal)),
+          _osgViewerWidget(),
+          _guiController()
 {
     //the names
     setObjectName("MainWindow");
@@ -50,19 +57,20 @@ MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase
     setupMenuBar();
 
     //Set up the osg viewer widget
-    osgViewerWidget = setupOSGViewerWidget();
+    //_osgViewerWidget = setupOSGViewerWidget();
+    _osgViewerWidget = setupOSGViewerWidgetDefault();
 
     //Set up the control elements widget
-    controlElementWidget = setupControlElementWidget();
+    _controlElementWidget = setupControlElementWidget();
 
     //Set up the time slider widget
-    timeSliderWidget = setupTimeSliderWidget(_timeSlider);
+    _timeSliderWidget = setupTimeSliderWidgetDefault(_timeSlider);
 
     //assemble the layouts
     QVBoxLayout* mainRowLayout = new QVBoxLayout;
-    mainRowLayout->addWidget(osgViewerWidget);
-    mainRowLayout->addWidget(timeSliderWidget);
-    mainRowLayout->addWidget(controlElementWidget);
+    mainRowLayout->addWidget(_osgViewerWidget);
+    mainRowLayout->addWidget(_timeSliderWidget);
+    mainRowLayout->addWidget(_controlElementWidget);
 
     //the father of all widget
     QWidget* topWidget = new QWidget;
@@ -76,31 +84,31 @@ MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase
     //to trigger the scene updates with the visualization step size
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateGUIelements()));
-    _visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
+    //MF \todo Move to approriate place _visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
 }
 
 void MainWidget::setupMenuBar()
 {
     //menu caption "File"
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    QAction* exportAction = fileMenu->addAction(tr("Export Video"));
-    QAction* changeModelAction = fileMenu->addAction(tr("Change Model"));
-    QAction* somethingAction = fileMenu->addAction(tr("Do Something"));
-    fileMenu->addSeparator();
-    fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
+    _fileMenu = menuBar()->addMenu(tr("&File"));
+    QAction* exportAction = _fileMenu->addAction(tr("Export Video"));
+    QAction* changeModelAction = _fileMenu->addAction(tr("Load Model"));
+    QAction* somethingAction = _fileMenu->addAction(tr("Do Something"));
+    _fileMenu->addSeparator();
+    _fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
 
-    QObject::connect(changeModelAction, SIGNAL(triggered()), this, SLOT(openFileDialogGetFileName()));
+    QObject::connect(changeModelAction, SIGNAL(triggered()), this, SLOT(loadModel()));
 
     //menu caption "Settings"
-    settingsMenu = menuBar()->addMenu(tr("Settings"));
-    QAction* generalSettingsAction = settingsMenu->addAction(tr("General Settings"));
+    _settingsMenu = menuBar()->addMenu(tr("Settings"));
+    QAction* generalSettingsAction = _settingsMenu->addAction(tr("General Settings"));
 
     QObject::connect(generalSettingsAction, SIGNAL(triggered()), this, SLOT(openDialogSettings()));
 
     //menu caption "Inputs"
-    inputMenu = menuBar()->addMenu(tr("Inputs"));
-    QAction* mapInputAction = inputMenu->addAction(tr("Map Input To Devices"));
-    QAction* dontCareAction = inputMenu->addAction(tr("I Don't Care About Input"));
+    _inputMenu = menuBar()->addMenu(tr("Inputs"));
+    QAction* mapInputAction = _inputMenu->addAction(tr("Map Input To Devices"));
+    QAction* dontCareAction = _inputMenu->addAction(tr("I Don't Care About Input"));
 
     QObject::connect(mapInputAction, SIGNAL(triggered()), this, SLOT(openDialogInputMapper()));
 }
@@ -112,13 +120,32 @@ QWidget* MainWidget::setupOSGViewerWidget()
     return addViewWidget(window, _omVisualizer->_viewerStuff->_scene._rootNode);
 }
 
+QWidget* MainWidget::setupOSGViewerWidgetDefault()
+{
+    //the osg-viewer widget
+    osgQt::GraphicsWindowQt* window = createGraphicsWindow(0, 0, 100, 100);
+    return addViewWidgetDefault(window);
+}
+
+QWidget* MainWidget::setupTimeSliderWidgetDefault(QSlider* timeSlider)
+{
+    //the slider row
+    int value = -1;
+    timeSlider->setFixedHeight(30);
+    timeSlider->setSliderPosition(0);
+    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ") + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
+    value = timeSlider->sliderPosition();
+
+    return timeSlider;
+}
+
 QWidget* MainWidget::setupTimeSliderWidget(QSlider* timeSlider)
 {
     //the slider row
     int value = -1;
     timeSlider->setFixedHeight(30);
     timeSlider->setSliderPosition(_omVisualizer->omvManager->getTimeProgress());
-    std::cout << "min " << timeSlider->minimum() << " max " << timeSlider->maximum() << std::endl;
+    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ") + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
     value = timeSlider->sliderPosition();
 
     QObject::connect(timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
@@ -143,7 +170,8 @@ QWidget* MainWidget::setupControlElementWidget()
     QPushButton* coffeeButton = new QPushButton;
     coffeeButton->setText("Buy us a coffee");
 
-    _timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->omvManager->_visTime)));
+    //_timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->omvManager->_visTime)));
+    _timeDisplay->setText(QString("time ").append(QString::fromStdString("")));
     _timeDisplay->setFixedWidth(70);
     _timeDisplay->setFixedHeight(20);
 
@@ -181,6 +209,27 @@ QWidget* MainWidget::addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg
     camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
 
     view->setSceneData(scene);
+    view->addEventHandler(new osgViewer::StatsHandler);
+    view->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
+    //MFgw->setTouchEventsEnabled(true);
+
+    return gw->getGLWidget();
+}
+
+QWidget* MainWidget::addViewWidgetDefault(osgQt::GraphicsWindowQt* gw)
+{
+    osgViewer::View* view = new osgViewer::View;
+    addView(view);
+
+    osg::Camera* camera = view->getCamera();
+    camera->setGraphicsContext(gw);
+
+    const osg::GraphicsContext::Traits* traits = gw->getTraits();
+
+    camera->setClearColor(osg::Vec4(0.2, 0.2, 0.6, 1.0));
+    camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
+    camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
+
     view->addEventHandler(new osgViewer::StatsHandler);
     view->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
     //MFgw->setTouchEventsEnabled(true);
@@ -236,30 +285,50 @@ void MainWidget::updateGUIelements()
 {
     _timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->omvManager->_visTime)).append(QString(" sec")));
     _timeSlider->setSliderPosition(_omVisualizer->omvManager->getTimeProgress());
-
 }
 
 void MainWidget::setVisTimeSlotFunction(int val)
 {
     _omVisualizer->omvManager->_visTime = (_omVisualizer->omvManager->_endTime - _omVisualizer->omvManager->_startTime) * (float) (val / 100.0);
     _omVisualizer->sceneUpdate();
-
 }
 
-void MainWidget::openFileDialogGetFileName()
+void MainWidget::loadModel(/*bool& visFMU*/)
+{
+    // User has to select model from file. _modelName, _pathName and _visFMU are set.
+    QString modelName = modelSelectionDialog();
+
+    // Let create a OMVisualizer object by the GUIController.
+    _omVisualizer = _guiController->loadModel(modelName.toStdString());
+
+    LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
+
+    _osgViewerWidget = setupOSGViewerWidget();
+
+    // Okay, at this point it was trial end error. What do we really need to do in order to show the loaded model??
+    _controlElementWidget = setupControlElementWidget();
+
+    //Set up the time slider widget
+    _timeSliderWidget = setupTimeSliderWidget(_timeSlider);
+
+    //assemble the layouts
+    QVBoxLayout* mainRowLayout = new QVBoxLayout;
+    mainRowLayout->addWidget(_osgViewerWidget);
+    mainRowLayout->addWidget(_timeSliderWidget);
+    mainRowLayout->addWidget(_controlElementWidget);
+
+    //the father of all widget
+    QWidget* topWidget = new QWidget;
+    topWidget->setLayout(mainRowLayout);
+    setCentralWidget(topWidget);
+}
+
+QString MainWidget::modelSelectionDialog()
 {
     QFileDialog* dialog = new QFileDialog;
-
-    QString fileName = dialog->getOpenFileName(this, tr("Choose A Scene Description File"), QString(), tr("Visualization XML(*_visual.xml)"));
-    std::string fileNameStd = fileName.toStdString();
-    std::size_t pos = fileNameStd.find_last_of("/");
-    std::string pathName = fileNameStd.substr(0, pos + 1);
-    std::string modelName = fileNameStd.substr(pos + 1, fileNameStd.length());
-    pos = modelName.find("_visual.xml");
-    modelName = modelName.substr(0, pos);
-
-    std::cout << "FILENAME " << pathName << " MODELNAME " << modelName << std::endl;
-    std::cout << "IMPLEMENT SOMETHING THAT LOADS THE NEW MODEL AND INTIALIZES THE SCENE!!!" << std::endl;
+    // The user can filter for *.fmu or *.mat files.
+    QString fileName = dialog->getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
+    return fileName;
 }
 
 void MainWidget::openDialogInputMapper()
@@ -410,7 +479,8 @@ void MainWidget::changeBGColourInOSGViewer(int colorIdx)
 {
     osg::Vec4 colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
-    std::cout << "colorIdx " << colorIdx << std::endl;
+    LOGGER_WRITE(std::string("Color Idx ") + std::to_string(colorIdx) + std::string(" boolean inputs, "), Util::LC_GUI, Util::LL_INFO);
+//    std::cout << "colorIdx " << colorIdx << std::endl;
     switch (colorIdx)
     {
         case 0:
