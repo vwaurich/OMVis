@@ -49,28 +49,15 @@ namespace Model
     class OMVisualizerAbstract
     {
      public:
-        /// The default constructor is forbidden.
-        OMVisualizerAbstract()  //= delete;
-                : _baseData(nullptr),
-                  _viewerStuff(nullptr),
-                  nodeUpdater(nullptr),
-                  omvManager(nullptr)
-        {
-        }
+        /// The default constructor.
+        OMVisualizerAbstract();
 
         /*! \brief Constructs OMVisualizer object from arguments.
          *
          * @param model Name of the model.
          * @param dir Path to the FMU or result file and corresponding XML-file.
          */
-        OMVisualizerAbstract(std::string modelName, std::string dir)
-                : _baseData(new OMVisualBase(modelName, dir)),
-                  _viewerStuff(new View::OMVisualViewer),
-                  nodeUpdater(new Model::UpdateVisitor),
-                  omvManager(new View::OMVManager(0.0, 0.0, 0.0, 0.1, 0.0, 10.0))
-        {
-            _viewerStuff->_scene.path = dir;
-        }
+        OMVisualizerAbstract(const std::string modelName, const std::string dir);
 
         /// Destructs OMVisualizer object.
         virtual ~OMVisualizerAbstract() = default;
@@ -97,98 +84,56 @@ namespace Model
             _baseData->initXMLDoc();
         }
 
-        void setUpScene()
-        {
-            //build scene graph
-            _viewerStuff->_scene.setUpScene(_baseData->_xmlDoc.first_node());
-        }
+        void setUpScene();
 
         /*! \brief In case of FMU visualization, this methods performs a simulation step.
          *
          * \remark All classes that derive from OMVisualizerAbstract
          * @param omvm
          */
-        virtual void simulate(View::OMVManager& omvm) = 0;
+        virtual void simulate(View::OMVManager& omvm) { };
 
-        /*! \brief Virtual Method to update the scene. Is implemented either by usign FMU or mat-file.
+        /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or mat-file.
          *
          * \remark All classes that derive from OMVisualizerAbstract
          * @param omvm
          */
-        virtual void updateVisAttributes(double time) = 0;
+        virtual void updateVisAttributes(double time) { };
 
-        /*! \brief Virtual Method to initialize the scene. Is implemented either by usign FMU or mat-file.
+        /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
          *
          * \remark All classes that derive from OMVisualizerAbstract
          */
-        virtual void initializeVisAttributes(double time) = 0;
+        virtual void initializeVisAttributes(double time) { };
 
         /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
          *
          * \remark All classes that derive from OMVisualizerAbstract
          */
-        virtual void updateScene(double time) = 0;
+        virtual void updateScene(double time) { };
 
 		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
 		*/
-		virtual int getDataTypeID() = 0;
+		virtual int getDataTypeID() { };
 
         /*! \brief Starts the visualization.
          */
-        void startVisualization()
-        {
-            if (omvManager->_visTime < omvManager->_endTime - 1.e-6)
-            {
-                omvManager->pause = false;
-                std::cout << "start visualization" << std::endl;
-            }
-            else
-                std::cout << "There is nothing left to visualize. Initialize first." << std::endl;
-        }
+        void startVisualization();
 
         /*! \brief Pauses the visualization.
          */
-        void pauseVisualization()
-        {
-            std::cout << "pause visualization" << std::endl;
-            omvManager->pause = true;
-
-        }
-
+        void pauseVisualization();
         /*! \brief Sets the scene to start position.
          */
-        void initVisualization()
-        {
-            std::cout << "init visualization" << std::endl;
-            initializeVisAttributes(omvManager->_startTime);
-            omvManager->_visTime = omvManager->_startTime;
-            omvManager->pause = true;
-        }
+        void initVisualization();
 
         /*! \brief Prints a message which tells you to buy us a coffee.
          */
-        void donationVisualization()
-        {
-            std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
-        }
+        void donationVisualization();
 
         /*! \brief Calls for a scene update.
          */
-        void sceneUpdate()
-        {
-            if (!omvManager->pause)
-            {
-                updateScene(omvManager->_visTime);
-                omvManager->_visTime = omvManager->_visTime + omvManager->_hVisual;
-                std::cout << "update scene at " << (omvManager->_visTime) << " simTime " << (omvManager->_simTime) << " _visStepSize " << (omvManager->_hVisual) << std::endl;
-                if (omvManager->_visTime >= omvManager->_endTime - 1.e-6)
-                {
-                    std::cout << "PASUE!!!!!!!!!!!!!!" << std::endl;
-                    omvManager->pause = true;
-                }
-            }
-        }
-
+        void sceneUpdate();
 
      public:
         /// \todo: Can this attr. be private?
