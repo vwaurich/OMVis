@@ -33,7 +33,7 @@
 namespace Model
 {
 
-    OMVisualizerFMU::OMVisualizerFMU(std::string modelName, std::string modelPath)
+    OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
             : OMVisualizerAbstract(modelName, modelPath),
               _fmul(),
               _fmuData(),
