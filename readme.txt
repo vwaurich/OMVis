@@ -1,8 +1,9 @@
 OMVis -  An open source tool for model and simulation visualization.
 ====================================================================
 
-==== REMARKS ===
-At the moment, not all source and header files are in the project.
+OMVis is a tool to visualize and animate simulation models. It is meant to visualize models from different simulation tools.
+What shall be visualized is described in a XML-file and the result files provide the corresponding data.
+Besides the animation of result fiels, there is a possibility to animate multibody-systems with a FMU interactively.
 
 
 === BUILD AND COMPILE ===
@@ -21,9 +22,12 @@ At the moment, not all source and header files are in the project.
 	4. QT 5.5 (LGPL)
 		- windows installer http://www.qt.io/
 	5. (rapdixml.hpp) (Boost Software License or MIT)
-		-included , http://rapidxml.sourceforge.net/
-	6. OpenModelica - read_matlab4.cpp - read_matlab4.h (OSMC-PL, GPL v3.0)
-		-included, https://openmodelica.org/
+		- copy in OMVis/include/Util
+		- http://rapidxml.sourceforge.net/ 
+	6. OpenModelica - read_matlab4.cpp - read_matlab4.h (OSMC-PL, GPL v3.0) 
+		- can be found in OMC repository \OpenModelica\OMCompiler\SimulationRuntime\c\util
+		- https://github.com/OpenModelica
+		- copy read_matlab4.cpp in OMVis/src/Util  and read_matlab4.h in OMVis/include/Util
 	7. Boost C++ Libraries (Boost Software License)
 		-windows: build from source http://www.boost.org/
 
@@ -51,5 +55,6 @@ version.lib
 
 fmilib_shared.lib
 SDL2main.lib
+
 
 
