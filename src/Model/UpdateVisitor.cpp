@@ -26,6 +26,7 @@
 
 #include "Model/UpdateVisitor.hpp"
 #include "Visualize.hpp"
+#include "Util/Logger.hpp"
 
 namespace Model
 {
@@ -39,7 +40,8 @@ namespace Model
     /**
      MatrixTransform
      */
-    void UpdateVisitor::apply(osg::MatrixTransform& node)
+    void UpdateVisitor::apply(osg::MatrixTransform&
+)
     {
         //std::cout<<"MT "<<node.className()<<"  "<<node.getName()<<std::endl;
         node.setMatrix(_visAttr._mat);
@@ -70,18 +72,18 @@ namespace Model
             //shapeDraw->setColor(osg::Vec4(visAttr.color,1.0));
 
             if (_visAttr._type == "pipecylinder")
-                draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2, _visAttr._length));
+                draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2.0, _visAttr._length));
             else if (_visAttr._type == "cylinder")
-                draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2, _visAttr._length));
+                draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2.0, _visAttr._length));
             else if (_visAttr._type == "box")
                 draw->setShape(new osg::Box(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width, _visAttr._height, _visAttr._length));
             else if (_visAttr._type == "cone")
-                draw->setShape(new osg::Cone(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2, _visAttr._length));
+                draw->setShape(new osg::Cone(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2.0, _visAttr._length));
             else if (_visAttr._type == "sphere")
-                draw->setShape(new osg::Sphere(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._length / 2));
+                draw->setShape(new osg::Sphere(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._length / 2.0));
             else
             {
-                std::cout << "UNKNOWN TYPE, WE MAKE A CAPSULE " << std::endl;
+                LOGGER_WRITE(std::string("Unknown type, we make a capsule."), Util::LC_GUI, UTIL::LL_WARNING);
                 //string id = string(visAttr.type.begin(), visAttr.type.begin()+11);
                 draw->setShape(new osg::Capsule(osg::Vec3f(0.0, 0.0, 0.0), 0.1, 0.5));
             }
