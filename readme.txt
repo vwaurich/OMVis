@@ -3,7 +3,7 @@ OMVis -  An open source tool for model and simulation visualization.
 
 OMVis is a tool to visualize and animate simulation models. It is meant to visualize models from different simulation tools.
 What shall be visualized is described in a XML-file and the result files provide the corresponding data.
-Besides the animation of result fiels, there is a possibility to animate multibody-systems with a FMU interactively.
+Besides the animation of result files, there is a possibility to animate multibody-systems with a FMU interactively.
 
 
 === BUILD AND COMPILE ===
