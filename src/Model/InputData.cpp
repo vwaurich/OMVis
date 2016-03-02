@@ -1,22 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * InputData.cpp
@@ -34,8 +33,8 @@
 namespace Model
 {
 
-	const inputKey keys_real[4] = { JOY_1_X, JOY_1_Y , JOY_2_X , JOY_2_Y };
-	const inputKey keys_bool[4] = { KEY_W, KEY_A, KEY_S, KEY_D };
+    const inputKey keys_real[4] = { JOY_1_X, JOY_1_Y, JOY_2_X, JOY_2_Y };
+    const inputKey keys_bool[4] = { KEY_W, KEY_A, KEY_S, KEY_D };
 
     InputData::InputData()
             : _data(),
@@ -57,12 +56,12 @@ namespace Model
         // ------------------
         fmi1_import_variable_list_t* allVariables = fmi1_import_get_variable_list(fmu);
         //comparison function ptr
-        int (*causalityCheck)(fmi1_import_variable_t* vl, void* enumIdx);
+        int (*causalityCheck)(fmi1_import_variable_t* vl, (void*) enumIdx);
         causalityCheck = &causalityEqual;
-        int (*baseTypeCheck)(fmi1_import_variable_t* vl, void* refBaseType);
+        int (*baseTypeCheck)(fmi1_import_variable_t* vl, (void*) refBaseType);
         baseTypeCheck = &baseTypeEqual;
         //all vars per type
-        fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (void*)fmi1_causality_enu_input);
+        fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (void*) fmi1_causality_enu_input);
         fmi1_import_variable_list_t* realInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_real);
         fmi1_import_variable_list_t* integerInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_int);
         fmi1_import_variable_list_t* booleanInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_bool);
@@ -77,23 +76,23 @@ namespace Model
         _data._numInteger = fmi1_import_get_variable_list_size(integerInputs);
         _data._numBoolean = fmi1_import_get_variable_list_size(booleanInputs);
         _data._numString = fmi1_import_get_variable_list_size(stringInputs);
-		
-		//the variable names
-		getVariableNames(realInputs, _data._numReal, &_data._namesReal);
-		getVariableNames(integerInputs, _data._numInteger, &_data._namesInteger);
-		getVariableNames(booleanInputs, _data._numBoolean, &_data._namesBool);
-		getVariableNames(stringInputs, _data._numString, &_data._namesString);
-		std::cout << "reals: " << _data._namesReal.size()<<std::endl;
-		std::cout << "ints: " << _data._namesInteger.size() << std::endl;
 
-		std::cout << "bools: " << _data._namesBool.size() << std::endl;
+        //the variable names
+        getVariableNames(realInputs, _data._numReal, &_data._namesReal);
+        getVariableNames(integerInputs, _data._numInteger, &_data._namesInteger);
+        getVariableNames(booleanInputs, _data._numBoolean, &_data._namesBool);
+        getVariableNames(stringInputs, _data._numString, &_data._namesString);
+        std::cout << "reals: " << _data._namesReal.size() << std::endl;
+        std::cout << "ints: " << _data._namesInteger.size() << std::endl;
 
-		std::cout << "strings: " << _data._namesString.size() << std::endl;
+        std::cout << "bools: " << _data._namesBool.size() << std::endl;
+
+        std::cout << "strings: " << _data._namesString.size() << std::endl;
 
         LOGGER_WRITE(std::string("There are ") + std::to_string(_data._numBoolean) + std::string(" boolean inputs, ")
-                                               + std::to_string(_data._numReal) + std::string(" real inputs, ")
-                                               + std::to_string(_data._numInteger) + std::string(" integer inputs and ")
-                                               + std::to_string(_data._numString) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
+                + std::to_string(_data._numReal) + std::string(" real inputs, ")
+                + std::to_string(_data._numInteger) + std::string(" integer inputs and ")
+                + std::to_string(_data._numString) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
         //std::cout << "There are " << _data._numBoolean << " boolean inputs " << _data._numReal << " real inputs " << _data._numInteger << " integer inputs " << _data._numString << " string inputs" << std::endl;
 
         // the values for the inputs per type
@@ -162,13 +161,13 @@ namespace Model
     void InputData::printValues()
     {
         for (unsigned int r = 0; r < _data._numReal; ++r)
-			std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
+            std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
         for (unsigned int i = 0; i < _data._numInteger; ++i)
             std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
         for (unsigned int b = 0; b < _data._numBoolean; ++b)
             std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
-		for (unsigned int s = 0; s < _data._numString; ++s)
-            std::cout << "string input " << s <<" (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
+        for (unsigned int s = 0; s < _data._numString; ++s)
+            std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
     }
 
     void InputData::resetInputValues()
@@ -220,46 +219,53 @@ namespace Model
         return false;
     }
 
+    void InputData::getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames)
+    {
+        for (int idx = 0; idx < numVars; idx++)
+        {
+            fmi1_import_variable_t* var = fmi1_import_get_variable(varLst, idx);
+            const char* na = fmi1_import_get_variable_name(var);
+            std::string name = "";
+            name.assign(na);
+            varNames->push_back(name);
+        }
+    }
 
-	void InputData::getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames)
-	{
-		for (int idx = 0; idx < numVars; idx++)
-		{
-			fmi1_import_variable_t* var = fmi1_import_get_variable(varLst, idx);
-			const char* na = fmi1_import_get_variable_name(var);
-			std::string name = "";
-			name.assign(na);
-			varNames->push_back(name);
-		}
-	}
+    void InputData::printKeyToInputMap()
+    {
+        std::cout << "KEY TO INPUT MAP" << std::endl;
+        for (std::map<inputKey, KeyMapValue>::const_iterator it = _keyToInputMap.begin(); it != _keyToInputMap.end(); ++it)
+        {
+            std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
+        }
+    }
 
-	void InputData::printKeyToInputMap()
-	{
-		std::cout << "KEY TO INPUT MAP" << std::endl;
-		for (std::map<inputKey, KeyMapValue >::const_iterator it = _keyToInputMap.begin();
-		it != _keyToInputMap.end(); ++it)
-		{
-			std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
-		}
-	}
+    inputKey getInputDataKeyForString(std::string keyString)
+    {
+        if (!keyString.compare("JOY_1_X"))
+            return JOY_1_X;
+        else if (!keyString.compare("JOY_1_Y"))
+            return JOY_1_Y;
+        else if (!keyString.compare("JOY_2_X"))
+            return JOY_2_X;
+        else if (!keyString.compare("JOY_2_Y"))
+            return JOY_2_Y;
+        else if (!keyString.compare("KEY_W"))
+            return KEY_W;
+        else if (!keyString.compare("KEY_A"))
+            return KEY_A;
+        else if (!keyString.compare("KEY_S"))
+            return KEY_S;
+        else if (!keyString.compare("KEY_D"))
+            return KEY_D;
+        else
+            std::cout << "getInputKeyForString  failed" << std::endl;
+    }
 
-	inputKey getInputDataKeyForString(std::string keyString)
-	{
-		if (!keyString.compare("JOY_1_X")) return JOY_1_X;
-		else if (!keyString.compare("JOY_1_Y")) return JOY_1_Y;
-		else if (!keyString.compare("JOY_2_X")) return JOY_2_X;
-		else if (!keyString.compare("JOY_2_Y")) return JOY_2_Y;
-		else if (!keyString.compare("KEY_W")) return KEY_W;
-		else if (!keyString.compare("KEY_A")) return KEY_A;
-		else if (!keyString.compare("KEY_S")) return KEY_S;
-		else if (!keyString.compare("KEY_D")) return KEY_D;
-		else std::cout << "getInputKeyForString  failed" << std::endl;
-	}
+    std::string keyMapValueToString(KeyMapValue val)
+    {
+        return std::string(fmi1_base_type_to_string(val._baseType)).append(std::to_string(val._valueIdx));
 
-	std::string keyMapValueToString(KeyMapValue val)
-	{
-		return std::string(fmi1_base_type_to_string(val._baseType)).append(std::to_string(val._valueIdx));
-			
-	}
+    }
 
 }  // End namespace Model
