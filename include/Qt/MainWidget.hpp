@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /**
  OMVis
@@ -72,13 +72,6 @@ class MainWidget : public QMainWindow, public osgViewer::CompositeViewer
 {
 Q_OBJECT
  public:
-    QMenu* _fileMenu;
-    QMenu* _settingsMenu;
-    QMenu* _inputMenu;
-    QWidget* _osgViewerWidget;
-    QWidget* _controlElementWidget;
-    QWidget* _timeSliderWidget;
-
     /*! \brief Constructs MainWidget object from arguments.
      *
      * A empty GUI is created and the model has to be loaded via file open dialog.
@@ -88,7 +81,7 @@ Q_OBJECT
      * @param threadingModel The threading model.
      * @param omv The OMVisualizer which stores the scene.
      */
-    MainWidget(QWidget* parent = 0, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded, Model::OMVisualizerAbstract* omv = NULL);
+    MainWidget(QWidget* parent = 0, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded, Model::OMVisualizerAbstract* omv = nullptr);
 
     /*! \brief Adds a view-widget to the main-widget
      *
@@ -153,9 +146,9 @@ Q_OBJECT
      */
     QString modelSelectionDialog();
 
-	/*! \brief Creates a gui elemnt to set the mapping for a input value.
-	*/
-	QHBoxLayout* createInputMapperRow(int inputIdx, std::string varName, std::string type);
+    /*! \brief Creates a gui elemnt to set the mapping for a input value.
+     */
+    QHBoxLayout* createInputMapperRow(int inputIdx, std::string varName, std::string type);
 
  public slots:
     /*! \brief Function that is triggered by the play-button.
@@ -207,9 +200,17 @@ Q_OBJECT
      */
     void changeBGColourInOSGViewer(int colorIdx);
 
-	/*! \brief Updates the key-input-map
-	*/
-	void updateKeyMapValue(QString key);
+    /*! \brief Updates the key-input-map
+     */
+    void updateKeyMapValue(QString key);
+
+ public:
+    QMenu* _fileMenu;
+    QMenu* _settingsMenu;
+    QMenu* _inputMenu;
+    QWidget* _osgViewerWidget;
+    QWidget* _controlElementWidget;
+    QWidget* _timeSliderWidget;
 
  protected:
     QSlider* _timeSlider;
@@ -222,9 +223,9 @@ Q_OBJECT
     Controller::GUIController* _guiController;
 
     /// \todo: Remove
-   // bool _visFMU;  ///< True, if we visualize a FMU, otherwise false and we vis. a MAT file
-   // std::string _modelName;
-   // std::string _pathName;
+    // bool _visFMU;  ///< True, if we visualize a FMU, otherwise false and we vis. a MAT file
+    // std::string _modelName;
+    // std::string _pathName;
 };
 
 #endif /* INCLUDE_MAINWIDGET_HPP_ */

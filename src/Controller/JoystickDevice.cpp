@@ -36,7 +36,7 @@
 namespace Controller
 {
     JoystickDevice::JoystickDevice()
-            : _joystick(NULL),
+            : _joystick(nullptr),
               _xDir(0),
               _yDir(0)
     {
@@ -52,7 +52,7 @@ namespace Controller
             LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),  Util::LC_LOADER, Util::LL_INFO);
             //Load joystick
             _joystick = SDL_JoystickOpen(0);
-            if (_joystick == NULL)
+            if (_joystick == nullptr)
                 LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),  Util::LC_LOADER, Util::LL_INFO);
         }
     }

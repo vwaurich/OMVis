@@ -40,8 +40,7 @@ namespace Model
     /**
      MatrixTransform
      */
-    void UpdateVisitor::apply(osg::MatrixTransform&
-)
+    void UpdateVisitor::apply(osg::MatrixTransform& node)
     {
         //std::cout<<"MT "<<node.className()<<"  "<<node.getName()<<std::endl;
         node.setMatrix(_visAttr._mat);
@@ -83,7 +82,7 @@ namespace Model
                 draw->setShape(new osg::Sphere(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._length / 2.0));
             else
             {
-                LOGGER_WRITE(std::string("Unknown type, we make a capsule."), Util::LC_GUI, UTIL::LL_WARNING);
+                LOGGER_WRITE(std::string("Unknown type, we make a capsule."), Util::LC_GUI, Util::LL_WARNING);
                 //string id = string(visAttr.type.begin(), visAttr.type.begin()+11);
                 draw->setShape(new osg::Capsule(osg::Vec3f(0.0, 0.0, 0.0), 0.1, 0.5));
             }
