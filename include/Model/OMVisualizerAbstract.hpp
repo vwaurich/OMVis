@@ -95,12 +95,16 @@ namespace Model
         {
             // init xml file and get visAttributes
             _baseData->initXMLDoc();
+			// count shapes
+			_baseData->countShapes();
         }
 
         void setUpScene()
         {
             //build scene graph
             _viewerStuff->_scene.setUpScene(_baseData->_xmlDoc.first_node());
+			//count nodes
+
         }
 
         /*! \brief In case of FMU visualization, this methods performs a simulation step.

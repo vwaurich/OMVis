@@ -66,4 +66,15 @@ namespace Model
         LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.", Util::LC_LOADER, Util::LL_DEBUG);
     }
 
+	int OMVisualBase::countShapes() {
+		rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
+		int num=0;
+		for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+		{
+			num++;
+		}
+		return num;
+	}
+
+
 }  // End namespace Model

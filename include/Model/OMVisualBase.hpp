@@ -49,6 +49,8 @@ namespace Model
         /// Reads XML file and sets up osg::viewer.
         void initXMLDoc();
 
+		int countShapes();
+
      public:
         /// \todo Can this attr. be private?
         std::string _modelName;

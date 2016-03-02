@@ -61,6 +61,7 @@ namespace View
         osgViewer::Viewer _viewer;  //the osg-viewer
         /// \todo Can this attr. be private?
         OSGScene _scene;
+		int numShapes;
     };
 
 
