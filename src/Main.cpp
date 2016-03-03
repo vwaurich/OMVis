@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 
         // Create visualization
         Initialization::Factory* factory = new Initialization::Factory();
-        Model::OMVisualizerAbstract* omv = new Model::OMVisualizerAbstract();
+		Model::OMVisualizerAbstract* omv = factory->createVisualizationObject("","");
         Util::Logger::initialize();
 
         /*

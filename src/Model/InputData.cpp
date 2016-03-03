@@ -56,9 +56,9 @@ namespace Model
         // ------------------
         fmi1_import_variable_list_t* allVariables = fmi1_import_get_variable_list(fmu);
         //comparison function ptr
-        int (*causalityCheck)(fmi1_import_variable_t* vl, (void*) enumIdx);
+        int (*causalityCheck)(fmi1_import_variable_t* vl, void* enumIdx);
         causalityCheck = &causalityEqual;
-        int (*baseTypeCheck)(fmi1_import_variable_t* vl, (void*) refBaseType);
+        int (*baseTypeCheck)(fmi1_import_variable_t* vl, void* refBaseType);
         baseTypeCheck = &baseTypeEqual;
         //all vars per type
         fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (void*) fmi1_causality_enu_input);
