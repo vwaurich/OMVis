@@ -26,18 +26,19 @@
  */
 
 #include "Model/OMVisualBase.hpp"
-#include "Visualize.hpp"
-#include "Util/Logger.hpp"
 
 namespace Model
 {
 
-    OMVisualBase::OMVisualBase(std::string model, std::string dir)
-            : _modelName(model),
-              _dirName(dir),
-              _xmlDoc(),
-              _visAttr(),
-              _xmlFileName(dir + model + "_visual.xml")
+	OMVisualBase::OMVisualBase(std::string model, std::string dir)
+		: _modelName(model),
+		_dirName(dir),
+		_xmlDoc(),
+		_xmlFileName(dir + model + "_visual.xml"),
+		allVisAttr(),
+		numShapes(0),
+		visAttrFactory(new Initialization::VisAttributesFactory)
+
     {
     }
 
@@ -66,12 +67,17 @@ namespace Model
         LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.", Util::LC_LOADER, Util::LL_DEBUG);
     }
 
-	int OMVisualBase::countShapes() {
+	const int OMVisualBase::initVisAttributes() {
 		rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
 		int num=0;
 		for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
 		{
-			num++;
+			if (isShapeAttrType(shapeNode))
+			{
+				num++;
+				ShapeAttributes* shapeAttr = new ShapeAttributes;
+				allVisAttr.push_back(shapeAttr);
+			}
 		}
 		return num;
 	}

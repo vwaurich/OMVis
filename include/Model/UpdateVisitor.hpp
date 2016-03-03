@@ -31,6 +31,7 @@
 #include <osg/Geode>
 #include <osg/MatrixTransform>
 #include "VisAttributes.hpp"
+#include "ShapeAttributes.hpp"
 
 namespace Model
 {
@@ -51,7 +52,7 @@ namespace Model
 
      public:
         /// \todo Can this attr. be private
-        VisAttributes _visAttr;
+        VisAttributes* _visAttr;
     };
 
 }  // End namespace Model

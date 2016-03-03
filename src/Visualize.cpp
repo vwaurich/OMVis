@@ -235,7 +235,12 @@ rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3
  */
 bool isCADType(std::string typeName)
 {
-    return typeName.size() >= 12 && std::string(typeName.begin(), typeName.begin() + 11) == "modelica://";
+	if (typeName.size() >= 12)
+	{
+		if (std::string(typeName.begin(), typeName.begin() + 11) == "modelica://") return true;
+	}
+	else
+		return false;
 }
 
 /**
@@ -287,6 +292,28 @@ std::string getShapeType(rapidxml::xml_node<>* node)
     return node->first_node("type")->value();
 }
 
+/**
+is it a ShapeAttributes-type?
+*/
+bool isShapeAttrTypeFromString(std::string typeStr)
+{
+	if (!typeStr.compare("pipecylinder")) return true;
+	else if (!typeStr.compare("cylinder")) return true;
+	else if (!typeStr.compare("box")) return true;
+	else if (!typeStr.compare("cone")) return true;
+	else if (!typeStr.compare("sphere")) return true;
+	else if (!isCADType(typeStr)) return true;
+	else return false;
+}
+
+/**
+is it a ShapeAttributes-type?
+*/
+bool isShapeAttrType(rapidxml::xml_node<>* node)
+{
+	std::string typeStr = node->first_node("type")->value();
+	return isShapeAttrTypeFromString(typeStr);
+}
 
 
 /**

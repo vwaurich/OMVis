@@ -35,8 +35,7 @@ namespace View
 
     OMVisualViewer::OMVisualViewer()
             : _viewer(),
-              _scene(),
-			  numShapes(0)
+              _scene()
     {
     }
 

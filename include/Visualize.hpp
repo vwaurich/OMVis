@@ -76,6 +76,11 @@ bool exists(const std::string& name);
 
 std::string getShapeType(rapidxml::xml_node<>* node);
 
+bool isShapeAttrTypeFromString(std::string typeStr);
+
+bool isShapeAttrType(rapidxml::xml_node<>* node);
+
+
 
 osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 

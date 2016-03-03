@@ -68,7 +68,7 @@ namespace Model
                   _viewerStuff(new View::OMVisualViewer),
                   nodeUpdater(new Model::UpdateVisitor),
                   omvManager(new View::OMVManager(0.0, 0.0, 0.0, 0.1, 0.0, 10.0))
-        {
+		{
             _viewerStuff->_scene.path = dir;
         }
 
@@ -95,16 +95,14 @@ namespace Model
         {
             // init xml file and get visAttributes
             _baseData->initXMLDoc();
-			// count shapes
-			_baseData->countShapes();
+		    //allocate memory for all visAttributes and count shapes
+			_baseData->initVisAttributes();
         }
 
         void setUpScene()
         {
             //build scene graph
             _viewerStuff->_scene.setUpScene(_baseData->_xmlDoc.first_node());
-			//count nodes
-
         }
 
         /*! \brief In case of FMU visualization, this methods performs a simulation step.
@@ -121,11 +119,12 @@ namespace Model
          */
         virtual void updateVisAttributes(double time) = 0;
 
-        /*! \brief Virtual Method to initialize the scene. Is implemented either by usign FMU or mat-file.
-         *
-         * \remark All classes that derive from OMVisualizerAbstract
-         */
-        virtual void initializeVisAttributes(double time) = 0;
+		/*! \brief Virtual Method to create the scene. Is implemented either by usign FMU or mat-file.
+		*
+		* \remark All classes that derive from OMVisualizerAbstract
+		* @param omvm
+		*/
+		virtual void createVisAttributes() = 0;
 
         /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
          *
@@ -164,7 +163,7 @@ namespace Model
         void initVisualization()
         {
             std::cout << "init visualization" << std::endl;
-            initializeVisAttributes(omvManager->_startTime);
+			createVisAttributes();
             omvManager->_visTime = omvManager->_startTime;
             omvManager->pause = true;
         }

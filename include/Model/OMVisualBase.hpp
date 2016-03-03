@@ -28,8 +28,15 @@
 #define INCLUDE_OMVISUALBASE_HPP_
 
 #include <string>
+
 #include "VisAttributes.hpp"
+#include "ShapeAttributes.hpp"
+#include "Visualize.hpp"
+
 #include "Util/rapidxml.hpp"
+#include "Util/Logger.hpp"
+
+#include "Initialization/VisAttributesFactory.hpp"
 
 namespace Model
 {
@@ -49,7 +56,7 @@ namespace Model
         /// Reads XML file and sets up osg::viewer.
         void initXMLDoc();
 
-		int countShapes();
+		const int initVisAttributes();
 
      public:
         /// \todo Can this attr. be private?
@@ -60,9 +67,14 @@ namespace Model
         /// The XML containing the information about the visualization.
         rapidxml::xml_document<> _xmlDoc;
         /// \todo Can this attr. be private?
-        /// Stores the current visualization data.
-        VisAttributes _visAttr;
 
+        /// Stores the current visualization data.
+		std::vector<VisAttributes*> allVisAttr;
+		/// Number of all visualization objects
+		int numShapes;
+		/// Factory to create visAttributes
+		Initialization::VisAttributesFactory* visAttrFactory;
+	
      private:
         std::string _xmlFileName;
     };

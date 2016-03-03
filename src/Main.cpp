@@ -73,6 +73,7 @@ int main(int argc, char* argv[])
         // Init visualization
         omv->initData();
         omv->setUpScene();
+		omv->createVisAttributes();
 		omv->updateVisAttributes(0.0);  // set scene to initial position 
 
         QApplication app(argc, argv);

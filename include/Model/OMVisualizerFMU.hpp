@@ -35,6 +35,7 @@
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
+#include "Model/ShapeAttributes.hpp"
 #include "Visualize.hpp"
 
 
@@ -82,9 +83,10 @@ namespace Model
 		*/
 		void updateVisAttributes(double time);
 
-		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+		/*! \brief This method creates the actual data for the visuaslization bodies by using variables from the fmu.
+		*
 		*/
-		void initializeVisAttributes(double time);
+		void createVisAttributes();
 
 		/*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
 		*/

@@ -194,27 +194,12 @@ namespace Model
 		unsigned int shapeIdx = 0;
 		for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
 		{
-			// get the values for the scene graph objects
-			_baseData->_visAttr._type = getShapeType(shapeNode);
-			_baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time,_fmul._fmu);
-			_baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmul._fmu);
-			_baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmul._fmu);
-			rAndT rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T,
-				_baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
-			_baseData->_visAttr._r = rT._r;
-			_baseData->_visAttr._T = rT._T;
-
-			_baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
+			VisAttributes* visAttr = _baseData->allVisAttr[shapeIdx];
+			visAttr->updateVisAttributesFMU(shapeNode, time, _fmul._fmu);
 
 			//update the shapes
-			nodeUpdater->_visAttr = _baseData->_visAttr;
-			//updater.visAttr.dumpVisAttributes();
+			nodeUpdater->_visAttr = visAttr;
+			//nodeUpdater->_visAttr->dumpVisAttributes();
 
 			//get the scene graph nodes and stuff
 			osg::ref_ptr<osg::Node> child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
@@ -223,13 +208,34 @@ namespace Model
 		} //end while
 	}  //end function
 
-	void OMVisualizerFMU::initializeVisAttributes(double time)
+	void OMVisualizerFMU::createVisAttributes()
 	{
+		//init FMU
 		_fmuData = initializeFMU(_fmul._fmu, _simSettings);
 		omvManager->_visTime = omvManager->_startTime;
 		omvManager->_simTime = omvManager->_startTime;
-		updateVisAttributes(omvManager->_visTime);
-	}
+
+		// Update all shapes
+		rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
+		unsigned int shapeIdx = 0;
+		for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+		{
+			//create a VisAttributes object according to the node
+			VisAttributes* visAttr = _baseData->visAttrFactory->createVisAttributes(shapeNode->first_node("type")->value());
+			_baseData->allVisAttr[shapeIdx] = visAttr;
+
+			visAttr->updateVisAttributesFMU(shapeNode, omvManager->_startTime, _fmul._fmu);
+
+			//update the shapes
+			nodeUpdater->_visAttr = visAttr;
+			//nodeUpdater->_visAttr->dumpVisAttributes();
+
+			//get the scene graph nodes and stuff
+			osg::ref_ptr<osg::Node> child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
+			child->accept(*nodeUpdater);
+			shapeIdx++;
+		} //end while
+	}  //end function
 
 	void OMVisualizerFMU::updateScene(double time)
 	{

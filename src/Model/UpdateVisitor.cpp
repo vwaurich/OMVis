@@ -43,7 +43,7 @@ namespace Model
     void UpdateVisitor::apply(osg::MatrixTransform& node)
     {
         //std::cout<<"MT "<<node.className()<<"  "<<node.getName()<<std::endl;
-        node.setMatrix(_visAttr._mat);
+        node.setMatrix(_visAttr->getTransformationMatrix());
         traverse(node);
     }
 
@@ -52,13 +52,13 @@ namespace Model
      */
     void UpdateVisitor::apply(osg::Geode& node)
     {
-        //std::cout<<"GEODE "<<visAttr.type<<" "<<std::endl;
+        //std::cout<<"GEODE "<<_visAttr->getType()<<" "<<std::endl;
         osg::ref_ptr<osg::StateSet> ss = node.getOrCreateStateSet();
 
         //its a stl-file
-        if (isCADType(_visAttr._type))
+        if (isCADType(_visAttr->getType()))
         {
-            std::string filename = extractCADFilename(_visAttr._type);
+            std::string filename = extractCADFilename(_visAttr->getType());
             osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
 
         }
@@ -67,25 +67,9 @@ namespace Model
         {
             osg::ref_ptr<osg::Drawable> draw = node.getDrawable(0);
             draw->dirtyDisplayList();
-            //osg::ref_ptr<osg::ShapeDrawable> shapeDraw = dynamic_cast<osg::ShapeDrawable*>(draw.get());
-            //shapeDraw->setColor(osg::Vec4(visAttr.color,1.0));
 
-            if (_visAttr._type == "pipecylinder")
-                draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2, _visAttr._length));
-            else if (_visAttr._type == "cylinder")
-                draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2, _visAttr._length));
-            else if (_visAttr._type == "box")
-                draw->setShape(new osg::Box(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width, _visAttr._height, _visAttr._length));
-            else if (_visAttr._type == "cone")
-                draw->setShape(new osg::Cone(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._width / 2, _visAttr._length));
-            else if (_visAttr._type == "sphere")
-                draw->setShape(new osg::Sphere(osg::Vec3f(0.0, 0.0, 0.0), _visAttr._length / 2));
-            else
-            {
-                std::cout << "UNKNOWN TYPE, WE MAKE A CAPSULE " << std::endl;
-                //string id = string(visAttr.type.begin(), visAttr.type.begin()+11);
-                draw->setShape(new osg::Capsule(osg::Vec3f(0.0, 0.0, 0.0), 0.1, 0.5));
-            }
+			//udpate the attributes for the drawable
+			_visAttr->updateDrawable(draw);
 
             //cout<<"SHAPE "<<draw->getShape()->className()<<endl;
             node.addDrawable(draw.get());
@@ -93,7 +77,7 @@ namespace Model
         //osg::Material *material = dynamic_cast<osg::Material*>(ss->getAttribute(osg::StateAttribute::MATERIAL));
         osg::ref_ptr<osg::Material> material = new osg::Material;
 
-        material->setDiffuse(osg::Material::FRONT, osg::Vec4(_visAttr._color / 255, 1.0));
+        material->setDiffuse(osg::Material::FRONT, osg::Vec4(_visAttr->getColor() / 255, 1.0));
         ss->setAttribute(material);
         node.setStateSet(ss);
         traverse(node);

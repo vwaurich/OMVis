@@ -36,51 +36,48 @@
 
 namespace Model
 {
-
-    /*! \brief Contains all information to display a shape.
-     *
-     *
+    /*! \brief Abstract class for a visualization object
      */
     class VisAttributes
     {
      public:
-        VisAttributes();
+		 VisAttributes() {};
         ~VisAttributes() = default;
 
         VisAttributes(const VisAttributes& va) = delete;
         VisAttributes& operator=(const VisAttributes& va) = default;
 
         /// Dumps the attributes.
-        void dumpVisAttributes();
+        virtual void dumpVisAttributes() = 0;
 
-        /// Computes the attributes of the shape for a certain time.
-        void fetchVisAttributes(rapidxml::xml_node<>* node, ModelicaMatReader matReader, fmi1_import_t* fmu, double time, bool useFMU);
+		/*! \brief update the elements with FMU variables
+		*/
+		virtual void updateVisAttributesFMU(rapidxml::xml_node<>* node, double time , fmi1_import_t* fmu) = 0;
 
-     public:
-        /// \todo Can these attributes be private?
-        std::string _type;
-        /// \todo Can these attributes be private?
-        double _length;
-        /// \todo Can these attributes be private?
-        double _width;
-        /// \todo Can these attributes be private?
-        double _height;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _r;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _rShape;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _lDir;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _wDir;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _color;
-        /// \todo Can these attributes be private?
-        /// The original T
-        osg::Matrix3 _T;
-        /// \todo Can these attributes be private?
-        /// The computed(adapted to the lenght direction)
-        osg::Matrix _mat;
+		/*! \brief update the elements with mat-file variables
+		*/
+		virtual void updateVisAttributesMAT(rapidxml::xml_node<>* node, double time, ModelicaMatReader matReader) = 0;
+
+		/*! \brief Gets the transformation matrix
+		*/
+		virtual osg::Matrix getTransformationMatrix() = 0;
+
+		/*! \brief gets the type of the shape
+		*/
+		virtual std::string getType() = 0;
+
+		/*! \brief get the color of the shape
+		*/
+		virtual osg::Vec3f getColor() = 0;
+
+		/*! \brief Outputs true if tis a Shape Visualization Object
+		*/
+		virtual bool isShapeVisualizer() = 0;
+
+		/*! \brief Updates the shape drawable type and attributes
+		*/
+		virtual void updateDrawable(osg::ref_ptr<osg::Drawable> draw) = 0;
+
     };
 
 }  // End namespace Model

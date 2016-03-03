@@ -63,9 +63,9 @@ namespace Model
 		*/
 		void updateVisAttributes(double time);
 
-		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+		/*! \brief Implementation for OMVisualizerAbstract::createVisAttributes to create all visualization attributes based on a mat file
 		*/
-		void initializeVisAttributes(double time);
+		void createVisAttributes();
 
 		/*! \brief For MAT-file based visualization, nothing has to be done. Just get the visualizationAttributes
 		*/
