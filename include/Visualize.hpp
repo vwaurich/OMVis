@@ -74,34 +74,41 @@ std::string extractCADFilename(std::string s);
 
 bool exists(const std::string& name);
 
-std::string getShapeType(rapidxml::xml_node<>* node);
+
+//Get Data From xml-nodes
+
+std::string getNodeType(rapidxml::xml_node<>* node);
+
+std::string getNodeIdent(rapidxml::xml_node<>* node);
+
+osg::Matrix3 getNodeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+
+osg::Matrix3 getNodeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+
+osg::Vec3f getNodeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+
+osg::Vec3f getNodeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+
+double getNodeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+
+double getNodeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+
+osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
+
+rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type);
+
+
+
+//Shape Visualzation Objects
 
 bool isShapeAttrTypeFromString(std::string typeStr);
 
 bool isShapeAttrType(rapidxml::xml_node<>* node);
 
+//Prism Visualzation Objects
 
+bool isPrismAttrTypeFromString(std::string typeStr);
 
-osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
-osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-
-
-std::string getShapeIdent(rapidxml::xml_node<>* node);
-
-
-osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
-osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-
-
-double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
-double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-
-
-osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
-
-rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type);
+bool isPrismAttrType(rapidxml::xml_node<>* node);
 
 #endif /* INCLUDE_VISUALIZE_HPP_ */

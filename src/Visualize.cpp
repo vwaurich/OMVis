@@ -237,10 +237,16 @@ bool isCADType(std::string typeName)
 {
 	if (typeName.size() >= 12)
 	{
-		if (std::string(typeName.begin(), typeName.begin() + 11) == "modelica://") return true;
+		if (std::string(typeName.begin(), typeName.begin() + 11) == "modelica://")
+		{
+			return true;
+		}
 	}
 	else
+	{
+
 		return false;
+	}
 }
 
 /**
@@ -273,53 +279,30 @@ bool exists(const std::string& name)
 }
 
 /****************************
- * Extract Shape information
+ * Extract Visualization Object information
  *****************************/
 
-/**
- gets the ident of the shape
- */
-std::string getShapeIdent(rapidxml::xml_node<>* node)
-{
-    return node->first_node("ident")->value();
-}
-
-/**
- gets the type of the shape
- */
-std::string getShapeType(rapidxml::xml_node<>* node)
-{
-    return node->first_node("type")->value();
-}
-
-/**
-is it a ShapeAttributes-type?
+ /**
+gets the ident of the shape
 */
-bool isShapeAttrTypeFromString(std::string typeStr)
+std::string getNodeIdent(rapidxml::xml_node<>* node)
 {
-	if (!typeStr.compare("pipecylinder")) return true;
-	else if (!typeStr.compare("cylinder")) return true;
-	else if (!typeStr.compare("box")) return true;
-	else if (!typeStr.compare("cone")) return true;
-	else if (!typeStr.compare("sphere")) return true;
-	else if (!isCADType(typeStr)) return true;
-	else return false;
+	return node->first_node("ident")->value();
 }
 
 /**
-is it a ShapeAttributes-type?
+gets the type of the shape
 */
-bool isShapeAttrType(rapidxml::xml_node<>* node)
+std::string getNodeType(rapidxml::xml_node<>* node)
 {
-	std::string typeStr = node->first_node("type")->value();
-	return isShapeAttrTypeFromString(typeStr);
+	return node->first_node("type")->value();
 }
 
 
 /**
 gets the vector of the indicated node exp of the shape
 */
-osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+osg::Matrix3 getNodeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
 {
 	rapidxml::xml_node<>* x1Node = node->first_node(attr)->first_node();
 	rapidxml::xml_node<>* x2Node = x1Node->next_sibling();
@@ -345,7 +328,7 @@ osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double ti
 /**
 gets the vector of the indicated node exp of the shape
 */
-osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
+osg::Matrix3 getNodeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
 {
 	rapidxml::xml_node<>* x1Node = node->first_node(attr)->first_node();
 	rapidxml::xml_node<>* x2Node = x1Node->next_sibling();
@@ -372,7 +355,7 @@ osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double ti
 /**
 gets the vector of the indicated node exp of the shape
 */
-osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+osg::Vec3f getNodeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
 {
 	rapidxml::xml_node<>* xNode = node->first_node(attr)->first_node();
 	rapidxml::xml_node<>* yNode = xNode->next_sibling();
@@ -386,7 +369,7 @@ osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time
 /**
 gets the vector of the indicated node exp of the shape
 */
-osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
+osg::Vec3f getNodeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
 {
 	rapidxml::xml_node<>* xNode = node->first_node(attr)->first_node();
 	rapidxml::xml_node<>* yNode = xNode->next_sibling();
@@ -400,7 +383,7 @@ osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time
 /**
 gets the value of the indicated node exp
 */
-double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+double getNodeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
 {
 	rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
 	double val = evaluateExpressionMAT(expNode, time, reader);
@@ -410,7 +393,7 @@ double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time
 /**
 gets the value of the indicated node exp
 */
-double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
+double getNodeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
 {
 	rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
 	double val = evaluateExpressionFMU(expNode, time, fmu);
@@ -434,4 +417,72 @@ unsigned int numShapes(rapidxml::xml_node<>* rootNode)
             ++num;
 
     return num;
+}
+
+
+/****************************
+* Check Type of Visualization Object
+*****************************/
+
+
+/**
+is the string a ShapeAttributes-type?
+*/
+bool isShapeAttrTypeFromString(std::string typeStr)
+{
+	if (!typeStr.compare("pipecylinder"))
+	{
+		return true;
+	}
+	else if (!typeStr.compare("cylinder")) 
+	{
+		return true;
+	}
+	else if (!typeStr.compare("box")) 
+	{
+		return true;
+	}
+	else if (!typeStr.compare("cone")) 
+	{
+		return true;
+	}
+	else if (!typeStr.compare("sphere")) 
+	{
+		return true;
+	}
+	else if (isCADType(typeStr))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+/**
+is the node a ShapeAttributes-type?
+*/
+bool isShapeAttrType(rapidxml::xml_node<>* node)
+{
+	std::string typeStr = node->first_node("type")->value();
+	return isShapeAttrTypeFromString(typeStr);
+}
+
+/**
+is the string a PrismAttributes-type?
+*/
+bool isPrismAttrType(rapidxml::xml_node<>* node)
+{
+	std::string typeStr = node->first_node("type")->value();
+	return isPrismAttrTypeFromString(typeStr);
+}
+
+/**
+is the string a PrismAttributes-type?
+*/
+bool isPrismAttrTypeFromString(std::string typeStr)
+{
+	if (!typeStr.compare("prism")) return true;
+	else return false;
 }

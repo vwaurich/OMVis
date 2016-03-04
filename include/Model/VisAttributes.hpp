@@ -29,6 +29,7 @@
 
 #include <osg/Vec3f>
 #include <osg/Matrix>
+#include <osg/Drawable>
 #include <osg/Uniform>
 #include "WrapperFMILib.hpp"
 #include "Util/rapidxml.hpp"
@@ -66,17 +67,16 @@ namespace Model
 		*/
 		virtual std::string getType() = 0;
 
-		/*! \brief get the color of the shape
-		*/
-		virtual osg::Vec3f getColor() = 0;
-
-		/*! \brief Outputs true if tis a Shape Visualization Object
+		/*! \brief Outputs true if its a Shape Visualization Object
 		*/
 		virtual bool isShapeVisualizer() = 0;
 
-		/*! \brief Updates the shape drawable type and attributes
+		/*! \brief Updates the osg geode type and attributes
 		*/
-		virtual void updateDrawable(osg::ref_ptr<osg::Drawable> draw) = 0;
+		virtual void updateGeode(osg::Geode* node) = 0;
+		/*! \brief Sets the material (color as well) for the stateset of a node
+		*/
+		virtual void setMaterial(osg::ref_ptr<osg::StateSet> stateSet) = 0;
 
     };
 

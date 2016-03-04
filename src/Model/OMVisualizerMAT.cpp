@@ -93,9 +93,8 @@ namespace Model
 
 			visAttr->updateVisAttributesMAT(shapeNode, time, _matReader);
 
-			//update the shapes
+			//update the visualization objects with a nodevisitor
 			nodeUpdater->_visAttr = visAttr;
-
 			//nodeUpdater->_visAttr->dumpVisAttributes();
 			
 			//get the scene graph nodes and stuff

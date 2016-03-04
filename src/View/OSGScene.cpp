@@ -45,7 +45,7 @@ namespace View
             osg::ref_ptr<osg::Geode> geode;
             osg::ref_ptr<osg::StateSet> ss;
 
-            std::string type = getShapeType(shapeNode);
+            std::string type = getNodeType(shapeNode);
             std::cout << "we have the shape " << shapeNode->value() << " with type " << type << std::endl;
 
             //color

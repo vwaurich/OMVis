@@ -64,16 +64,16 @@ namespace Model
 	void ShapeAttributes::updateVisAttributesFMU(rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
 	{
 		// get the values for the scene graph objects
-		_type = getShapeType(node);
-		_length = getShapeAttrFMU((const char*) "length", node, time, fmu);
-		_width = getShapeAttrFMU((const char*) "width", node, time, fmu);
-		_height = getShapeAttrFMU((const char*) "height", node, time, fmu);
-		_r = getShapeVectorFMU((char*) "r", node, time, fmu);
-		_rShape = getShapeVectorFMU((char*) "r_shape", node, time, fmu);
-		_lDir = getShapeVectorFMU((char*) "lengthDir", node, time, fmu);
-		_wDir = getShapeVectorFMU((char*) "widthDir", node, time, fmu);
-		_color = getShapeVectorFMU((char*) "color", node, time, fmu);
-		_T = getShapeMatrixFMU((char*) "T", node, time, fmu);
+		_type = getNodeType(node);
+		_length = getNodeAttrFMU((const char*) "length", node, time, fmu);
+		_width = getNodeAttrFMU((const char*) "width", node, time, fmu);
+		_height = getNodeAttrFMU((const char*) "height", node, time, fmu);
+		_r = getNodeVectorFMU((char*) "r", node, time, fmu);
+		_rShape = getNodeVectorFMU((char*) "r_shape", node, time, fmu);
+		_lDir = getNodeVectorFMU((char*) "lengthDir", node, time, fmu);
+		_wDir = getNodeVectorFMU((char*) "widthDir", node, time, fmu);
+		_color = getNodeVectorFMU((char*) "color", node, time, fmu);
+		_T = getNodeMatrixFMU((char*) "T", node, time, fmu);
 		rAndT rT = staticRotation(_r, _rShape, _T,_lDir, _wDir, _length, _width, _height, _type);
 		_r = rT._r;
 		_T = rT._T;
@@ -83,16 +83,16 @@ namespace Model
 	void ShapeAttributes::updateVisAttributesMAT(rapidxml::xml_node<>* node, double time, ModelicaMatReader matReader)
 	{
 		// get the values for the scene graph objects
-		_type = getShapeType(node);
-		_length = getShapeAttrMAT((const char*) "length", node, time, matReader);
-		_width = getShapeAttrMAT((const char*) "width", node, time, matReader);
-		_height = getShapeAttrMAT((const char*) "height", node, time, matReader);
-		_r = getShapeVectorMAT((char*) "r", node, time, matReader);
-		_rShape = getShapeVectorMAT((char*) "r_shape", node, time, matReader);
-		_lDir = getShapeVectorMAT((char*) "lengthDir", node, time, matReader);
-		_wDir = getShapeVectorMAT((char*) "widthDir", node, time, matReader);
-		_color = getShapeVectorMAT((char*) "color", node, time, matReader);
-		_T = getShapeMatrixMAT((char*) "T", node, time, matReader);
+		_type = getNodeType(node);
+		_length = getNodeAttrMAT((const char*) "length", node, time, matReader);
+		_width = getNodeAttrMAT((const char*) "width", node, time, matReader);
+		_height = getNodeAttrMAT((const char*) "height", node, time, matReader);
+		_r = getNodeVectorMAT((char*) "r", node, time, matReader);
+		_rShape = getNodeVectorMAT((char*) "r_shape", node, time, matReader);
+		_lDir = getNodeVectorMAT((char*) "lengthDir", node, time, matReader);
+		_wDir = getNodeVectorMAT((char*) "widthDir", node, time, matReader);
+		_color = getNodeVectorMAT((char*) "color", node, time, matReader);
+		_T = getNodeMatrixMAT((char*) "T", node, time, matReader);
 		rAndT rT = staticRotation(_r, _rShape, _T, _lDir, _wDir, _length, _width, _height, _type);
 		_r = rT._r;
 		_T = rT._T;
@@ -120,8 +120,11 @@ namespace Model
 		return true;
 	}
 
-	void ShapeAttributes::updateDrawable(osg::ref_ptr<osg::Drawable> draw)
+	void ShapeAttributes::updateGeode(osg::Geode* node)
 	{
+		osg::ref_ptr<osg::Drawable> draw = node->getDrawable(0);
+		draw->dirtyDisplayList();
+
 		if (_type == "pipecylinder")
 			draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _width / 2, _length));
 		else if (_type == "cylinder")
@@ -139,6 +142,16 @@ namespace Model
 			draw->setShape(new osg::Capsule(osg::Vec3f(0.0, 0.0, 0.0), 0.1, 0.5));
 		}
 
+		node->addDrawable(draw.get());
+	}
+
+	void ShapeAttributes::setMaterial(osg::ref_ptr<osg::StateSet> stateSet)
+	{ 
+		//osg::Material *material = dynamic_cast<osg::Material*>(ss->getAttribute(osg::StateAttribute::MATERIAL));
+		osg::ref_ptr<osg::Material> material = new osg::Material;
+
+		material->setDiffuse(osg::Material::FRONT, osg::Vec4(_color / 255, 1.0));
+		stateSet->setAttribute(material);
 	}
 
 }  // End namespace Model

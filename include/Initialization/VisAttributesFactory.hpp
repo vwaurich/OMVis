@@ -49,7 +49,6 @@ namespace Initialization
 		VisAttributesFactory& operator=(const VisAttributesFactory& f) = delete;
 
         Model::VisAttributes* createVisAttributes(std::string typeName);
-
     };
 
 }  // End namespace Initialization

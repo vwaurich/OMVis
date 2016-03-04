@@ -17,13 +17,16 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INCLUDE_SHAPEATTRIBUTES_HPP_
-#define INCLUDE_SHAPEATTRIBUTES_HPP_
+#ifndef INCLUDE_PRISMATTRIBUTES_HPP_
+#define INCLUDE_PRISMATTRIBUTES_HPP_
+
+#define _USE_MATH_DEFINES  //we need pi as a constant
 
 #include "WrapperFMILib.hpp"
 #include "Util/rapidxml.hpp"
 #include "Util/read_matlab4.h"
 #include "VisAttributes.hpp"
+#include <math.h>"
 
 namespace Model
 {
@@ -32,14 +35,14 @@ namespace Model
      *
      *
      */
-    class ShapeAttributes : public VisAttributes
+    class PrismAttributes : public VisAttributes
     {
      public:
-		 ShapeAttributes();
-        ~ShapeAttributes() = default;
+		 PrismAttributes();
+        ~PrismAttributes() = default;
 
-		ShapeAttributes(const ShapeAttributes& va) = delete;
-		ShapeAttributes& operator=(const ShapeAttributes& va) = default;
+		PrismAttributes(const PrismAttributes& va) = delete;
+		PrismAttributes& operator=(const PrismAttributes& va) = default;
 
         /// Dumps the attributes.
         void dumpVisAttributes();
@@ -68,13 +71,18 @@ namespace Model
 		*/
 		bool isShapeVisualizer();
 
+		/*! \brief Outputs true if its a Prism Visualization Object
+		*/
+		bool isPrismVisualizer();
+
 		/*! \brief Updates the osg geode type and attributes
 		*/
 		void updateGeode(osg::Geode* node);
 
-		/*! \brief Sets the material (color as well) for the stateset of a node
+		/*! \brief Sets the Material for the stateset of a node
 		*/
 		void setMaterial(osg::ref_ptr<osg::StateSet> stateSet);
+
 
      public:
         /// \todo Can these attributes be private?
@@ -82,19 +90,18 @@ namespace Model
         /// \todo Can these attributes be private?
         double _length;
         /// \todo Can these attributes be private?
-        double _width;
+		double _radius;
+		/// \todo Can these attributes be private?
+		int _numEdges;
         /// \todo Can these attributes be private?
-        double _height;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _r;
-        /// \todo Can these attributes be private?
+		osg::Vec3f _r;
+		/// \todo Can these attributes be private?
         osg::Vec3f _rShape;
         /// \todo Can these attributes be private?
         osg::Vec3f _lDir;
         /// \todo Can these attributes be private?
-        osg::Vec3f _wDir;
-        /// \todo Can these attributes be private?
-        osg::Vec3f _color;
+        osg::Vec3f _color0;
+		osg::Vec3f _color1;
         /// \todo Can these attributes be private?
         /// The original T
         osg::Matrix3 _T;
@@ -103,6 +110,10 @@ namespace Model
         osg::Matrix _mat;
     };
 
+
+
 }  // End namespace Model
 
-#endif /* INCLUDE_SHAPEATTRIBUTES_HPP_ */
+
+
+#endif /* INCLUDE_PRISMATTRIBUTES_HPP_ */

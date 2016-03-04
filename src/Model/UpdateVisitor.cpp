@@ -65,22 +65,14 @@ namespace Model
         //its a drawable
         else
         {
-            osg::ref_ptr<osg::Drawable> draw = node.getDrawable(0);
-            draw->dirtyDisplayList();
-
-			//udpate the attributes for the drawable
-			_visAttr->updateDrawable(draw);
-
-            //cout<<"SHAPE "<<draw->getShape()->className()<<endl;
-            node.addDrawable(draw.get());
+			//udpate the attributes for the geode
+			_visAttr->updateGeode(&node);
         }
-        //osg::Material *material = dynamic_cast<osg::Material*>(ss->getAttribute(osg::StateAttribute::MATERIAL));
-        osg::ref_ptr<osg::Material> material = new osg::Material;
-
-        material->setDiffuse(osg::Material::FRONT, osg::Vec4(_visAttr->getColor() / 255, 1.0));
-        ss->setAttribute(material);
-        node.setStateSet(ss);
         traverse(node);
+
+		//set color for shapes
+		_visAttr->setMaterial(ss);
+		node.setStateSet(ss);
     }
 
 }  // End namespace Model

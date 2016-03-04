@@ -20,6 +20,8 @@
 #include "Initialization/VisAttributesFactory.hpp"
 #include "Visualize.hpp"
 #include "Model/ShapeAttributes.hpp"
+#include "Model/PrismAttributes.hpp"
+
 
 namespace Initialization
 {
@@ -27,14 +29,21 @@ namespace Initialization
 	Model::VisAttributes* VisAttributesFactory::createVisAttributes(std::string typeName)
     {
 		//default is a shape object
-		Model::ShapeAttributes* shapeAttr = new Model::ShapeAttributes;
+		Model::VisAttributes* visAttr = (Model::VisAttributes*) new Model::ShapeAttributes;
 
 		//get a shape object
 		if (isShapeAttrTypeFromString(typeName))
 		{
-			shapeAttr = new Model::ShapeAttributes;
+			visAttr = (Model::VisAttributes*) new Model::ShapeAttributes;
 		}
-		return shapeAttr;
+
+		//get a prism object
+		else if (isPrismAttrTypeFromString(typeName))
+		{
+			visAttr = (Model::VisAttributes*) new Model::PrismAttributes;
+		}
+
+		return visAttr;
     }
 
 

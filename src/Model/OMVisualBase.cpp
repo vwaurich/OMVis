@@ -75,8 +75,14 @@ namespace Model
 			if (isShapeAttrType(shapeNode))
 			{
 				num++;
-				ShapeAttributes* shapeAttr = new ShapeAttributes;
+				Model::ShapeAttributes* shapeAttr = new Model::ShapeAttributes();
 				allVisAttr.push_back(shapeAttr);
+			}
+			else if (isPrismAttrType(shapeNode))
+			{
+				num++;
+				PrismAttributes* prismAttr = new PrismAttributes();
+				allVisAttr.push_back(prismAttr);
 			}
 		}
 		return num;

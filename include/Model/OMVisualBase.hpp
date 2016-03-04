@@ -31,6 +31,8 @@
 
 #include "VisAttributes.hpp"
 #include "ShapeAttributes.hpp"
+#include "PrismAttributes.hpp"
+
 #include "Visualize.hpp"
 
 #include "Util/rapidxml.hpp"
