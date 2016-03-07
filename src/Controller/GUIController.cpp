@@ -18,6 +18,8 @@ namespace Controller
 
     Model::OMVisualizerAbstract* GUIController::loadModel(const std::string& modelNameIn)
     {
+        LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
+
         // Get file name and path from the users selection.
         std::size_t pos = modelNameIn.find_last_of("/");
         std::string path = modelNameIn.substr(0, pos + 1);
@@ -34,21 +36,19 @@ namespace Controller
         else
         {
             visFMU = false;
-            // // Remove '_res' from the model file name, because the XML file for MODEL_res.mat it named MODEL_visual.xml.
-            modelName = modelName.substr(0, modelName.find("_res"));
-
             // Remove '_res' from the model file name, because the XML file for MODEL_res.mat it named MODEL_visual.xml.
-            //std::string modelWithOutRes = modelName.substr(0, modelName.find("_res"));
+            modelName = modelName.substr(0, modelName.find("_res"));
         }
 
         // Check for XML description file.
         bool xmlExists = checkForXMLFile(path, modelName);
 
+        // Some useful output for the user and developer.
         LOGGER_WRITE(std::string("Path to model: ") + path, Util::LC_CTR, Util::LL_DEBUG);
         LOGGER_WRITE(std::string("Model file: ") + modelName, Util::LC_CTR, Util::LL_DEBUG);
         LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
-        // Create an appropriate OMVisualizer object.
+        // Ask the factory to create an appropriate OMVisualizer object.
         Initialization::Factory* factory = new Initialization::Factory();
         Model::OMVisualizerAbstract* omv = factory->createVisualizationObject(modelName, path, visFMU);
 
