@@ -29,7 +29,6 @@
 #include <string>
 #include <SDL.h>
 #include "Controller/JoystickDevice.hpp"
-//#include "Input.hpp"
 #include "Model/InputData.hpp"
 #include "Util/Logger.hpp"
 
