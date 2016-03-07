@@ -29,7 +29,9 @@
 
 #include <string>
 #include <memory>
-#include "Model/FMUSimulate.hpp"
+
+#include "FMU.hpp"
+
 #include "Controller/JoystickDevice.hpp"
 #include "Controller/KeyboardEventHandler.hpp"
 #include "Model/SimSettings.hpp"
@@ -37,7 +39,7 @@
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Visualize.hpp"
 
-
+// Forward declaration
 namespace View
 {
     class OMVManager;
@@ -72,12 +74,12 @@ namespace Model
         /// \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
         void initData();
 
-        /*! \brief This methods resets the input values of a FMU to default ("zero" )values.
+        /*! \brief This methods resets the input values of a FMU to default ("zero") values.
          *
          */
         void resetInputs();
 
-		/*! \brief This method updates the actual data for the visuaslization bodies by using variables from the fmu.
+		/*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
 		*
 		*/
 		void updateVisAttributes(const double time);
@@ -97,13 +99,14 @@ namespace Model
          */
         void linkInputsToEventHandler();
 
-		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
+		/*! \brief Returns a 0 if we use a MAT file, 1 if we use FMU for visualization.
 		*/
 		int getDataTypeID();
 
      private:
-        fmul_t _fmul;
-        fmuData _fmuData;
+		FMU _fmu;
+        //!fmul_t _fmul;
+        //!fmuData _fmuData;
         SimSettings* _simSettings;
 
      public:

@@ -35,11 +35,21 @@ namespace Model
 
     OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
             : OMVisualizerAbstract(modelName, modelPath),
-              _fmul(),
-              _fmuData(),
+              _fmu(),
+              //_fmul(),
+              //_fmuData(),
               _simSettings(new SimSettings),
               _inputData()
     {
+    }
+
+    void OMVisualizerFMU::initData()
+    {
+        OMVisualizerAbstract::initData();
+        loadFMU(_baseData->_modelName, _baseData->_dirName);
+        linkInputsToEventHandler();
+        _simSettings->setTend(_omvManager->_endTime);
+        _simSettings->setHdef(0.001);
     }
 
     void OMVisualizerFMU::loadFMU(const std::string model, const std::string dir)
@@ -49,17 +59,19 @@ namespace Model
         std::string fmuFileName = dir + model + ".fmu";
 
         //load and initialize fmu
-        _fmul = load(dir.c_str(), fmuFileName.c_str());
+        //_fmul = load(dir.c_str(), fmuFileName.c_str());
+        _fmu.load(dir.c_str(), fmuFileName.c_str());
         LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_INIT, Util::LL_DEBUG);
-        //std::cout << "LOADED!!!!!!!!!!!" << std::endl;
 
-        _fmuData = initializeFMU(_fmul._fmu, _simSettings);
+        //_fmuData = initializeFMU(_fmul._fmu, _simSettings);
+        _fmu.initialize(_simSettings);
         LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_INIT, Util::LL_DEBUG);
-        //std::cout << "INITIALIZED!!!!!!!!!!!" << std::endl;
 
-        _inputData.initializeInputs(_fmul._fmu);
+        //_inputData.initializeInputs(_fmul._fmu);
+        _inputData.initializeInputs(_fmu._fmu);
+        std::cout << "hier1\n";
         _inputData.printValues();
-
+        std::cout << "hier2\n";
         //assign interactive inputs
         //for (unsigned int i = 0; i < inputs.n_inputs; i++){
         //string key = "";
@@ -85,57 +97,57 @@ namespace Model
         //tcur = settings.tstart;
         //hcur = settings.hdef;
         int zero_crossning_event = 0;
-        _fmuData._fmiStatus = fmi1_import_set_time(_fmul._fmu, time);
-        _fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmul._fmu, _fmuData._eventIndicators, _fmuData._nEventIndicators);
+        _fmu._fmuData._fmiStatus = fmi1_import_set_time(_fmu._fmu, time);
+        _fmu._fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu._fmu, _fmu._fmuData._eventIndicators, _fmu._fmuData._nEventIndicators);
 
         /* Check if an event indicator has triggered */
-        for (size_t k = 0; k < _fmuData._nEventIndicators; ++k)
+        for (size_t k = 0; k < _fmu._fmuData._nEventIndicators; ++k)
         {
-            if (_fmuData._eventIndicators[k] * _fmuData._eventIndicatorsPrev[k] < 0)
+            if (_fmu._fmuData._eventIndicators[k] * _fmu._fmuData._eventIndicatorsPrev[k] < 0)
             {
                 zero_crossning_event = 1;
-                LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: Event occurred at ") + std::to_string(_fmuData._tcur), Util::LC_CTR, Util::LL_DEBUG);
+                LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: Event occurred at ") + std::to_string(_fmu._fmuData._tcur), Util::LC_CTR, Util::LL_DEBUG);
                 //std::cout << "AN EVENT at " << _fmuData._tcur << std::endl;
                 break;
             }
         }
 
         /* Handle any events */
-        if (_simSettings->get_callEventUpdate() || zero_crossning_event || (_fmuData._eventInfo.upcomingTimeEvent && _fmuData._tcur == _fmuData._eventInfo.nextEventTime))
+        if (_simSettings->getCallEventUpdate() || zero_crossning_event || (_fmu._fmuData._eventInfo.upcomingTimeEvent && _fmu._fmuData._tcur == _fmu._fmuData._eventInfo.nextEventTime))
         {
-            std::cout << "HANDLE EVENT at " << _fmuData._tcur << std::endl;
-            _fmuData._fmiStatus = fmi1_import_eventUpdate(_fmul._fmu, _simSettings->get_intermediateResults(), &_fmuData._eventInfo);
-            _fmuData._fmiStatus = fmi1_import_get_continuous_states(_fmul._fmu, _fmuData._states, _fmuData._nStates);
-            _fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmul._fmu, _fmuData._eventIndicators, _fmuData._nEventIndicators);
-            _fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmul._fmu, _fmuData._eventIndicatorsPrev, _fmuData._nEventIndicators);
+            std::cout << "HANDLE EVENT at " << _fmu._fmuData._tcur << std::endl;
+            _fmu._fmuData._fmiStatus = fmi1_import_eventUpdate(_fmu._fmu, _simSettings->getIntermediateResults(), &_fmu._fmuData._eventInfo);
+            _fmu._fmuData._fmiStatus = fmi1_import_get_continuous_states(_fmu._fmu, _fmu._fmuData._states, _fmu._fmuData._nStates);
+            _fmu._fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu._fmu, _fmu._fmuData._eventIndicators, _fmu._fmuData._nEventIndicators);
+            _fmu._fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu._fmu, _fmu._fmuData._eventIndicatorsPrev, _fmu._fmuData._nEventIndicators);
         }
         /* Updated next time step */
-        if (_fmuData._eventInfo.upcomingTimeEvent)
+        if (_fmu._fmuData._eventInfo.upcomingTimeEvent)
         {
-            if (_fmuData._tcur + _simSettings->get_hdef() < _fmuData._eventInfo.nextEventTime)
-                _fmuData._hcur = _simSettings->get_hdef();
+            if (_fmu._fmuData._tcur + _simSettings->getHdef() < _fmu._fmuData._eventInfo.nextEventTime)
+                _fmu._fmuData._hcur = _simSettings->getHdef();
             else
-                _fmuData._hcur = _fmuData._eventInfo.nextEventTime - _fmuData._tcur;
+                _fmu._fmuData._hcur = _fmu._fmuData._eventInfo.nextEventTime - _fmu._fmuData._tcur;
         }
         else
-            _fmuData._hcur = _simSettings->get_hdef();
+            _fmu._fmuData._hcur = _simSettings->getHdef();
 
         /* increase with step size*/
-        _fmuData._tcur += _fmuData._hcur;
+        _fmu._fmuData._tcur += _fmu._fmuData._hcur;
 
         /* last step */
-        if (_fmuData._tcur > _simSettings->get_tend() - _fmuData._hcur / 1e16)
+        if (_fmu._fmuData._tcur > _simSettings->getTend() - _fmu._fmuData._hcur / 1e16)
         {
-            _fmuData._tcur -= _fmuData._hcur;
-            _fmuData._hcur = (_simSettings->get_tend() - _fmuData._tcur);
-            _fmuData._tcur = _simSettings->get_tend();
+            _fmu._fmuData._tcur -= _fmu._fmuData._hcur;
+            _fmu._fmuData._hcur = _simSettings->getTend() - _fmu._fmuData._tcur;
+            _fmu._fmuData._tcur = _simSettings->getTend();
         }
         //set inputs
         _joystick.detectContinuousInputEvents(_inputData);
-        _inputData.setInputsInFMU(_fmul._fmu);
+        _inputData.setInputsInFMU(_fmu._fmu);
 
         /* Solve system */
-        _fmuData._fmiStatus = fmi1_import_get_derivatives(_fmul._fmu, _fmuData._statesDer, _fmuData._nStates);
+        _fmu._fmuData._fmiStatus = fmi1_import_get_derivatives(_fmu._fmu, _fmu._fmuData._statesDer, _fmu._fmuData._nStates);
 
         //print out some values for debugging:
         //std::cout<<"DO EULER at "<<data.tcur<<std::endl;
@@ -146,26 +158,19 @@ namespace Model
         //std::cout<<"value "<<value<<std::endl;
 
         // integrate a step with euler
-        for (size_t k = 0; k < _fmuData._nStates; ++k)
-            _fmuData._states[k] = _fmuData._states[k] + _fmuData._hcur * _fmuData._statesDer[k];
+        for (size_t k = 0; k < _fmu._fmuData._nStates; ++k)
+            _fmu._fmuData._states[k] = _fmu._fmuData._states[k] + _fmu._fmuData._hcur * _fmu._fmuData._statesDer[k];
 
         /* Set states */
-        _fmuData._fmiStatus = fmi1_import_set_continuous_states(_fmul._fmu, _fmuData._states, _fmuData._nStates);
+        _fmu._fmuData._fmiStatus = fmi1_import_set_continuous_states(_fmu._fmu, _fmu._fmuData._states, _fmu._fmuData._nStates);
         /* Step is complete */
-        _fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmul._fmu, &_simSettings->_callEventUpdate);
+        _fmu._fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmu._fmu, &_simSettings->_callEventUpdate);
 
         _inputData.resetInputValues();
-        return _fmuData._tcur;
+        return _fmu._fmuData._tcur;
     }
 
-    void OMVisualizerFMU::initData()
-    {
-        OMVisualizerAbstract::initData();
-        loadFMU(_baseData->_modelName, _baseData->_dirName);
-        linkInputsToEventHandler();
-        _simSettings->set_tend(_omvManager->_endTime);
-        _simSettings->set_hdef(0.001);
-    }
+
 
     void OMVisualizerFMU::resetInputs()
     {
@@ -199,15 +204,18 @@ namespace Model
         {
             // get the values for the scene graph objects
             _baseData->_visAttr._type = getShapeType(shapeNode);
-            _baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmul._fmu);
-            _baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmul._fmu);
+
+            //_baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._length = getShapeAttrFMU(std::string("length").c_str(), shapeNode, time, _fmu._fmu);
+
+            _baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmu._fmu);
+            _baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmu._fmu);
             rAndT rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
             _baseData->_visAttr._r = rT._r;
             _baseData->_visAttr._T = rT._T;
@@ -227,7 +235,8 @@ namespace Model
 
     void OMVisualizerFMU::initializeVisAttributes(const double time)
     {
-        _fmuData = initializeFMU(_fmul._fmu, _simSettings);
+        //_fmuData = initializeFMU(_fmul._fmu, _simSettings);
+        _fmu.initialize(_simSettings);
         _omvManager->_visTime = _omvManager->_startTime;
         _omvManager->_simTime = _omvManager->_startTime;
         updateVisAttributes(_omvManager->_visTime);
