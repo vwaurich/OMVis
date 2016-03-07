@@ -29,6 +29,7 @@
 #include "Input.hpp"
 #include "Model/InputData.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Util.hpp"
 
 namespace Model
 {
@@ -52,21 +53,27 @@ namespace Model
 
     void InputData::initializeInputs(fmi1_import_t* fmu)
     {
-        // init data
-        // ------------------
+        // Get pointer to all variables.
         fmi1_import_variable_list_t* allVariables = fmi1_import_get_variable_list(fmu);
-        //comparison function ptr
-        int (*causalityCheck)(fmi1_import_variable_t* vl, (void*) enumIdx);
+        // Define comparison function pointer.
+        int (*causalityCheck)(fmi1_import_variable_t* vl, void* enumIdx);
         causalityCheck = &causalityEqual;
-        int (*baseTypeCheck)(fmi1_import_variable_t* vl, (void*) refBaseType);
+        int (*baseTypeCheck)(fmi1_import_variable_t* vl, void* refBaseType);
         baseTypeCheck = &baseTypeEqual;
-        //all vars per type
-        fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, (void*) fmi1_causality_enu_input);
-        fmi1_import_variable_list_t* realInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_real);
-        fmi1_import_variable_list_t* integerInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_int);
-        fmi1_import_variable_list_t* booleanInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_bool);
-        fmi1_import_variable_list_t* stringInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, (void*) fmi1_base_type_str);
-        //all vrs per type
+
+        // Get all variables per type.
+        fmi1_causality_enu_t causalityType = fmi1_causality_enu_t::fmi1_causality_enu_input;
+        fmi1_import_variable_list_t* allInputs = fmi1_import_filter_variables(allVariables, causalityCheck, static_cast<void*>(&causalityType));
+        fmi1_base_type_enu_t baseType = fmi1_base_type_enu_t::fmi1_base_type_real;
+        fmi1_import_variable_list_t* realInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, static_cast<void*>(&baseType));
+        baseType = fmi1_base_type_enu_t::fmi1_base_type_int;
+        fmi1_import_variable_list_t* integerInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, static_cast<void*>(&baseType));
+        baseType = fmi1_base_type_enu_t::fmi1_base_type_bool;
+        fmi1_import_variable_list_t* booleanInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, static_cast<void*>(&baseType));
+        baseType = fmi1_base_type_enu_t::fmi1_base_type_str;
+        fmi1_import_variable_list_t* stringInputs = fmi1_import_filter_variables(allInputs, baseTypeCheck, static_cast<void*>(&baseType));
+
+        // All value references per type.
         _data._vrReal = fmi1_import_get_value_referece_list(realInputs);
         _data._vrInteger = fmi1_import_get_value_referece_list(integerInputs);
         _data._vrBoolean = fmi1_import_get_value_referece_list(booleanInputs);
@@ -82,18 +89,18 @@ namespace Model
         getVariableNames(integerInputs, _data._numInteger, &_data._namesInteger);
         getVariableNames(booleanInputs, _data._numBoolean, &_data._namesBool);
         getVariableNames(stringInputs, _data._numString, &_data._namesString);
-        std::cout << "reals: " << _data._namesReal.size() << std::endl;
-        std::cout << "ints: " << _data._namesInteger.size() << std::endl;
 
-        std::cout << "bools: " << _data._namesBool.size() << std::endl;
+        LOGGER_WRITE(std::string(), Util::LC_INIT, Util::LL_INFO);
 
-        std::cout << "strings: " << _data._namesString.size() << std::endl;
+        LOGGER_WRITE(std::string("Number of Reals: ") + std::to_string(_data._namesReal.size()), Util::LC_INIT, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Integers: ") + std::to_string(_data._namesInteger.size()), Util::LC_INIT, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Booleans: ") + std::to_string(_data._namesBool.size()), Util::LC_INIT, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Strings: ") + std::to_string(_data._namesString.size()), Util::LC_INIT, Util::LL_INFO);
 
         LOGGER_WRITE(std::string("There are ") + std::to_string(_data._numBoolean) + std::string(" boolean inputs, ")
                 + std::to_string(_data._numReal) + std::string(" real inputs, ")
                 + std::to_string(_data._numInteger) + std::string(" integer inputs and ")
                 + std::to_string(_data._numString) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
-        //std::cout << "There are " << _data._numBoolean << " boolean inputs " << _data._numReal << " real inputs " << _data._numInteger << " integer inputs " << _data._numString << " string inputs" << std::endl;
 
         // the values for the inputs per type
         _data._valuesReal = (fmi1_real_t*) calloc(_data._numReal, sizeof(fmi1_real_t));
@@ -116,14 +123,14 @@ namespace Model
         {
             KeyMapValue mapValue = { fmi1_base_type_real, r };
             _keyToInputMap[keys_real[r]] = mapValue;
-            LOGGER_WRITE(std::string("Assign realinput ") + std::to_string(r) + std::string(" to key ") + std::to_string(keys_real[r]), Util::LC_INIT, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Assign real input ") + std::to_string(r) + std::string(" to key ") + std::to_string(keys_real[r]), Util::LC_INIT, Util::LL_INFO);
             //std::cout << "assign realinput " << r << " to key " << keys_real[r] << std::endl;
             fmi1_import_real_variable_t* var = fmi1_import_get_variable_as_real(fmi1_import_get_variable(realInputs, r));
             _data._attrReal[r]._max = fmi1_import_get_real_variable_max(var);
             _data._attrReal[r]._min = fmi1_import_get_real_variable_min(var);
             _data._attrReal[r]._start = fmi1_import_get_real_variable_start(var);
             _data._attrReal[r]._nominal = fmi1_import_get_real_variable_nominal(var);
-            std::cout << "min " << _data._attrReal[r]._min << " max " << _data._attrReal[r]._max << std::endl;
+            LOGGER_WRITE(std::string("min ") + std::to_string(_data._attrReal[r]._min) + std::string(" max ") + std::to_string(_data._attrReal[r]._max), Util::LC_INIT, Util::LL_INFO);
             ++k;
         }
         for (unsigned int i = 0; i < _data._numInteger; ++i)
@@ -136,7 +143,7 @@ namespace Model
         {
             KeyMapValue mapValue = { fmi1_base_type_bool, b };
             _keyToInputMap[keys_bool[b]] = mapValue;
-            std::cout << "assign boolinput " << b << " to key " << keys_bool[b] << std::endl;
+            LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(b) + std::string(" to key ") + std::to_string(keys_bool[b]), Util::LC_INIT, Util::LL_INFO);
             ++k;
         }
         for (unsigned int s = 0; s < _data._numString; ++s)
@@ -147,7 +154,8 @@ namespace Model
         }
 
         for (keyMapIter iter = _keyToInputMap.begin(); iter != _keyToInputMap.end(); ++iter)
-            std::cout << "Key: " << iter->first << "  -->  " << "Values:" << iter->second._baseType << iter->second._valueIdx << std::endl;
+            LOGGER_WRITE(std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ") + std::to_string(iter->second._baseType)
+                         + std::string(" ") +std::to_string(iter->second._valueIdx), Util::LC_INIT, Util::LL_INFO);
     }
 
     void InputData::setInputsInFMU(fmi1_import_t* fmu)
@@ -209,23 +217,24 @@ namespace Model
             }
             else
             {
-                std::cout << "the value is not for a real input" << std::endl;
+                LOGGER_WRITE(std::string( "The value is not for a real input."), Util::LC_INIT, Util::LL_INFO);
+                //std::cout << "the value is not for a real input" << std::endl;
                 return false;
             }
         }
-        else
-            return false;
 
         return false;
     }
 
     void InputData::getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames)
     {
-        for (int idx = 0; idx < numVars; idx++)
+        std::string name("");
+        fmi1_import_variable_t* var = nullptr;
+        const char* na = nullptr;
+        for (int idx = 0; idx < numVars; ++idx)
         {
-            fmi1_import_variable_t* var = fmi1_import_get_variable(varLst, idx);
-            const char* na = fmi1_import_get_variable_name(var);
-            std::string name = "";
+            var = fmi1_import_get_variable(varLst, idx);
+            na = fmi1_import_get_variable_name(var);
             name.assign(na);
             varNames->push_back(name);
         }
@@ -240,6 +249,7 @@ namespace Model
         }
     }
 
+    /// \todo: No return?!
     inputKey getInputDataKeyForString(std::string keyString)
     {
         if (!keyString.compare("JOY_1_X"))
@@ -265,7 +275,6 @@ namespace Model
     std::string keyMapValueToString(KeyMapValue val)
     {
         return std::string(fmi1_base_type_to_string(val._baseType)).append(std::to_string(val._valueIdx));
-
     }
 
 }  // End namespace Model
