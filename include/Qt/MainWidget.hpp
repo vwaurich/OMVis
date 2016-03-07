@@ -29,6 +29,7 @@
 #ifndef INCLUDE_MAINWIDGET_HPP_
 #define INCLUDE_MAINWIDGET_HPP_
 
+#include <string>
 #include <QTimer>
 #include <QApplication>
 #include <QVBoxLayout>
@@ -74,7 +75,7 @@ Q_OBJECT
  public:
     /*! \brief Constructs MainWidget object from arguments.
      *
-     * A empty GUI is created and the model has to be loaded via file open dialog.
+     * A empty GUI is created and the model has to be loaded via the file open dialog.
      *
      * @param parent Parent for initialization of QWidget Baseclass.
      * @param flags Window flags for initialization of QWidget Baseclass.
@@ -83,7 +84,9 @@ Q_OBJECT
      */
     MainWidget(QWidget* parent = 0, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded, Model::OMVisualizerAbstract* omv = nullptr);
 
-    /*! \brief Adds a view-widget to the main-widget
+    /*! \brief Adds a view-widget to the main-widget.
+     *
+     * The OMVisualizer object has to be present and initialized.
      *
      * @param gw The graphical window.
      * @param scene The osg scene.
@@ -222,10 +225,9 @@ Q_OBJECT
     /// The GUIController object will take the users input from GUI and handle it.
     Controller::GUIController* _guiController;
 
-    /// \todo: Remove
-    // bool _visFMU;  ///< True, if we visualize a FMU, otherwise false and we vis. a MAT file
-    // std::string _modelName;
-    // std::string _pathName;
+    /// This member is true, if a model is currently loaded and initialized. Otherwise it is false. This member can be used to determine,
+    /// what User actions are allowed in the GUI.
+    bool _modelLoaded;
 };
 
 #endif /* INCLUDE_MAINWIDGET_HPP_ */
