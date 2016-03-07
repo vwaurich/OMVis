@@ -28,17 +28,18 @@ int causalityEqual(fmi1_import_variable_t* var, void* enumIdx)
     fmi1_causality_enu_t causality = fmi1_import_get_causality(var);
     // Use static cast to "convert" void* to fmi1_causality_enu_t*. With that, we can compare the attributes.
     fmi1_causality_enu_t* toComp = static_cast<fmi1_causality_enu_t*>(enumIdx);
+    //int enumIdxInt = (int) enumIdx;
 
-    LOGGER_WRITE(std::string("causalityEqual: fmi1_causality_enu_t causality is ") + std::to_string(causality) + " and enumIdx has attribute " + std::to_string(*toComp) + std::string("."), Util::LC_INIT, Util::LL_INFO);
+    // LOGGER_WRITE(std::string("causalityEqual: fmi1_causality_enu_t causality is ") + std::to_string(causality) + " and enumIdx has attribute " + std::to_string(*toComp) + std::string("."), Util::LC_INIT, Util::LL_INFO);
     if (*toComp == causality)
     {
-        LOGGER_WRITE(std::string("They are equal!"), Util::LC_INIT, Util::LL_INFO);
+        //LOGGER_WRITE(std::string("They are equal!"), Util::LC_INIT, Util::LL_INFO);
         //std::cout << "the input var: " << fmi1_import_get_variable_name(var) << std::endl;
         return 1;
     }
     else
     {
-        LOGGER_WRITE(std::string("They are not equal!"), Util::LC_INIT, Util::LL_INFO);
+        //LOGGER_WRITE(std::string("They are not equal!"), Util::LC_INIT, Util::LL_INFO);
         return 0;
     }
 }
