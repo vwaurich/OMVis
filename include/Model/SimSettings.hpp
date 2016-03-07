@@ -52,17 +52,17 @@ namespace Model
         SimSettings& operator=(const SimSettings& ss) = delete;
 
         /// \todo Refactor method to setTend
-        void set_tend(const fmi1_real_t t);
-        void set_tstart(const fmi1_real_t t);
-        void set_hdef(const fmi1_real_t h);
-        void set_relativeTolerance(const fmi1_real_t t);
-        fmi1_real_t get_tend();
-        fmi1_real_t get_tstart();
-        fmi1_real_t get_hdef();
-        fmi1_real_t get_relativeTolerance();
-        fmi1_boolean_t get_toleranceControlled();
-        fmi1_boolean_t get_callEventUpdate();
-        fmi1_boolean_t get_intermediateResults();
+        void setTend(const fmi1_real_t t);
+        void setTstart(const fmi1_real_t t);
+        void setHdef(const fmi1_real_t h);
+        void setRelativeTolerance(const fmi1_real_t t);
+        fmi1_real_t getTend();
+        fmi1_real_t getTstart();
+        fmi1_real_t getHdef();
+        fmi1_real_t getRelativeTolerance();
+        fmi1_boolean_t getToleranceControlled();
+        fmi1_boolean_t getCallEventUpdate();
+        fmi1_boolean_t getIntermediateResults();
 
         static int iunused;
 
