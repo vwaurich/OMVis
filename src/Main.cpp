@@ -43,47 +43,17 @@
  */
 
 #include <stdexcept>
-//#include <memory>
 #include <iostream>
 #include "OMVIS.hpp"
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Hello" << std::endl;
     try
     {
-        // Render frames
-        bool makeLoop = true;
-
-        // Create visualization
-        Initialization::Factory* factory = new Initialization::Factory();
-        Model::OMVisualizerAbstract* omv = new Model::OMVisualizerAbstract();
+        // Initialize logger.
         Util::Logger::initialize();
 
-        /*
-         // Unsupported at the moment: Model is given via command line parameters.
-         if (1 < argc)
-         {
-         // Parse command line arguments
-         Util::CommandLineArgs cLArgs = Util::getCommandLineArguments(argc, argv);
-         // Init. logger
-         Util::Logger::initialize(cLArgs._logSettings);
-
-         //        std::string modelname = cLArgs._modelName;
-         //        bool useFMU = cLArgs._useFMU;
-         //        std::string path = cLArgs._modelPath;
-
-         LOGGER_WRITE(std::string("Hei, modelname = ") + cLArgs._modelName + std::string(", path = ") + cLArgs._modelPath + " and useFMU = " + Util::boolToString(cLArgs._useFMU), Util::LC_OTHER, Util::LL_ERROR);
-         omv = factory->createVisualizationFromCLargs(cLArgs);
-         // Init visualization
-         omv->initData();
-         omv->setUpScene();
-         omv->updateVisAttributes(0.0);  // set scene to initial position
-         }
-         */
-
         LOGGER_WRITE(std::string("Okay, let's create the main widget..."), Util::LC_OTHER, Util::LL_INFO);
-
         QApplication app(argc, argv);
         MainWidget* mainWidget = new MainWidget(0, Qt::Widget, osgViewer::CompositeViewer::SingleThreaded);
         mainWidget->setGeometry(100, 100, 800, 600);
