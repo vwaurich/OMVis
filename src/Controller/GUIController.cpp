@@ -9,8 +9,8 @@
 #include <sys/stat.h>
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Initialization/Factory.hpp"
-#include "Util/Logger.hpp"
 #include "Controller/GUIController.hpp"
+#include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
 namespace Controller
