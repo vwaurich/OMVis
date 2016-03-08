@@ -105,9 +105,13 @@ namespace Model
         keyboardMap _keyboardToKeyMap;
     };
 
+
+    /*-----------------------------------------
+     * Free Functions
+     *---------------------------------------*/
     bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data);
 
-	/*! \brief Conversion from std::string to inputKey enum */
+	/*! \brief Converts the given std::string to inputKey enum. */
 	inputKey getInputDataKeyForString(std::string keyString);
 
 	std::string keyMapValueToString(KeyMapValue);

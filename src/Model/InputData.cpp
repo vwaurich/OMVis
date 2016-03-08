@@ -239,11 +239,13 @@ namespace Model
     {
         std::cout << "KEY TO INPUT MAP" << std::endl;
         for (std::map<inputKey, KeyMapValue>::const_iterator it = _keyToInputMap.begin(); it != _keyToInputMap.end(); ++it)
-        {
             std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
-        }
     }
 
+
+    /*-----------------------------------------
+     * Free Functions
+     *---------------------------------------*/
     /// \todo: No return?!
     inputKey getInputDataKeyForString(std::string keyString)
     {
