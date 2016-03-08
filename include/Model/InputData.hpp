@@ -112,6 +112,16 @@ namespace Model
 
 	std::string keyMapValueToString(KeyMapValue);
 
+	/*! \brief Checks the causality of the var and outputs 1 if they are equal, 0 otherwise.
+	 *
+	 */
+	int causalityEqual(fmi1_import_variable_t* var, void* enumIdx);
+
+	/*! \brief Checks the type of the var and outputs 1 if they are equal.
+	 *
+	 */
+	int baseTypeEqual(fmi1_import_variable_t* var, void* refBaseType);
+
 }  // End namespace Model
 
 #endif /* INCLUDE_INPUTDATA_HPP_ */
