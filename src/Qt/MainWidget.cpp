@@ -87,23 +87,23 @@ MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase
 
 void MainWidget::setupMenuBar()
 {
-    //menu caption "File"
+    // Menu caption "File"
     _fileMenu = menuBar()->addMenu(tr("&File"));
     QAction* exportAction = _fileMenu->addAction(tr("Export Video"));
     QAction* changeModelAction = _fileMenu->addAction(tr("Load Model"));
-    QAction* somethingAction = _fileMenu->addAction(tr("Do Something"));
     _fileMenu->addSeparator();
     _fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
 
+    QObject::connect(exportAction, SIGNAL(triggered()), this, SLOT(exportVideo()));
     QObject::connect(changeModelAction, SIGNAL(triggered()), this, SLOT(loadModel()));
 
-    //menu caption "Settings"
+    // Menu caption "Settings"
     _settingsMenu = menuBar()->addMenu(tr("Settings"));
     QAction* generalSettingsAction = _settingsMenu->addAction(tr("General Settings"));
 
     QObject::connect(generalSettingsAction, SIGNAL(triggered()), this, SLOT(openDialogSettings()));
 
-    //menu caption "Inputs"
+    // Menu caption "Inputs"
     _inputMenu = menuBar()->addMenu(tr("Inputs"));
     QAction* mapInputAction = _inputMenu->addAction(tr("Map Input To Devices"));
     QAction* dontCareAction = _inputMenu->addAction(tr("I Don't Care About Input"));
@@ -131,7 +131,8 @@ QWidget* MainWidget::setupTimeSliderWidgetDefault(QSlider* timeSlider)
     int value = -1;
     timeSlider->setFixedHeight(30);
     timeSlider->setSliderPosition(0);
-    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ") + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
+    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ")
+                 + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
     value = timeSlider->sliderPosition();
 
     return timeSlider;
@@ -143,7 +144,8 @@ QWidget* MainWidget::setupTimeSliderWidget(QSlider* timeSlider)
     int value = -1;
     timeSlider->setFixedHeight(30);
     timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
-    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ") + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
+    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ")
+                 + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
     value = timeSlider->sliderPosition();
 
     QObject::connect(timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
@@ -254,6 +256,12 @@ osgQt::GraphicsWindowQt* MainWidget::createGraphicsWindow(int x, int y, int w, i
     return new osgQt::GraphicsWindowQt(traits.get());
 }
 
+/*-----------------------------------------
+ * Slot Functions
+ *---------------------------------------*/
+
+
+
 void MainWidget::playSlotFunction()
 {
     _omVisualizer->startVisualization();
@@ -328,6 +336,11 @@ QString MainWidget::modelSelectionDialog()
     // The user can filter for *.fmu or *.mat files.
     QString fileName = dialog->getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
     return fileName;
+}
+
+void MainWidget::exportVideo()
+{
+    QMessageBox::warning(0, QString("Information"), QString("This functionality might come soon."));
 }
 
 void MainWidget::openDialogInputMapper()
@@ -451,17 +464,6 @@ QHBoxLayout* MainWidget::createInputMapperRow(int inputIdx, std::string varName,
 
 void MainWidget::openDialogSettings()
 {
-    QMainWindow* inputDialog = new QMainWindow(this);
-    inputDialog->setWindowTitle("Settings");
-
-    QWidget* dialogWidget = new QWidget;
-
-    const int numOfInputs = 3;
-
-    QVBoxLayout* settingRowsLayout = new QVBoxLayout;
-
-    QHBoxLayout* backgroundColourRow = new QHBoxLayout;
-    QLabel* bgcLabel = new QLabel(QString("background colour "));
     QComboBox* bgcDropDownList = new QComboBox();
 
     //use a QStringList here
@@ -469,16 +471,21 @@ void MainWidget::openDialogSettings()
     bgcDropDownList->addItem("lovely lila", "KEY_B");
     bgcDropDownList->addItem("ivory white", "KEY_C");
     bgcDropDownList->addItem("froggy green", "KEY_D");
+    bgcDropDownList->setMaximumHeight(20);
 
-    bgcDropDownList->setMaximumHeight(20);
-    bgcDropDownList->setMaximumHeight(20);
+    QVBoxLayout* settingRowsLayout = new QVBoxLayout();
+    QHBoxLayout* backgroundColourRow = new QHBoxLayout();
+    QLabel* bgcLabel = new QLabel(QString("Set the background color to "));
     backgroundColourRow->addWidget(bgcLabel);
     backgroundColourRow->addWidget(bgcDropDownList);
     settingRowsLayout->addLayout(backgroundColourRow);
 
     QObject::connect(bgcDropDownList, SIGNAL(currentIndexChanged(int)), this, SLOT(changeBGColourInOSGViewer(int)));
 
+    QWidget* dialogWidget = new QWidget();
     dialogWidget->setLayout(settingRowsLayout);
+    QMainWindow* inputDialog = new QMainWindow(this);
+    inputDialog->setWindowTitle("Settings");
     inputDialog->setCentralWidget(dialogWidget);
 
     inputDialog->show();
