@@ -82,7 +82,7 @@ Q_OBJECT
      * @param threadingModel The threading model.
      * @param omv The OMVisualizer which stores the scene.
      */
-    MainWidget(QWidget* parent = 0, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded, Model::OMVisualizerAbstract* omv = nullptr);
+    MainWidget(QWidget* parent = nullptr, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded, Model::OMVisualizerAbstract* omv = nullptr);
 
     /*! \brief Adds a view-widget to the main-widget.
      *
@@ -120,7 +120,10 @@ Q_OBJECT
         frame();
     }
 
-    /*! \brief Creates the top menu.
+    /*! \brief Creates the top menu bar.
+     *
+     * The top menu bar is created by adding the menu points connecting them to corresponding slots.
+     * Currently, there are the top menus File, Settings and Input.
      */
     void setupMenuBar();
 
@@ -191,6 +194,9 @@ Q_OBJECT
      */
     void loadModel(/*bool& visFMU*/);
 
+    /*! \todo Implement me. */
+    void exportVideo();
+
     /*! \brief Function that opens the input mapper dialog
      */
     void openDialogInputMapper();
@@ -225,8 +231,8 @@ Q_OBJECT
     /// The GUIController object will take the users input from GUI and handle it.
     Controller::GUIController* _guiController;
 
-    /// This member is true, if a model is currently loaded and initialized. Otherwise it is false. This member can be used to determine,
-    /// what User actions are allowed in the GUI.
+    /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
+     * This member can be used to determine, what User actions are allowed in the GUI. */
     bool _modelLoaded;
 };
 
