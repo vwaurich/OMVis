@@ -48,7 +48,7 @@ namespace Model
         fmi1_event_info_t _eventInfo;
         fmi1_real_t _tcur;
         fmi1_real_t _hcur;
-    } fmuData;
+    } FMUData;
 
 
     /// MF: \todo Complete this class and remove the structs and free functions.
@@ -69,7 +69,7 @@ namespace Model
         fmi_import_context_t* _context;  //MF Muss es fmi1_import_context_t* sein?
         jm_callbacks* _callbacks;
         fmi1_callback_functions_t _callBackFunctions;
-        fmuData _fmuData;
+        FMUData _fmuData;
     };
 
 
