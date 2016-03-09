@@ -34,7 +34,7 @@ namespace View
 {
 
     OMVisualViewer::OMVisualViewer()
-            : _viewer(),
+            : _osgViewer(),
               _scene()
     {
     }
@@ -43,16 +43,16 @@ namespace View
     {
         // set up osg::viewer
         LOGGER_WRITE(std::string("Set up Camera Manipulator."), Util::LC_LOADER, Util::LL_DEBUG);
-        _viewer.setCameraManipulator(new osgGA::TrackballManipulator);
+        _osgViewer.setCameraManipulator(new osgGA::TrackballManipulator);
 
         LOGGER_WRITE(std::string("Set up View Window."), Util::LC_LOADER, Util::LL_DEBUG);
-        _viewer.setUpViewInWindow(500, 500, 1000, 700);  //MF: This method is "depreacted, use view.apply(new osgViewer::SingleWindow(x,y,width,screenNum))."
+        _osgViewer.setUpViewInWindow(500, 500, 1000, 700);  //MF: This method is "depreacted, use view.apply(new osgViewer::SingleWindow(x,y,width,screenNum))."
 
         LOGGER_WRITE(std::string("Get Camera."), Util::LC_LOADER, Util::LL_DEBUG);
-        _viewer.getCamera()->setClearColor((osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)));
+        _osgViewer.getCamera()->setClearColor((osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)));
 
         LOGGER_WRITE(std::string("Call realize() method on viewer."), Util::LC_LOADER, Util::LL_DEBUG);
-        _viewer.realize();
+        _osgViewer.realize();
     }
 
 	void OMVisualViewer::dumpOSGTreeDebug()

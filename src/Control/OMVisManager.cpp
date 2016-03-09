@@ -24,11 +24,11 @@
  *      Author: mf
  */
 
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 
-namespace View
+namespace Control
 {
-	OMVManager::OMVManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime)
+	OMVisManager::OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime)
 			: _simTime(simTime),
               _realTime(realTime),
               _visTime(visTime),
@@ -36,29 +36,29 @@ namespace View
 			  _startTime(startTime),
 			  _endTime(endTime),
 			  _visualTimer(new osg::Timer),
-			  pause(true)
+			  _pause(true)
     {
     }
 
-    void OMVManager::updateTick()
+    void OMVisManager::updateTick()
     {
 		_visualTimer->tick();
         _realTime = _visualTimer->time_m() / 1000.0;
     }
 
-    bool OMVManager::simTimeReady()
+    bool OMVisManager::simTimeReady()
     {
         return _realTime > _simTime && _simTime <= _endTime;
     }
 
-    bool OMVManager::visTimeReady()
+    bool OMVisManager::visTimeReady()
     {
         return _simTime >= _visTime;
     }
 
-	int OMVManager::getTimeProgress()
+	int OMVisManager::getTimeProgress()
 	{
 		return (int)_visTime * 99.0 / (_endTime - _startTime);
 	}
 
-}  // End namespace View
+}  // End namespace Control

@@ -26,6 +26,7 @@
 
 #include "Model/OMVisualizerMAT.hpp"
 #include "Util/Logger.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Model
 {
@@ -69,7 +70,6 @@ namespace Model
         var = omc_matlab4_find_var(reader, varName);
         if (var == nullptr)
             LOGGER_WRITE(std::string("Could not get variable ") + varName + std::string(" from result file."), Util::LC_CTR, Util::LL_ERROR);
-        //std::cout << "Error: Did not get variable from result file! " << varName << std::endl;
         else
             omc_matlab4_val(res, reader, var, time);
 
@@ -81,6 +81,8 @@ namespace Model
         // Update all shapes
         rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
         unsigned int shapeIdx = 0;
+        rAndT rT;
+        osg::ref_ptr<osg::Node> child = nullptr;
         for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
         {
             // get the values for the scene graph objects
@@ -94,7 +96,7 @@ namespace Model
             _baseData->_visAttr._wDir = getShapeVectorMAT((char*) "widthDir", shapeNode, time, _matReader);
             _baseData->_visAttr._color = getShapeVectorMAT((char*) "color", shapeNode, time, _matReader);
             _baseData->_visAttr._T = getShapeMatrixMAT((char*) "T", shapeNode, time, _matReader);
-            rAndT rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
+            rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
             _baseData->_visAttr._r = rT._r;
             _baseData->_visAttr._T = rT._T;
             _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
@@ -104,11 +106,11 @@ namespace Model
             //_baseData->_visAttr.dumpVisAttributes();
 
             //get the scene graph nodes and stuff
-            osg::ref_ptr<osg::Node> child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
+            child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
             child->accept(*_nodeUpdater);
-            shapeIdx++;
-        }  //End for-loop
-    }  //End function
+            ++shapeIdx;
+        }
+    }
 
     void OMVisualizerMAT::initializeVisAttributes(const double time)
     {

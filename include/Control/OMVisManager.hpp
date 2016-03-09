@@ -24,31 +24,32 @@
  *      Author: mf
  */
 
-#ifndef INCLUDE_OMVMANAGER_HPP_
-#define INCLUDE_OMVMANAGER_HPP_
+#ifndef INCLUDE_OMVISMANAGER_HPP_
+#define INCLUDE_OMVISMANAGER_HPP_
 
 #include <osg/Timer>
 #include <iostream>
 
-namespace View
+namespace Control
 {
 
-    class OMVManager
+    class OMVisManager
     {
      public:
-        OMVManager() = delete;
+        OMVisManager() = delete;
 
-        OMVManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime);
+        OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime);
 
-        ~OMVManager() = default;
-        OMVManager(const OMVManager& omvm) = delete;
-        OMVManager& operator=(const OMVManager& omvm) = delete;
+        ~OMVisManager() = default;
+        OMVisManager(const OMVisManager& omvm) = delete;
+        OMVisManager& operator=(const OMVisManager& omvm) = delete;
 
         void updateTick();
         bool simTimeReady();
         bool visTimeReady();
-		/*! \brief Get a value between 0 and 99 that indicates how far we are between start and end of a simulation
-		*/
+
+        /*! \brief Get a value between 0 and 99 that indicates how far we are between start and end of a simulation
+		 */
 		int getTimeProgress();
 
      public:
@@ -63,12 +64,12 @@ namespace View
         /// \todo Can this attr. be private?
         double _endTime;
 		double _startTime;
-		bool pause;
+		bool _pause;
 
 	public:
 		osg::Timer* _visualTimer;
     };
 
-}  // End namespace View
+}  // End namespace Control
 
-#endif /* INCLUDE_OMVMANAGER_HPP_ */
+#endif /* INCLUDE_OMVISMANAGER_HPP_ */

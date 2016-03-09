@@ -27,16 +27,16 @@
 #ifndef INCLUDE_OMVISUALIZERABSTRACT_HPP_
 #define INCLUDE_OMVISUALIZERABSTRACT_HPP_
 
-namespace View
+namespace Control
 {
-    class OMVManager;
+    class OMVisManager;
 }
 
 #include <memory>
 #include "View/OMVisualViewer.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
-#include "View/OMVManager.hpp"
+//#include "View/OMVManager.hpp"
 
 namespace Model
 {
@@ -91,7 +91,7 @@ namespace Model
          * \remark All classes that derive from OMVisualizerAbstract
          * @param omvm
          */
-        virtual void simulate(View::OMVManager& omvm) { };
+        virtual void simulate(Control::OMVisManager& omvm) { };
 
         /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or mat-file.
          *
@@ -141,7 +141,7 @@ namespace Model
         /// \todo: Can this attr. be private?
         View::OMVisualViewer* _viewerStuff;
         UpdateVisitor* _nodeUpdater;
-        View::OMVManager* _omvManager;
+        Control::OMVisManager* _omvManager;
     };
 
 }  // End namespace Model

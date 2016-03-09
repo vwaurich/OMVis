@@ -35,6 +35,7 @@ namespace View
 
     /*! \brief Base class that contains xml infos and viewer.
      *
+     * \todo: privatize members
      */
     class OMVisualViewer
     {
@@ -57,8 +58,8 @@ namespace View
 		void dumpOSGTreeDebug();
 
      public:
-        /// \todo Can this attr. be private?
-        osgViewer::Viewer _viewer;  //the osg-viewer
+        /// The osg viewer holds a single view to a single scene.
+        osgViewer::Viewer _osgViewer;
         /// \todo Can this attr. be private?
         OSGScene _scene;
     };

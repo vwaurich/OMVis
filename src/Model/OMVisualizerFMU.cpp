@@ -28,7 +28,7 @@
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisualViewer.hpp"
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Model
 {
@@ -69,9 +69,7 @@ namespace Model
 
         //_inputData.initializeInputs(_fmul._fmu);
         _inputData.initializeInputs(_fmu._fmu);
-        std::cout << "hier1\n";
         _inputData.printValues();
-        std::cout << "hier2\n";
         //assign interactive inputs
         //for (unsigned int i = 0; i < inputs.n_inputs; i++){
         //string key = "";
@@ -82,7 +80,7 @@ namespace Model
         //}
     }
 
-    void OMVisualizerFMU::simulate(View::OMVManager& omvm)
+    void OMVisualizerFMU::simulate(Control::OMVisManager& omvm)
     {
         while (omvm._simTime < omvm._realTime + omvm._hVisual && omvm._simTime < omvm._endTime)
         {
@@ -170,8 +168,6 @@ namespace Model
         return _fmu._fmuData._tcur;
     }
 
-
-
     void OMVisualizerFMU::resetInputs()
     {
         //reset real input values to 0
@@ -191,8 +187,8 @@ namespace Model
     void OMVisualizerFMU::linkInputsToEventHandler()
     {
         //start eventhandler and link to inputs
-        Controller::KeyboardEventHandler* kbEventHandler = new Controller::KeyboardEventHandler(&_inputData);
-        _viewerStuff->_viewer.addEventHandler(kbEventHandler);
+        Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(&_inputData);
+        _viewerStuff->_osgViewer.addEventHandler(kbEventHandler);
     }
 
     void OMVisualizerFMU::updateVisAttributes(const double time)
@@ -200,6 +196,8 @@ namespace Model
         // Update all shapes
         rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
         unsigned int shapeIdx = 0;
+        rAndT rT;
+        osg::ref_ptr<osg::Node> child = nullptr;
         for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
         {
             // get the values for the scene graph objects
@@ -216,7 +214,7 @@ namespace Model
             _baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmu._fmu);
             _baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmu._fmu);
             _baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmu._fmu);
-            rAndT rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
+            rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
             _baseData->_visAttr._r = rT._r;
             _baseData->_visAttr._T = rT._T;
 
@@ -227,11 +225,11 @@ namespace Model
             //updater.visAttr.dumpVisAttributes();
 
             //get the scene graph nodes and stuff
-            osg::ref_ptr<osg::Node> child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
+            child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
             child->accept(*_nodeUpdater);
-            shapeIdx++;
-        }  //end while
-    }  //end function
+            ++shapeIdx;
+        }
+    }
 
     void OMVisualizerFMU::initializeVisAttributes(const double time)
     {

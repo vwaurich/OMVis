@@ -34,7 +34,7 @@
 
 #include "Visualize.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 #include "InfoVisitor.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Model/SimSettings.hpp"

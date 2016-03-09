@@ -27,13 +27,14 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
+#include <Control/JoystickDevice.hpp>
+#include <Control/KeyboardEventHandler.hpp>
+
 #include <string>
 #include <memory>
 
 #include "FMU.hpp"
 
-#include "Controller/JoystickDevice.hpp"
-#include "Controller/KeyboardEventHandler.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
@@ -67,7 +68,7 @@ namespace Model
         /// Loads and initializes FMU file.
         void loadFMU(const std::string model, const std::string dir);
 
-        virtual void simulate(View::OMVManager& omvm);
+        virtual void simulate(Control::OMVisManager& omvm);
 
         double simulateStep(const double time);
 
@@ -114,7 +115,7 @@ namespace Model
         InputData _inputData;
 
         /// \todo Remove, we do not need it because we have inputData.
-        Controller::JoystickDevice _joystick;
+        Control::JoystickDevice _joystick;
     };
 
 }  // End namespace Model
