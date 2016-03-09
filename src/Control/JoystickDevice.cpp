@@ -25,14 +25,14 @@
  *      Author: mf
  */
 
+#include <Control/JoystickDevice.hpp>
 #include <iostream>
 #include <string>
 #include <SDL.h>
-#include "Controller/JoystickDevice.hpp"
 #include "Model/InputData.hpp"
 #include "Util/Logger.hpp"
 
-namespace Controller
+namespace Control
 {
     JoystickDevice::JoystickDevice()
             : _joystick(nullptr),
@@ -86,4 +86,4 @@ namespace Controller
         }
     }
 
-}  // End namespace Controller
+}  // End namespace Control

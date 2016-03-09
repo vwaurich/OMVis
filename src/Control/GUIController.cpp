@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * GUIController.cpp
@@ -26,14 +26,18 @@
 
 #include <string>
 #include <sys/stat.h>
+#include <Control/GUIController.hpp>
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Initialization/Factory.hpp"
-#include "Controller/GUIController.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
-namespace Controller
+namespace Control
 {
+//    GUIController::GUIController()
+//            //: _viewer(new View::OMVisualViewer())
+//    {
+//    }
 
     Model::OMVisualizerAbstract* GUIController::loadModel(const std::string& modelNameIn)
     {
@@ -76,6 +80,13 @@ namespace Controller
         omv->setUpScene();
         omv->updateVisAttributes(0.0);  // set scene to initial position
 
+        // Init viewer \todo: Create viewer::init(path, xmldoc) function
+//        _viewer->_scene._path = path;
+//        // build scene graph. omv::_baseData::_xmlDoc has to be initialized at this point.
+//        _viewer->_scene.setUpScene(omv->_baseData->_xmlDoc.first_node());
+
+//        omv->updateVisAttributes(0.0);  // set scene to initial position
+
         return omv;
     }
 
@@ -86,4 +97,4 @@ namespace Controller
         return (stat(file.c_str(), &buffer) == 0);
     }
 
-}  // End namespace Controller
+}  // End namespace Control

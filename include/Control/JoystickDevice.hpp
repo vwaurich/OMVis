@@ -35,7 +35,7 @@ namespace Model{
     class InputData;
 }
 
-namespace Controller
+namespace Control
 {
     /*! \brief Class that serves as controller for input from joystick.
      *
@@ -69,6 +69,6 @@ namespace Controller
         int _yDir;
     };
 
-}  // End namespace Controller
+}  // End namespace Control
 
 #endif /* INCLUDE_JOYSTICKDEVICE_HPP_ */

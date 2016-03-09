@@ -24,14 +24,18 @@
  *      Author: mf
  */
 
-#ifndef INCLUDE_CONTROLLER_GUICONTROLLER_HPP_
-#define INCLUDE_CONTROLLER_GUICONTROLLER_HPP_
+#ifndef INCLUDE_CONTROL_GUICONTROLLER_HPP_
+#define INCLUDE_CONTROL_GUICONTROLLER_HPP_
+
+#include "View/OMVisualViewer.hpp"
 
 // Forward declaration
-class OMVisualizerAbstract;
+namespace Model {
+    class OMVisualizerAbstract;
+}
 
 
-namespace Controller
+namespace Control
 {
 
     /*! \brief This class is a controller class which handles user interaction with OMVis via GUI.
@@ -71,9 +75,9 @@ namespace Controller
         bool checkForXMLFile(const std::string& path, const std::string& modelName);
 
      private:
-        // No members
+        //View::OMVisualViewer* _viewer;
     };
 
-}  // End namespace Controller
+}  // End namespace Control
 
-#endif /* INCLUDE_CONTROLLER_GUICONTROLLER_HPP_ */
+#endif /* INCLUDE_CONTROL_GUICONTROLLER_HPP_ */

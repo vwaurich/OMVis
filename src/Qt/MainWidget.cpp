@@ -26,16 +26,16 @@
  @version 0.1
  */
 
+#include <Control/GUIController.hpp>
 #include "Qt/MainWidget.hpp"
 #include "Model/FMU.hpp"
 #include "Util/Logger.hpp"
-#include "Controller/GUIController.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 
-MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase::ThreadingModel threadingModel, Model::OMVisualizerAbstract* omv)
+MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase::ThreadingModel threadingModel/*, Model::OMVisualizerAbstract* omv*/)
         : QMainWindow(parent, f),
-          _timeDisplay(new QLabel),
-          _omVisualizer(omv),
+          _timeDisplay(new QLabel()),
+          _omVisualizer(nullptr),
           _timeSlider(new QSlider(Qt::Horizontal)),
           _osgViewerWidget(),
           _guiController(),
@@ -196,7 +196,7 @@ QWidget* MainWidget::setupControlElementWidget()
 QWidget* MainWidget::addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene)
 {
     //osgViewer::View* view = new osgViewer::View;
-    osgViewer::View* view = &_omVisualizer->_viewerStuff->_viewer;
+    osgViewer::View* view = &_omVisualizer->_viewerStuff->_osgViewer;
     addView(view);
 
     osg::Camera* camera = view->getCamera();
@@ -256,12 +256,10 @@ osgQt::GraphicsWindowQt* MainWidget::createGraphicsWindow(int x, int y, int w, i
     return new osgQt::GraphicsWindowQt(traits.get());
 }
 
+
 /*-----------------------------------------
  * Slot Functions
  *---------------------------------------*/
-
-
-
 void MainWidget::playSlotFunction()
 {
     _omVisualizer->startVisualization();
@@ -485,18 +483,18 @@ void MainWidget::openDialogSettings()
     QWidget* dialogWidget = new QWidget();
     dialogWidget->setLayout(settingRowsLayout);
     QMainWindow* inputDialog = new QMainWindow(this);
-    inputDialog->setWindowTitle("Settings");
+    inputDialog->setWindowTitle("General Settings");
     inputDialog->setCentralWidget(dialogWidget);
 
     inputDialog->show();
 }
 
-void MainWidget::changeBGColourInOSGViewer(int colorIdx)
+void MainWidget::changeBGColourInOSGViewer(const int colorIdx)
 {
-    osg::Vec4 colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    //osg::Vec4 colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    osg::Vec4 colVec(0.0f, 0.0f, 0.0f, 0.0f);
 
-    LOGGER_WRITE(std::string("Color Idx ") + std::to_string(colorIdx) + std::string(" boolean inputs, "), Util::LC_GUI, Util::LL_INFO);
-//    std::cout << "colorIdx " << colorIdx << std::endl;
+    LOGGER_WRITE(std::string("Color Idx ") + std::to_string(colorIdx), Util::LC_GUI, Util::LL_INFO);
     switch (colorIdx)
     {
         case 0:
@@ -515,7 +513,7 @@ void MainWidget::changeBGColourInOSGViewer(int colorIdx)
             colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
             break;  //black
     }
-    _omVisualizer->_viewerStuff->_viewer.getCamera()->setClearColor(colVec);
+    _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
 }
 
 void MainWidget::updateKeyMapValue(QString varToKey)

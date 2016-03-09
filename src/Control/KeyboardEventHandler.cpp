@@ -25,11 +25,12 @@
  *      Author: mf
  */
 
+#include <Control/KeyboardEventHandler.hpp>
+
 #include <string>
 #include <iostream>
-#include "Controller/KeyboardEventHandler.hpp"
 
-namespace Controller
+namespace Control
 {
 
     KeyboardEventHandler::KeyboardEventHandler(Model::InputData* inputs)
@@ -87,4 +88,4 @@ namespace Controller
         return false;
     }
 
-} // End namespace Controller
+} // End namespace Control

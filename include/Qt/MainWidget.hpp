@@ -58,9 +58,10 @@
 #include <osgQt/GraphicsWindowQt>
 
 #include "Model/OMVisualizerAbstract.hpp"
+#include "Control/OMVisManager.hpp"
 
 // Forward declarations
-namespace Controller
+namespace Control
 {
     class GUIController;
 }
@@ -82,7 +83,7 @@ Q_OBJECT
      * @param threadingModel The threading model.
      * @param omv The OMVisualizer which stores the scene.
      */
-    MainWidget(QWidget* parent = nullptr, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded, Model::OMVisualizerAbstract* omv = nullptr);
+    MainWidget(QWidget* parent = nullptr, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded/*, Model::OMVisualizerAbstract* omv = nullptr*/);
 
     /*! \brief Adds a view-widget to the main-widget.
      *
@@ -205,9 +206,9 @@ Q_OBJECT
      */
     void openDialogSettings();
 
-    /*! \brief Changes the Background color in the osg::viewer
+    /*! \brief Changes the background color in the osg::viewer.
      */
-    void changeBGColourInOSGViewer(int colorIdx);
+    void changeBGColourInOSGViewer(const int colorIdx);
 
     /*! \brief Updates the key-input-map
      */
@@ -229,7 +230,7 @@ Q_OBJECT
     Model::OMVisualizerAbstract* _omVisualizer;
 
     /// The GUIController object will take the users input from GUI and handle it.
-    Controller::GUIController* _guiController;
+    Control::GUIController* _guiController;
 
     /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
      * This member can be used to determine, what User actions are allowed in the GUI. */
