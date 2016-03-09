@@ -142,10 +142,7 @@ Q_OBJECT
 
     /*! \brief Creates the time slider widget
      */
-    QWidget* setupTimeSliderWidget(QSlider*);
-
-    /// Just init. slider.
-    QWidget* setupTimeSliderWidgetDefault(QSlider*);
+    QWidget* setupTimeSliderWidget(const int position);
 
     /*! \brief This methods shows the window to choose the model file.
      *

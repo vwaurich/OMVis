@@ -62,7 +62,8 @@ MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase
     _controlElementWidget = setupControlElementWidget();
 
     //Set up the time slider widget
-    _timeSliderWidget = setupTimeSliderWidgetDefault(_timeSlider);
+    //X2 _timeSliderWidget = setupTimeSliderWidgetDefault(_timeSlider);
+    _timeSliderWidget = setupTimeSliderWidget(0);
 
     //assemble the layouts
     QVBoxLayout* mainRowLayout = new QVBoxLayout;
@@ -128,34 +129,20 @@ QWidget* MainWidget::setupOSGViewerWidgetDefault()
     return addViewWidgetDefault(window);
 }
 
-QWidget* MainWidget::setupTimeSliderWidgetDefault(QSlider* timeSlider)
+QWidget* MainWidget::setupTimeSliderWidget(const int position)
 {
-    //the slider row
-    int value = -1;
-    timeSlider->setFixedHeight(30);
-    timeSlider->setSliderPosition(0);
-    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ")
-                 + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
-    value = timeSlider->sliderPosition();
+    // \todo This should be done once. Not every time we call this function.
+    _timeSlider->setFixedHeight(30);
 
-    return timeSlider;
-}
+    //int tP = _guiController->getTimeProgress();
+    _timeSlider->setSliderPosition(position);
 
-QWidget* MainWidget::setupTimeSliderWidget(QSlider* timeSlider)
-{
-    //the slider row
-    int value = -1;
-    timeSlider->setFixedHeight(30);
-    //X1 timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
-    int tP = _guiController->getTimeProgress();
-    timeSlider->setSliderPosition(tP);
+    LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ")
+                 + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
+    int value = _timeSlider->sliderPosition();
 
-    LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ")
-                 + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
-    value = timeSlider->sliderPosition();
-
-    QObject::connect(timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
-    return timeSlider;
+    QObject::connect(_timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
+    return _timeSlider;
 }
 
 QWidget* MainWidget::setupControlElementWidget()
@@ -165,8 +152,8 @@ QWidget* MainWidget::setupControlElementWidget()
     QPushButton* initButton = new QPushButton("Initialize", this);
     QPushButton* coffeeButton = new QPushButton("Support: Buy us a coffee.", this);
 
-    //_timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->omvManager->_visTime)));
-    _timeDisplay->setText(QString("Time ").append(QString::fromStdString("0.0")));
+    // Time value of -1.0 indicates, that no model is loaded into OMVis.
+    _timeDisplay->setText(QString("Time ").append(QString::fromStdString("-1.0")));
     _timeDisplay->setFixedWidth(60);
     _timeDisplay->setFixedHeight(20);
 
@@ -179,7 +166,6 @@ QWidget* MainWidget::setupControlElementWidget()
     buttonRowLayOut->addWidget(coffeeButton);
     buttonRowLayOut->addWidget(_timeDisplay);
     buttonRowBox->setLayout(buttonRowLayOut);
-
     buttonRowBox->setFixedHeight(60);
 
     // Connect the buttons to the corresponding slot functions.
@@ -323,11 +309,15 @@ void MainWidget::loadModel(/*bool& visFMU*/)
 
     _osgViewerWidget = setupOSGViewerWidget();
 
-    // Okay, at this point it was trial end error. What do we really need to do in order to show the loaded model??
-    _controlElementWidget = setupControlElementWidget();
+    // Set value of time display to 0.0
+    _timeDisplay->setText(QString("Time ").append(QString::fromStdString("0.0")));
 
-    //Set up the time slider widget
-    _timeSliderWidget = setupTimeSliderWidget(_timeSlider);
+    // Okay, at this point it was trial end error. What do we really need to do in order to show the loaded model??
+
+    // Set the time slider widget to the simulation start time of the loaded model.
+    //X2 _timeSliderWidget = setupTimeSliderWidget(_timeSlider);
+    int tP = _guiController->getTimeProgress();
+    _timeSliderWidget = setupTimeSliderWidget(tP);
 
     //assemble the layouts
     QVBoxLayout* mainRowLayout = new QVBoxLayout;
