@@ -35,10 +35,10 @@
 MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase::ThreadingModel threadingModel/*, Model::OMVisualizerAbstract* omv*/)
         : QMainWindow(parent, f),
           _timeDisplay(new QLabel()),
-          _omVisualizer(nullptr),
+          //X1 _omVisualizer(nullptr),
           _timeSlider(new QSlider(Qt::Horizontal)),
           _osgViewerWidget(),
-          _guiController(),
+          _guiController(new Control::GUIController()),
           _modelLoaded(false)
 {
     //the names
@@ -115,7 +115,10 @@ QWidget* MainWidget::setupOSGViewerWidget()
 {
     //the osg-viewer widget
     osgQt::GraphicsWindowQt* window = createGraphicsWindow(0, 0, 100, 100);
-    return addViewWidget(window, _omVisualizer->_viewerStuff->_scene._rootNode);
+    //X1 return addViewWidget(window, _omVisualizer->_viewerStuff->_scene._rootNode);
+
+    osg::ref_ptr<osg::Node> rN = _guiController->getSceneRootNode();
+    return addViewWidget(window, rN);
 }
 
 QWidget* MainWidget::setupOSGViewerWidgetDefault()
@@ -143,7 +146,10 @@ QWidget* MainWidget::setupTimeSliderWidget(QSlider* timeSlider)
     //the slider row
     int value = -1;
     timeSlider->setFixedHeight(30);
-    timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
+    //X1 timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
+    int tP = _guiController->getTimeProgress();
+    timeSlider->setSliderPosition(tP);
+
     LOGGER_WRITE(std::string("min ") + std::to_string(timeSlider->minimum()) + std::string(" and max ")
                  + std::to_string(timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
     value = timeSlider->sliderPosition();
@@ -196,7 +202,8 @@ QWidget* MainWidget::setupControlElementWidget()
 QWidget* MainWidget::addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene)
 {
     //osgViewer::View* view = new osgViewer::View;
-    osgViewer::View* view = &_omVisualizer->_viewerStuff->_osgViewer;
+    //X1 osgViewer::View* view = &_omVisualizer->_viewerStuff->_osgViewer;
+    osgViewer::View* view = _guiController->getViewer();
     addView(view);
 
     osg::Camera* camera = view->getCamera();
@@ -262,39 +269,52 @@ osgQt::GraphicsWindowQt* MainWidget::createGraphicsWindow(int x, int y, int w, i
  *---------------------------------------*/
 void MainWidget::playSlotFunction()
 {
-    _omVisualizer->startVisualization();
+    //X1 _omVisualizer->startVisualization();
+    _guiController->startVisualization();
 }
 
 void MainWidget::pauseSlotFunction()
 {
-    _omVisualizer->pauseVisualization();
+    //X1 _omVisualizer->pauseVisualization();
+    _guiController->pauseVisualization();
 }
 
 void MainWidget::initSlotFunction()
 {
-    _omVisualizer->initVisualization();
+    //X1 _omVisualizer->initVisualization();
+    _guiController->initVisualization();
 }
 
 void MainWidget::coffeeSlotFunction()
 {
-    _omVisualizer->donationVisualization();
+    //X1 _omVisualizer->donationVisualization();
+    _guiController->donationVisualization();
 }
 
 void MainWidget::updateScene()
 {
-    _omVisualizer->sceneUpdate();
+    //X1 _omVisualizer->sceneUpdate();
+    _guiController->sceneUpdate();
 }
 
 void MainWidget::updateGUIelements()
 {
-    _timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->_omvManager->_visTime)).append(QString(" sec")));
-    _timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
+    //X1 _timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->_omvManager->_visTime)).append(QString(" sec")));
+    //X1 _timeSlider->setSliderPosition(_omVisualizer->_omvManager->getTimeProgress());
+
+    double visTime = _guiController->getVisTime();
+    int tP = _guiController->getTimeProgress();
+    _timeDisplay->setText(QString("time ").append(QString::number(visTime)).append(QString(" sec")));
+    _timeSlider->setSliderPosition(tP);
 }
 
 void MainWidget::setVisTimeSlotFunction(int val)
 {
-    _omVisualizer->_omvManager->_visTime = (_omVisualizer->_omvManager->_endTime - _omVisualizer->_omvManager->_startTime) * (float) (val / 100.0);
-    _omVisualizer->sceneUpdate();
+    //X1 _omVisualizer->_omvManager->_visTime = (_omVisualizer->_omvManager->_endTime - _omVisualizer->_omvManager->_startTime) * (float) (val / 100.0);
+    //X1 _omVisualizer->sceneUpdate();
+
+    _guiController->setVisTime(val);
+    _guiController->sceneUpdate();
 }
 
 void MainWidget::loadModel(/*bool& visFMU*/)
@@ -303,7 +323,8 @@ void MainWidget::loadModel(/*bool& visFMU*/)
     QString modelName = modelSelectionDialog();
 
     // Let create a OMVisualizer object by the GUIController.
-    _omVisualizer = _guiController->loadModel(modelName.toStdString());
+    //X1_omVisualizer = _guiController->loadModel(modelName.toStdString());
+    _guiController->loadModel(modelName.toStdString());
 
     _modelLoaded = true;
     LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
@@ -357,56 +378,58 @@ void MainWidget::openDialogInputMapper()
         QVBoxLayout* valueLayout = new QVBoxLayout;
 
         // If a result file is visualized, we can not map keys to input variables.
-        if (_omVisualizer->getDataTypeID() == 0)
+        //X1 if (_omVisualizer->getDataTypeID() == 0)
+        if (_guiController->modelIsMATFile())
         {
             std::cout << "MAT TYPE " << std::endl;
         }
         // FMU
-        else if (_omVisualizer->getDataTypeID() == 1)
+        //X1 else if (_omVisualizer->getDataTypeID() == 1)
+        else if (_guiController->modelIsFMU())
         {
-            Model::OMVisualizerFMU* fmuData = (Model::OMVisualizerFMU*) _omVisualizer;
-            std::cout << "FMU TYPE " << std::endl;
-            //real inputs
-            if (fmuData->_inputData._data._numReal > 0)
-            {
-                QLabel* realInputLabel = new QLabel("all real inputs");
-                valueLayout->addWidget(realInputLabel);
-            }
-            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numReal; inputIdx++)
-            {
-                std::string var = fmuData->_inputData._data._namesReal.at(inputIdx);
-
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
-                valueLayout->addLayout(inputRow);
-            }
-            //bool inputs
-            if (fmuData->_inputData._data._numBoolean > 0)
-            {
-                QLabel* realInputLabel = new QLabel("all bool inputs");
-                valueLayout->addWidget(realInputLabel);
-            }
-            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numBoolean; inputIdx++)
-            {
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesBool.at(inputIdx), "bool");
-                valueLayout->addLayout(inputRow);
-            }
-            //integer inputs
-            if (fmuData->_inputData._data._numInteger > 0)
-            {
-                QLabel* realInputLabel = new QLabel("all integer inputs");
-                valueLayout->addWidget(realInputLabel);
-            }
-            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numInteger; inputIdx++)
-            {
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesInteger.at(inputIdx), "integer");
-                valueLayout->addLayout(inputRow);
-            }
-            //string inputs
-            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numString; inputIdx++)
-            {
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesString.at(inputIdx), "string");
-                valueLayout->addLayout(inputRow);
-            }
+//X1            Model::OMVisualizerFMU* fmuData = (Model::OMVisualizerFMU*) _omVisualizer;
+//X1            std::cout << "FMU TYPE " << std::endl;
+//X1            //real inputs
+//            if (fmuData->_inputData._data._numReal > 0)
+//            {
+//                QLabel* realInputLabel = new QLabel("all real inputs");
+//                valueLayout->addWidget(realInputLabel);
+//            }
+//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numReal; ++inputIdx)
+//            {
+//                std::string var = fmuData->_inputData._data._namesReal.at(inputIdx);
+//
+//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
+//                valueLayout->addLayout(inputRow);
+//            }
+//            //bool inputs
+//            if (fmuData->_inputData._data._numBoolean > 0)
+//            {
+//                QLabel* realInputLabel = new QLabel("all bool inputs");
+//                valueLayout->addWidget(realInputLabel);
+//            }
+//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numBoolean; ++inputIdx)
+//            {
+//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesBool.at(inputIdx), "bool");
+//                valueLayout->addLayout(inputRow);
+//            }
+//            //integer inputs
+//            if (fmuData->_inputData._data._numInteger > 0)
+//            {
+//                QLabel* realInputLabel = new QLabel("all integer inputs");
+//                valueLayout->addWidget(realInputLabel);
+//            }
+//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numInteger; ++inputIdx)
+//            {
+//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesInteger.at(inputIdx), "integer");
+//                valueLayout->addLayout(inputRow);
+//            }
+//            //string inputs
+//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numString; ++inputIdx)
+//            {
+//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesString.at(inputIdx), "string");
+//                valueLayout->addLayout(inputRow);
+//            }
         }
         else
         {
@@ -513,27 +536,28 @@ void MainWidget::changeBGColourInOSGViewer(const int colorIdx)
             colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
             break;  //black
     }
-    _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
+    //X1 _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
+    _guiController->setBackgroundColor(colVec);
 }
 
 void MainWidget::updateKeyMapValue(QString varToKey)
 {
-    const int lengthOfTypeStr = 4;
-    Model::OMVisualizerFMU* fmuVisualizer = (Model::OMVisualizerFMU*) _omVisualizer;
-
-    std::string varToKeyString = varToKey.toStdString();
-    int posKey = varToKeyString.find(" -> ");
-    std::string typeString = varToKeyString.substr(0, lengthOfTypeStr);
-    std::string idxString = varToKeyString.substr(lengthOfTypeStr, posKey - lengthOfTypeStr);
-    std::string keyString = varToKeyString.substr(posKey + std::string(" -> ").length(), varToKeyString.length());
-    std::cout << "type: " << typeString << std::endl;
-    std::cout << "idx: " << idxString << std::endl;
-    std::cout << "key: " << keyString << std::endl;
-    fmi1_base_type_enu_t type = Model::getFMI1baseTypeFor4CharString(typeString);
-
-    KeyMapValue mapValue = { type, std::stoi(idxString) };
-    fmuVisualizer->_inputData._keyToInputMap[Model::getInputDataKeyForString(keyString)] = mapValue;
-    //remove current mapping!!
-
-    fmuVisualizer->_inputData.printKeyToInputMap();
+//X1    const int lengthOfTypeStr = 4;
+//X1    Model::OMVisualizerFMU* fmuVisualizer = (Model::OMVisualizerFMU*) _omVisualizer;
+//X1
+//    std::string varToKeyString = varToKey.toStdString();
+//    int posKey = varToKeyString.find(" -> ");
+//    std::string typeString = varToKeyString.substr(0, lengthOfTypeStr);
+//    std::string idxString = varToKeyString.substr(lengthOfTypeStr, posKey - lengthOfTypeStr);
+//    std::string keyString = varToKeyString.substr(posKey + std::string(" -> ").length(), varToKeyString.length());
+//    std::cout << "type: " << typeString << std::endl;
+//    std::cout << "idx: " << idxString << std::endl;
+//    std::cout << "key: " << keyString << std::endl;
+//    fmi1_base_type_enu_t type = Model::getFMI1baseTypeFor4CharString(typeString);
+//
+//    KeyMapValue mapValue = { type, std::stoi(idxString) };
+//    fmuVisualizer->_inputData._keyToInputMap[Model::getInputDataKeyForString(keyString)] = mapValue;
+//    //remove current mapping!!
+//
+//    fmuVisualizer->_inputData.printKeyToInputMap();
 }

@@ -227,7 +227,7 @@ Q_OBJECT
     QLabel* _timeDisplay;
     QTimer _renderTimer;  //!< Brief Triggers a new frame.
     QTimer _visTimer;  //!< Brief Triggers a new scene-update.
-    Model::OMVisualizerAbstract* _omVisualizer;
+    //X1 Model::OMVisualizerAbstract* _omVisualizer;
 
     /// The GUIController object will take the users input from GUI and handle it.
     Control::GUIController* _guiController;

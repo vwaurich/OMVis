@@ -31,15 +31,17 @@
 #include "Initialization/Factory.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Control
 {
-//    GUIController::GUIController()
-//            //: _viewer(new View::OMVisualViewer())
-//    {
-//    }
+    GUIController::GUIController()
+            : _omVisualizer(nullptr)
+    {
+    }
 
-    Model::OMVisualizerAbstract* GUIController::loadModel(const std::string& modelNameIn)
+    //X1 Model::OMVisualizerAbstract* GUIController::loadModel(const std::string& modelNameIn)
+    void GUIController::loadModel(const std::string& modelNameIn)
     {
         LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
 
@@ -73,21 +75,15 @@ namespace Control
 
         // Ask the factory to create an appropriate OMVisualizer object.
         Initialization::Factory* factory = new Initialization::Factory();
-        Model::OMVisualizerAbstract* omv = factory->createVisualizationObject(modelName, path, visFMU);
+        //X1 Model::OMVisualizerAbstract* omv = factory->createVisualizationObject(modelName, path, visFMU);
+        _omVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
 
         // Initialize the OMVisualizer object.
-        omv->initData();
-        omv->setUpScene();
-        omv->updateVisAttributes(0.0);  // set scene to initial position
+        _omVisualizer->initData();
+        _omVisualizer->setUpScene();
+        _omVisualizer->updateVisAttributes(0.0);  // set scene to initial position
 
-        // Init viewer \todo: Create viewer::init(path, xmldoc) function
-//        _viewer->_scene._path = path;
-//        // build scene graph. omv::_baseData::_xmlDoc has to be initialized at this point.
-//        _viewer->_scene.setUpScene(omv->_baseData->_xmlDoc.first_node());
-
-//        omv->updateVisAttributes(0.0);  // set scene to initial position
-
-        return omv;
+        //X1 return omv;
     }
 
     bool GUIController::checkForXMLFile(const std::string& path, const std::string& modelName)
@@ -97,4 +93,68 @@ namespace Control
         return (stat(file.c_str(), &buffer) == 0);
     }
 
+    void GUIController::startVisualization()
+    {
+        _omVisualizer->startVisualization();
+    }
+
+    void GUIController::pauseVisualization()
+    {
+        _omVisualizer->pauseVisualization();
+    }
+
+    void GUIController::initVisualization()
+    {
+        _omVisualizer->initVisualization();
+    }
+
+    void GUIController::donationVisualization()
+    {
+        std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
+    }
+
+    osgViewer::View* GUIController::getViewer()
+    {
+        return &_omVisualizer->_viewerStuff->_osgViewer;
+    }
+
+    int GUIController::getTimeProgress()
+    {
+        return _omVisualizer->_omvManager->getTimeProgress();
+    }
+
+    osg::ref_ptr<osg::Node> GUIController::getSceneRootNode()
+    {
+        return _omVisualizer->_viewerStuff->_scene._rootNode;
+    }
+
+    void GUIController::sceneUpdate()
+    {
+        _omVisualizer->sceneUpdate();
+    }
+
+    double GUIController::getVisTime()
+    {
+        return _omVisualizer->_omvManager->_visTime;
+    }
+
+    void GUIController::setVisTime(const int val)
+    {
+        _omVisualizer->_omvManager->_visTime = (_omVisualizer->_omvManager->_endTime - _omVisualizer->_omvManager->_startTime) * (float) (val / 100.0);
+    }
+
+    bool GUIController::modelIsMATFile()
+    {
+        return (_omVisualizer->getDataTypeID() == 0) ? true : false;
+    }
+
+    bool GUIController::modelIsFMU()
+    {
+        return (_omVisualizer->getDataTypeID() == 1) ? true : false;
+    }
+
+    void GUIController::setBackgroundColor(const osg::Vec4 colVec)
+    {
+        _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
+    }
 }  // End namespace Control

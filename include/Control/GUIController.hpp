@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /*
  * GUIController.hpp
@@ -28,12 +28,13 @@
 #define INCLUDE_CONTROL_GUICONTROLLER_HPP_
 
 #include "View/OMVisualViewer.hpp"
+#include "osg/Vec4"
 
 // Forward declaration
-namespace Model {
+namespace Model
+{
     class OMVisualizerAbstract;
 }
-
 
 namespace Control
 {
@@ -46,7 +47,7 @@ namespace Control
     class GUIController
     {
      public:
-        GUIController() = default;
+        GUIController(); //X1 = default;
         ~GUIController() = default;
 
         GUIController(const GUIController& gc) = delete;
@@ -61,7 +62,8 @@ namespace Control
          * \return Pointer to OMVisualizer object which is created by the factory.
          * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
          */
-        Model::OMVisualizerAbstract* loadModel(const std::string& modelName);
+        //X1 Model::OMVisualizerAbstract* loadModel(const std::string& modelName);
+        void loadModel(const std::string& modelName);
 
         /*! \brief Check if the XML file for a given path and model name can be accessed.
          *
@@ -74,8 +76,24 @@ namespace Control
          */
         bool checkForXMLFile(const std::string& path, const std::string& modelName);
 
+        void startVisualization();
+        void pauseVisualization();
+        void initVisualization();
+        void donationVisualization();
+
+        osgViewer::View* getViewer();
+        int getTimeProgress();
+        osg::ref_ptr<osg::Node> getSceneRootNode();
+        void sceneUpdate();
+        double getVisTime();
+        void setVisTime(const int val);
+        bool modelIsMATFile();
+        bool modelIsFMU();
+        void setBackgroundColor(const osg::Vec4 colVec);
+
      private:
-        //View::OMVisualViewer* _viewer;
+        //X1
+        Model::OMVisualizerAbstract* _omVisualizer;
     };
 
 }  // End namespace Control
