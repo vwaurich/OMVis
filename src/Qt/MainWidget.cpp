@@ -160,27 +160,19 @@ QWidget* MainWidget::setupTimeSliderWidget(QSlider* timeSlider)
 
 QWidget* MainWidget::setupControlElementWidget()
 {
-    //the button row
-    QHBoxLayout* buttonRowLayOut = new QHBoxLayout;
-    QGroupBox* buttonRowBox = new QGroupBox;
-
-    QPushButton* playButton = new QPushButton;
-    playButton->setText("PLAY");
-
-    QPushButton* pauseButton = new QPushButton;
-    pauseButton->setText("PAUSE");
-
-    QPushButton* initButton = new QPushButton;
-    initButton->setText("INITIAL");
-
-    QPushButton* coffeeButton = new QPushButton;
-    coffeeButton->setText("Buy us a coffee");
+    QPushButton* playButton = new QPushButton("Play", this);
+    QPushButton* pauseButton = new QPushButton("Pause", this);
+    QPushButton* initButton = new QPushButton("Initialize", this);
+    QPushButton* coffeeButton = new QPushButton("Support: Buy us a coffee.", this);
 
     //_timeDisplay->setText(QString("time ").append(QString::number(_omVisualizer->omvManager->_visTime)));
-    _timeDisplay->setText(QString("time ").append(QString::fromStdString("")));
-    _timeDisplay->setFixedWidth(70);
+    _timeDisplay->setText(QString("Time ").append(QString::fromStdString("0.0")));
+    _timeDisplay->setFixedWidth(60);
     _timeDisplay->setFixedHeight(20);
 
+    //the button row
+    QHBoxLayout* buttonRowLayOut = new QHBoxLayout(this);
+    QGroupBox* buttonRowBox = new QGroupBox();
     buttonRowLayOut->addWidget(initButton);
     buttonRowLayOut->addWidget(playButton);
     buttonRowLayOut->addWidget(pauseButton);
@@ -188,9 +180,9 @@ QWidget* MainWidget::setupControlElementWidget()
     buttonRowLayOut->addWidget(_timeDisplay);
     buttonRowBox->setLayout(buttonRowLayOut);
 
-    buttonRowBox->setFixedHeight(50);
+    buttonRowBox->setFixedHeight(60);
 
-    //the button connections
+    // Connect the buttons to the corresponding slot functions.
     QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(playSlotFunction()));
     QObject::connect(pauseButton, SIGNAL(clicked()), this, SLOT(pauseSlotFunction()));
     QObject::connect(initButton, SIGNAL(clicked()), this, SLOT(initSlotFunction()));
