@@ -60,8 +60,8 @@ namespace View
             {
                 std::string filename = extractCADFilename(type);
 				std::cout << "its a stl" << std::endl;
-				std::cout << path << std::endl;
-                filename = path + filename;
+				std::cout << _path << std::endl;
+                filename = _path + filename;
                 std::cout << "its a stl file1. " << filename << std::endl;
 
                 if (!exists(filename))

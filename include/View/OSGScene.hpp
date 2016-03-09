@@ -54,7 +54,7 @@ namespace View
      public:
         /// \todo Can this attr. be private?
         osg::ref_ptr<osg::Group> _rootNode;
-		std::string path;
+		std::string _path;
     };
 
 }  // End namespace View
