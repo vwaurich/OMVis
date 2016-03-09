@@ -104,7 +104,7 @@ namespace Model
         _data._valuesBoolean = (fmi1_boolean_t*) calloc(_data._numBoolean, sizeof(fmi1_boolean_t));
         _data._valuesString = (fmi1_string_t*) calloc(_data._numString, sizeof(fmi1_string_t));
         // malloc attributes
-        _data._attrReal = (attributes_real*) calloc(_data._numReal, sizeof(attributes_real));
+        _data._attrReal = (AttributesReal*) calloc(_data._numReal, sizeof(AttributesReal));
 
         // init keymap and attributes
         // ------------------

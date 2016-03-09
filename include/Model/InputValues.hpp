@@ -39,7 +39,7 @@ namespace Model
         fmi1_real_t _max;
         fmi1_real_t _nominal;
         fmi1_real_t _start;
-    } attributes_real;
+    } AttributesReal;
 
     /*! \brief Base class for all inputValues.
      *
@@ -95,7 +95,7 @@ namespace Model
         unsigned int _numBoolean;
         unsigned int _numString;
 
-        attributes_real* _attrReal;
+        AttributesReal* _attrReal;
     };
 
 }  // End namespace Model
