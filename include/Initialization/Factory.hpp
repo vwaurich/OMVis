@@ -38,9 +38,9 @@ namespace Util
 {
     class CommandLineArgs;
 }
-namespace View
+namespace Control
 {
-    class OMVManager;
+    class OMVisManager;
 }
 
 namespace Initialization

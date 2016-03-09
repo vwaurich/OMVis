@@ -31,7 +31,7 @@
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Util/Logger.hpp"
 #include "Util/CommandLineArgs.hpp"
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Initialization
 {
