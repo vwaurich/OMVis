@@ -74,16 +74,15 @@ class MainWidget : public QMainWindow, public osgViewer::CompositeViewer
 {
 Q_OBJECT
  public:
-    /*! \brief Constructs MainWidget object from arguments.
+    /*! \brief Constructs the MainWidget object from arguments.
      *
      * A empty GUI is created and the model has to be loaded via the file open dialog.
      *
      * @param parent Parent for initialization of QWidget Baseclass.
      * @param flags Window flags for initialization of QWidget Baseclass.
      * @param threadingModel The threading model.
-     * @param omv The OMVisualizer which stores the scene.
      */
-    MainWidget(QWidget* parent = nullptr, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded/*, Model::OMVisualizerAbstract* omv = nullptr*/);
+    MainWidget(QWidget* parent = nullptr, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
 
     /*! \brief Adds a view-widget to the main-widget.
      *
@@ -140,9 +139,20 @@ Q_OBJECT
      */
     QWidget* setupControlElementWidget();
 
-    /*! \brief Creates the time slider widget
+    /*! \brief Creates and sets up the time slider widget.
+     *
+     * We use a horizontal slider widget with a range from 0 to 100.
+     * The slider position is set to default value of 0, i.e., to the very left position.
+     * A connection to the method \ref setVisTimeSlotFunction(int) is created and triggered if the user
+     * moves the slider.
      */
-    QWidget* setupTimeSliderWidget(const int position);
+    QWidget* setupTimeSliderWidget();
+
+    /*! \brief Sets time slider to the given position.
+     *
+     * @param newPos New position of the time slider.
+     */
+    void setTimeSliderPosition(int newPos);
 
     /*! \brief This methods shows the window to choose the model file.
      *

@@ -157,4 +157,10 @@ namespace Control
     {
         _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
     }
+
+    double GUIController::getSimulationStartTime() const
+    {
+        return _omVisualizer->_omvManager->_startTime;
+    }
+
 }  // End namespace Control

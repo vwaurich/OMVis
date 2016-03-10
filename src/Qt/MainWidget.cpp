@@ -32,11 +32,11 @@
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 
-MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase::ThreadingModel threadingModel/*, Model::OMVisualizerAbstract* omv*/)
+MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase::ThreadingModel threadingModel)
         : QMainWindow(parent, f),
           _timeDisplay(new QLabel()),
           //X1 _omVisualizer(nullptr),
-          _timeSlider(new QSlider(Qt::Horizontal)),
+          //X3_timeSlider(new QSlider(Qt::Horizontal)),
           _osgViewerWidget(),
           _guiController(new Control::GUIController()),
           _modelLoaded(false)
@@ -54,16 +54,16 @@ MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase
     // Set up the top menu-bar
     setupMenuBar();
 
-    //Set up the osg viewer widget
+    // Set up the osg viewer widget
     //_osgViewerWidget = setupOSGViewerWidget();
     _osgViewerWidget = setupOSGViewerWidgetDefault();
 
-    //Set up the control elements widget
+    // Set up the control elements widget
     _controlElementWidget = setupControlElementWidget();
 
-    //Set up the time slider widget
+    // Set up the time slider widget and set the slider to start position.
     //X2 _timeSliderWidget = setupTimeSliderWidgetDefault(_timeSlider);
-    _timeSliderWidget = setupTimeSliderWidget(0);
+    _timeSliderWidget = setupTimeSliderWidget();
 
     //assemble the layouts
     QVBoxLayout* mainRowLayout = new QVBoxLayout;
@@ -84,6 +84,9 @@ MainWidget::MainWidget(QWidget* parent, Qt::WindowFlags f, osgViewer::ViewerBase
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateGUIelements()));
     //MF \todo Move to approriate place _visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
+
+    setTimeSliderPosition(111);
+    setTimeSliderPosition(-3);
 }
 
 void MainWidget::setupMenuBar()
@@ -129,17 +132,34 @@ QWidget* MainWidget::setupOSGViewerWidgetDefault()
     return addViewWidgetDefault(window);
 }
 
-QWidget* MainWidget::setupTimeSliderWidget(const int position)
+void MainWidget::setTimeSliderPosition(int newPos)
 {
-    // \todo This should be done once. Not every time we call this function.
-    _timeSlider->setFixedHeight(30);
+    // Check if newPos in the sliders range.
+    if (_timeSlider->minimum() > newPos)
+    {
+        LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [")
+                     + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to minimum."), Util::LC_GUI, Util::LL_WARNING);
+        newPos = _timeSlider->minimum();
+    }
+    else if (_timeSlider->maximum() < newPos)
+    {
+        LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [")
+                             + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to maximum."), Util::LC_GUI, Util::LL_WARNING);
+        newPos = _timeSlider->maximum();
+    }
 
-    //int tP = _guiController->getTimeProgress();
-    _timeSlider->setSliderPosition(position);
+    // Set new position.
+    _timeSlider->setSliderPosition(newPos);
+}
 
-    LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ")
-                 + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
-    int value = _timeSlider->sliderPosition();
+QWidget* MainWidget::setupTimeSliderWidget()
+{
+    _timeSlider = new QSlider(Qt::Horizontal, this), _timeSlider->setFixedHeight(30);
+    _timeSlider->setMinimum(0);
+    _timeSlider->setMaximum(99);
+    _timeSlider->setSliderPosition(0);
+
+    LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ") + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
 
     QObject::connect(_timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
     return _timeSlider;
@@ -158,7 +178,7 @@ QWidget* MainWidget::setupControlElementWidget()
     _timeDisplay->setFixedHeight(20);
 
     //the button row
-    QHBoxLayout* buttonRowLayOut = new QHBoxLayout(this);
+    QHBoxLayout* buttonRowLayOut = new QHBoxLayout();
     QGroupBox* buttonRowBox = new QGroupBox();
     buttonRowLayOut->addWidget(initButton);
     buttonRowLayOut->addWidget(playButton);
@@ -241,7 +261,6 @@ osgQt::GraphicsWindowQt* MainWidget::createGraphicsWindow(int x, int y, int w, i
     return new osgQt::GraphicsWindowQt(traits.get());
 }
 
-
 /*-----------------------------------------
  * Slot Functions
  *---------------------------------------*/
@@ -309,15 +328,15 @@ void MainWidget::loadModel(/*bool& visFMU*/)
 
     _osgViewerWidget = setupOSGViewerWidget();
 
-    // Set value of time display to 0.0
-    _timeDisplay->setText(QString("Time ").append(QString::fromStdString("0.0")));
+    // Set value of time display to simulation start time of the model.
+    double startT = _guiController->getSimulationStartTime();
+    _timeDisplay->setText(QString("Time ").append(QString::number(startT)));
+
+    // Set the time slider to a position according to the simulation start time of the loaded model.
+    int tP = _guiController->getTimeProgress();
+    setTimeSliderPosition(tP);
 
     // Okay, at this point it was trial end error. What do we really need to do in order to show the loaded model??
-
-    // Set the time slider widget to the simulation start time of the loaded model.
-    //X2 _timeSliderWidget = setupTimeSliderWidget(_timeSlider);
-    int tP = _guiController->getTimeProgress();
-    _timeSliderWidget = setupTimeSliderWidget(tP);
 
     //assemble the layouts
     QVBoxLayout* mainRowLayout = new QVBoxLayout;

@@ -91,6 +91,9 @@ namespace Control
         bool modelIsFMU();
         void setBackgroundColor(const osg::Vec4 colVec);
 
+        /// Returns simulation start time of the loaded model.
+        double getSimulationStartTime() const;
+
      private:
         //X1
         Model::OMVisualizerAbstract* _omVisualizer;
