@@ -34,7 +34,8 @@
 namespace Model
 {
 
-    /*! \brief Base class that contains XML information.
+    /*! \brief Base class that encapsulates the information given in the XML file.
+     *
      *
      */
     class OMVisualBase
@@ -55,7 +56,7 @@ namespace Model
         /// \todo Can this attr. be private?
         std::string _dirName;
         /// \todo Can this attr. be private?
-        /// The XML containing the information about the visualization.
+        /// The XML file containing the information about the visualization.
         rapidxml::xml_document<> _xmlDoc;
         /// \todo Can this attr. be private?
         /// Stores the current visualization data.
