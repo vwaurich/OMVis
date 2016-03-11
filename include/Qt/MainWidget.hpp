@@ -72,7 +72,7 @@ QT_FORWARD_DECLARE_CLASS(QSignalMapper)
 class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
 //If we want to use a toolbar, we have to derive from QMainWindow.
 {
-    Q_OBJECT
+Q_OBJECT
 
  public:
     /*! \brief Constructs the MainWidget object from arguments.
@@ -100,7 +100,7 @@ class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
      * @param gw The graphical window.
      * @return The widget for the osg-viewer.
      */
-    QWidget* addViewWidgetDefault(osgQt::GraphicsWindowQt* gw, /*X5*/ osg::Node* scene);
+    QWidget* addViewWidgetDefault(osgQt::GraphicsWindowQt* gw, /*X5*/osg::Node* scene);
 
     /*! \brief Creates a osgQt::createGraphicsWindow
      *
@@ -121,12 +121,28 @@ class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
         frame();
     }
 
+    /*-------------------------------------------------------------------------
+     * Initialization
+     *-----------------------------------------------------------------------*/
+    /*! \brief This function sets up the widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
+     *
+     * This function encapsulates all the single functions to set up all "Teilfenster".
+     */
+    void setupWidgets();
+
+    /*! \brief Creates the layout which is used for OMVis.
+     *
+     * We use a row layout consisting of the three widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
+     */
+    QVBoxLayout* createViewerLayout();
+
     /*! \brief Creates the top menu bar.
      *
      * The top menu bar is created by adding the menu points connecting them to corresponding slots.
      * Currently, there are the top menus File, Settings and Input.
      */
-    void setupMenuBar();
+    void createMenuBar();
+    void createActions();
 
     /*! \brief Creates the osg-viewer-widget
      */
@@ -169,6 +185,9 @@ class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
     QHBoxLayout* createInputMapperRow(int inputIdx, std::string varName, std::string type);
 
  public slots:
+    /*-------------------------------------------------------------------------
+     * SLOTS
+     *-----------------------------------------------------------------------*/
     /*! \brief Function that is triggered by the play-button.
      */
     void playSlotFunction();
@@ -225,14 +244,30 @@ class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
      */
     void updateKeyMapValue(QString key);
 
+    /*! \brief Shows information about OMVis. */
+    void aboutOMVis();
+
  private:
-    // Menus---
+    // --- Menus ---
     QMenu* _fileMenu;
     QMenu* _settingsMenu;
     QMenu* _inputMenu;
+    QMenu* _helpMenu;
 
-    // Widgets---
+    // --- Actions ---
+    QAction* _openAct;
+//    QAction* _loadAct;
+    QAction* _exportAct;
+    QAction* _exitAct;
+    QAction* _genSetAct;
+    QAction* _mapInputAct;
+    QAction* _dontCareAct;
+    QAction* _aboutOMVisAct;
+
+    // --- Widgets---
+    /// Widget which handles the OSG scene.
     QWidget* _osgViewerWidget;
+    /// Widget which handles the control elements (e.g., play, stop button).
     QWidget* _controlElementWidget;
     /// Widget which handles the time slider.
     QWidget* _timeSliderWidget;

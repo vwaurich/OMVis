@@ -34,7 +34,7 @@
 #include <osgDB/ReadFile>
 #include <QScreen>
 
-OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/ osgViewer::ViewerBase::ThreadingModel threadingModel)
+OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel)
         : QMainWindow(/*parent, f*/),
           osgViewer::CompositeViewer(),
           _timeDisplay(new QLabel()),
@@ -51,26 +51,16 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/ osgViewer::View
     // disable the default setting of viewer.done() by pressing Escape.
     setKeyEventSetsDone(0);
 
+    // Create the widgets for time slider, osg viewer and control elements.
+    setupWidgets();
+
     // Set up the top menu-bar
-    setupMenuBar();
+    createActions();
+    createMenuBar();
 
-    // Set up the osg viewer widget
-    _osgViewerWidget = setupOSGViewerWidgetDefault();
-
-    // Set up the control elements widget
-    _controlElementWidget = setupControlElementWidget();
-
-    // Set up the time slider widget and set the slider to start position.
-    _timeSliderWidget = setupTimeSliderWidget();
-
-    //assemble the layouts
-    QVBoxLayout* mainRowLayout = new QVBoxLayout;
-    mainRowLayout->addWidget(_osgViewerWidget);
-    mainRowLayout->addWidget(_timeSliderWidget);
-    mainRowLayout->addWidget(_controlElementWidget);
-
-    //the father of all widget
-    QWidget* topWidget = new QWidget;
+    // Assemble the widgets to a layout and create the father of all widgets with this layout.
+    QVBoxLayout* mainRowLayout = createViewerLayout();
+    QWidget* topWidget = new QWidget();
     topWidget->setLayout(mainRowLayout);
     setCentralWidget(topWidget);
 
@@ -86,30 +76,77 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/ osgViewer::View
     resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
 }
 
-void OMVisViewer::setupMenuBar()
+void OMVisViewer::setupWidgets()
+{
+    // Set up the osg viewer widget
+    _osgViewerWidget = setupOSGViewerWidgetDefault();
+
+    // Set up the control elements widget
+    _controlElementWidget = setupControlElementWidget();
+
+    // Set up the time slider widget and set the slider to start position.
+    _timeSliderWidget = setupTimeSliderWidget();
+}
+
+QVBoxLayout* OMVisViewer::createViewerLayout()
+{
+    QVBoxLayout* mainRowLayout = new QVBoxLayout();
+    mainRowLayout->addWidget(_osgViewerWidget);
+    mainRowLayout->addWidget(_timeSliderWidget);
+    mainRowLayout->addWidget(_controlElementWidget);
+    return mainRowLayout;
+}
+
+void OMVisViewer::createActions()
+{
+    _openAct = new QAction(tr("&Open..."), this);
+    _openAct->setShortcut(tr("Ctrl+O"));
+    QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(loadModel()));
+
+    _exportAct = new QAction(tr("&Export Video"), this);
+    QObject::connect(_exportAct, SIGNAL(triggered()), this, SLOT(exportVideo()));
+
+    _exitAct = new QAction(tr("&Open..."), this);
+    _exitAct->setShortcut(tr("Ctrl+Q"));
+    QObject::connect(_exitAct, SIGNAL(triggered()), this, SLOT(close()));
+
+    _genSetAct = new QAction(tr("&General Settings"), this);
+    QObject::connect(_genSetAct, SIGNAL(triggered()), this, SLOT(openDialogSettings()));
+
+    _mapInputAct = new QAction(tr("&Open..."), this);
+    QObject::connect(_mapInputAct, SIGNAL(triggered()), this, SLOT(openDialogInputMapper));
+
+    _dontCareAct = new QAction(tr("&I Don't Care About Inputs"), this);
+    //QObject::connect(_dontCareAct, SIGNAL(triggered()), this, SLOT());
+
+    _aboutOMVisAct = new QAction(tr("&About OMVis"), this);
+    QObject::connect(_aboutOMVisAct, SIGNAL(triggered()), this, SLOT(aboutOMVis()));
+}
+
+void OMVisViewer::createMenuBar()
 {
     // Menu caption "File"
-    _fileMenu = menuBar()->addMenu(tr("&File"));
-    QAction* exportAction = _fileMenu->addAction(tr("Export Video"));
-    QAction* changeModelAction = _fileMenu->addAction(tr("Load Model"));
+    _fileMenu = new QMenu(tr("&File"), this);
+    _fileMenu->addAction(_openAct);
+//    _fileMenu->addAction(_loadAct);
+    _fileMenu->addAction(_exportAct);
     _fileMenu->addSeparator();
-    _fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
+    _fileMenu->addAction(_exitAct);
 
-    QObject::connect(exportAction, SIGNAL(triggered()), this, SLOT(exportVideo()));
-    QObject::connect(changeModelAction, SIGNAL(triggered()), this, SLOT(loadModel()));
+    _settingsMenu = new QMenu(tr("Settings"), this);
+    _settingsMenu->addAction(_genSetAct);
 
-    // Menu caption "Settings"
-    _settingsMenu = menuBar()->addMenu(tr("Settings"));
-    QAction* generalSettingsAction = _settingsMenu->addAction(tr("General Settings"));
+    _inputMenu = new QMenu(tr("Inputs"), this);
+    _inputMenu->addAction(_mapInputAct);
+    _inputMenu->addAction(_dontCareAct);
 
-    QObject::connect(generalSettingsAction, SIGNAL(triggered()), this, SLOT(openDialogSettings()));
+    _helpMenu = new QMenu(tr("&Help"), this);
+    _helpMenu->addAction(_aboutOMVisAct);
 
-    // Menu caption "Inputs"
-    _inputMenu = menuBar()->addMenu(tr("Inputs"));
-    QAction* mapInputAction = _inputMenu->addAction(tr("Map Input To Devices"));
-    QAction* dontCareAction = _inputMenu->addAction(tr("I Don't Care About Input"));
-
-    QObject::connect(mapInputAction, SIGNAL(triggered()), this, SLOT(openDialogInputMapper()));
+    menuBar()->addMenu(_fileMenu);
+    menuBar()->addMenu(_settingsMenu);
+    menuBar()->addMenu(_inputMenu);
+    menuBar()->addMenu(_helpMenu);
 }
 
 /** Updates the OSGViewerWidget if a new model was loaded into OMVis.
@@ -377,7 +414,6 @@ void OMVisViewer::loadModel()
     //X5 _osgViewerWidget = setupOSGViewerWidget();
     updateOSGViewerWidget();
 
-
     // Set value of time display to simulation start time of the model.
     double startT = _guiController->getSimulationStartTime();
     _timeDisplay->setText(QString("Time ").append(QString::number(startT)));
@@ -610,4 +646,18 @@ void OMVisViewer::updateKeyMapValue(QString varToKey)
 //    //remove current mapping!!
 //
 //    fmuVisualizer->_inputData.printKeyToInputMap();
+}
+
+void OMVisViewer::aboutOMVis()
+{
+    QMessageBox::about(this, tr("About OMVis"), tr("<p><b>OMVis</b> is a tool to visualize and animate simulation models. "
+                                                   "It is meant to visualize models from different simulation tools. "
+                                                   "What shall be visualized is described in a XML-file and the result files "
+                                                   "provide the corresponding data."
+                                                   "Besides the animation of result files, there is a possibility to animate "
+                                                   "multibody-systems with a FMU interactively.</p>"
+                                                   "<p>Version: 0.01 "
+                                                   "Website: https://github.com/vwaurich/OMVis"
+                                                   "(c) Copyright: See license text."
+                                                   "Authors: Volker Waurich, Martin Flehmig</p>"));
 }
