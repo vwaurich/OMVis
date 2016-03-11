@@ -95,7 +95,6 @@ namespace Control
         double getSimulationStartTime() const;
 
      private:
-        //X1
         Model::OMVisualizerAbstract* _omVisualizer;
     };
 

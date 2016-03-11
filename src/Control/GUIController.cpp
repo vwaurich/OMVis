@@ -40,7 +40,6 @@ namespace Control
     {
     }
 
-    //X1 Model::OMVisualizerAbstract* GUIController::loadModel(const std::string& modelNameIn)
     void GUIController::loadModel(const std::string& modelNameIn)
     {
         LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
@@ -75,15 +74,12 @@ namespace Control
 
         // Ask the factory to create an appropriate OMVisualizer object.
         Initialization::Factory* factory = new Initialization::Factory();
-        //X1 Model::OMVisualizerAbstract* omv = factory->createVisualizationObject(modelName, path, visFMU);
         _omVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
 
         // Initialize the OMVisualizer object.
         _omVisualizer->initData();
         _omVisualizer->setUpScene();
         _omVisualizer->updateVisAttributes(0.0);  // set scene to initial position
-
-        //X1 return omv;
     }
 
     bool GUIController::checkForXMLFile(const std::string& path, const std::string& modelName)
