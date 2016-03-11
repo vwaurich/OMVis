@@ -55,113 +55,20 @@ int main(int argc, char* argv[])
 
         LOGGER_WRITE(std::string("Okay, let's create the main widget..."), Util::LC_OTHER, Util::LL_INFO);
         QApplication app(argc, argv);
-        MainWidget* mainWidget = new MainWidget(0, Qt::Widget, osgViewer::CompositeViewer::SingleThreaded);
-        mainWidget->setGeometry(100, 100, 800, 600);
-        mainWidget->show();
-        app.exec();
 
-        //while (!omv->_viewerStuff->_viewer.done())
-//        while (false)
-//        {
-//            // render everything, even when tend is reached
-//            omv->_viewerStuff->_viewer.frame();
-//            // restart from the beginning after tend
-//            if (omvManager._simTime > omvManager._endTime && makeLoop)
-//            {
-//                omvManager._timer.setStartTick();
-//            }
-//
-//            // simulation and animation loop
-//            while (omvManager._realTime < omvManager._endTime)
-//            {
-//                //update real time counter
-//                omvManager.updateTick();
-//                //cout<<"realTime "<<omvManager.realTime<<endl;
-//
-//                // In case of FMU, simulate FMU
-//                omv->simulate(omvManager);
-//
-////                if (useFMU)
-////                {
-////                    while (omvManager._simTime < omvManager._realTime + omvManager._hVisual && omvManager._simTime < omvManager._endTime)
-////                    {
-////                        //<<"simulate "<<omvManager.simTime<<endl;
-////                        //omv.fmuData.inputs.printValues();
-////                        omvManager._simTime = omv->_fmuData->simulateStep(omvManager._simTime);
-////                    }
-////                }
-//
-//                //visualization step
-//                if (omvManager._realTime >= omvManager._visTime)
-//                {
-//                    LOGGER_WRITE(std::string("Render ") + std::to_string(omvManager._visTime), Util::LC_VIEWER, Util::LL_INFO);
-//                    // update all shapes
-//                    rapidxml::xml_node<> * rootNode = omv->_baseData->_xmlDoc.first_node();
-//                    unsigned int shapeIdx = 0;
-//
-//                    for (rapidxml::xml_node<> * shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
-//                    {
-//                        // get all values for the attributes at this time
-//                        omv->fetchVisAttributes(shapeNode, omvManager._visTime);
-//                        //omv.resetInputs();
-//                        //update the shapes
-//                        updater._visAttr = omv->_baseData->_visAttr;
-//                        //updater.visAttr.dumpVisAttributes();
-//
-//                        //get the scene graph nodes and stuff
-//                        osg::ref_ptr<osg::Node> child = omv->_viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
-//                        child->accept(updater);
-//                        shapeIdx++;
-//                    }
-//                    //update visualization time in omvManager
-//                    omvManager._visTime = omvManager._visTime + omvManager._hVisual;
-//                }
-//                //render a new frame
-//                omv->_viewerStuff->_viewer.frame();
-//            }
-//            if (makeLoop)
-//                omvManager._timer.setStartTick();
-//        }
-//
+        //OMVisViewer* mainWidget = new OMVisViewer(0, Qt::Widget, osgViewer::CompositeViewer::SingleThreaded);
+        //mainWidget->show();
+
+        OMVisViewer omvisViewer;
+        omvisViewer.show();
+
+        app.exec();
     }
     catch (std::exception &ex)
     {
         LOGGER_WRITE(std::string("Execution failed. Error: ") + std::string(ex.what()), Util::LC_OTHER, Util::LL_ERROR);
         return -1;
     }
-//
-//
-//    // Test of Logger Settings
-//    // LOGGER_WRITE(std::string("Hei, LC_LOADER, LL_ERROR"),  Util::LC_LOADER, Util::LL_ERROR);
-//    // LOGGER_WRITE(std::string("Hei, LC_LOADER, LL_WARNING"),  Util::LC_LOADER, Util::LL_WARNING);
-//    // LOGGER_WRITE(std::string("Hei, LC_LOADER, LL_INFO"),  Util::LC_LOADER, Util::LL_INFO);
-//    // LOGGER_WRITE(std::string("Hei, LC_LOADER, LL_DEBUG"),  Util::LC_LOADER, Util::LL_DEBUG);
-//
-//    // Create visualizer
-//    OMVisualizer* omv = new OMVisualizer(useFMU, modelname, path);
-//
-//
-//    omv->initData();
-//    omv->linkInputsToEventHandler();
-//    omv->setUpScene();
-//
-//    //the node traverser which dumps the tree
-//    InfoVisitor infoVisitor;
-//    omv->_viewerStuff->_scene._rootNode->accept(infoVisitor);
-//
-//    //render frames
-//    bool makeLoop = true;
-//    OMVManager omvManager;
-//    omvManager._endTime = 10;
-//    omvManager._hVisual = 0.1;
-//    if (omv->_useFMU)
-//    {
-//        omv->_fmuData->_settings->set_tend(omvManager._endTime);
-//        omv->_fmuData->_settings->set_hdef(0.001);
-//    }
-//    omvManager._timer.setStartTick();
-//    UpdateVisitor updater;
-//
 
     return 0;
 }

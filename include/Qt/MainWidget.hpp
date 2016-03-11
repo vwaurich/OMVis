@@ -69,10 +69,11 @@ class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QSignalMapper)
 
-class MainWidget : public QMainWindow, public osgViewer::CompositeViewer
+class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
 //If we want to use a toolbar, we have to derive from QMainWindow.
 {
-Q_OBJECT
+    Q_OBJECT
+
  public:
     /*! \brief Constructs the MainWidget object from arguments.
      *
@@ -82,7 +83,7 @@ Q_OBJECT
      * @param flags Window flags for initialization of QWidget Baseclass.
      * @param threadingModel The threading model.
      */
-    MainWidget(QWidget* parent = nullptr, Qt::WindowFlags f = 0, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
+    OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
 
     /*! \brief Adds a view-widget to the main-widget.
      *
@@ -99,7 +100,7 @@ Q_OBJECT
      * @param gw The graphical window.
      * @return The widget for the osg-viewer.
      */
-    QWidget* addViewWidgetDefault(osgQt::GraphicsWindowQt* gw);
+    QWidget* addViewWidgetDefault(osgQt::GraphicsWindowQt* gw, /*X5*/ osg::Node* scene);
 
     /*! \brief Creates a osgQt::createGraphicsWindow
      *
@@ -130,6 +131,9 @@ Q_OBJECT
     /*! \brief Creates the osg-viewer-widget
      */
     QWidget* setupOSGViewerWidget();
+    //X5
+    //QWidget*
+    void updateOSGViewerWidget();
 
     /*! \brief Creates a default osg-viewer-widget
      */
@@ -200,7 +204,7 @@ Q_OBJECT
      *
      * @param visFMU
      */
-    void loadModel(/*bool& visFMU*/);
+    void loadModel();
 
     /*! \todo Implement me. */
     void exportVideo();
@@ -221,20 +225,24 @@ Q_OBJECT
      */
     void updateKeyMapValue(QString key);
 
- public:
+ private:
+    // Menus---
     QMenu* _fileMenu;
     QMenu* _settingsMenu;
     QMenu* _inputMenu;
+
+    // Widgets---
     QWidget* _osgViewerWidget;
     QWidget* _controlElementWidget;
+    /// Widget which handles the time slider.
     QWidget* _timeSliderWidget;
 
- protected:
+ private:
+    /// Slider that corresponds to the current simulation time with respect to start and end time.
     QSlider* _timeSlider;
     QLabel* _timeDisplay;
     QTimer _renderTimer;  //!< Brief Triggers a new frame.
     QTimer _visTimer;  //!< Brief Triggers a new scene-update.
-    //X1 Model::OMVisualizerAbstract* _omVisualizer;
 
     /// The GUIController object will take the users input from GUI and handle it.
     Control::GUIController* _guiController;
