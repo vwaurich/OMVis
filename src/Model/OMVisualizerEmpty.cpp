@@ -22,7 +22,7 @@
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerEmpty.hpp"
 #include "View/OMVisualViewer.hpp"
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Model
 {
