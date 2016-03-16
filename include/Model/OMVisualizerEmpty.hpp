@@ -29,9 +29,9 @@
 
 #include <string>
 #include <memory>
-#include "Model/FMUSimulate.hpp"
-#include "Controller/JoystickDevice.hpp"
-#include "Controller/KeyboardEventHandler.hpp"
+#include "Model/OMVisualizerFMU.hpp"
+#include "Control/JoystickDevice.hpp"
+#include "Control/KeyboardEventHandler.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
