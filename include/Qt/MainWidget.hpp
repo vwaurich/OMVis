@@ -134,7 +134,7 @@ Q_OBJECT
      *
      * We use a row layout consisting of the three widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
      */
-    QVBoxLayout* createViewerLayout();
+    void createLayout();
 
     /*! \brief Creates the top menu bar.
      *
@@ -153,7 +153,7 @@ Q_OBJECT
 
     /*! \brief Creates a default osg-viewer-widget
      */
-    QWidget* setupOSGViewerWidgetDefault();
+    QWidget* setupOSGViewerWidgetDefault(/*X8*/ osg::Node* scene);
 
     /*! \brief Creates the control widget (play, pause,...)
      */
@@ -225,6 +225,11 @@ Q_OBJECT
      */
     void loadModel();
 
+    //X9
+    void loadModelCow();
+    void loadModelCessna();
+    void unloadModel();
+
     /*! \todo Implement me. */
     void exportVideo();
 
@@ -256,13 +261,18 @@ Q_OBJECT
 
     // --- Actions ---
     QAction* _openAct;
-//    QAction* _loadAct;
     QAction* _exportAct;
     QAction* _exitAct;
     QAction* _genSetAct;
     QAction* _mapInputAct;
     QAction* _dontCareAct;
     QAction* _aboutOMVisAct;
+
+    //X9
+    QAction* _loadCessnaAct;
+    QAction* _loadCowAct;
+    QAction* _unloadAct;
+    osgViewer::View* _view;
 
     // --- Widgets---
     /// Widget which handles the OSG scene.
@@ -278,6 +288,9 @@ Q_OBJECT
     QLabel* _timeDisplay;
     QTimer _renderTimer;  //!< Brief Triggers a new frame.
     QTimer _visTimer;  //!< Brief Triggers a new scene-update.
+
+    //X6
+    QTimer _timer;
 
     /// The GUIController object will take the users input from GUI and handle it.
     Control::GUIController* _guiController;
