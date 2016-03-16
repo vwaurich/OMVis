@@ -21,7 +21,7 @@
 /**
  OMVis
  visualize.cpp
- Purpose: Relevant functions for the visualizatino
+ Purpose: Relevant functions for the visualization
 
  @author Volker Waurich
  @version 0.1
