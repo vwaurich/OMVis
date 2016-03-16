@@ -189,15 +189,10 @@ QWidget* OMVisViewer::setupOSGViewerWidget(osg::Node* scene)
     if (scene == nullptr)
         std::cout << "Something went wrong loading the osg file." << std::endl;
     return setupViewWidget(window, scene);
-
-    //QGroupBox* buttonRowBox = new QGroupBox();
-    //return buttonRowBox;
 }
 
 QWidget* OMVisViewer::setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* scene)
 {
-//X9    osgViewer::View* view = new osgViewer::View();
-//X9    addView(view);
     if (_sceneView == nullptr)
         _sceneView = new osgViewer::View();
     addView(_sceneView);
