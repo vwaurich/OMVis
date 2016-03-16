@@ -62,7 +62,6 @@ namespace Control
          * \return Pointer to OMVisualizer object which is created by the factory.
          * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
          */
-        //X1 Model::OMVisualizerAbstract* loadModel(const std::string& modelName);
         void loadModel(const std::string& modelName);
 
         /*! \brief Check if the XML file for a given path and model name can be accessed.
