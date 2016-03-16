@@ -34,26 +34,26 @@ namespace View
 {
 
     OMVisualViewer::OMVisualViewer()
-            : _osgViewer(),
+            : //X9 _osgViewer(),
               _scene()
     {
     }
 
-    void OMVisualViewer::initViewer()
-    {
-        // set up osg::viewer
-        LOGGER_WRITE(std::string("Set up Camera Manipulator."), Util::LC_LOADER, Util::LL_DEBUG);
-        _osgViewer.setCameraManipulator(new osgGA::TrackballManipulator);
-
-        LOGGER_WRITE(std::string("Set up View Window."), Util::LC_LOADER, Util::LL_DEBUG);
-        _osgViewer.setUpViewInWindow(500, 500, 1000, 700);  //MF: This method is "depreacted, use view.apply(new osgViewer::SingleWindow(x,y,width,screenNum))."
-
-        LOGGER_WRITE(std::string("Get Camera."), Util::LC_LOADER, Util::LL_DEBUG);
-        _osgViewer.getCamera()->setClearColor((osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)));
-
-        LOGGER_WRITE(std::string("Call realize() method on viewer."), Util::LC_LOADER, Util::LL_DEBUG);
-        _osgViewer.realize();
-    }
+//X9    void OMVisualViewer::initViewer()
+//    {
+//        // set up osg::viewer
+//        LOGGER_WRITE(std::string("Set up Camera Manipulator."), Util::LC_LOADER, Util::LL_DEBUG);
+//        _osgViewer.setCameraManipulator(new osgGA::TrackballManipulator);
+//
+//        LOGGER_WRITE(std::string("Set up View Window."), Util::LC_LOADER, Util::LL_DEBUG);
+//        _osgViewer.setUpViewInWindow(500, 500, 1000, 700);  //MF: This method is "depreacted, use view.apply(new osgViewer::SingleWindow(x,y,width,screenNum))."
+//
+//        LOGGER_WRITE(std::string("Get Camera."), Util::LC_LOADER, Util::LL_DEBUG);
+//        _osgViewer.getCamera()->setClearColor((osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)));
+//
+//        LOGGER_WRITE(std::string("Call realize() method on viewer."), Util::LC_LOADER, Util::LL_DEBUG);
+//        _osgViewer.realize();
+//    }
 
 	void OMVisualViewer::dumpOSGTreeDebug()
 	{

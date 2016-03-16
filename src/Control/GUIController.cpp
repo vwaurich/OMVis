@@ -109,10 +109,10 @@ namespace Control
         std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
     }
 
-    osgViewer::View* GUIController::getViewer()
-    {
-        return &_omVisualizer->_viewerStuff->_osgViewer;
-    }
+//X9    osgViewer::View* GUIController::getViewer()
+//X9    {
+//X9        return &_omVisualizer->_viewerStuff->_osgViewer;
+//X9    }
 
     int GUIController::getTimeProgress()
     {
@@ -149,10 +149,10 @@ namespace Control
         return (_omVisualizer->getDataTypeID() == 1) ? true : false;
     }
 
-    void GUIController::setBackgroundColor(const osg::Vec4 colVec)
-    {
-        _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
-    }
+//X9    void GUIController::setBackgroundColor(const osg::Vec4 colVec)
+//X9    {
+//X9        _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
+//X9    }
 
     double GUIController::getSimulationStartTime() const
     {

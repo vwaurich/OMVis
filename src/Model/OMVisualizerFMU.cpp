@@ -187,8 +187,9 @@ namespace Model
     void OMVisualizerFMU::linkInputsToEventHandler()
     {
         //start eventhandler and link to inputs
-        Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(&_inputData);
-        _viewerStuff->_osgViewer.addEventHandler(kbEventHandler);
+        //X9 \todo MF: Since the viewer is now located in the OMVisViewer object, we have to readjust this event handler setting.
+        //X9 Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(&_inputData);
+        //X9 _viewerStuff->_osgViewer.addEventHandler(kbEventHandler);
     }
 
     void OMVisualizerFMU::updateVisAttributes(const double time)

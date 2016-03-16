@@ -49,7 +49,7 @@ namespace View
 		/*! \brief This initializes the viewer.
 		*
 		*/
-		void initViewer();
+        //X9 void initViewer();
 
 
 		/*! \brief This method dumps a string representation of the scene graph to stdOut.
@@ -59,7 +59,7 @@ namespace View
 
      public:
         /// The osg viewer holds a single view to a single scene.
-        osgViewer::Viewer _osgViewer;
+        //X9osgViewer::Viewer _osgViewer;
         /// \todo Can this attr. be private?
         OSGScene _scene;
     };

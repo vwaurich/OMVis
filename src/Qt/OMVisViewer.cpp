@@ -27,21 +27,26 @@
  */
 
 #include <Control/GUIController.hpp>
-#include "Qt/MainWidget.hpp"
 #include "Model/FMU.hpp"
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include <osgDB/ReadFile>
 #include <QScreen>
 #include <assert.h>
+#include <Qt/OMVisViewer.hpp>
+
+
+/*-----------------------------------------
+ * CONSTRUCTORS
+ *---------------------------------------*/
 
 OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel)
         : QMainWindow(/*parent, f*/),
           osgViewer::CompositeViewer(),
+          _sceneView(new osgViewer::View()),
           _timeDisplay(new QLabel()),
           _guiController(new Control::GUIController()),
-          _modelLoaded(false),
-          _view(new osgViewer::View())
+          _modelLoaded(false)
 {
     //the names
     setObjectName("MainWindow");
@@ -69,11 +74,16 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
 
     //to trigger the scene updates with the visualization step size
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
-    QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateGUIelements()));
+    QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
     //MF \todo Move to appropriate place _visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
 
     resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
 }
+
+
+/*-----------------------------------------
+ * INITIALIZATION FUNCTIONS
+ *---------------------------------------*/
 
 void OMVisViewer::setupWidgets()
 {
@@ -81,7 +91,7 @@ void OMVisViewer::setupWidgets()
     osg::Node* scene = osgDB::readNodeFile("teapot.osg");
 
     // Set up the osg viewer widget
-    _osgViewerWidget = setupOSGViewerWidgetDefault(scene);
+    _osgViewerWidget = setupOSGViewerWidget(scene);
 
     // Set up the control elements widget
     _controlElementWidget = setupControlElementWidget();
@@ -171,28 +181,28 @@ void OMVisViewer::createMenuBar()
     menuBar()->addMenu(_helpMenu);
 }
 
-QWidget* OMVisViewer::setupOSGViewerWidgetDefault(osg::Node* scene)
+QWidget* OMVisViewer::setupOSGViewerWidget(osg::Node* scene)
 {
     //the osg-viewer widget
     osgQt::GraphicsWindowQt* window = createGraphicsWindow(0, 0, 100, 100);
 
     if (scene == nullptr)
         std::cout << "Something went wrong loading the osg file." << std::endl;
-    return addViewWidgetDefault(window, scene);
+    return setupViewWidget(window, scene);
 
     //QGroupBox* buttonRowBox = new QGroupBox();
     //return buttonRowBox;
 }
 
-QWidget* OMVisViewer::addViewWidgetDefault(osgQt::GraphicsWindowQt* gw, osg::Node* scene)
+QWidget* OMVisViewer::setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* scene)
 {
 //X9    osgViewer::View* view = new osgViewer::View();
 //X9    addView(view);
-    if (_view == nullptr)
-        _view = new osgViewer::View();
-    addView(_view);
+    if (_sceneView == nullptr)
+        _sceneView = new osgViewer::View();
+    addView(_sceneView);
 
-    osg::Camera* camera = _view->getCamera();
+    osg::Camera* camera = _sceneView->getCamera();
     camera->setGraphicsContext(gw);
 
     const osg::GraphicsContext::Traits* traits = gw->getTraits();
@@ -201,9 +211,9 @@ QWidget* OMVisViewer::addViewWidgetDefault(osgQt::GraphicsWindowQt* gw, osg::Nod
     camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
     camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
 
-    _view->setSceneData(scene);
-    _view->addEventHandler(new osgViewer::StatsHandler);
-    _view->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
+    _sceneView->setSceneData(scene);
+    _sceneView->addEventHandler(new osgViewer::StatsHandler);
+    _sceneView->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
     gw->setTouchEventsEnabled(true);
 
     return gw->getGLWidget();
@@ -226,24 +236,6 @@ osgQt::GraphicsWindowQt* OMVisViewer::createGraphicsWindow(int x, int y, int w, 
     traits->samples = ds->getNumMultiSamples();
 
     return new osgQt::GraphicsWindowQt(traits.get());
-}
-
-void OMVisViewer::setTimeSliderPosition(int newPos)
-{
-    // Check if newPos in the sliders range. If not give out a warning and reset position.
-    if (_timeSlider->minimum() > newPos)
-    {
-        LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to minimum."), Util::LC_GUI, Util::LL_WARNING);
-        newPos = _timeSlider->minimum();
-    }
-    else if (_timeSlider->maximum() < newPos)
-    {
-        LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to maximum."), Util::LC_GUI, Util::LL_WARNING);
-        newPos = _timeSlider->maximum();
-    }
-
-    // Set new position.
-    _timeSlider->setSliderPosition(newPos);
 }
 
 QWidget* OMVisViewer::setupTimeSliderWidget()
@@ -292,9 +284,11 @@ QWidget* OMVisViewer::setupControlElementWidget()
     return buttonRowBox;
 }
 
+
 /*-----------------------------------------
- * Slot Functions
+ * SLOT FUNCTIONS
  *---------------------------------------*/
+
 void OMVisViewer::playSlotFunction()
 {
     _guiController->startVisualization();
@@ -320,14 +314,6 @@ void OMVisViewer::updateScene()
     _guiController->sceneUpdate();
 }
 
-void OMVisViewer::updateGUIelements()
-{
-    double visTime = _guiController->getVisTime();
-    int tP = _guiController->getTimeProgress();
-    _timeDisplay->setText(QString("time ").append(QString::number(visTime)).append(QString(" sec")));
-    _timeSlider->setSliderPosition(tP);
-}
-
 void OMVisViewer::setVisTimeSlotFunction(int val)
 {
     _guiController->setVisTime(val);
@@ -345,23 +331,16 @@ void OMVisViewer::loadModel()
     _modelLoaded = true;
     LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
 
-    //X9 osg::Node* scene = osgDB::readNodeFile("cessna.osg");
-
     // Set up the osg viewer widget
     osg::Node* scene = _guiController->getSceneRootNode();
-    _view->setSceneData(scene);
+    if (scene == nullptr)
+        LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
+    _sceneView->setSceneData(scene);
+
+    // Update the slider and the time display.
+    updateTimingElements();
 
     LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
-
-    // Set value of time display to simulation start time of the model.
-    double startT = _guiController->getSimulationStartTime();
-    _timeDisplay->setText(QString("Time ").append(QString::number(startT)));
-
-    // Set the time slider to a position according to the simulation start time of the loaded model.
-    int tP = _guiController->getTimeProgress();
-    setTimeSliderPosition(0);
-
-    LOGGER_WRITE(std::string("OSGViewUpdated2"), Util::LC_LOADER, Util::LL_WARNING);
 }
 
 void OMVisViewer::loadModelCessna()
@@ -370,7 +349,7 @@ void OMVisViewer::loadModelCessna()
     osg::Node* scene = osgDB::readNodeFile("cessna.osg");
     if (scene == nullptr)
             LOGGER_WRITE(std::string("Uiuiui, das Model cessna.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cessna.osg im aktuellen Verzeichnis? "), Util::LC_LOADER, Util::LL_ERROR);
-    _view->setSceneData(scene);
+    _sceneView->setSceneData(scene);
     _modelLoaded = true;
     LOGGER_WRITE(std::string("Dort, Cessna geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
@@ -381,7 +360,7 @@ void OMVisViewer::loadModelCow()
     osg::Node* scene = osgDB::readNodeFile("cow.osg");
     if (scene == nullptr)
         LOGGER_WRITE(std::string("Uiuiui, das Model cow.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cow.osg im aktuellen Verzeichnis?"), Util::LC_LOADER, Util::LL_ERROR);
-    _view->setSceneData(scene);
+    _sceneView->setSceneData(scene);
     _modelLoaded = true;
     LOGGER_WRITE(std::string("Dort, Kuh geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
@@ -389,7 +368,7 @@ void OMVisViewer::loadModelCow()
 void OMVisViewer::unloadModel()
 {
     LOGGER_WRITE(std::string("Hier, entlade das aktuelle Model!"), Util::LC_LOADER, Util::LL_INFO);
-    _view->setSceneData(new osg::Node() );
+    _sceneView->setSceneData(new osg::Node() );
     _modelLoaded = false;
     LOGGER_WRITE(std::string("Dort, kein Model geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
@@ -546,7 +525,7 @@ void OMVisViewer::openDialogSettings()
     backgroundColourRow->addWidget(bgcDropDownList);
     settingRowsLayout->addLayout(backgroundColourRow);
 
-    QObject::connect(bgcDropDownList, SIGNAL(currentIndexChanged(int)), this, SLOT(changeBGColourInOSGViewer(int)));
+    QObject::connect(bgcDropDownList, SIGNAL(currentIndexChanged(int)), this, SLOT(changeBGColourOfSceneView(int)));
 
     QWidget* dialogWidget = new QWidget();
     dialogWidget->setLayout(settingRowsLayout);
@@ -557,11 +536,11 @@ void OMVisViewer::openDialogSettings()
     inputDialog->show();
 }
 
-void OMVisViewer::changeBGColourInOSGViewer(const int colorIdx)
+void OMVisViewer::changeBGColourOfSceneView(const int colorIdx)
 {
-    osg::Vec4 colVec(0.0f, 0.0f, 0.0f, 0.0f);
+    osg::Vec4 colVec;
 
-    LOGGER_WRITE(std::string("Color Idx ") + std::to_string(colorIdx), Util::LC_GUI, Util::LL_INFO);
+    LOGGER_WRITE(std::string("Color Idx ") + std::to_string(colorIdx), Util::LC_GUI, Util::LL_DEBUG);
     switch (colorIdx)
     {
         case 0:
@@ -580,7 +559,7 @@ void OMVisViewer::changeBGColourInOSGViewer(const int colorIdx)
             colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
             break;  //black
     }
-    _guiController->setBackgroundColor(colVec);
+    _sceneView->getCamera()->setClearColor(colVec);
 }
 
 void OMVisViewer::updateKeyMapValue(QString varToKey)
@@ -619,92 +598,37 @@ void OMVisViewer::aboutOMVis()
                                                    "Authors: Volker Waurich, Martin Flehmig</p>"));
 }
 
+void OMVisViewer::updateTimingElements()
+{
+    updateTimeDisplay();
+    updateTimeSliderPosition(); //_timeSlider->setSliderPosition(tP);
+}
 
+/*-----------------------------------------
+ * OTHER FUNCTIONS
+ *---------------------------------------*/
 
+void OMVisViewer::updateTimeDisplay()
+{
+    double visTime = _guiController->getVisTime();
+    _timeDisplay->setText(QString("time ").append(QString::number(visTime)).append(QString(" sec")));
+}
 
+void OMVisViewer::updateTimeSliderPosition()
+{
+    int newPos = _guiController->getTimeProgress();
+    // Check if newPos in the sliders range. If not give out a warning and reset position.
+    if (_timeSlider->minimum() > newPos)
+    {
+        LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to minimum."), Util::LC_GUI, Util::LL_WARNING);
+        newPos = _timeSlider->minimum();
+    }
+    else if (_timeSlider->maximum() < newPos)
+    {
+        LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to maximum."), Util::LC_GUI, Util::LL_WARNING);
+        newPos = _timeSlider->maximum();
+    }
 
-///** Updates the OSGViewerWidget if a new model was loaded into OMVis.
-// *
-// * We assume, that the _osgViewerWidget != nullptr, i.e., it points to a already created Widget.
-// * Thus, we only need to update this Window content with the new model information.
-// *
-// * @return Pointer to the updated Widget object.
-// */
-////QWidget*
-//void OMVisViewer::updateOSGViewerWidget()
-//{
-//    //X5 das muss glaube ich nicht nochmal gemacht werden. _osgViewerWidget zeigt gerade auf das in
-//    //   setupOSGViewerWidgeDefault mit New erzeugte osgQt::GraphicsWindowQt Objekt.
-//    //osgQt::GraphicsWindowQt* window = createGraphicsWindow(0, 0, 100, 100);
-//
-//    // Get new root node from model data.
-//    osg::ref_ptr<osg::Node> rN = _guiController->getSceneRootNode();
-//
-//    // Muessen wir den view ersetzen oder nur die szene updaten?? --> removeView??
-//    // Auf der anderen Seite: Der view ist ja schon da, also pruefen ob der view schon hinzugefuegt wurde
-//    // und dann benutzen, sonst anlegen
-//    osgViewer::View* view = _guiController->getViewer();
-//    if (view == nullptr)
-//        LOGGER_WRITE(std::string("Hey, your osg::View is a nullptr!"), Util::LC_LOADER, Util::LL_WARNING);
-//    else
-//    {
-//        removeView(view);
-////        osg::Node* scene = osgDB::readNodeFile("cessna.osg");
-////        if (scene == nullptr)
-////            std::cout << "Something went wrong loading the osg file." << std::endl;
-////        view->setSceneData(scene);
-//    }
-//    _osgViewerWidget->update();
-//    this->update();
-//    LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
-//    //    osgViewer::View* view = _guiController->getViewer();
-//    //addView(view);
-//    //osg::Camera* camera = view->getCamera();
-//    //camera->setGraphicsContext(gw);
-//
-//    //const osg::GraphicsContext::Traits* traits = gw->getTraits();
-////
-////    camera->setClearColor(osg::Vec4(0.2, 0.2, 0.6, 1.0));
-////    camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
-////    camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
-////
-////    view->setSceneData(scene);
-////    view->addEventHandler(new osgViewer::StatsHandler);
-////    view->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
-//    //MFgw->setTouchEventsEnabled(true);
-//
-////    return _osgViewerWidget->getGLWidget();
-//}
-
-//QWidget* OMVisViewer::setupOSGViewerWidget()
-//{
-//    //the osg-viewer widget
-//    //X5 das muss glaube ich nicht nochmal gemacht werden. _osgViewerWidget zeigt gerade auf das in
-//    //   setupOSGViewerWidgeDefault mit New erzeugte osgQt::GraphicsWindowQt Objekt.
-//    osgQt::GraphicsWindowQt* window = createGraphicsWindow(0, 0, 100, 100);
-//
-//    osg::ref_ptr<osg::Node> rN = _guiController->getSceneRootNode();
-//    return addViewWidget(window, rN);
-//}
-//
-//QWidget* OMVisViewer::addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene)
-//{
-//    osgViewer::View* view = _guiController->getViewer();
-//    addView(view);
-//
-//    osg::Camera* camera = view->getCamera();
-//    camera->setGraphicsContext(gw);
-//
-//    const osg::GraphicsContext::Traits* traits = gw->getTraits();
-//
-//    camera->setClearColor(osg::Vec4(0.2, 0.2, 0.6, 1.0));
-//    camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
-//    camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
-//
-//    view->setSceneData(scene);
-//    view->addEventHandler(new osgViewer::StatsHandler);
-//    view->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
-//    //MFgw->setTouchEventsEnabled(true);
-//
-//    return gw->getGLWidget();
-//}
+    // Set new position.
+    _timeSlider->setSliderPosition(newPos);
+}

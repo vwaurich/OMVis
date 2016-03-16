@@ -26,8 +26,8 @@
  @version 0.1
  */
 
-#ifndef INCLUDE_MAINWIDGET_HPP_
-#define INCLUDE_MAINWIDGET_HPP_
+#ifndef INCLUDE_OMVISVIEWER_HPP_
+#define INCLUDE_OMVISVIEWER_HPP_
 
 #include <string>
 #include <QTimer>
@@ -75,6 +75,9 @@ class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
 Q_OBJECT
 
  public:
+    /*-----------------------------------------
+     * CONSTRUCTORS
+     *---------------------------------------*/
     /*! \brief Constructs the MainWidget object from arguments.
      *
      * A empty GUI is created and the model has to be loaded via the file open dialog.
@@ -84,6 +87,10 @@ Q_OBJECT
      * @param threadingModel The threading model.
      */
     OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
+
+    /*-----------------------------------------
+     * INITIALIZATION FUNCTIONS
+     *---------------------------------------*/
 
     /*! \brief Adds a view-widget to the main-widget.
      *
@@ -100,7 +107,7 @@ Q_OBJECT
      * @param gw The graphical window.
      * @return The widget for the osg-viewer.
      */
-    QWidget* addViewWidgetDefault(osgQt::GraphicsWindowQt* gw, /*X5*/osg::Node* scene);
+    QWidget* setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* scene);
 
     /*! \brief Creates a osgQt::createGraphicsWindow
      *
@@ -121,9 +128,6 @@ Q_OBJECT
         frame();
     }
 
-    /*-------------------------------------------------------------------------
-     * Initialization
-     *-----------------------------------------------------------------------*/
     /*! \brief This function sets up the widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
      *
      * This function encapsulates all the single functions to set up all "Teilfenster".
@@ -144,16 +148,9 @@ Q_OBJECT
     void createMenuBar();
     void createActions();
 
-    /*! \brief Creates the osg-viewer-widget
-     */
-    QWidget* setupOSGViewerWidget();
-    //X5
-    //QWidget*
-    void updateOSGViewerWidget();
-
     /*! \brief Creates a default osg-viewer-widget
      */
-    QWidget* setupOSGViewerWidgetDefault(/*X8*/ osg::Node* scene);
+    QWidget* setupOSGViewerWidget(/*X8*/osg::Node* scene);
 
     /*! \brief Creates the control widget (play, pause,...)
      */
@@ -168,12 +165,6 @@ Q_OBJECT
      */
     QWidget* setupTimeSliderWidget();
 
-    /*! \brief Sets time slider to the given position.
-     *
-     * @param newPos New position of the time slider.
-     */
-    void setTimeSliderPosition(int newPos);
-
     /*! \brief This methods shows the window to choose the model file.
      *
      * The member variables _modelName, _modelPath and _useFMU are set according to the users chosen model.
@@ -184,10 +175,31 @@ Q_OBJECT
      */
     QHBoxLayout* createInputMapperRow(int inputIdx, std::string varName, std::string type);
 
+    /*! \brief Updates the time slider to the position which corresponds to the current visualization time.
+     *
+     * The new position of the slider is provided by the function \ref Control::GUIController::->getTimeProgress().
+     * If the position is out of the sliders range, a warning is triggered by the Logger.
+     */
+    void updateTimeSliderPosition();
+
+    /*! \brief Updates the time display to the current visualization time.
+     *
+     * The current visualization time is provided by the function \ref Control::GUIController::->getVisProgress().
+     */
+    void updateTimeDisplay();
+
+
+    /*-----------------------------------------
+     * SLOT FUNCTIONS
+     *---------------------------------------*/
+
  public slots:
-    /*-------------------------------------------------------------------------
-     * SLOTS
-     *-----------------------------------------------------------------------*/
+    /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
+     *
+     * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplay().
+     * */
+    void updateTimingElements();
+
     /*! \brief Function that is triggered by the play-button.
      */
     void playSlotFunction();
@@ -207,10 +219,6 @@ Q_OBJECT
     /*! \brief Function that is triggered the scene-update timer.
      */
     void updateScene();
-
-    /*! \brief Function that is triggered the scene-update timer.
-     */
-    void updateGUIelements();
 
     /*! \brief Function that is triggered the scene-update timer.
      */
@@ -241,9 +249,9 @@ Q_OBJECT
      */
     void openDialogSettings();
 
-    /*! \brief Changes the background color in the osg::viewer.
+    /*! \brief Changes the background color of the scene view.
      */
-    void changeBGColourInOSGViewer(const int colorIdx);
+    void changeBGColourOfSceneView(const int colorIdx);
 
     /*! \brief Updates the key-input-map
      */
@@ -268,11 +276,13 @@ Q_OBJECT
     QAction* _dontCareAct;
     QAction* _aboutOMVisAct;
 
-    //X9
+    //X9 This members are for testing purposes (load, reload functionality) and can be removed in the future.
     QAction* _loadCessnaAct;
     QAction* _loadCowAct;
     QAction* _unloadAct;
-    osgViewer::View* _view;
+
+    /*! \brief The view which holds the osg scene. */
+    osgViewer::View* _sceneView;
 
     // --- Widgets---
     /// Widget which handles the OSG scene.
@@ -282,22 +292,21 @@ Q_OBJECT
     /// Widget which handles the time slider.
     QWidget* _timeSliderWidget;
 
- private:
     /// Slider that corresponds to the current simulation time with respect to start and end time.
     QSlider* _timeSlider;
+    /// This label displays the current visualization time.
     QLabel* _timeDisplay;
-    QTimer _renderTimer;  //!< Brief Triggers a new frame.
-    QTimer _visTimer;  //!< Brief Triggers a new scene-update.
-
-    //X6
-    QTimer _timer;
+    /// Triggers a new frame.
+    QTimer _renderTimer;
+    /// Triggers a new scene-update.
+    QTimer _visTimer;
 
     /// The GUIController object will take the users input from GUI and handle it.
     Control::GUIController* _guiController;
 
     /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
-     * This member can be used to determine, what User actions are allowed in the GUI. */
+     * It can be used to determine, what user actions are allowed in the GUI. */
     bool _modelLoaded;
 };
 
-#endif /* INCLUDE_MAINWIDGET_HPP_ */
+#endif /* INCLUDE_OMVISVIEWER_HPP_ */
