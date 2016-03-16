@@ -114,7 +114,7 @@ namespace Model
 
 		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
 		*/
-		virtual int getDataTypeID() { };
+		virtual int getDataTypeID() = 0;
 
         /*! \brief Starts the visualization.
          */

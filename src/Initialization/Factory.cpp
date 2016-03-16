@@ -27,6 +27,7 @@
 
 #include "Initialization/Factory.hpp"
 #include "Model/OMVisualizerFMU.hpp"
+#include "Model/OMVisualizerEmpty.hpp"
 #include "Model/OMVisualizerMAT.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Util/Logger.hpp"
@@ -48,7 +49,7 @@ namespace Initialization
         // Command line is empty. Model has to be loaded via GUI. Return pointer to base class object.
         if (modelName.empty() && path.empty())
         {
-            result = new Model::OMVisualizerAbstract();
+            result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerEmpty("",""));
             LOGGER_WRITE("Initialize OMVisalizerAbstract.", Util::LC_LOADER, Util::LL_DEBUG);
         }
         else
