@@ -26,9 +26,10 @@
  */
 
 #include <string>
-#include <iostream>
+//#include <iostream>
 #include "View/OSGScene.hpp"
 #include "Visualize.hpp"
+#include "Util/Logger.hpp"
 
 namespace View
 {
@@ -46,26 +47,26 @@ namespace View
             osg::ref_ptr<osg::StateSet> ss;
 
             std::string type = getShapeType(shapeNode);
-            std::cout << "we have the shape " << shapeNode->value() << " with type " << type << std::endl;
+            LOGGER_WRITE(std::string("Shape: ") + shapeNode->value() + std::string(", type: ") + type,Util::LC_LOADER, Util::LL_DEBUG);
 
             //color
-            osg::ref_ptr<osg::Material> material = new osg::Material;
+            osg::ref_ptr<osg::Material> material = new osg::Material();
             material->setDiffuse(osg::Material::FRONT, osg::Vec4f(0.0, 0.0, 0.0, 0.0));
 
             //matrix transformation
-            osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform;
+            osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform();
 
             //stl node
             if (isCADType(type))
             {
                 std::string filename = extractCADFilename(type);
-				std::cout << "its a stl" << std::endl;
-				std::cout << path << std::endl;
-                filename = path + filename;
-                std::cout << "its a stl file1. " << filename << std::endl;
+                LOGGER_WRITE(std::string("Its a STL and the path is ") + _path ,Util::LC_LOADER, Util::LL_INFO);
+				filename = _path + filename;
 
+				// \todo What do we do at this point?
                 if (!exists(filename))
-                    std::cout << filename << " not found" << std::endl;
+                    LOGGER_WRITE(std::string("Could not find the file ") + filename +std::string(".") ,Util::LC_LOADER, Util::LL_WARNING);
+
 
                 osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
                 osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
@@ -74,19 +75,19 @@ namespace View
                 node->setStateSet(ss);
                 transf->addChild(node.get());
             }
-
             //geode with shape drawable
             else
             {
-                osg::ref_ptr<osg::ShapeDrawable> shapeDraw = new osg::ShapeDrawable;
+                osg::ref_ptr<osg::ShapeDrawable> shapeDraw = new osg::ShapeDrawable();
                 shapeDraw->setColor(osg::Vec4(1.0, 1.0, 1.0, 1.0));
-                geode = new osg::Geode;
+                geode = new osg::Geode();
                 geode->addDrawable(shapeDraw.get());
                 osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
                 ss->setAttribute(material.get());
                 geode->setStateSet(ss);
                 transf->addChild(geode.get());
             }
+
             _rootNode->addChild(transf.get());
         }
     }

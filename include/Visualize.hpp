@@ -47,7 +47,8 @@
 //-----------------------
 
 /**
- struct to handle position vector and rotationMatrix
+ * struct to handle position vector and rotationMatrix
+ * \todo Find a more suitable name for this struct and better place.
  */
 struct rAndT
 {

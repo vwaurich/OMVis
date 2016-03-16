@@ -105,12 +105,26 @@ namespace Model
         keyboardMap _keyboardToKeyMap;
     };
 
+
+    /*-----------------------------------------
+     * Free Functions
+     *---------------------------------------*/
     bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data);
 
-	/*! \brief Conversion from std::string to inputKey enum */
+	/*! \brief Converts the given std::string to inputKey enum. */
 	inputKey getInputDataKeyForString(std::string keyString);
 
 	std::string keyMapValueToString(KeyMapValue);
+
+	/*! \brief Checks the causality of the var and outputs 1 if they are equal, 0 otherwise.
+	 *
+	 */
+	int causalityEqual(fmi1_import_variable_t* var, void* enumIdx);
+
+	/*! \brief Checks the type of the var and outputs 1 if they are equal.
+	 *
+	 */
+	int baseTypeEqual(fmi1_import_variable_t* var, void* refBaseType);
 
 }  // End namespace Model
 

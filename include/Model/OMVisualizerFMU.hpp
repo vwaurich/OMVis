@@ -27,17 +27,20 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
+#include <Control/JoystickDevice.hpp>
+#include <Control/KeyboardEventHandler.hpp>
+
 #include <string>
 #include <memory>
-#include "Model/FMUSimulate.hpp"
-#include "Controller/JoystickDevice.hpp"
-#include "Controller/KeyboardEventHandler.hpp"
+
+#include "FMU.hpp"
+
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Visualize.hpp"
 
-
+// Forward declaration
 namespace View
 {
     class OMVManager;
@@ -65,19 +68,19 @@ namespace Model
         /// Loads and initializes FMU file.
         void loadFMU(const std::string model, const std::string dir);
 
-        virtual void simulate(View::OMVManager& omvm);
+        virtual void simulate(Control::OMVisManager& omvm);
 
         double simulateStep(const double time);
 
         /// \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
         void initData();
 
-        /*! \brief This methods resets the input values of a FMU to default ("zero" )values.
+        /*! \brief This methods resets the input values of a FMU to default ("zero") values.
          *
          */
         void resetInputs();
 
-		/*! \brief This method updates the actual data for the visuaslization bodies by using variables from the fmu.
+		/*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
 		*
 		*/
 		void updateVisAttributes(const double time);
@@ -97,13 +100,14 @@ namespace Model
          */
         void linkInputsToEventHandler();
 
-		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
+		/*! \brief Returns a 0 if we use a MAT file, 1 if we use FMU for visualization.
 		*/
 		int getDataTypeID();
 
      private:
-        fmul_t _fmul;
-        fmuData _fmuData;
+		FMU _fmu;
+        //!fmul_t _fmul;
+        //!fmuData _fmuData;
         SimSettings* _simSettings;
 
      public:
@@ -111,7 +115,7 @@ namespace Model
         InputData _inputData;
 
         /// \todo Remove, we do not need it because we have inputData.
-        Controller::JoystickDevice _joystick;
+        Control::JoystickDevice _joystick;
     };
 
 }  // End namespace Model

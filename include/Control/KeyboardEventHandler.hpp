@@ -30,7 +30,7 @@
 #include <osgGA/GUIEventHandler>
 #include "Model/InputData.hpp"
 
-namespace Controller
+namespace Control
 {
     /*! \brief This class handles keyboard events.
      *
@@ -63,6 +63,6 @@ namespace Controller
         Model::InputData* _inputs;
     };
 
-}  // End namespace controller
+}  // End namespace control
 
 #endif /* INCLUDE_KEYBOARDEVENTHANDLER_HPP_ */

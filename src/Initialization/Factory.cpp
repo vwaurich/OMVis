@@ -32,7 +32,7 @@
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Util/Logger.hpp"
 #include "Util/CommandLineArgs.hpp"
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Initialization
 {
@@ -42,28 +42,28 @@ namespace Initialization
         return createVisualizationObject(cLArgs._modelName, cLArgs._modelPath, cLArgs._useFMU);
     }
 
-    Model::OMVisualizerAbstract* Factory::createVisualizationObject(const std::string modelName, const std::string pathName, const bool useFMU)
+    Model::OMVisualizerAbstract* Factory::createVisualizationObject(const std::string modelName, const std::string path, const bool useFMU)
     {
         Model::OMVisualizerAbstract* result;
 
         // Command line is empty. Model has to be loaded via GUI. Return pointer to base class object.
-        if (modelName.empty() && pathName.empty())
+        if (modelName.empty() && path.empty())
         {
             result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerEmpty("",""));
             LOGGER_WRITE("Initialize OMVisalizerAbstract.", Util::LC_LOADER, Util::LL_DEBUG);
         }
         else
         {
-            //FMU based visualisation
+            //FMU based visualization
             if (useFMU)
             {
-                result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerFMU(modelName, pathName));
+                result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerFMU(modelName, path));
                 LOGGER_WRITE("Initialize OMVisalizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            //Mat-file based visualisation
+            //Mat-file based visualization
             else
             {
-                result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerMAT(modelName, pathName));
+                result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerMAT(modelName, path));
                 LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
             }
         }

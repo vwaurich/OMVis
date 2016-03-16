@@ -53,11 +53,11 @@ namespace Model
 
         virtual void initData();
 
-        virtual void simulate(View::OMVManager& omvm) { }
+        virtual void simulate(Control::OMVisManager& omvm) { }
 
 		/*! \brief Implementation for OMVisualizerAbstract::updateVisAttributes to update all visualization attributes based on a mat file
 		*
-		* @param time - the point of time
+		* @param time The point of time
 		*/
 		void updateVisAttributes(const double time);
 

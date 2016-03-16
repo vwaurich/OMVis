@@ -26,14 +26,15 @@
  */
 
 #include "Model/SimSettings.hpp"
-#include "Model/FMUSimulate.hpp"
+
+#include "../../include/Model/FMU.hpp"
 
 namespace Model
 {
 
     SimSettings::SimSettings()
             : _callEventUpdate(fmi1_false),
-              _toleranceControlled(fmi1_false),
+              _toleranceControlled(fmi1_true),
               _intermediateResults(fmi1_false),
               _tstart(0.0),
               _hdef(0.1),
@@ -42,57 +43,57 @@ namespace Model
     {
     }
 
-    void SimSettings::set_tend(const fmi1_real_t t)
+    void SimSettings::setTend(const fmi1_real_t t)
     {
         _tend = t;
     }
 
-    void SimSettings::set_tstart(const fmi1_real_t t)
+    void SimSettings::setTstart(const fmi1_real_t t)
     {
         _tstart = t;
     }
 
-    void SimSettings::set_hdef(const fmi1_real_t h)
+    void SimSettings::setHdef(const fmi1_real_t h)
     {
         _hdef = h;
     }
 
-    void SimSettings::set_relativeTolerance(const fmi1_real_t t)
+    void SimSettings::setRelativeTolerance(const fmi1_real_t t)
     {
         _relativeTolerance = t;
     }
 
-    fmi1_real_t SimSettings::get_tend()
+    fmi1_real_t SimSettings::getTend()
     {
         return _tend;
     }
 
-    fmi1_real_t SimSettings::get_tstart()
+    fmi1_real_t SimSettings::getTstart()
     {
         return _tstart;
     }
 
-    fmi1_real_t SimSettings::get_hdef()
+    fmi1_real_t SimSettings::getHdef()
     {
         return _hdef;
     }
 
-    fmi1_real_t SimSettings::get_relativeTolerance()
+    fmi1_real_t SimSettings::getRelativeTolerance()
     {
         return _relativeTolerance;
     }
 
-    fmi1_boolean_t SimSettings::get_toleranceControlled()
+    fmi1_boolean_t SimSettings::getToleranceControlled()
     {
         return _toleranceControlled;
     }
 
-    fmi1_boolean_t SimSettings::get_callEventUpdate()
+    fmi1_boolean_t SimSettings::getCallEventUpdate()
     {
         return _callEventUpdate;
     }
 
-    fmi1_boolean_t SimSettings::get_intermediateResults()
+    fmi1_boolean_t SimSettings::getIntermediateResults()
     {
         return _intermediateResults;
     }

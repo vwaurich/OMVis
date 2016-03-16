@@ -15,7 +15,8 @@ Besides the animation of result files, there is a possibility to animate multibo
 	2. OpenSceneGraph (Version >= 3.4.0) (OSGPL/LGPL)
 		- http://trac.openscenegraph.org
 		- via Package Manager: libopenscenegraph-dev
-		- windows: build from source http://www.openscenegraph.org/index.php/download-section/stable-releases, use dependencies http://www.openscenegraph.org/index.php/download-section/dependencies
+		- windows: build from source http://www.openscenegraph.org/index.php/download-section/stable-releases, 
+                  use dependencies- http://www.openscenegraph.org/index.php/download-section/dependencies
 	3. FMI Library (BSD)
 		- http://www.jmodelica.org/FMILibrary
 		- windows: download binaries
@@ -55,6 +56,31 @@ version.lib
 
 fmilib_shared.lib
 SDL2main.lib
+
+
+
+
+
+== Develop OMVis using Eclipse (Linux) ==
+
+1. Create Eclipse project from cmake:
+-------------------------------------
+In order to create a proper Eclipse project for OMVis call cmake with -G="Eclipse CDT4 - Unix Makefiles". This has to 
+be done out ouf source, i.e., means create a build directory on top of the source folder:
+
+mkdir OMVis_eclipse
+cd OMVis_eclipse
+cmake ../OMVis/ -G="Eclipse CDT4 - Unix Makefiles"
+
+
+2. Configure Eclipse project:
+-----------------------------
+
+2.1 Get rid of "Symbol QMainWindow could not be resolved" or "Unresolved inclusion: <QAction>":
+Right click on project -> C/C++ General -> Path and Symbols
+Add the Qt5 includes here, e.g., /usr/include/qt5/, /usr/include/qt5/QtGui/ and /usr/include/qt5/QtCore/.
+It might be necessary to add these paths to C as well as to C++. After that, you need to rebuild the index by Right 
+click on project -> Index -> Rebuid.
 
 
 

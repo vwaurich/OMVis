@@ -6,6 +6,7 @@
  */
 
 #include "Model/OMVisualizerAbstract.hpp"
+#include "Control/OMVisManager.hpp"
 
 namespace Model
 {
@@ -22,9 +23,9 @@ namespace Model
             : _baseData(new OMVisualBase(modelName, dir)),
               _viewerStuff(new View::OMVisualViewer),
               _nodeUpdater(new Model::UpdateVisitor),
-              _omvManager(new View::OMVManager(0.0, 0.0, 0.0, 0.1, 0.0, 10.0))
+              _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 10.0))
     {
-        _viewerStuff->_scene.path = dir;
+        _viewerStuff->_scene._path = dir;
     }
 
     void OMVisualizerAbstract::setUpScene()
@@ -37,7 +38,7 @@ namespace Model
     {
         if (_omvManager->_visTime < _omvManager->_endTime - 1.e-6)
         {
-            _omvManager->pause = false;
+            _omvManager->_pause = false;
             std::cout << "start visualization" << std::endl;
         }
         else
@@ -47,7 +48,7 @@ namespace Model
     void OMVisualizerAbstract::pauseVisualization()
     {
         std::cout << "pause visualization" << std::endl;
-        _omvManager->pause = true;
+        _omvManager->_pause = true;
 
     }
 
@@ -56,7 +57,7 @@ namespace Model
         std::cout << "init visualization" << std::endl;
         initializeVisAttributes(_omvManager->_startTime);
         _omvManager->_visTime = _omvManager->_startTime;
-        _omvManager->pause = true;
+        _omvManager->_pause = true;
     }
 
     void OMVisualizerAbstract::donationVisualization()
@@ -66,7 +67,7 @@ namespace Model
 
     void OMVisualizerAbstract::sceneUpdate()
     {
-        if (!_omvManager->pause)
+        if (!_omvManager->_pause)
         {
             updateScene(_omvManager->_visTime);
             _omvManager->_visTime = _omvManager->_visTime + _omvManager->_hVisual;
@@ -74,7 +75,7 @@ namespace Model
             if (_omvManager->_visTime >= _omvManager->_endTime - 1.e-6)
             {
                 std::cout << "PASUE!!!!!!!!!!!!!!" << std::endl;
-                _omvManager->pause = true;
+                _omvManager->_pause = true;
             }
         }
     }

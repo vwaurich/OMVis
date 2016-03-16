@@ -32,9 +32,10 @@
  * Header file that encapsulates all OMVIS headers in order to provide one header to the application.
  */
 
+#include <Qt/OMVisViewer.hpp>
 #include "Visualize.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
-#include "View/OMVManager.hpp"
+#include "Control/OMVisManager.hpp"
 #include "InfoVisitor.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Model/SimSettings.hpp"
@@ -45,6 +46,5 @@
 #include "Util/CommandLineArgs.hpp"
 
 #include "Initialization/Factory.hpp"
-#include "Qt/MainWidget.hpp"
 
 #endif /* INCLUDE_OMVIS_HPP_ */

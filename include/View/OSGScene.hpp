@@ -27,15 +27,16 @@
 #ifndef INCLUDE_OSGSCENE_HPP_
 #define INCLUDE_OSGSCENE_HPP_
 
-#include <osg/Group>
 #include "Util/rapidxml.hpp"
+#include <osg/Group>
 #include <osgDB/ReadFile>
 
 namespace View
 {
 
-    /*! \brief Class that stores root node of osg scene.
+    /*! \brief Class that stores the pointer to the root node of the models OSG scene.
      *
+     * \todo This class handles access to the root node. Encapsulate access to the pointer.
      */
     class OSGScene
     {
@@ -54,7 +55,7 @@ namespace View
      public:
         /// \todo Can this attr. be private?
         osg::ref_ptr<osg::Group> _rootNode;
-		std::string path;
+		std::string _path;
     };
 
 }  // End namespace View
