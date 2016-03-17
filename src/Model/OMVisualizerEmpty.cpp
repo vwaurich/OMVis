@@ -21,7 +21,7 @@
 #include <iostream>
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerEmpty.hpp"
-#include "View/OMVisualViewer.hpp"
+#include "View/OMVisScene.hpp"
 #include "Control/OMVisManager.hpp"
 
 namespace Model

@@ -37,20 +37,14 @@ namespace View
      *
      * \todo: privatize members
      */
-    class OMVisualViewer
+    class OMVisScene
     {
      public:
-        OMVisualViewer();
-        ~OMVisualViewer() = default;
+		 OMVisScene();
+        ~OMVisScene() = default;
 
-        OMVisualViewer(const OMVisualViewer& omvv) = delete;
-        OMVisualViewer& operator=(const OMVisualViewer& omvv) = delete;
-
-		/*! \brief This initializes the viewer.
-		*
-		*/
-        //X9 void initViewer();
-
+		OMVisScene(const OMVisScene& omvv) = delete;
+		OMVisScene& operator=(const OMVisScene& omvv) = delete;
 
 		/*! \brief This method dumps a string representation of the scene graph to stdOut.
 		*
@@ -58,8 +52,6 @@ namespace View
 		void dumpOSGTreeDebug();
 
      public:
-        /// The osg viewer holds a single view to a single scene.
-        //X9osgViewer::Viewer _osgViewer;
         /// \todo Can this attr. be private?
         OSGScene _scene;
     };

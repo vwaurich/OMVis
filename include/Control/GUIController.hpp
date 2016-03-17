@@ -27,7 +27,7 @@
 #ifndef INCLUDE_CONTROL_GUICONTROLLER_HPP_
 #define INCLUDE_CONTROL_GUICONTROLLER_HPP_
 
-#include "View/OMVisualViewer.hpp"
+#include "View/OMVisScene.hpp"
 #include "osg/Vec4"
 
 // Forward declaration

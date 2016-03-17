@@ -75,7 +75,7 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
     //to trigger the scene updates with the visualization step size
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
-    //MF \todo Move to appropriate place _visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
+    //mf: Move to another place //_visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
 
     resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
 }
@@ -88,7 +88,7 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
 void OMVisViewer::setupWidgets()
 {
     //X8 We have a initial scene:
-    osg::Node* scene = osgDB::readNodeFile("teapot.osg");
+    osg::Node* scene = osgDB::readNodeFile("dumptruck.osg");
 
     // Set up the osg viewer widget
     _osgViewerWidget = setupOSGViewerWidget(scene);
@@ -353,6 +353,7 @@ void OMVisViewer::loadModelCow()
 {
     LOGGER_WRITE(std::string("Hier, lade die Kuh!"), Util::LC_LOADER, Util::LL_INFO);
     osg::Node* scene = osgDB::readNodeFile("cow.osg");
+	std::cout << "DONE!\n";
     if (scene == nullptr)
         LOGGER_WRITE(std::string("Uiuiui, das Model cow.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cow.osg im aktuellen Verzeichnis?"), Util::LC_LOADER, Util::LL_ERROR);
     _sceneView->setSceneData(scene);

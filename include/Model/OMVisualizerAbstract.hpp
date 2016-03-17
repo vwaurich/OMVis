@@ -33,7 +33,7 @@ namespace Control
 }
 
 #include <memory>
-#include "View/OMVisualViewer.hpp"
+#include "View/OMVisScene.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
 //#include "View/OMVManager.hpp"
@@ -139,7 +139,7 @@ namespace Model
         /// \todo: Can this attr. be private?
         OMVisualBase* _baseData;
         /// \todo: Can this attr. be private?
-        View::OMVisualViewer* _viewerStuff;
+        View::OMVisScene* _viewerStuff;
         UpdateVisitor* _nodeUpdater;
         Control::OMVisManager* _omvManager;
     };

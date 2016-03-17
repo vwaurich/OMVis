@@ -18,7 +18,7 @@
 */
 
 /*
- * OMVisualViewer.cpp
+ * OMVisScene.cpp
  *
  *  Created on: 03.02.2016
  *      Author: mf
@@ -26,36 +26,20 @@
 
 #include <iostream>
 #include <osgGA/TrackballManipulator>
-#include "View/OMVisualViewer.hpp"
+#include "View/OMVisScene.hpp"
 #include "Util/Logger.hpp"
 #include "InfoVisitor.hpp"
 
 namespace View
 {
 
-    OMVisualViewer::OMVisualViewer()
-            : //X9 _osgViewer(),
-              _scene()
+    OMVisScene::OMVisScene()
+            : _scene()
     {
     }
 
-//X9    void OMVisualViewer::initViewer()
-//    {
-//        // set up osg::viewer
-//        LOGGER_WRITE(std::string("Set up Camera Manipulator."), Util::LC_LOADER, Util::LL_DEBUG);
-//        _osgViewer.setCameraManipulator(new osgGA::TrackballManipulator);
-//
-//        LOGGER_WRITE(std::string("Set up View Window."), Util::LC_LOADER, Util::LL_DEBUG);
-//        _osgViewer.setUpViewInWindow(500, 500, 1000, 700);  //MF: This method is "depreacted, use view.apply(new osgViewer::SingleWindow(x,y,width,screenNum))."
-//
-//        LOGGER_WRITE(std::string("Get Camera."), Util::LC_LOADER, Util::LL_DEBUG);
-//        _osgViewer.getCamera()->setClearColor((osg::Vec4(1.0f, 1.0f, 1.0f, 1.0f)));
-//
-//        LOGGER_WRITE(std::string("Call realize() method on viewer."), Util::LC_LOADER, Util::LL_DEBUG);
-//        _osgViewer.realize();
-//    }
 
-	void OMVisualViewer::dumpOSGTreeDebug()
+	void OMVisScene::dumpOSGTreeDebug()
 	{
 		// The node traverser which dumps the tree
 		InfoVisitor infoVisitor;
