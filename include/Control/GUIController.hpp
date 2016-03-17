@@ -93,6 +93,11 @@ namespace Control
         /// Returns simulation start time of the loaded model.
         double getSimulationStartTime() const;
 
+        /*! \brief Gets the visualization step size in milliseconds from the omvManager
+         * @return The visualization step size in milliseconds
+         */
+		double getVisStepsize();
+
      private:
         Model::OMVisualizerAbstract* _omVisualizer;
     };

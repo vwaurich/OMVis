@@ -159,4 +159,9 @@ namespace Control
         return _omVisualizer->_omvManager->_startTime;
     }
 
+	double GUIController::getVisStepsize()
+	{
+		return _omVisualizer->_omvManager->_hVisual * 1000.0;
+	}
+
 }  // End namespace Control

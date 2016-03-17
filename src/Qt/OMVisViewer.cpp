@@ -75,7 +75,6 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
     //to trigger the scene updates with the visualization step size
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
-    //mf: Move to another place //_visTimer.start(omv->omvManager->_hVisual * 1000.0);  // we need milliseconds in here
 
     resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
 }
@@ -331,6 +330,10 @@ void OMVisViewer::loadModel()
     if (scene == nullptr)
         LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
     _sceneView->setSceneData(scene);
+
+	//start the timer to trigger model and scene update
+	_visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
+
 
     // Update the slider and the time display.
     updateTimingElements();
