@@ -28,6 +28,7 @@
 #define INCLUDE_CONTROL_GUICONTROLLER_HPP_
 
 #include "View/OMVisScene.hpp"
+#include "Model/InputData.hpp"
 #include "osg/Vec4"
 
 // Forward declaration
@@ -97,6 +98,11 @@ namespace Control
          * @return The visualization step size in milliseconds
          */
 		double getVisStepsize();
+
+        /*! \brief Gets the InputData from the omVisualizer
+         * @return The input data object pointer
+         */
+		Model::InputData* getInputData();
 
      private:
         Model::OMVisualizerAbstract* _omVisualizer;

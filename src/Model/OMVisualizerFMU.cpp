@@ -47,7 +47,6 @@ namespace Model
     {
         OMVisualizerAbstract::initData();
         loadFMU(_baseData->_modelName, _baseData->_dirName);
-        linkInputsToEventHandler();
         _simSettings->setTend(_omvManager->_endTime);
         _simSettings->setHdef(0.001);
     }
@@ -182,14 +181,6 @@ namespace Model
         //reset string input values to 0
         for (unsigned int s = 0; s < _inputData._data._numString; ++s)
             _inputData._data._valuesString[s] = "";
-    }
-
-    void OMVisualizerFMU::linkInputsToEventHandler()
-    {
-        //start eventhandler and link to inputs
-        //X9 \todo MF: Since the viewer is now located in the OMVisViewer object, we have to readjust this event handler setting.
-        //X9 Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(&_inputData);
-        //X9 _viewerStuff->_osgViewer.addEventHandler(kbEventHandler);
     }
 
     void OMVisualizerFMU::updateVisAttributes(const double time)

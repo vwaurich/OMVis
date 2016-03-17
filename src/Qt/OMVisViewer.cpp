@@ -334,6 +334,9 @@ void OMVisViewer::loadModel()
 	//start the timer to trigger model and scene update
 	_visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
 
+	//set the inputData to handle Keyboard-events as inputs
+	Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+	_sceneView->addEventHandler(kbEventHandler);
 
     // Update the slider and the time display.
     updateTimingElements();

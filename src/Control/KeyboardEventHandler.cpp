@@ -44,6 +44,7 @@ namespace Control
         {
             case (osgGA::GUIEventAdapter::KEYDOWN):
             {
+				std::cout << "KEYDOWN" << std::endl;
                 unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
                 keyBoardMapIter keyboardmapValue = _inputs->_keyboardToKeyMap.find((unsigned int) keyboardValue);
                 if (keyboardmapValue != _inputs->_keyboardToKeyMap.end())

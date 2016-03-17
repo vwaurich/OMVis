@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <Control/GUIController.hpp>
 #include "Model/OMVisualizerAbstract.hpp"
+#include "Model/OMVisualizerFMU.hpp"
 #include "Initialization/Factory.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
@@ -163,5 +164,20 @@ namespace Control
 	{
 		return _omVisualizer->_omvManager->_hVisual * 1000.0;
 	}
+
+
+	Model::InputData* GUIController::getInputData()
+	{
+		if (_omVisualizer->getDataTypeID() == 1)
+		{
+			Model::OMVisualizerFMU* omVisFMU = (Model::OMVisualizerFMU*)_omVisualizer;
+			return &omVisFMU->_inputData;
+		}
+		else
+			return &Model::InputData();
+
+	}
+
+
 
 }  // End namespace Control

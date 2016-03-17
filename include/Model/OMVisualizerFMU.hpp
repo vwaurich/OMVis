@@ -93,13 +93,6 @@ namespace Model
 		*/
 		void updateScene(const double time);
 
-        /*! \brief The input values and the controller device are connected so that the user can control the simulation.
-         *
-         * \todo What about joystick support? I think we need here connection to a more general controller object/class.
-         * \todo Find a more suitable name, maybe linkInputsToController()?
-         */
-        void linkInputsToEventHandler();
-
 		/*! \brief Returns a 0 if we use a MAT file, 1 if we use FMU for visualization.
 		*/
 		int getDataTypeID();
