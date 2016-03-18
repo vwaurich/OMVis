@@ -17,13 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * OMVisualizerMAT.cpp
- *
- *  Created on: 19.02.2016
- *      Author: mf
- */
-
 #include "Model/OMVisualizerMAT.hpp"
 #include "Util/Logger.hpp"
 #include "Control/OMVisManager.hpp"

@@ -17,13 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- OMVis
- algebra.cpp
- Purpose: Some algebra functions
-
- @author Volker Waurich
- @version 0.1
+/** @addtogroup Util
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #include <iostream>
@@ -64,3 +62,6 @@ namespace Util
     }
 
 }  // End namespace Util
+/**
+ * @}
+ */

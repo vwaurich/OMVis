@@ -17,17 +17,8 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/*
- * SimSettings.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
 #include "Model/SimSettings.hpp"
-
-#include "../../include/Model/FMU.hpp"
+#include "Model/FMU.hpp"
 
 namespace Model
 {

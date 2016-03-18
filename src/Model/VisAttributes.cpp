@@ -17,14 +17,6 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/*
- * VisAttributes.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
 #include "Model/VisAttributes.hpp"
 #include "Visualize.hpp"
 

@@ -24,11 +24,12 @@
  *      Author: mf
  */
 
+#include <View/InfoVisitor.hpp>
+
 #include <iostream>
 #include <osgGA/TrackballManipulator>
 #include "View/OMVisScene.hpp"
 #include "Util/Logger.hpp"
-#include "InfoVisitor.hpp"
 
 namespace View
 {

@@ -17,13 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * InputData.cpp
- *
- *  Created on: 17.02.2016
- *      Author: mf
- */
-
 #include <iostream>
 #include <string>
 #include "Model/InputData.hpp"

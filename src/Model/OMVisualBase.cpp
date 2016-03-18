@@ -17,14 +17,6 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/*
- * OMVisualBase.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
 #include "Model/OMVisualBase.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"

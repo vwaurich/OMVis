@@ -17,13 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * OMVisualizerFMU.cpp
- *
- *  Created on: 19.02.2016
- *      Author: mf
- */
-
 #include <iostream>
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"

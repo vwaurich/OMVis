@@ -17,13 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * UpdateVisitor.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
 #include "Model/UpdateVisitor.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
