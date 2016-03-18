@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * Util.hpp
- *
- *  Created on: 15.02.2016
- *      Author: mf
+/** @addtogroup Util
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_UTIL_UTIL_HPP_
@@ -45,3 +45,6 @@ namespace Util
 }  // End namespace Util
 
 #endif /* INCLUDE_UTIL_UTIL_HPP_ */
+/**
+ * @}
+ */

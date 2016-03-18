@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * OMVManager.hpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
+/** @addtogroup Model
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_OMVISMANAGER_HPP_
@@ -73,3 +73,6 @@ namespace Control
 }  // End namespace Control
 
 #endif /* INCLUDE_OMVISMANAGER_HPP_ */
+/**
+ * @}
+ */

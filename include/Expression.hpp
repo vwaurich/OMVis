@@ -17,13 +17,11 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- OMVis
- expression.h
- Purpose: Evaluates an expression and receives the numerical value from the result file.
-
- @author Volker Waurich
- @version 0.1
+/** @addtogroup OMVis
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_EXPRESSION_HPP_
@@ -87,3 +85,6 @@ double evaluateExpressionFMU(rapidxml::xml_node<>* node, double time, fmi1_impor
 
 
 #endif /* INCLUDE_EXPRESSION_HPP_ */
+/**
+ * @}
+ */

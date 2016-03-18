@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * OMVisualViewer.hpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
+/** @addtogroup Visualization
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_OMVISUALVIEWER_HPP_
@@ -60,3 +60,6 @@ namespace View
 }  // End namespace View
 
 #endif /* INCLUDE_OMVISUALVIEWER_HPP_ */
+/**
+ * @}
+ */

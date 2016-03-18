@@ -17,6 +17,13 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/** @addtogroup Model
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
+ */
+
 #ifndef INCLUDE_FMUSIMULATE_HPP_
 #define INCLUDE_FMUSIMULATE_HPP_
 
@@ -94,3 +101,6 @@ namespace Model
 }  // End namespace Model
 
 #endif /* INCLUDE_FMUSIMULATE_HPP_ */
+/**
+ * @}
+ */

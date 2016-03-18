@@ -17,11 +17,11 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * GUIController.hpp
- *
- *  Created on: 01.03.2016
- *      Author: mf
+/** @addtogroup Control
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_CONTROL_GUICONTROLLER_HPP_
@@ -113,3 +113,6 @@ namespace Control
 }  // End namespace Control
 
 #endif /* INCLUDE_CONTROL_GUICONTROLLER_HPP_ */
+/**
+ * @}
+ */

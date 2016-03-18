@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * InputData.hpp
- *
- *  Created on: 10.02.2016
- *      Author: mf
+/** @addtogroup Model
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_INPUTDATA_HPP_

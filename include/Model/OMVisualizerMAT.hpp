@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * OMVisualizerMAT.hpp
- *
- *  Created on: 17.02.2016
- *      Author: mf
+/** @addtogroup Model
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_OMVISUALIZERMAT_HPP_
@@ -80,3 +80,6 @@ namespace Model
 }  // End namepsace Model
 
 #endif /* INCLUDE_OMVISUALIZERMAT_HPP_ */
+/**
+ * @}
+ */

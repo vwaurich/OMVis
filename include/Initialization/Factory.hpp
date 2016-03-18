@@ -17,11 +17,11 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Factory.hpp
- *
- *  Created on: 18.02.2016
- *      Author: mf
+/** @addtogroup Initialization
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_INITIALIZATION_FACTORY_HPP_
@@ -94,3 +94,6 @@ namespace Initialization
 }  // End namespace Initialization
 
 #endif /* INCLUDE_INITIALIZATION_FACTORY_HPP_ */
+/**
+ * @}
+ */

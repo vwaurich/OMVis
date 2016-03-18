@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * JoystickDevice.hpp
- *
- *  Created on: 10.02.2016
- *      Author: mf
+/** @addtogroup Control
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_JOYSTICKDEVICE_HPP_
@@ -72,3 +72,6 @@ namespace Control
 }  // End namespace Control
 
 #endif /* INCLUDE_JOYSTICKDEVICE_HPP_ */
+/**
+ * @}
+ */

@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * CommandlineParser.hpp
- *
- *  Created on: 15.02.2016
- *      Author: mf
+/** @addtogroup Util
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_UTIL_COMMANDLINEARGS_HPP_
@@ -40,7 +40,10 @@
 namespace Util
 {
 
-    /*! \brief This class holds the settings specified by the user via command line. */
+    /*! \brief This class holds the settings specified by the user via command line.
+     * \Remark: This is not longer supported.
+     * \todo: Volker, do we want to remove this code from source?
+     */
     class CommandLineArgs
     {
      public:
@@ -88,3 +91,6 @@ namespace Util
 }  // End namespace Util
 
 #endif /* INCLUDE_UTIL_COMMANDLINEARGS_HPP_ */
+/**
+ * @}
+ */

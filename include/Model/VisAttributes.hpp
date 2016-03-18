@@ -17,11 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * VisAttributes.hpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
+/** @addtogroup Model
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_VISATTRIBUTES_HPP_
@@ -86,3 +86,6 @@ namespace Model
 }  // End namespace Model
 
 #endif /* INCLUDE_VISATTRIBUTES_HPP_ */
+/**
+ * @}
+ */
