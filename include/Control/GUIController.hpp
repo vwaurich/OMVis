@@ -48,7 +48,7 @@ namespace Control
     class GUIController
     {
      public:
-        GUIController(); //X1 = default;
+        GUIController();
         ~GUIController() = default;
 
         GUIController(const GUIController& gc) = delete;
@@ -99,7 +99,9 @@ namespace Control
          */
 		double getVisStepsize();
 
-        /*! \brief Gets the InputData from the omVisualizer
+        /*! \brief Gets the InputData from the omVisualizer.
+         *
+         * If we visualize a MAT file, we return a proper nullptr.
          * @return The input data object pointer
          */
 		Model::InputData* getInputData();

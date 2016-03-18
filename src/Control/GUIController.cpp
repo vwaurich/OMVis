@@ -110,11 +110,6 @@ namespace Control
         std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
     }
 
-//X9    osgViewer::View* GUIController::getViewer()
-//X9    {
-//X9        return &_omVisualizer->_viewerStuff->_osgViewer;
-//X9    }
-
     int GUIController::getTimeProgress()
     {
         return _omVisualizer->_omvManager->getTimeProgress();
@@ -150,11 +145,6 @@ namespace Control
         return (_omVisualizer->getDataTypeID() == 1) ? true : false;
     }
 
-//X9    void GUIController::setBackgroundColor(const osg::Vec4 colVec)
-//X9    {
-//X9        _omVisualizer->_viewerStuff->_osgViewer.getCamera()->setClearColor(colVec);
-//X9    }
-
     double GUIController::getSimulationStartTime() const
     {
         return _omVisualizer->_omvManager->_startTime;
@@ -165,7 +155,6 @@ namespace Control
 		return _omVisualizer->_omvManager->_hVisual * 1000.0;
 	}
 
-
 	Model::InputData* GUIController::getInputData()
 	{
 		if (_omVisualizer->getDataTypeID() == 1)
@@ -175,9 +164,7 @@ namespace Control
 		}
 		else
 			return &Model::InputData();
-
 	}
-
 
 
 }  // End namespace Control
