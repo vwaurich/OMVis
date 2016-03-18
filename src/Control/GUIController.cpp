@@ -163,7 +163,7 @@ namespace Control
 			return &omVisFMU->_inputData;
 		}
 		else
-			return &Model::InputData();
+			return nullptr;
 	}
 
 
