@@ -61,21 +61,22 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
     // Create the widgets for time slider, osg viewer and control elements.
     setupWidgets();
 
-    // Set up the top menu-bar
+    // Set up the top menu-bar.
     createActions();
     createMenuBar();
 
     // Assemble the widgets to a layout and create the father of all widgets with this layout.
     createLayout();
 
-    //to trigger the the paint events which render the view
+    // To trigger the paint event which renders the view.
     QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
     _renderTimer.start(10);
 
-    //to trigger the scene updates with the visualization step size
+    // To trigger the scene updates with the visualization step size.
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
     QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
 
+    // GUI will be resized to half of screen.
     resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
 }
 
