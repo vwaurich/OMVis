@@ -80,7 +80,7 @@ cmake ../OMVis/ -G="Eclipse CDT4 - Unix Makefiles"
 Right click on project -> C/C++ General -> Path and Symbols
 Add the Qt5 includes here, e.g., /usr/include/qt5/, /usr/include/qt5/QtGui/ and /usr/include/qt5/QtCore/.
 It might be necessary to add these paths to C as well as to C++. After that, you need to rebuild the index by Right 
-click on project -> Index -> Rebuid.
+click on project -> Index -> Rebuild.
 
 
 
