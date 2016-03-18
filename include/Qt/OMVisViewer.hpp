@@ -100,14 +100,18 @@ Q_OBJECT
      * @param scene The osg scene.
      * @return The widget for the osg-viewer.
      */
-    QWidget* addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene);
+    //X1QWidget* addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene);
 
     /*! \brief Adds an empty view-widget to the main-widget
      *
      * @param gw The graphical window.
      * @return The widget for the osg-viewer.
      */
-    QWidget* setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* scene);
+    QWidget* setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* rootNode);
+
+    /*! \brief Creates a default osg-viewer-widget
+     */
+    QWidget* setupOSGViewerWidget(/*X8*/osg::Node* rootNode);
 
     /*! \brief Creates a osgQt::createGraphicsWindow
      *
@@ -148,9 +152,7 @@ Q_OBJECT
     void createMenuBar();
     void createActions();
 
-    /*! \brief Creates a default osg-viewer-widget
-     */
-    QWidget* setupOSGViewerWidget(/*X8*/osg::Node* scene);
+
 
     /*! \brief Creates the control widget (play, pause,...)
      */

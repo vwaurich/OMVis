@@ -35,7 +35,6 @@
 #include <assert.h>
 #include <Qt/OMVisViewer.hpp>
 
-
 /*-----------------------------------------
  * CONSTRUCTORS
  *---------------------------------------*/
@@ -88,10 +87,10 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
 void OMVisViewer::setupWidgets()
 {
     //X8 We have a initial scene:
-    osg::Node* scene = osgDB::readNodeFile("dumptruck.osg");
+    osg::Node* rootNode = osgDB::readNodeFile("dumptruck.osg");
 
     // Set up the osg viewer widget
-    _osgViewerWidget = setupOSGViewerWidget(scene);
+    _osgViewerWidget = setupOSGViewerWidget(rootNode);
 
     // Set up the control elements widget
     _controlElementWidget = setupControlElementWidget();
@@ -181,17 +180,17 @@ void OMVisViewer::createMenuBar()
     menuBar()->addMenu(_helpMenu);
 }
 
-QWidget* OMVisViewer::setupOSGViewerWidget(osg::Node* scene)
+QWidget* OMVisViewer::setupOSGViewerWidget(osg::Node* rootNode)
 {
     //the osg-viewer widget
     osgQt::GraphicsWindowQt* window = createGraphicsWindow(0, 0, 100, 100);
 
-    if (scene == nullptr)
+    if (rootNode == nullptr)
         std::cout << "Something went wrong loading the osg file." << std::endl;
-    return setupViewWidget(window, scene);
+    return setupViewWidget(window, rootNode);
 }
 
-QWidget* OMVisViewer::setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* scene)
+QWidget* OMVisViewer::setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* rootNode)
 {
     if (_sceneView == nullptr)
         _sceneView = new osgViewer::View();
@@ -206,7 +205,7 @@ QWidget* OMVisViewer::setupViewWidget(osgQt::GraphicsWindowQt* gw, osg::Node* sc
     camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
     camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
 
-    _sceneView->setSceneData(scene);
+    _sceneView->setSceneData(rootNode);
     _sceneView->addEventHandler(new osgViewer::StatsHandler);
     _sceneView->setCameraManipulator(new osgGA::MultiTouchTrackballManipulator);
     gw->setTouchEventsEnabled(true);
