@@ -36,7 +36,6 @@ namespace Control
 #include "View/OMVisScene.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
-//#include "View/OMVManager.hpp"
 
 namespace Model
 {
