@@ -157,7 +157,7 @@ namespace Control
 
 	Model::InputData* GUIController::getInputData()
 	{
-		if (_omVisualizer->getDataTypeID() == 1)
+		if (modelIsFMU())
 		{
 			Model::OMVisualizerFMU* omVisFMU = (Model::OMVisualizerFMU*)_omVisualizer;
 			return &omVisFMU->_inputData;
