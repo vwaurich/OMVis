@@ -632,6 +632,5 @@ void OMVisViewer::updateTimeSliderPosition()
     }
 
     // Set new position.
-    std::cout << "Time slider Position is " << newPos << std::endl;
     _timeSlider->setSliderPosition(newPos);
 }
