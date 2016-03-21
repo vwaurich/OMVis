@@ -79,7 +79,6 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
     resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
 }
 
-
 /*-----------------------------------------
  * INITIALIZATION FUNCTIONS
  *---------------------------------------*/
@@ -278,7 +277,6 @@ QWidget* OMVisViewer::setupControlElementWidget()
     return buttonRowBox;
 }
 
-
 /*-----------------------------------------
  * SLOT FUNCTIONS
  *---------------------------------------*/
@@ -331,12 +329,12 @@ void OMVisViewer::loadModel()
         LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
     _sceneView->setSceneData(scene);
 
-	//start the timer to trigger model and scene update
-	_visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
+    //start the timer to trigger model and scene update
+    _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
 
-	//set the inputData to handle Keyboard-events as inputs
-	Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
-	_sceneView->addEventHandler(kbEventHandler);
+    //set the inputData to handle Keyboard-events as inputs
+    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+    _sceneView->addEventHandler(kbEventHandler);
 
     // Update the slider and the time display.
     updateTimingElements();
@@ -349,7 +347,7 @@ void OMVisViewer::loadModelCessna()
     LOGGER_WRITE(std::string("Hier, lade die Cessna!"), Util::LC_LOADER, Util::LL_INFO);
     osg::Node* scene = osgDB::readNodeFile("cessna.osg");
     if (scene == nullptr)
-            LOGGER_WRITE(std::string("Uiuiui, das Model cessna.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cessna.osg im aktuellen Verzeichnis? "), Util::LC_LOADER, Util::LL_ERROR);
+        LOGGER_WRITE(std::string("Uiuiui, das Model cessna.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cessna.osg im aktuellen Verzeichnis? "), Util::LC_LOADER, Util::LL_ERROR);
     _sceneView->setSceneData(scene);
     _modelLoaded = true;
     LOGGER_WRITE(std::string("Dort, Cessna geladen!"), Util::LC_LOADER, Util::LL_INFO);
@@ -359,7 +357,7 @@ void OMVisViewer::loadModelCow()
 {
     LOGGER_WRITE(std::string("Hier, lade die Kuh!"), Util::LC_LOADER, Util::LL_INFO);
     osg::Node* scene = osgDB::readNodeFile("cow.osg");
-	std::cout << "DONE!\n";
+    std::cout << "DONE!\n";
     if (scene == nullptr)
         LOGGER_WRITE(std::string("Uiuiui, das Model cow.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cow.osg im aktuellen Verzeichnis?"), Util::LC_LOADER, Util::LL_ERROR);
     _sceneView->setSceneData(scene);
@@ -370,7 +368,7 @@ void OMVisViewer::loadModelCow()
 void OMVisViewer::unloadModel()
 {
     LOGGER_WRITE(std::string("Hier, entlade das aktuelle Model!"), Util::LC_LOADER, Util::LL_INFO);
-    _sceneView->setSceneData(new osg::Node() );
+    _sceneView->setSceneData(new osg::Node());
     _modelLoaded = false;
     LOGGER_WRITE(std::string("Dort, kein Model geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
@@ -588,16 +586,22 @@ void OMVisViewer::updateKeyMapValue(QString varToKey)
 
 void OMVisViewer::aboutOMVis()
 {
-    QMessageBox::about(this, tr("About OMVis"), tr("<p><b>OMVis</b> is a tool to visualize and animate simulation models. "
-                                                   "It is meant to visualize models from different simulation tools. "
-                                                   "What shall be visualized is described in a XML-file and the result files "
-                                                   "provide the corresponding data."
-                                                   "Besides the animation of result files, there is a possibility to animate "
-                                                   "multibody-systems with a FMU interactively.</p>"
-                                                   "<p>Version: 0.01 "
-                                                   "Website: https://github.com/vwaurich/OMVis"
-                                                   "(c) Copyright: See license text."
-                                                   "Authors: Volker Waurich, Martin Flehmig</p>"));
+    QString information("<p><b>OMVis</b> is a tool to visualize and animate simulation models. "
+                        "It is meant to visualize models from different simulation tools. "
+                        "What shall be visualized is described in a XML-file and the result files "
+                        "provide the corresponding data."
+                        "Besides the animation of result files, there is a possibility to animate "
+                        "multibody-systems with a FMU interactively.</p>"
+                        "<p>Version: 0.01 <br>"
+                        "Website: https://github.com/vwaurich/OMVis<br>"
+                        "(c) Copyright: See license text.<br>"
+                        "Authors: Volker Waurich, Martin Flehmig</p>");
+
+    QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information, QMessageBox::NoButton);
+    QPushButton* coffeeButton = msgBox.addButton(QMessageBox::tr("Support: Buy us a coffee."), QMessageBox::ActionRole);
+    msgBox.setStandardButtons(QMessageBox::Close);
+    QObject::connect(coffeeButton, SIGNAL(clicked()), this, SLOT(coffeeSlotFunction()));
+    int ret = msgBox.exec();
 }
 
 void OMVisViewer::updateTimingElements()
@@ -605,6 +609,7 @@ void OMVisViewer::updateTimingElements()
     updateTimeDisplay();
     updateTimeSliderPosition();
 }
+
 
 /*-----------------------------------------
  * OTHER FUNCTIONS
