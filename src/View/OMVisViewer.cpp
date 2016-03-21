@@ -116,6 +116,7 @@ void OMVisViewer::createLayout()
 
 void OMVisViewer::createActions()
 {
+    // Menu caption "File".
     _openAct = new QAction(tr("&Open..."), this);
     _openAct->setShortcut(tr("Ctrl+O"));
     QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(loadModel()));
@@ -130,27 +131,30 @@ void OMVisViewer::createActions()
 
     _exportAct = new QAction(tr("Export Video"), this);
     QObject::connect(_exportAct, SIGNAL(triggered()), this, SLOT(exportVideo()));
-
     _exitAct = new QAction(tr("&Quit"), this);
     _exitAct->setShortcut(tr("Ctrl+Q"));
     QObject::connect(_exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
+    // Menu caption "Settings".
     _genSetAct = new QAction(tr("General Settings"), this);
     QObject::connect(_genSetAct, SIGNAL(triggered()), this, SLOT(openDialogSettings()));
+    _resetCameraAct = new QAction(tr("Reset Camera"), this);
+    QObject::connect(_resetCameraAct, SIGNAL(triggered()), this, SLOT(resetCamera()));
 
+    // Menu caption "Inputs".
     _mapInputAct = new QAction(tr("Map Inputs"), this);
     QObject::connect(_mapInputAct, SIGNAL(triggered()), this, SLOT(openDialogInputMapper()));
-
     _dontCareAct = new QAction(tr("I Don't Care About Inputs"), this);
     //QObject::connect(_dontCareAct, SIGNAL(triggered()), this, SLOT());
 
+    // Menu caption "Help".
     _aboutOMVisAct = new QAction(tr("About OMVis"), this);
     QObject::connect(_aboutOMVisAct, SIGNAL(triggered()), this, SLOT(aboutOMVis()));
 }
 
 void OMVisViewer::createMenuBar()
 {
-    // Menu caption "File"
+    // Menu caption "File".
     _fileMenu = new QMenu(tr("&File"), this);
     _fileMenu->addAction(_openAct);
 
@@ -163,16 +167,21 @@ void OMVisViewer::createMenuBar()
     _fileMenu->addSeparator();
     _fileMenu->addAction(_exitAct);
 
+    // Menu caption "Settings".
     _settingsMenu = new QMenu(tr("Settings"), this);
     _settingsMenu->addAction(_genSetAct);
+    _settingsMenu->addAction(_resetCameraAct);
 
+    // Menu caption "Inputs".
     _inputMenu = new QMenu(tr("Inputs"), this);
     _inputMenu->addAction(_mapInputAct);
     _inputMenu->addAction(_dontCareAct);
 
+    // Menu caption "Help".
     _helpMenu = new QMenu(tr("&Help"), this);
     _helpMenu->addAction(_aboutOMVisAct);
 
+    // Add the menus to the menubar.
     menuBar()->addMenu(_fileMenu);
     menuBar()->addMenu(_settingsMenu);
     menuBar()->addMenu(_inputMenu);
@@ -534,6 +543,11 @@ void OMVisViewer::openDialogSettings()
     inputDialog->setCentralWidget(dialogWidget);
 
     inputDialog->show();
+}
+
+void OMVisViewer::resetCamera()
+{
+    _sceneView->home();
 }
 
 void OMVisViewer::changeBGColourOfSceneView(const int colorIdx)

@@ -76,6 +76,7 @@ Q_OBJECT
     /*-----------------------------------------
      * CONSTRUCTORS
      *---------------------------------------*/
+
     /*! \brief Constructs the MainWidget object from arguments.
      *
      * A empty GUI is created and the model has to be loaded via the file open dialog.
@@ -85,6 +86,7 @@ Q_OBJECT
      * @param threadingModel The threading model.
      */
     OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
+
 
     /*-----------------------------------------
      * INITIALIZATION FUNCTIONS
@@ -194,7 +196,7 @@ Q_OBJECT
      *---------------------------------------*/
 
  public slots:
-    /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
+     /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
      *
      * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplay().
      * */
@@ -233,7 +235,7 @@ Q_OBJECT
      */
     void loadModel();
 
-    //X9
+    //X9 This slots are for testing purposes (load, reload functionality) and can be removed in the future.
     void loadModelCow();
     void loadModelCessna();
     void unloadModel();
@@ -249,7 +251,14 @@ Q_OBJECT
      */
     void openDialogSettings();
 
+    /*! \brief This functions resets the camera to the initial view.
+     *
+     * This functionality will be useful if the user got lost in rotating the model and wants to reset the view.
+     */
+    void resetCamera();
+
     /*! \brief Changes the background color of the scene view.
+     * \todo Add some more suitable colors. The currently available colors are a bit too loud.
      */
     void changeBGColourOfSceneView(const int colorIdx);
 
@@ -275,6 +284,8 @@ Q_OBJECT
     QAction* _mapInputAct;
     QAction* _dontCareAct;
     QAction* _aboutOMVisAct;
+    /*! This action will reset the camera/view to the initial position. */
+    QAction* _resetCameraAct;
 
     //X9 This members are for testing purposes (load, reload functionality) and can be removed in the future.
     QAction* _loadCessnaAct;
