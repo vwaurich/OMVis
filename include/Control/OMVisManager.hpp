@@ -48,9 +48,11 @@ namespace Control
         bool simTimeReady();
         bool visTimeReady();
 
-        /*! \brief Get a value between 0 and 99 that indicates how far we are between start and end of a simulation
-		 */
+        /*! \brief Calculates from the current visualization time (_visTime) the slider position. */
 		int getTimeProgress();
+
+		/*! Set the slider range. */
+		void setSliderRange(const int min, const int max);
 
      public:
         /// \todo Can this attr. be private?
@@ -68,6 +70,9 @@ namespace Control
 
 	public:
 		osg::Timer* _visualTimer;
+
+		/*! Range of the slider widget. */
+		int _sliderRange;
     };
 
 }  // End namespace Control

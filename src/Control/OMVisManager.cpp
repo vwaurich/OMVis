@@ -25,6 +25,7 @@
  */
 
 #include "Control/OMVisManager.hpp"
+#include "cmath"
 
 namespace Control
 {
@@ -36,7 +37,8 @@ namespace Control
 			  _startTime(startTime),
 			  _endTime(endTime),
 			  _visualTimer(new osg::Timer),
-			  _pause(true)
+			  _pause(true),
+			  _sliderRange(0)
     {
     }
 
@@ -56,9 +58,14 @@ namespace Control
         return _simTime >= _visTime;
     }
 
+    void OMVisManager::setSliderRange(const int min, const int max)
+    {
+        _sliderRange = max - min;
+    }
+
 	int OMVisManager::getTimeProgress()
 	{
-		return (int)_visTime * 99.0 / (_endTime - _startTime);
+	    return std::round(_visTime * _sliderRange / (_endTime - _startTime));
 	}
 
 }  // End namespace Control

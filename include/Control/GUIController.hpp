@@ -60,10 +60,15 @@ namespace Control
          * MAT file and asks the factory for creation of an appropriate OMVisualizer object. Furthermore, the
          * OMVisualizer object is initialized.
          * The method checks, if the corresponding XML file is accessible.
+         *
+         * \param modelName Path and name of the model to load.
+         * \param timeSliderStart Minimum value of the time slider object.
+         * \param timeSliderEnd Maximum value of the time slider object.
          * \return Pointer to OMVisualizer object which is created by the factory.
+         *
          * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
          */
-        void loadModel(const std::string& modelName);
+        void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
 
         /*! \brief Check if the XML file for a given path and model name can be accessed.
          *

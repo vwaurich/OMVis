@@ -49,7 +49,6 @@ namespace Model
     {
         std::cout << "pause visualization" << std::endl;
         _omvManager->_pause = true;
-
     }
 
     void OMVisualizerAbstract::initVisualization()

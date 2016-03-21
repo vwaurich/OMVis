@@ -237,7 +237,7 @@ QWidget* OMVisViewer::setupTimeSliderWidget()
     _timeSlider = new QSlider(Qt::Horizontal, this);
     _timeSlider->setFixedHeight(30);
     _timeSlider->setMinimum(0);
-    _timeSlider->setMaximum(99);
+    _timeSlider->setMaximum(100);
     _timeSlider->setSliderPosition(0);
 
     LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ") + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
@@ -320,7 +320,7 @@ void OMVisViewer::loadModel()
     QString modelName = modelSelectionDialog();
 
     // Let create a OMVisualizer object by the GUIController.
-    _guiController->loadModel(modelName.toStdString());
+    _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
 
     _modelLoaded = true;
     LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
@@ -603,7 +603,7 @@ void OMVisViewer::aboutOMVis()
 void OMVisViewer::updateTimingElements()
 {
     updateTimeDisplay();
-    updateTimeSliderPosition(); //_timeSlider->setSliderPosition(tP);
+    updateTimeSliderPosition();
 }
 
 /*-----------------------------------------
@@ -632,5 +632,6 @@ void OMVisViewer::updateTimeSliderPosition()
     }
 
     // Set new position.
+    std::cout << "Time slider Position is " << newPos << std::endl;
     _timeSlider->setSliderPosition(newPos);
 }

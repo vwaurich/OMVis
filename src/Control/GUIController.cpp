@@ -41,7 +41,7 @@ namespace Control
     {
     }
 
-    void GUIController::loadModel(const std::string& modelNameIn)
+    void GUIController::loadModel(const std::string& modelNameIn, const int timeSliderStart, const int timeSliderEnd)
     {
         LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
 
@@ -76,6 +76,7 @@ namespace Control
         // Ask the factory to create an appropriate OMVisualizer object.
         Initialization::Factory* factory = new Initialization::Factory();
         _omVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
+        _omVisualizer->_omvManager->setSliderRange(timeSliderStart, timeSliderEnd);
 
         // Initialize the OMVisualizer object.
         _omVisualizer->initData();
