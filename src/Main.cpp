@@ -50,14 +50,15 @@ int main(int argc, char* argv[])
 {
     try
     {
-        // Initialize logger.
-        Util::Logger::initialize();
+        // Parse command line arguments for logger specific settings.
+        Util::CommandLineArgs clArgs = Util::getCommandLineArguments(argc, argv);
+
+        // Initialize logger with logger settings from command line.
+        Util::Logger::initialize(clArgs._logSettings);
+        Util::Logger logger = Util::Logger::getInstance();
 
         LOGGER_WRITE(std::string("Okay, let's create the main widget..."), Util::LC_OTHER, Util::LL_INFO);
         QApplication app(argc, argv);
-
-        //OMVisViewer* mainWidget = new OMVisViewer(0, Qt::Widget, osgViewer::CompositeViewer::SingleThreaded);
-        //mainWidget->show();
 
         OMVisViewer omvisViewer;
         omvisViewer.show();

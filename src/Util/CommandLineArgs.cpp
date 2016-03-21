@@ -53,7 +53,8 @@ namespace Util
 				"Available categories: loader, controller, viewer, solver, other.\n"
 				"Available levels: error, warning, info, debug.\n"
 				"Hint: Different settings of logger category and level can be specified "
-				"separately to allow fine grained control, e.g., -l=\"loader=error\" -l=\"viewer=info\" ");
+				"separately to allow fine grained control, e.g., -l=\"loader=error\" -l=\"viewer=info\".\n"
+			    "All categories can be set to the very same level via -l=\"all=LEVEL\"");
 
 		po::variables_map vm;
 		CommandLineArgs result;
@@ -68,15 +69,16 @@ namespace Util
 				return result;
 			}
 
-			if (vm.count("path"))
-				result._modelPath = vm["path"].as<std::string>();
-//			else
-//				throw std::runtime_error("Path to visualization model required, but missing.");
-
-			if (vm.count("model"))
-				result._modelName = vm["model"].as<std::string>();
-//			else
-//				throw std::runtime_error("Model file required, but missing.");
+			// X7 Not supported any longer. Load the model via file-open dialog in GUI.
+			// X7 if (vm.count("path"))
+			// X7 result._modelPath = vm["path"].as<std::string>();
+			// X7	else
+			// X7	    throw std::runtime_error("Path to visualization model required, but missing.");
+			// X7
+			// X7 if (vm.count("model"))
+			// X7 result._modelName = vm["model"].as<std::string>();
+			// X7	else
+			// X7	    throw std::runtime_error("Model file required, but missing.");
 
 			//Set value of useFMU
 			result._useFMU = vm["useFMU"].as<bool>();
@@ -95,7 +97,7 @@ namespace Util
 					{
 						if (tmpvec[0] == "all")
 						{
-							//std::cout << "All Logger Categories are set to level " << tmpvec[1] << std::endl;
+						    // std::cout << "All Logger Categories are set to level " << tmpvec[1] << std::endl;
 							logSet.setAll(loglvlmap[tmpvec[1]]);
 							break;
 						}
