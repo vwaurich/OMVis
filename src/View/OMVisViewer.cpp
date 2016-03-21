@@ -411,58 +411,56 @@ void OMVisViewer::openDialogInputMapper()
         QVBoxLayout* valueLayout = new QVBoxLayout;
 
         // If a result file is visualized, we can not map keys to input variables.
-        //X1 if (_omVisualizer->getDataTypeID() == 0)
         if (_guiController->modelIsMATFile())
         {
             std::cout << "MAT TYPE " << std::endl;
         }
         // FMU
-        //X1 else if (_omVisualizer->getDataTypeID() == 1)
         else if (_guiController->modelIsFMU())
         {
-//X1            Model::OMVisualizerFMU* fmuData = (Model::OMVisualizerFMU*) _omVisualizer;
-//X1            std::cout << "FMU TYPE " << std::endl;
-//X1            //real inputs
-//            if (fmuData->_inputData._data._numReal > 0)
-//            {
-//                QLabel* realInputLabel = new QLabel("all real inputs");
-//                valueLayout->addWidget(realInputLabel);
-//            }
-//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numReal; ++inputIdx)
-//            {
-//                std::string var = fmuData->_inputData._data._namesReal.at(inputIdx);
-//
-//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
-//                valueLayout->addLayout(inputRow);
-//            }
-//            //bool inputs
-//            if (fmuData->_inputData._data._numBoolean > 0)
-//            {
-//                QLabel* realInputLabel = new QLabel("all bool inputs");
-//                valueLayout->addWidget(realInputLabel);
-//            }
-//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numBoolean; ++inputIdx)
-//            {
-//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesBool.at(inputIdx), "bool");
-//                valueLayout->addLayout(inputRow);
-//            }
-//            //integer inputs
-//            if (fmuData->_inputData._data._numInteger > 0)
-//            {
-//                QLabel* realInputLabel = new QLabel("all integer inputs");
-//                valueLayout->addWidget(realInputLabel);
-//            }
-//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numInteger; ++inputIdx)
-//            {
-//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesInteger.at(inputIdx), "integer");
-//                valueLayout->addLayout(inputRow);
-//            }
-//            //string inputs
-//            for (uint inputIdx = 0; inputIdx < fmuData->_inputData._data._numString; ++inputIdx)
-//            {
-//                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, fmuData->_inputData._data._namesString.at(inputIdx), "string");
-//                valueLayout->addLayout(inputRow);
-//            }
+			Model::InputData* inputData = _guiController->getInputData();
+            std::cout << "FMU TYPE " << std::endl;
+            //real inputs
+            if (inputData->_data._numReal > 0)
+            {
+                QLabel* realInputLabel = new QLabel("all real inputs");
+                valueLayout->addWidget(realInputLabel);
+            }
+            for (uint inputIdx = 0; inputIdx < inputData->_data._numReal; ++inputIdx)
+            {
+                std::string var = inputData->_data._namesReal.at(inputIdx);
+
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
+                valueLayout->addLayout(inputRow);
+            }
+            //bool inputs
+            if (inputData->_data._numBoolean > 0)
+            {
+                QLabel* realInputLabel = new QLabel("all bool inputs");
+                valueLayout->addWidget(realInputLabel);
+            }
+            for (uint inputIdx = 0; inputIdx < inputData->_data._numBoolean; ++inputIdx)
+            {
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool.at(inputIdx), "bool");
+                valueLayout->addLayout(inputRow);
+            }
+            //integer inputs
+            if (inputData->_data._numInteger > 0)
+            {
+                QLabel* realInputLabel = new QLabel("all integer inputs");
+                valueLayout->addWidget(realInputLabel);
+            }
+            for (uint inputIdx = 0; inputIdx < inputData->_data._numInteger; ++inputIdx)
+            {
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger.at(inputIdx), "integer");
+                valueLayout->addLayout(inputRow);
+            }
+            //string inputs
+            for (uint inputIdx = 0; inputIdx < inputData->_data._numString; ++inputIdx)
+            {
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesString.at(inputIdx), "string");
+                valueLayout->addLayout(inputRow);
+            }
         }
         else
         {
