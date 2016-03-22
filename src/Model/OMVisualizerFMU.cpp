@@ -163,16 +163,16 @@ namespace Model
     void OMVisualizerFMU::resetInputs()
     {
         //reset real input values to 0
-        for (unsigned int r = 0; r < _inputData._data._numReal; ++r)
+        for (unsigned int r = 0; r < _inputData._data.getNumReal(); ++r)
             _inputData._data._valuesReal[r] = 0.0;
         //reset integer input values to 0
-        for (unsigned int i = 0; i < _inputData._data._numInteger; ++i)
+        for (unsigned int i = 0; i < _inputData._data.getNumInteger(); ++i)
             _inputData._data._valuesInteger[i] = 0;
         //reset boolean input values to 0
-        for (unsigned int b = 0; b < _inputData._data._numBoolean; ++b)
+        for (unsigned int b = 0; b < _inputData._data.getNumBoolean(); ++b)
             _inputData._data._valuesBoolean[b] = false;
         //reset string input values to 0
-        for (unsigned int s = 0; s < _inputData._data._numString; ++s)
+        for (unsigned int s = 0; s < _inputData._data.getNumString(); ++s)
             _inputData._data._valuesString[s] = "";
     }
 

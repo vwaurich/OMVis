@@ -71,16 +71,16 @@ namespace Model
         _data._vrBoolean = fmi1_import_get_value_referece_list(booleanInputs);
         _data._vrString = fmi1_import_get_value_referece_list(stringInputs);
         //the number of inputs per type
-        _data._numReal = fmi1_import_get_variable_list_size(realInputs);
-        _data._numInteger = fmi1_import_get_variable_list_size(integerInputs);
-        _data._numBoolean = fmi1_import_get_variable_list_size(booleanInputs);
-        _data._numString = fmi1_import_get_variable_list_size(stringInputs);
+        _data.setNumReal(fmi1_import_get_variable_list_size(realInputs));
+        _data.setNumInteger(fmi1_import_get_variable_list_size(integerInputs));
+        _data.setNumBoolean(fmi1_import_get_variable_list_size(booleanInputs));
+        _data.setNumString(fmi1_import_get_variable_list_size(stringInputs));
 
         //the variable names
-        getVariableNames(realInputs, _data._numReal, &_data._namesReal);
-        getVariableNames(integerInputs, _data._numInteger, &_data._namesInteger);
-        getVariableNames(booleanInputs, _data._numBoolean, &_data._namesBool);
-        getVariableNames(stringInputs, _data._numString, &_data._namesString);
+        getVariableNames(realInputs, _data.getNumReal(), &_data._namesReal);
+        getVariableNames(integerInputs, _data.getNumInteger(), &_data._namesInteger);
+        getVariableNames(booleanInputs, _data.getNumBoolean(), &_data._namesBool);
+        getVariableNames(stringInputs, _data.getNumString(), &_data._namesString);
 
         LOGGER_WRITE(std::string(), Util::LC_INIT, Util::LL_INFO);
 
@@ -89,15 +89,17 @@ namespace Model
         LOGGER_WRITE(std::string("Number of Booleans: ") + std::to_string(_data._namesBool.size()), Util::LC_INIT, Util::LL_INFO);
         LOGGER_WRITE(std::string("Number of Strings: ") + std::to_string(_data._namesString.size()), Util::LC_INIT, Util::LL_INFO);
 
-        LOGGER_WRITE(std::string("There are ") + std::to_string(_data._numBoolean) + std::string(" boolean inputs, ") + std::to_string(_data._numReal) + std::string(" real inputs, ") + std::to_string(_data._numInteger) + std::string(" integer inputs and ") + std::to_string(_data._numString) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
+        LOGGER_WRITE(std::string("There are ") + std::to_string(_data.getNumBoolean()) + std::string(" boolean inputs, ")
+        + std::to_string(_data.getNumReal()) + std::string(" real inputs, ") + std::to_string(_data.getNumInteger())
+        + std::string(" integer inputs and ") + std::to_string(_data.getNumString()) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
 
         // the values for the inputs per type
-        _data._valuesReal = (fmi1_real_t*) calloc(_data._numReal, sizeof(fmi1_real_t));
-        _data._valuesInteger = (fmi1_integer_t*) calloc(_data._numInteger, sizeof(fmi1_integer_t));
-        _data._valuesBoolean = (fmi1_boolean_t*) calloc(_data._numBoolean, sizeof(fmi1_boolean_t));
-        _data._valuesString = (fmi1_string_t*) calloc(_data._numString, sizeof(fmi1_string_t));
+        _data._valuesReal = (fmi1_real_t*) calloc(_data.getNumReal(), sizeof(fmi1_real_t));
+        _data._valuesInteger = (fmi1_integer_t*) calloc(_data.getNumInteger(), sizeof(fmi1_integer_t));
+        _data._valuesBoolean = (fmi1_boolean_t*) calloc(_data.getNumBoolean(), sizeof(fmi1_boolean_t));
+        _data._valuesString = (fmi1_string_t*) calloc(_data.getNumString(), sizeof(fmi1_string_t));
         // malloc attributes
-        _data._attrReal = (AttributesReal*) calloc(_data._numReal, sizeof(AttributesReal));
+        _data._attrReal = (AttributesReal*) calloc(_data.getNumReal(), sizeof(AttributesReal));
 
         // init keymap and attributes
         // ------------------
@@ -108,7 +110,7 @@ namespace Model
 
         int k = 0;
         //make map from keys to input values
-        for (unsigned int r = 0; r < _data._numReal; ++r)
+        for (unsigned int r = 0; r < _data.getNumReal(); ++r)
         {
             KeyMapValue mapValue = { fmi1_base_type_real, r };
             _keyToInputMap[keys_real[r]] = mapValue;
@@ -122,20 +124,20 @@ namespace Model
             LOGGER_WRITE(std::string("min ") + std::to_string(_data._attrReal[r]._min) + std::string(" max ") + std::to_string(_data._attrReal[r]._max), Util::LC_INIT, Util::LL_INFO);
             ++k;
         }
-        for (unsigned int i = 0; i < _data._numInteger; ++i)
+        for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
         {
             KeyMapValue mapValue = { fmi1_base_type_int, i };
             _keyToInputMap[keys_real[k]] = mapValue;
             ++k;
         }
-        for (unsigned int b = 0; b < _data._numBoolean; ++b)
+        for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
         {
             KeyMapValue mapValue = { fmi1_base_type_bool, b };
             _keyToInputMap[keys_bool[b]] = mapValue;
             LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(b) + std::string(" to key ") + std::to_string(keys_bool[b]), Util::LC_INIT, Util::LL_INFO);
             ++k;
         }
-        for (unsigned int s = 0; s < _data._numString; ++s)
+        for (unsigned int s = 0; s < _data.getNumString(); ++s)
         {
             KeyMapValue mapValue = { fmi1_base_type_str, s };
             _keyToInputMap[keys_real[k]] = mapValue;
@@ -148,37 +150,37 @@ namespace Model
 
     void InputData::setInputsInFMU(fmi1_import_t* fmu)
     {
-        fmi1_status_t status = fmi1_import_set_real(fmu, _data._vrReal, _data._numReal, _data._valuesReal);
-        status = fmi1_import_set_integer(fmu, _data._vrInteger, _data._numInteger, _data._valuesInteger);
-        status = fmi1_import_set_boolean(fmu, _data._vrBoolean, _data._numBoolean, _data._valuesBoolean);
-        status = fmi1_import_set_string(fmu, _data._vrBoolean, _data._numBoolean, _data._valuesString);
+        fmi1_status_t status = fmi1_import_set_real(fmu, _data._vrReal, _data.getNumReal(), _data._valuesReal);
+        status = fmi1_import_set_integer(fmu, _data._vrInteger, _data.getNumInteger(), _data._valuesInteger);
+        status = fmi1_import_set_boolean(fmu, _data._vrBoolean, _data.getNumBoolean(), _data._valuesBoolean);
+        status = fmi1_import_set_string(fmu, _data._vrBoolean, _data.getNumBoolean(), _data._valuesString);
     }
 
     void InputData::printValues()
     {
-        for (unsigned int r = 0; r < _data._numReal; ++r)
+        for (unsigned int r = 0; r < _data.getNumReal(); ++r)
             std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
-        for (unsigned int i = 0; i < _data._numInteger; ++i)
+        for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
             std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
-        for (unsigned int b = 0; b < _data._numBoolean; ++b)
+        for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
             std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
-        for (unsigned int s = 0; s < _data._numString; ++s)
+        for (unsigned int s = 0; s < _data.getNumString(); ++s)
             std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
     }
 
     void InputData::resetInputValues()
     {
         //reset real input values to 0
-        for (unsigned int r = 0; r < _data._numReal; ++r)
+        for (unsigned int r = 0; r < _data.getNumReal(); ++r)
             _data._valuesReal[r] = 0.0;
         //reset integer input values to 0
-        for (unsigned int i = 0; i < _data._numInteger; ++i)
+        for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
             _data._valuesInteger[i] = 0;
         //reset boolean input values to 0
-        for (unsigned int b = 0; b < _data._numBoolean; ++b)
+        for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
             _data._valuesBoolean[b] = false;
         //reset string input values to 0
-        for (unsigned int s = 0; s < _data._numString; ++s)
+        for (unsigned int s = 0; s < _data.getNumString(); ++s)
             _data._valuesString[s] = "";
     }
 
@@ -200,17 +202,14 @@ namespace Model
                 double max = data._data._attrReal[realIdx]._max;
                 double val = value / 32767.0;
                 data._data._valuesReal[iterValue._valueIdx] = val;
-                //std::cout<<"set the value "<<val<<std::endl;
                 return true;
             }
             else
             {
                 LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_INIT, Util::LL_INFO);
-                //std::cout << "the value is not for a real input" << std::endl;
                 return false;
             }
         }
-
         return false;
     }
 

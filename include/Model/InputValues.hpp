@@ -77,6 +77,16 @@ namespace Model
         InputValues(const InputValues& ipv) = default;
         InputValues& operator=(const InputValues& ipv) = delete;
 
+        void setNumReal(const size_t num)    { _numReal = num; }
+        void setNumInteger(const size_t num) { _numInteger = num; }
+        void setNumBoolean(const size_t num) { _numBoolean = num; }
+        void setNumString(const size_t num)  { _numString = num; }
+
+        size_t getNumReal() const    { return _numReal; }
+        size_t getNumBoolean() const { return _numBoolean; }
+        size_t getNumInteger() const { return _numInteger; }
+        size_t getNumString() const  { return _numString; }
+
      public:
         const fmi1_value_reference_t* _vrReal;
         const fmi1_value_reference_t* _vrInteger;
@@ -90,11 +100,14 @@ namespace Model
         std::vector<std::string> _namesInteger;
         std::vector<std::string> _namesBool;
         std::vector<std::string> _namesString;
-        unsigned int _numReal;
-        unsigned int _numInteger;
-        unsigned int _numBoolean;
-        unsigned int _numString;
 
+     private:
+        size_t _numReal;
+        size_t _numInteger;
+        size_t _numBoolean;
+        size_t _numString;
+
+     public:
         AttributesReal* _attrReal;
     };
 

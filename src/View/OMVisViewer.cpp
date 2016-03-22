@@ -405,6 +405,7 @@ void OMVisViewer::openDialogInputMapper()
         msgBox.setStandardButtons(QMessageBox::Close);
         msgBox.exec();
     }
+    // If a result file is visualized, we can not map keys to input variables.
     else if (_guiController->modelIsMATFile())
     {
         QString information("Input Mapping is not available for mat file visualization.");
@@ -412,74 +413,59 @@ void OMVisViewer::openDialogInputMapper()
         msgBox.setStandardButtons(QMessageBox::Close);
         msgBox.exec();
     }
+    // FMU
     else
     {
         QMainWindow* inputDialog = new QMainWindow(this);
-        inputDialog->setWindowTitle("Input Mapper");
+        QWidget* dialogWidget = new QWidget(this);
+        QVBoxLayout* valueLayout = new QVBoxLayout(this);
 
-        QWidget* dialogWidget = new QWidget;
-        QVBoxLayout* valueLayout = new QVBoxLayout;
-
-        // If a result file is visualized, we can not map keys to input variables.
-        if (_guiController->modelIsMATFile())
+        Model::InputData* inputData = _guiController->getInputData();
+        // Real inputs
+        if (inputData->_data.getNumReal() > 0)
         {
-            std::cout << "MAT TYPE " << std::endl;
+            QLabel* realInputLabel = new QLabel("All real valued inputs:");
+            valueLayout->addWidget(realInputLabel);
         }
-        // FMU
-        else if (_guiController->modelIsFMU())
+        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumReal(); ++inputIdx)
         {
-            Model::InputData* inputData = _guiController->getInputData();
-            std::cout << "FMU TYPE " << std::endl;
-            //real inputs
-            if (inputData->_data._numReal > 0)
-            {
-                QLabel* realInputLabel = new QLabel("all real inputs");
-                valueLayout->addWidget(realInputLabel);
-            }
-            for (uint inputIdx = 0; inputIdx < inputData->_data._numReal; ++inputIdx)
-            {
-                std::string var = inputData->_data._namesReal.at(inputIdx);
+            std::string var = inputData->_data._namesReal.at(inputIdx);
 
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
-                valueLayout->addLayout(inputRow);
-            }
-            //bool inputs
-            if (inputData->_data._numBoolean > 0)
-            {
-                QLabel* realInputLabel = new QLabel("all bool inputs");
-                valueLayout->addWidget(realInputLabel);
-            }
-            for (uint inputIdx = 0; inputIdx < inputData->_data._numBoolean; ++inputIdx)
-            {
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool.at(inputIdx), "bool");
-                valueLayout->addLayout(inputRow);
-            }
-            //integer inputs
-            if (inputData->_data._numInteger > 0)
-            {
-                QLabel* realInputLabel = new QLabel("all integer inputs");
-                valueLayout->addWidget(realInputLabel);
-            }
-            for (uint inputIdx = 0; inputIdx < inputData->_data._numInteger; ++inputIdx)
-            {
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger.at(inputIdx), "integer");
-                valueLayout->addLayout(inputRow);
-            }
-            //string inputs
-            for (uint inputIdx = 0; inputIdx < inputData->_data._numString; ++inputIdx)
-            {
-                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesString.at(inputIdx), "string");
-                valueLayout->addLayout(inputRow);
-            }
+            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
+            valueLayout->addLayout(inputRow);
         }
-        else
+        // Boolean inputs
+        if (inputData->_data.getNumBoolean() > 0)
         {
-            std::cout << "UNKNOWN TYPE " << std::endl;
+            QLabel* realInputLabel = new QLabel("All boolean inputs:");
+            valueLayout->addWidget(realInputLabel);
+        }
+        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumBoolean(); ++inputIdx)
+        {
+            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool.at(inputIdx), "bool");
+            valueLayout->addLayout(inputRow);
+        }
+        //integer inputs
+        if (inputData->_data.getNumInteger() > 0)
+        {
+            QLabel* realInputLabel = new QLabel("All integer valued inputs:");
+            valueLayout->addWidget(realInputLabel);
+        }
+        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumInteger(); ++inputIdx)
+        {
+            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger.at(inputIdx), "integer");
+            valueLayout->addLayout(inputRow);
+        }
+        //string inputs
+        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumString(); ++inputIdx)
+        {
+            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesString.at(inputIdx), "string");
+            valueLayout->addLayout(inputRow);
         }
 
         dialogWidget->setLayout(valueLayout);
+        inputDialog->setWindowTitle("Input Mapper");
         inputDialog->setCentralWidget(dialogWidget);
-
         inputDialog->show();
     }
 }
