@@ -403,7 +403,14 @@ void OMVisViewer::openDialogInputMapper()
         QString information("Please load a model into OMVis first.");
         QMessageBox msgBox(QMessageBox::Information, tr("No Model Loaded"), information, QMessageBox::NoButton);
         msgBox.setStandardButtons(QMessageBox::Close);
-        int ret = msgBox.exec();
+        msgBox.exec();
+    }
+    else if (_guiController->modelIsMATFile())
+    {
+        QString information("Input Mapping is not available for mat file visualization.");
+        QMessageBox msgBox(QMessageBox::Information, tr("Not Available"), information, QMessageBox::NoButton);
+        msgBox.setStandardButtons(QMessageBox::Close);
+        msgBox.exec();
     }
     else
     {
