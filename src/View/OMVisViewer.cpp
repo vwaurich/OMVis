@@ -400,7 +400,10 @@ void OMVisViewer::openDialogInputMapper()
     // Proceed, if a model is already loaded. Otherwise give the user some hint to load a model first.
     if (!_modelLoaded)
     {
-
+        QString information("Please load a model into OMVis first.");
+        QMessageBox msgBox(QMessageBox::Information, tr("No Model Loaded"), information, QMessageBox::NoButton);
+        msgBox.setStandardButtons(QMessageBox::Close);
+        int ret = msgBox.exec();
     }
     else
     {
@@ -418,7 +421,7 @@ void OMVisViewer::openDialogInputMapper()
         // FMU
         else if (_guiController->modelIsFMU())
         {
-			Model::InputData* inputData = _guiController->getInputData();
+            Model::InputData* inputData = _guiController->getInputData();
             std::cout << "FMU TYPE " << std::endl;
             //real inputs
             if (inputData->_data._numReal > 0)
@@ -616,12 +619,24 @@ void OMVisViewer::aboutOMVis()
     int ret = msgBox.exec();
 }
 
+//void OMVisViewer::help()
+//{
+//    QString information("<p><b>Usefull Keyboard Bindings:</b>"
+//                        "Space bar: Reset the view to home position."
+//                        "<p><b>Usefull Mouse Bindings:</b>"
+//                        "Trackball -: Zoom out"
+//                        "Trackball +: Zoom in");
+//
+//    QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information);
+//    msgBox.setStandardButtons(QMessageBox::Close);
+//    msgBox.exec();
+//}
+
 void OMVisViewer::updateTimingElements()
 {
     updateTimeDisplay();
     updateTimeSliderPosition();
 }
-
 
 /*-----------------------------------------
  * OTHER FUNCTIONS
