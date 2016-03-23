@@ -52,6 +52,9 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
           _guiController(new Control::GUIController()),
           _modelLoaded(false)
 {
+    // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+
     //the names
     setObjectName("MainWindow");
     setWindowTitle("OMVIS - The Open-Source FMU-visualization");
@@ -290,6 +293,7 @@ QWidget* OMVisViewer::setupControlElementWidget()
 
     return buttonRowBox;
 }
+
 
 /*-----------------------------------------
  * SLOT FUNCTIONS
@@ -536,12 +540,9 @@ QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::st
         inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_1_Y")));
         inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_2_X")));
         inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_2_Y")));
-
     }
     else
-    {
         inputText->addItem("IMPLEMENT ME", "IMPLEMENT ME");
-    }
 
     inputText->setMaximumHeight(20);
     inputLabel->setMaximumHeight(20);
@@ -550,6 +551,28 @@ QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::st
     inputRow->addWidget(typeLabel);
     inputRow->addWidget(inputText);
     return inputRow;
+}
+
+void OMVisViewer::updateKeyMapValue(QString varToKey)
+{
+//X1    const int lengthOfTypeStr = 4;
+//X1    Model::OMVisualizerFMU* fmuVisualizer = (Model::OMVisualizerFMU*) _omVisualizer;
+//X1
+//    std::string varToKeyString = varToKey.toStdString();
+//    int posKey = varToKeyString.find(" -> ");
+//    std::string typeString = varToKeyString.substr(0, lengthOfTypeStr);
+//    std::string idxString = varToKeyString.substr(lengthOfTypeStr, posKey - lengthOfTypeStr);
+//    std::string keyString = varToKeyString.substr(posKey + std::string(" -> ").length(), varToKeyString.length());
+//    std::cout << "type: " << typeString << std::endl;
+//    std::cout << "idx: " << idxString << std::endl;
+//    std::cout << "key: " << keyString << std::endl;
+//    fmi1_base_type_enu_t type = Model::getFMI1baseTypeFor4CharString(typeString);
+//
+//    KeyMapValue mapValue = { type, std::stoi(idxString) };
+//    fmuVisualizer->_inputData._keyToInputMap[Model::getInputDataKeyForString(keyString)] = mapValue;
+//    //remove current mapping!!
+//
+//    fmuVisualizer->_inputData.printKeyToInputMap();
 }
 
 void OMVisViewer::openDialogSettings()
@@ -610,28 +633,6 @@ void OMVisViewer::changeBGColourOfSceneView(const int colorIdx)
             break;  //black
     }
     _sceneView->getCamera()->setClearColor(colVec);
-}
-
-void OMVisViewer::updateKeyMapValue(QString varToKey)
-{
-//X1    const int lengthOfTypeStr = 4;
-//X1    Model::OMVisualizerFMU* fmuVisualizer = (Model::OMVisualizerFMU*) _omVisualizer;
-//X1
-//    std::string varToKeyString = varToKey.toStdString();
-//    int posKey = varToKeyString.find(" -> ");
-//    std::string typeString = varToKeyString.substr(0, lengthOfTypeStr);
-//    std::string idxString = varToKeyString.substr(lengthOfTypeStr, posKey - lengthOfTypeStr);
-//    std::string keyString = varToKeyString.substr(posKey + std::string(" -> ").length(), varToKeyString.length());
-//    std::cout << "type: " << typeString << std::endl;
-//    std::cout << "idx: " << idxString << std::endl;
-//    std::cout << "key: " << keyString << std::endl;
-//    fmi1_base_type_enu_t type = Model::getFMI1baseTypeFor4CharString(typeString);
-//
-//    KeyMapValue mapValue = { type, std::stoi(idxString) };
-//    fmuVisualizer->_inputData._keyToInputMap[Model::getInputDataKeyForString(keyString)] = mapValue;
-//    //remove current mapping!!
-//
-//    fmuVisualizer->_inputData.printKeyToInputMap();
 }
 
 void OMVisViewer::aboutOMVis()

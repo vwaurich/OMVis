@@ -48,6 +48,9 @@
 
 int main(int argc, char* argv[])
 {
+    std::setlocale(LC_ALL, "en_US.UTF-8");
+    std::setlocale(LC_NUMERIC, "en_US.UTF-8");
+
     try
     {
         // Parse command line arguments for logger specific settings.
