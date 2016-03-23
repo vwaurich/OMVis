@@ -386,8 +386,7 @@ gets the value of the indicated node exp
 double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
 {
 	rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
-	double val = evaluateExpressionFMU(expNode, time, fmu);
-	return val;
+	return evaluateExpressionFMU(expNode, time, fmu);
 }
 
 /**
