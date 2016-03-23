@@ -45,11 +45,12 @@
 #include <stdexcept>
 #include <iostream>
 #include "OMVIS.hpp"
+#include <clocale>
 
 int main(int argc, char* argv[])
 {
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-    std::setlocale(LC_NUMERIC, "en_US.UTF-8");
+    setlocale(LC_ALL, "en_US.UTF-8");
+    setlocale(LC_NUMERIC, "en_US.UTF-8");
 
     try
     {

@@ -53,7 +53,7 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
           _modelLoaded(false)
 {
     // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
-    std::setlocale(LC_ALL, "en_US.UTF-8");
+    setlocale(LC_ALL, "en_US.UTF-8");
 
     //the names
     setObjectName("MainWindow");
