@@ -22,26 +22,62 @@
 #include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisScene.hpp"
 #include "Control/OMVisManager.hpp"
+#include "Control/JoystickDevice.hpp"
+#include <SDL.h>
+
 
 namespace Model
 {
 
-    OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
-            : OMVisualizerAbstract(modelName, modelPath),
-              _fmu(),
-              //_fmul(),
-              //_fmuData(),
-              _simSettings(new SimSettings),
-              _inputData()
+	OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
+		: OMVisualizerAbstract(modelName, modelPath),
+		_fmu(),
+		//_fmul(),
+		//_fmuData(),
+		_simSettings(new SimSettings),
+		_inputData(),
+		_joysticks()
     {
+		std::cout << "INIT JOYSTICKS!!!!!!!!!" << std::endl;
+
+		initJoySticks();
     }
+
+	void OMVisualizerFMU::initJoySticks()
+	{
+		//Initialize SDL
+		if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
+			LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
+
+		//Check for joysticks
+		_numJoysticks = SDL_NumJoysticks();
+		if (SDL_NumJoysticks() < 1)
+			LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+		else
+		{
+			LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+			//Load joystick
+			std::cout << "START LOADING JOYSTICKS!!!!!!!!!" << _numJoysticks << std::endl;
+
+			for (int i=0; i < _numJoysticks; i++)
+			{
+				std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i<<std::endl;
+
+				Control::JoystickDevice* newJoyStick = new Control::JoystickDevice(i);
+				_joysticks.push_back(newJoyStick);
+
+			if (newJoyStick == nullptr)
+				LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+			}
+		}
+	}
 
     void OMVisualizerFMU::initData()
     {
         OMVisualizerAbstract::initData();
         loadFMU(_baseData->_modelName, _baseData->_dirName);
         _simSettings->setTend(_omvManager->_endTime);
-        _simSettings->setHdef(0.001);
+        _simSettings->setHdef(0.005);
     }
 
     void OMVisualizerFMU::loadFMU(const std::string model, const std::string dir)
@@ -133,8 +169,12 @@ namespace Model
             _fmu._fmuData._tcur = _simSettings->getTend();
         }
         //set inputs
-        _joystick.detectContinuousInputEvents(_inputData);
-        _inputData.setInputsInFMU(_fmu._fmu);
+		for (int i=0; i < _numJoysticks; i++)
+		{
+			_joysticks[i]->detectContinuousInputEvents(_inputData);
+			_inputData.setInputsInFMU(_fmu._fmu);
+			//std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
+		}
 
         /* Solve system */
         _fmu._fmuData._fmiStatus = fmi1_import_get_derivatives(_fmu._fmu, _fmu._fmuData._statesDer, _fmu._fmuData._nStates);
@@ -156,7 +196,8 @@ namespace Model
         /* Step is complete */
         _fmu._fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmu._fmu, &_simSettings->_callEventUpdate);
 
-        _inputData.resetInputValues();
+		//vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
+        //_inputData.resetInputValues();
         return _fmu._fmuData._tcur;
     }
 
@@ -207,7 +248,7 @@ namespace Model
 
             //update the shapes
             _nodeUpdater->_visAttr = _baseData->_visAttr;
-            //updater.visAttr.dumpVisAttributes();
+			//_nodeUpdater->_visAttr.dumpVisAttributes();
 
             //get the scene graph nodes and stuff
             child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation

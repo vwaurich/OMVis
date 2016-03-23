@@ -45,9 +45,9 @@ namespace Control
      public:
         /*! \brief Default constructor.
          *
-         * Takes no arguments. Attributes are set to default values.
+         * Initialices the joystick with the corresponding ID
          */
-        JoystickDevice();
+        JoystickDevice(int joyID);
 
         /// Destructor.
         ~JoystickDevice()
@@ -55,18 +55,24 @@ namespace Control
         }
 
         /// The copy constructor is forbidden.
-        JoystickDevice(const JoystickDevice& jd) = delete;
+        //JoystickDevice(const JoystickDevice& jd) = delete;
 
         /// The assignment operator is forbidden.
         JoystickDevice& operator=(const JoystickDevice& jd) = delete;
 
         void detectContinuousInputEvents(Model::InputData inputInfo);
 
+		int getXDir();
+
+		int getYDir();
+
+
      private:
         SDL_Joystick* _joystick;
         SDL_Event _inputEvent;
         int _xDir;
         int _yDir;
+		int _joystickId;
     };
 
 }  // End namespace Control

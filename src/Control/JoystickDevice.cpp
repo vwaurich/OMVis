@@ -34,14 +34,15 @@
 
 namespace Control
 {
-    JoystickDevice::JoystickDevice()
-            : _joystick(nullptr),
-              _xDir(0),
-              _yDir(0)
+	JoystickDevice::JoystickDevice(int joyID)
+		: _joystick(nullptr),
+		_xDir(0),
+		_yDir(0),
+		_joystickId(joyID)
     {
         //Initialize SDL
-        if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
-            LOGGER_WRITE(std::string("SDL could not be initialized."),  Util::LC_LOADER, Util::LL_ERROR);
+        //if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
+        //    LOGGER_WRITE(std::string("SDL could not be initialized."),  Util::LC_LOADER, Util::LL_ERROR);
 
         //Check for joysticks
         if (SDL_NumJoysticks() < 1)
@@ -50,39 +51,50 @@ namespace Control
         {
             LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),  Util::LC_LOADER, Util::LL_INFO);
             //Load joystick
-            _joystick = SDL_JoystickOpen(0);
-            if (_joystick == nullptr)
-                LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),  Util::LC_LOADER, Util::LL_INFO);
+			_joystick = SDL_JoystickOpen(joyID);
+			if (_joystick == nullptr)
+				LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
         }
     }
 
+	int JoystickDevice::getXDir() 
+	{
+		return _xDir;
+	}
+
+	int JoystickDevice::getYDir()
+	{
+		return _yDir;
+	}
+
     void JoystickDevice::detectContinuousInputEvents(Model::InputData inputInfo)
     {
+
         SDL_PollEvent(&_inputEvent);
 
         if (_inputEvent.type == SDL_JOYAXISMOTION)
         {
             //Motion on first joystick
-            if (_inputEvent.jaxis.which == 0)
-            {
-                //X axis motion
-                if (_inputEvent.jaxis.axis == 0)
-                {
-                    _xDir = _inputEvent.jaxis.value;
-                    Model::setRealInputValueForInputKey(JOY_1_X, _xDir, inputInfo);
-                }
-                //Y axis motion
-                else if (_inputEvent.jaxis.axis == 1)
-                {
-                    _yDir = _inputEvent.jaxis.value;
-                    Model::setRealInputValueForInputKey(JOY_1_Y, _yDir, inputInfo);
-                }
-                else
-                {
-                    _xDir = 0;
-                    _yDir = 0;
-                }
-            }
+			if (_inputEvent.jaxis.which == _joystickId)
+			{
+				//X axis motion
+				if (_inputEvent.jaxis.axis == 0)
+				{
+					_xDir = _inputEvent.jaxis.value;
+					Model::setRealInputValueForInputKey(inputKey(_joystickId), _xDir, inputInfo);
+				}
+				//Y axis motion
+				else if (_inputEvent.jaxis.axis == 1)
+				{
+					_yDir = _inputEvent.jaxis.value;
+					Model::setRealInputValueForInputKey(inputKey(_joystickId+1), _yDir, inputInfo);
+				}
+				else
+				{
+					_xDir = 0;
+					_yDir = 0;
+				}
+			}
         }
     }
 

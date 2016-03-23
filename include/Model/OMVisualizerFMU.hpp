@@ -97,18 +97,24 @@ namespace Model
 		*/
 		int getDataTypeID();
 
+		/*! \brief initializes the attached joysticks
+		*/
+		void initJoySticks();
+
+
      private:
 		FMU _fmu;
         //!fmul_t _fmul;
         //!fmuData _fmuData;
         SimSettings* _simSettings;
+		int _numJoysticks;
 
      public:
         /// \ todo Make it private again.
         InputData _inputData;
 
         /// \todo Remove, we do not need it because we have inputData.
-        Control::JoystickDevice _joystick;
+        std::vector<Control::JoystickDevice*> _joysticks;
     };
 
 }  // End namespace Model

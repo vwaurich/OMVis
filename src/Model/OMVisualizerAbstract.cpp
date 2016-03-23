@@ -23,7 +23,7 @@ namespace Model
             : _baseData(new OMVisualBase(modelName, dir)),
               _viewerStuff(new View::OMVisScene),
               _nodeUpdater(new Model::UpdateVisitor),
-              _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 10.0))
+              _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
     {
         _viewerStuff->_scene._path = dir;
     }
