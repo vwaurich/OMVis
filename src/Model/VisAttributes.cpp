@@ -38,7 +38,7 @@ namespace Model
     {
     }
 
-    void VisAttributes::dumpVisAttributes()
+    void VisAttributes::dumpVisAttributes() const
     {
         std::cout << "type " << _type << std::endl;
         std::cout << "length " << _length << std::endl;

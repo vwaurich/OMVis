@@ -50,8 +50,8 @@ namespace Model
         VisAttributes(const VisAttributes& va) = delete;
         VisAttributes& operator=(const VisAttributes& va) = default;
 
-        /// Dumps the attributes.
-        void dumpVisAttributes();
+        /// Dumps the attributes to std::cout.
+        void dumpVisAttributes() const;
 
         /// Computes the attributes of the shape for a certain time.
         void fetchVisAttributes(rapidxml::xml_node<>* node, ModelicaMatReader matReader, fmi1_import_t* fmu, double time, bool useFMU);
