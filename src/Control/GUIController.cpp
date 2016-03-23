@@ -77,7 +77,7 @@ namespace Control
         _omVisualizer->updateVisAttributes(0.0);  // set scene to initial position
     }
 
-    bool GUIController::checkForXMLFile(const std::string& path, const std::string& modelName)
+    bool GUIController::checkForXMLFile(const std::string& path, const std::string& modelName) const
     {
         struct stat buffer;
         std::string file = path + modelName + "_visual.xml";

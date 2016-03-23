@@ -79,7 +79,7 @@ namespace Control
          * @param modelName Name of the model.
          * @return True, if the XML file is accessible. False, otherwise.
          */
-        bool checkForXMLFile(const std::string& path, const std::string& modelName);
+        bool checkForXMLFile(const std::string& path, const std::string& modelName) const;
 
         void startVisualization();
         void pauseVisualization();
