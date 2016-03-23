@@ -17,16 +17,9 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * GUIController.cpp
- *
- *  Created on: 01.03.2016
- *      Author: mf
- */
-
 #include <string>
 #include <sys/stat.h>
-#include <Control/GUIController.hpp>
+#include "Control/GUIController.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Initialization/Factory.hpp"
