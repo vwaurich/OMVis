@@ -175,7 +175,7 @@ Q_OBJECT
 
     /*! \brief Creates a GUI element to set the mapping for a input value.
      */
-    QHBoxLayout* createInputMapperRow(int inputIdx, std::string varName, std::string type);
+    QHBoxLayout* createInputMapperRow(const int inputIdx, const std::string varName, const std::string type) const;
 
     /*! \brief Updates the time slider to the position which corresponds to the current visualization time.
      *

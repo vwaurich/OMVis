@@ -26,14 +26,19 @@
  @version 0.1
  */
 
-#include <Control/GUIController.hpp>
+#include "Control/GUIController.hpp"
 #include "Model/FMU.hpp"
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
+#include "View/OMVisViewer.hpp"
+
 #include <osgDB/ReadFile>
-#include <QScreen>
 #include <assert.h>
-#include <View/OMVisViewer.hpp>
+
+#include <QScreen>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QFormLayout>
 
 /*-----------------------------------------
  * CONSTRUCTORS
@@ -397,7 +402,7 @@ void OMVisViewer::exportVideo()
 
 void OMVisViewer::openDialogInputMapper()
 {
-    // Proceed, if a model is already loaded. Otherwise give the user some hint to load a model first.
+    // Proceed, if a model is already loaded. Otherwise give the user a hint to load a model first.
     if (!_modelLoaded)
     {
         QString information("Please load a model into OMVis first.");
@@ -405,7 +410,7 @@ void OMVisViewer::openDialogInputMapper()
         msgBox.setStandardButtons(QMessageBox::Close);
         msgBox.exec();
     }
-    // If a result file is visualized, we can not map keys to input variables.
+    // If a result file is visualized, we cannot map keys to input variables.
     else if (_guiController->modelIsMATFile())
     {
         QString information("Input Mapping is not available for mat file visualization.");
@@ -416,63 +421,100 @@ void OMVisViewer::openDialogInputMapper()
     // FMU
     else
     {
-        QMainWindow* inputDialog = new QMainWindow(this);
-        QWidget* dialogWidget = new QWidget(this);
-        QVBoxLayout* valueLayout = new QVBoxLayout(this);
+        QDialog* inputDialog = new QDialog(this);
 
+        // The first way of adding the buttons Apply and Close
+        QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+        connect(buttonBox, SIGNAL(accepted()), inputDialog, SLOT(accept()));
+        connect(buttonBox, SIGNAL(rejected()), inputDialog, SLOT(reject()));
+
+        //X4 The second way of adding the buttons Apply and Close
+        //X4        QDialogButtonBox* buttonBox = new QDialogButtonBox();
+        //X4        QPushButton* close = new QPushButton(tr("&Close"));
+        //X4        QPushButton* apply = new QPushButton(tr("&Apply"));
+        //X4        apply->setDefault(true);
+
+        // todo: Currently we do not differentiate between the two buttons.
+        //       If "Apply" is clicked, the chosen selection of key mapping should be applied. Up to
+        //       this point it is only "cached".
+        //       If "Close" is clicked, the cached selection is discarded.
+        //X4        connect(buttonBox, SIGNAL(accepted()), inputDialog, SLOT(close()));
+        //X4        connect(buttonBox, SIGNAL(rejected()), inputDialog, SLOT(close()));
+        //X4        buttonBox->addButton(close, QDialogButtonBox::RejectRole);
+        //X4        buttonBox->addButton(apply, QDialogButtonBox::AcceptRole);
+
+        QVBoxLayout* mainLayout = new QVBoxLayout();
+        QGroupBox* qgroupBox;
         Model::InputData* inputData = _guiController->getInputData();
-        // Real inputs
-        if (inputData->_data.getNumReal() > 0)
-        {
-            QLabel* realInputLabel = new QLabel("All real valued inputs:");
-            valueLayout->addWidget(realInputLabel);
-        }
-        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumReal(); ++inputIdx)
-        {
-            std::string var = inputData->_data._namesReal.at(inputIdx);
 
-            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, var, "real");
-            valueLayout->addLayout(inputRow);
-        }
         // Boolean inputs
         if (inputData->_data.getNumBoolean() > 0)
         {
-            QLabel* realInputLabel = new QLabel("All boolean inputs:");
-            valueLayout->addWidget(realInputLabel);
-        }
-        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumBoolean(); ++inputIdx)
-        {
-            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool.at(inputIdx), "bool");
-            valueLayout->addLayout(inputRow);
-        }
-        //integer inputs
-        if (inputData->_data.getNumInteger() > 0)
-        {
-            QLabel* realInputLabel = new QLabel("All integer valued inputs:");
-            valueLayout->addWidget(realInputLabel);
-        }
-        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumInteger(); ++inputIdx)
-        {
-            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger.at(inputIdx), "integer");
-            valueLayout->addLayout(inputRow);
-        }
-        //string inputs
-        for (uint inputIdx = 0; inputIdx < inputData->_data.getNumString(); ++inputIdx)
-        {
-            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesString.at(inputIdx), "string");
-            valueLayout->addLayout(inputRow);
+            qgroupBox = new QGroupBox(tr("Boolean Inputs"), this);
+            QFormLayout* layout = new QFormLayout();
+            // layout->addRow(new QLabel(tr("Line 1:")), new QLineEdit);
+            // layout->addRow(new QLabel(tr("Line 2, long text:")), new QComboBox);
+            // layout->addRow(new QLabel(tr("Line 3:")), new QSpinBox);
+
+            for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumBoolean(); ++inputIdx)
+            {
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool[inputIdx], "bool");
+                layout->addRow(inputRow);
+            }
+            //X3 for (auto& b : inputData->_data._namesBool)
+            //X3 {
+            //X3    QHBoxLayout* inputRow = createInputMapperRow(inputIdx, b, "bool");
+            //X3    valueLayout->addLayout(inputRow);
+            //X3 }
+            qgroupBox->setLayout(layout);
+            mainLayout->addWidget(qgroupBox);
         }
 
-        dialogWidget->setLayout(valueLayout);
-        inputDialog->setWindowTitle("Input Mapper");
-        inputDialog->setCentralWidget(dialogWidget);
-        inputDialog->show();
+        // Real inputs
+        if (inputData->_data.getNumReal() > 0)
+        {
+            qgroupBox = new QGroupBox(tr("Real Inputs"), this);
+            QFormLayout* layout = new QFormLayout;
+            for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumReal(); ++inputIdx)
+            {
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesReal[inputIdx], "real");
+                layout->addRow(inputRow);
+            }
+            qgroupBox->setLayout(layout);
+            mainLayout->addWidget(qgroupBox);
+        }
+
+        // Integer inputs
+        if (inputData->_data.getNumInteger() > 0)
+        {
+            qgroupBox = new QGroupBox(tr("Integer Inputs"), this);
+            QFormLayout* layout = new QFormLayout;
+            for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumInteger(); ++inputIdx)
+            {
+                QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger[inputIdx], "integer");
+                layout->addRow(inputRow);
+            }
+            qgroupBox->setLayout(layout);
+            mainLayout->addWidget(qgroupBox);
+        }
+
+        // String inputs
+        //    for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumString(); ++inputIdx)
+        //        {
+        //            QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesString.at(inputIdx), "string");
+        //            valueLayout->addLayout(inputRow);
+        //        }
+        //
+
+        mainLayout->addWidget(buttonBox);
+        inputDialog->setLayout(mainLayout);
+        inputDialog->exec();
     }
 }
 
-QHBoxLayout* OMVisViewer::createInputMapperRow(int inputIdx, std::string varName, std::string type)
+QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::string varName, const std::string type) const
 {
-    QHBoxLayout* inputRow = new QHBoxLayout;
+    QHBoxLayout* inputRow = new QHBoxLayout();
     QLabel* inputLabel = new QLabel(QString("Input ").append(QString::number(inputIdx)));
     QLabel* varLabel = new QLabel(QString::fromStdString(varName));
     QLabel* typeLabel = new QLabel(QString::fromStdString(type));
