@@ -28,8 +28,9 @@ following we give a list of all necessary dependencies and the version number, w
     2. OpenSceneGraph (Version >= 3.4.0) (OSGPL/LGPL)
         - http://www.openscenegraph.org
         - Linux: via Package Manager --> libopenscenegraph-dev
-        - Windows: build from source http://www.openscenegraph.org/index.php/download-section/stable-releases, 
-                   use dependencies http://www.openscenegraph.org/index.php/download-section/dependencies
+        - Windows: 
+            - Source http://www.openscenegraph.org/index.php/download-section/stable-releases, 
+            - Dependencies http://www.openscenegraph.org/index.php/download-section/dependencies
     3. FMI Library (>= 2.0) (BSD)
         - http://www.jmodelica.org/FMILibrary
         - Linux: Download sources, unzip, read FMILIB_Readme.txt, configure, make, install
@@ -40,10 +41,12 @@ following we give a list of all necessary dependencies and the version number, w
         - Windows installer http://www.qt.io/
     5. RapdiXml Library (Boost Software License or MIT)
         - http://rapidxml.sourceforge.net/
-        - Download the header only library, extract and give (OMVis) Cmake a hint to the path via environment variable RAPIDXML_ROOT.         
+        - Download the header only library, extract and give (OMVis) Cmake a hint to the path via 
+          environment variable RAPIDXML_ROOT.         
     6. read_matlab4.cpp and read_matlab4.h from OpenModelica (OSMC-PL, GPL v3.0) 
         - https://github.com/OpenModelica/OMCompiler/tree/master/SimulationRuntime/c
-        - copy read_matlab4.cpp and read_matlab4.h to OMVis/src/Util/ and uncomment #include "omc_msvc.h"
+        - Copy read_matlab4.cpp and read_matlab4.h to OMVis/src/Util/. 
+        - Uncomment #include "omc_msvc.h".
     7. Boost C++ Libraries (Boost Software License)
         - http://www.boost.org/
         - Linux: via Package Manager
