@@ -40,7 +40,6 @@
 #include "Model/UpdateVisitor.hpp"
 #include "Model/SimSettings.hpp"
 
-#include "Util/rapidxml.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 #include "Util/CommandLineArgs.hpp"

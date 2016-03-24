@@ -29,7 +29,8 @@
 
 #include <string>
 #include "VisAttributes.hpp"
-#include "Util/rapidxml.hpp"
+
+#include <rapidxml.hpp>
 
 namespace Model
 {

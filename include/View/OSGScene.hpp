@@ -27,7 +27,7 @@
 #ifndef INCLUDE_OSGSCENE_HPP_
 #define INCLUDE_OSGSCENE_HPP_
 
-#include "Util/rapidxml.hpp"
+#include <rapidxml.hpp>
 #include <osg/Group>
 #include <osgDB/ReadFile>
 

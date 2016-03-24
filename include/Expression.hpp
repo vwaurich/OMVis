@@ -28,7 +28,8 @@
 #define INCLUDE_EXPRESSION_HPP_
 
 #include "WrapperFMILib.hpp"
-#include "Util/rapidxml.hpp"
+#include <rapidxml.hpp>
+
 #include "Util/read_matlab4.h"
 #include "Visualize.hpp"
 

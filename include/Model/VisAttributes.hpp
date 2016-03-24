@@ -31,8 +31,9 @@
 #include <osg/Matrix>
 #include <osg/Uniform>
 #include "WrapperFMILib.hpp"
-#include "Util/rapidxml.hpp"
 #include "Util/read_matlab4.h"
+
+#include <rapidxml.hpp>
 
 namespace Model
 {
