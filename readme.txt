@@ -37,10 +37,10 @@ following we give a list of all necessary dependencies and the version number, w
         - Its important to remember where FMIlibary is installed to. The installation path has to 
           be provided to the CMake file of OMVis. 
     4. QT (>= 5.0) (LGPL)
-        - windows installer http://www.qt.io/
-    5. rapdixml.hpp (Boost Software License or MIT)
+        - Windows installer http://www.qt.io/
+    5. RapdiXml Library (Boost Software License or MIT)
         - http://rapidxml.sourceforge.net/
-        - copy to OMVis/include/Util/         
+        - Download the header only library, extract and give (OMVis) Cmake a hint to the path via environment variable RAPIDXML_ROOT.         
     6. read_matlab4.cpp and read_matlab4.h from OpenModelica (OSMC-PL, GPL v3.0) 
         - https://github.com/OpenModelica/OMCompiler/tree/master/SimulationRuntime/c
         - copy read_matlab4.cpp and read_matlab4.h to OMVis/src/Util/ and uncomment #include "omc_msvc.h"
@@ -51,14 +51,14 @@ following we give a list of all necessary dependencies and the version number, w
             --> libboost-program-options-dev
             --> libboost-system-dev
             --> libboost-dev
-        - windows: build from source http://www.boost.org/
+        - Windows: build from source http://www.boost.org/
         
         
 \subsection configure Configure and Build
 \code
 ~> mkdir build
 ~> cd build
-~> cmake -DFMILIB_HOME=/PATH/TO/FMILIB2/
+~> cmake -DFMILIB_HOME=/PATH/TO/FMILIB2/ -DRAPIDXML_ROOT=/PATH/TO/RAPIDXML/
 ~> make OMVis
 \endcode
 
