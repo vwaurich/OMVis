@@ -77,7 +77,7 @@ namespace Model
         OMVisualizerAbstract::initData();
         loadFMU(_baseData->_modelName, _baseData->_dirName);
         _simSettings->setTend(_omvManager->_endTime);
-        _simSettings->setHdef(0.005);
+        _simSettings->setHdef(0.001);
     }
 
     void OMVisualizerFMU::loadFMU(const std::string model, const std::string dir)
