@@ -21,6 +21,8 @@
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
 
+#include <osgDB/ReadFile>
+
 namespace Model
 {
 

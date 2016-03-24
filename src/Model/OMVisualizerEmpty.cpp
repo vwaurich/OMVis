@@ -17,8 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#include <iostream>
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerEmpty.hpp"
 #include "View/OMVisScene.hpp"
@@ -39,7 +37,7 @@ namespace Model
 
     void OMVisualizerEmpty::updateVisAttributes(const double time)
     {
-    }  //end function
+    }
 
     void OMVisualizerEmpty::initializeVisAttributes(const double time)
     {

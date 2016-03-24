@@ -27,12 +27,12 @@
 #ifndef INCLUDE_VISATTRIBUTES_HPP_
 #define INCLUDE_VISATTRIBUTES_HPP_
 
-#include <osg/Vec3f>
-#include <osg/Matrix>
-#include <osg/Uniform>
 #include "WrapperFMILib.hpp"
 #include "Util/read_matlab4.h"
 
+#include <osg/Vec3f>
+#include <osg/Matrix>
+#include <osg/Uniform>
 #include <rapidxml.hpp>
 
 namespace Model

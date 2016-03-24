@@ -28,6 +28,8 @@
 #define INCLUDE_INPUTVALUES_HPP_
 
 #include "WrapperFMILib.hpp"
+
+#include <string>
 #include <vector>
 
 namespace Model

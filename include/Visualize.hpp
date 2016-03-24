@@ -29,16 +29,13 @@
 #ifndef INCLUDE_VISUALIZE_HPP_
 #define INCLUDE_VISUALIZE_HPP_
 
-#include <osg/Geode>
-#include <osg/Material>
-#include <osg/MatrixTransform>
-#include <osg/ShapeDrawable>
-#include <osg/Vec3f>
-#include <osgViewer/Viewer>
-#include <osgGA/TrackballManipulator>
-#include <osgDB/ReadFile>
 #include "WrapperFMILib.hpp"
 #include "Util/read_matlab4.h"
+
+#include <osg/Geode>
+//#include <osg/Material>
+#include <osg/Vec3f>
+
 #include <rapidxml.hpp>
 
 

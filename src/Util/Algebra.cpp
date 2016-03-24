@@ -24,8 +24,9 @@
  *  \date Feb 2016
  */
 
-#include <iostream>
 #include "Util/Algebra.hpp"
+
+#include <iostream>
 
 namespace Util
 {

@@ -17,20 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/**
- OMVis
- visualize.cpp
- Purpose: Relevant functions for the visualization
-
- @author Volker Waurich
- @version 0.1
- */
-
 #include "Visualize.hpp"
 #include "Util/Algebra.hpp"
 #include "Expression.hpp"
 
+#include <osgDB/ReadFile>
 
 /******************************
  Calculate Transformations

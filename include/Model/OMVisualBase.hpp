@@ -27,10 +27,11 @@
 #ifndef INCLUDE_OMVISUALBASE_HPP_
 #define INCLUDE_OMVISUALBASE_HPP_
 
-#include <string>
 #include "VisAttributes.hpp"
 
 #include <rapidxml.hpp>
+#include <string>
+
 
 namespace Model
 {

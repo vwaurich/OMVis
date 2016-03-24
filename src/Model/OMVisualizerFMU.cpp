@@ -17,14 +17,15 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisScene.hpp"
 #include "Control/OMVisManager.hpp"
 #include "Control/JoystickDevice.hpp"
+
 #include <SDL.h>
 
+#include <iostream>
 
 namespace Model
 {

@@ -27,9 +27,10 @@
 #ifndef INCLUDE_VIEW_INFOVISITOR_HPP_
 #define INCLUDE_VIEW_INFOVISITOR_HPP_
 
-#include <string>
 #include <osg/NodeVisitor>
 #include <osg/Geode>
+
+#include <string>
 
 namespace View
 {

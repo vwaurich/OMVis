@@ -27,8 +27,9 @@
 #ifndef INCLUDE_FMUSIMULATE_HPP_
 #define INCLUDE_FMUSIMULATE_HPP_
 
-#include <string>
 #include "WrapperFMILib.hpp"
+
+#include <string>
 
 // Forward Declaration
 namespace Model

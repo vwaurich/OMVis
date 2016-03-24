@@ -27,10 +27,11 @@
 #ifndef INCLUDE_UPDATEVISITOR_HPP_
 #define INCLUDE_UPDATEVISITOR_HPP_
 
+#include "VisAttributes.hpp"
+
 #include <osg/NodeVisitor>
 #include <osg/Geode>
 #include <osg/MatrixTransform>
-#include "VisAttributes.hpp"
 
 namespace Model
 {

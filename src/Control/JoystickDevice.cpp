@@ -17,20 +17,13 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/*
- * JoystickDevice.cpp
- *
- *  Created on: 11.02.2016
- *      Author: mf
- */
-
-#include <Control/JoystickDevice.hpp>
-#include <iostream>
-#include <string>
-#include <SDL.h>
+#include "Control/JoystickDevice.hpp"
 #include "Model/InputData.hpp"
 #include "Util/Logger.hpp"
+
+#include <SDL.h>
+
+#include <string>
 
 namespace Control
 {

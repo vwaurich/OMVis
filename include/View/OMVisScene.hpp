@@ -27,7 +27,6 @@
 #ifndef INCLUDE_OMVISUALVIEWER_HPP_
 #define INCLUDE_OMVISUALVIEWER_HPP_
 
-#include <osgViewer/Viewer>
 #include "View/OSGScene.hpp"
 
 namespace View

@@ -27,45 +27,31 @@
 #ifndef INCLUDE_OMVISVIEWER_HPP_
 #define INCLUDE_OMVISVIEWER_HPP_
 
-#include <string>
-#include <QTimer>
-#include <QApplication>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QMainWindow>
-#include <QTextEdit>
-#include <QList>
-#include <QPushButton>
-#include <QGroupBox>
-#include <QObject>
-#include <QLabel>
-#include <QAction>
-#include <QSlider>
-#include <QMenuBar>
-#include <QMenu>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QDialog>
-#include <QComboBox>
-
-#include <osgViewer/CompositeViewer>
-#include <osgViewer/ViewerEventHandlers>
-#include <osgGA/MultiTouchTrackballManipulator>
-#include <osgGA/EventQueue>
-#include <osgDB/ReadFile>
-#include <osgQt/GraphicsWindowQt>
-
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Control/OMVisManager.hpp"
+
+#include <QTimer>
+#include <QMainWindow>
+#include <QString>
+
+#include <osgViewer/CompositeViewer>
+#include <osgQt/GraphicsWindowQt>
+
+#include <string>
 
 // Forward declarations
 namespace Control
 {
     class GUIController;
 }
-class ToolBar;
+
+//X7 class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)
-QT_FORWARD_DECLARE_CLASS(QSignalMapper)
+QT_FORWARD_DECLARE_CLASS(QLabel)
+QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
+QT_FORWARD_DECLARE_CLASS(QAction)
+QT_FORWARD_DECLARE_CLASS(QSlider)
+//X7QT_FORWARD_DECLARE_CLASS(QSignalMapper)
 
 class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
 //If we want to use a toolbar, we have to derive from QMainWindow.

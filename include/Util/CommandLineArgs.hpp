@@ -27,15 +27,17 @@
 #ifndef INCLUDE_UTIL_COMMANDLINEARGS_HPP_
 #define INCLUDE_UTIL_COMMANDLINEARGS_HPP_
 
-#include <string>
-#include <map>
+#include "Util/Logger.hpp"
+#include "Util/Util.hpp"
+
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
-#include "Util/Logger.hpp"
-#include "Util/Util.hpp"
+#include <string>
+#include <map>
+
 
 namespace Util
 {

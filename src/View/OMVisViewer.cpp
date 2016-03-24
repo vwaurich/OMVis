@@ -17,15 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- OMVis
- MainWidget.cpp
- Purpose: Provides a nice gui
-
- @author vw
- @version 0.1
- */
-
 #include "Control/GUIController.hpp"
 #include "Model/FMU.hpp"
 #include "Util/Logger.hpp"
@@ -33,12 +24,27 @@
 #include "View/OMVisViewer.hpp"
 
 #include <osgDB/ReadFile>
-#include <assert.h>
+#include <osgGA/MultiTouchTrackballManipulator>
+#include <osgViewer/ViewerEventHandlers>
 
 #include <QScreen>
 #include <QDialogButtonBox>
 #include <QGroupBox>
 #include <QFormLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QGuiApplication>
+#include <QPushButton>
+#include <QObject>
+#include <QAction>
+#include <QSlider>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDialog>
+#include <QComboBox>
+#include <QMenuBar>
+
+#include <assert.h>
 
 /*-----------------------------------------
  * CONSTRUCTORS

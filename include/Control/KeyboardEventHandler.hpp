@@ -27,8 +27,11 @@
 #ifndef INCLUDE_KEYBOARDEVENTHANDLER_HPP_
 #define INCLUDE_KEYBOARDEVENTHANDLER_HPP_
 
+namespace Model{
+    class InputData;
+}
+
 #include <osgGA/GUIEventHandler>
-#include "Model/InputData.hpp"
 
 namespace Control
 {

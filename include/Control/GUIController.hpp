@@ -29,13 +29,15 @@
 
 #include "View/OMVisScene.hpp"
 #include "Model/InputData.hpp"
-#include "osg/Vec4"
 
-// Forward declaration
+#include <osg/Vec4>
+
+// Forward declarations
 namespace Model
 {
     class OMVisualizerAbstract;
 }
+
 
 namespace Control
 {
@@ -86,7 +88,6 @@ namespace Control
         void initVisualization();
         void donationVisualization();
 
-        osgViewer::View* getViewer();
         int getTimeProgress();
         osg::ref_ptr<osg::Node> getSceneRootNode();
         void sceneUpdate();

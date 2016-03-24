@@ -27,9 +27,10 @@
 #ifndef INCLUDE_INPUTDATA_HPP_
 #define INCLUDE_INPUTDATA_HPP_
 
-#include <map>
 #include "WrapperFMILib.hpp"
 #include "InputValues.hpp"
+
+#include <map>
 
 enum inputKey
 {

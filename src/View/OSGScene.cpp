@@ -17,19 +17,15 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/*
- * OSGScene.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
-#include <string>
-//#include <iostream>
 #include "View/OSGScene.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
+
+#include <osg/MatrixTransform>
+#include <osg/ShapeDrawable>
+#include <osg/Material>
+
+#include <string>
 
 namespace View
 {

@@ -27,8 +27,10 @@
 #ifndef INCLUDE_OMVISMANAGER_HPP_
 #define INCLUDE_OMVISMANAGER_HPP_
 
-#include <osg/Timer>
-#include <iostream>
+// Forward declaration
+namespace osg {
+   class Timer;
+}
 
 namespace Control
 {

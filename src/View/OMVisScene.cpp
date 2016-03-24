@@ -17,19 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * OMVisScene.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
-#include <View/InfoVisitor.hpp>
-
-#include <iostream>
-#include <osgGA/TrackballManipulator>
+#include "View/InfoVisitor.hpp"
 #include "View/OMVisScene.hpp"
 #include "Util/Logger.hpp"
+
+#include <osgGA/TrackballManipulator>
 
 namespace View
 {
@@ -39,13 +31,11 @@ namespace View
     {
     }
 
-
 	void OMVisScene::dumpOSGTreeDebug()
 	{
 		// The node traverser which dumps the tree
 		InfoVisitor infoVisitor;
 		_scene._rootNode->accept(infoVisitor);
 	}
-
 
 }  // End namespace View

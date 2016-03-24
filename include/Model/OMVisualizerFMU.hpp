@@ -27,18 +27,16 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
-#include <Control/JoystickDevice.hpp>
-#include <Control/KeyboardEventHandler.hpp>
-
-#include <string>
-#include <memory>
-
 #include "FMU.hpp"
-
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Visualize.hpp"
+#include "Control/JoystickDevice.hpp"
+#include "Control/KeyboardEventHandler.hpp"
+
+#include <string>
+//#include <memory>
 
 // Forward declaration
 namespace View

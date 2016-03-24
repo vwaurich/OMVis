@@ -28,10 +28,10 @@
 #define INCLUDE_EXPRESSION_HPP_
 
 #include "WrapperFMILib.hpp"
-#include <rapidxml.hpp>
-
 #include "Util/read_matlab4.h"
 #include "Visualize.hpp"
+
+#include <rapidxml.hpp>
 
 /*! \brief Gets the value of a variable at a certain time.
  *
@@ -45,14 +45,14 @@ double* omc_get_varValue(ModelicaMatReader* reader, const char* varName, double 
 * @param
 * @return the evaluated value
 */
-double evaluateBinaryExpMAT(rapidxml::xml_node<>*op, rapidxml::xml_node<> *exp2, rapidxml::xml_node<> *exp1, double time, ModelicaMatReader reader);
+double evaluateBinaryExpMAT(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2, rapidxml::xml_node<>* exp1, double time, ModelicaMatReader reader);
 
 /*! \brief Evaluates the Binary Exp using an fmu.
 *
 * @param
 * @return the evaluated value
 */
-double evaluateBinaryExpFMU(rapidxml::xml_node<>*op, rapidxml::xml_node<> *exp2, rapidxml::xml_node<> *exp1, double time, fmi1_import_t* fmu);
+double evaluateBinaryExpFMU(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2, rapidxml::xml_node<>* exp1, double time, fmi1_import_t* fmu);
 
 
 /*! \brief Evaluates the call-expression. Uses a mat file

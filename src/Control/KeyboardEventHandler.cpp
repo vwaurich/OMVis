@@ -18,14 +18,8 @@
 */
 
 
-/*
- * KeyboardEventhandler.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
-
-#include <Control/KeyboardEventHandler.hpp>
+#include "Control/KeyboardEventHandler.hpp"
+#include "Model/InputData.hpp"
 
 #include <string>
 #include <iostream>
@@ -34,7 +28,8 @@ namespace Control
 {
 
     KeyboardEventHandler::KeyboardEventHandler(Model::InputData* inputs)
-            : _inputs(inputs)
+            : GUIEventHandler(),
+              _inputs(inputs)
     {
     }
 

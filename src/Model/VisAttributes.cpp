@@ -20,6 +20,8 @@
 #include "Model/VisAttributes.hpp"
 #include "Visualize.hpp"
 
+#include <iostream>
+
 namespace Model
 {
 

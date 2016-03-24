@@ -27,15 +27,16 @@
 #ifndef INCLUDE_OMVISUALIZERABSTRACT_HPP_
 #define INCLUDE_OMVISUALIZERABSTRACT_HPP_
 
+#include "View/OMVisScene.hpp"
+#include "Model/OMVisualBase.hpp"
+#include "Model/UpdateVisitor.hpp"
+
+// Forward declaration
 namespace Control
 {
     class OMVisManager;
 }
 
-#include <memory>
-#include "View/OMVisScene.hpp"
-#include "Model/OMVisualBase.hpp"
-#include "Model/UpdateVisitor.hpp"
 
 namespace Model
 {

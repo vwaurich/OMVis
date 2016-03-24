@@ -32,8 +32,8 @@
  * Header file that encapsulates all OMVIS headers in order to provide one header to the application.
  */
 
-#include <View/InfoVisitor.hpp>
-#include <View/OMVisViewer.hpp>
+#include "View/InfoVisitor.hpp"
+#include "View/OMVisViewer.hpp"
 #include "Visualize.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Control/OMVisManager.hpp"
@@ -45,5 +45,7 @@
 #include "Util/CommandLineArgs.hpp"
 
 #include "Initialization/Factory.hpp"
+
+#include <QApplication>
 
 #endif /* INCLUDE_OMVIS_HPP_ */

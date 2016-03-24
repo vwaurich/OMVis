@@ -17,15 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * OMVManager.cpp
- *
- *  Created on: 03.02.2016
- *      Author: mf
- */
 
 #include "Control/OMVisManager.hpp"
-#include "cmath"
+
+#include <cmath>
+#include <osg/Timer>
 
 namespace Control
 {
