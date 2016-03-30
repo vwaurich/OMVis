@@ -79,7 +79,7 @@ namespace Model
                 , Util::LC_CTR, Util::LL_INFO);
             if (_omvManager->_visTime >= _omvManager->_endTime - 1.e-6)
             {
-                std::cout << "PASUE!!!!!!!!!!!!!!" << std::endl;
+                LOGGER_WRITE(std::string("The End."), Util::LC_CTR, Util::LL_INFO);
                 _omvManager->_pause = true;
             }
         }
