@@ -55,7 +55,6 @@ namespace Model
 		{
 			LOGGER_WRITE(std::string("Start loading joysticks. Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)."), Util::LC_LOADER, Util::LL_INFO);
 			//Load joystick
-
 			for (size_t i = 0; i < _numJoysticks; ++i)
 			{
 				std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i<<std::endl;
@@ -166,7 +165,7 @@ namespace Model
             _fmu._fmuData._tcur = _simSettings->getTend();
         }
         //set inputs
-		for (int i=0; i < _numJoysticks; i++)
+		for (size_t i = 0; i < _numJoysticks; ++i)
 		{
 			_joysticks[i]->detectContinuousInputEvents(_inputData);
 			_inputData.setInputsInFMU(_fmu._fmu);
@@ -201,16 +200,16 @@ namespace Model
     void OMVisualizerFMU::resetInputs()
     {
         //reset real input values to 0
-        for (unsigned int r = 0; r < _inputData._data.getNumReal(); ++r)
+        for (size_t r = 0; r < _inputData._data.getNumReal(); ++r)
             _inputData._data._valuesReal[r] = 0.0;
         //reset integer input values to 0
-        for (unsigned int i = 0; i < _inputData._data.getNumInteger(); ++i)
+        for (size_t i = 0; i < _inputData._data.getNumInteger(); ++i)
             _inputData._data._valuesInteger[i] = 0;
         //reset boolean input values to 0
-        for (unsigned int b = 0; b < _inputData._data.getNumBoolean(); ++b)
+        for (size_t b = 0; b < _inputData._data.getNumBoolean(); ++b)
             _inputData._data._valuesBoolean[b] = false;
         //reset string input values to 0
-        for (unsigned int s = 0; s < _inputData._data.getNumString(); ++s)
+        for (size_t s = 0; s < _inputData._data.getNumString(); ++s)
             _inputData._data._valuesString[s] = "";
     }
 
@@ -283,4 +282,3 @@ namespace Model
     }
 
 }  // End namespace Model
-
