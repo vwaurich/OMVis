@@ -17,12 +17,13 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * OMVIS.hpp
- *
- *  Created on: 15.02.2016
- *      Author: mf
+/** @addtogroup OMVis
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
+
 
 #ifndef INCLUDE_OMVIS_HPP_
 #define INCLUDE_OMVIS_HPP_
@@ -49,3 +50,6 @@
 #include <QApplication>
 
 #endif /* INCLUDE_OMVIS_HPP_ */
+/**
+ * @}
+ */
