@@ -79,16 +79,18 @@ namespace Model
         void resetInputs();
 
 		/*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
-		*
-		*/
+		 *
+		 */
 		void updateVisAttributes(const double time);
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
-		*/
-		void initializeVisAttributes(const double time);
+		 *
+		 * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract.
+		 */
+		void initializeVisAttributes(const double time = 0.0);
 
 		/*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
-		*/
+		 */
 		void updateScene(const double time);
 
 		/*! \brief Returns a 0 if we use a MAT file, 1 if we use FMU for visualization.
@@ -96,7 +98,7 @@ namespace Model
 		int getDataTypeID();
 
 		/*! \brief initializes the attached joysticks
-		*/
+		 */
 		void initJoySticks();
 
 
