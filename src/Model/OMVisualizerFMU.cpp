@@ -53,19 +53,18 @@ namespace Model
 			LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
 		else
 		{
-			LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+			LOGGER_WRITE(std::string("Start loading joysticks. Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)."), Util::LC_LOADER, Util::LL_INFO);
 			//Load joystick
-			std::cout << "START LOADING JOYSTICKS!!!!!!!!!" << _numJoysticks << std::endl;
 
-			for (int i=0; i < _numJoysticks; i++)
+			for (size_t i = 0; i < _numJoysticks; ++i)
 			{
 				std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i<<std::endl;
 
 				Control::JoystickDevice* newJoyStick = new Control::JoystickDevice(i);
-				_joysticks.push_back(newJoyStick);
-
-			if (newJoyStick == nullptr)
-				LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+				if (newJoyStick == nullptr)
+				    LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+				else
+				    _joysticks.push_back(newJoyStick);
 			}
 		}
 	}
