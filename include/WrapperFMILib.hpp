@@ -17,12 +17,6 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * WrapperFMILib.hpp
- *
- *  Created on: 11.02.2016
- *      Author: mf
- */
 
 #ifndef INCLUDE_WRAPPERFMILIB_HPP_
 #define INCLUDE_WRAPPERFMILIB_HPP_
