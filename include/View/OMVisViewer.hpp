@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Model
+/** @addtogroup View
  *  @{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig

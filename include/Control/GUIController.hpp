@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_CONTROL_GUICONTROLLER_HPP_
-#define INCLUDE_CONTROL_GUICONTROLLER_HPP_
+#ifndef INCLUDE_GUICONTROLLER_HPP_
+#define INCLUDE_GUICONTROLLER_HPP_
 
 #include "View/OMVisScene.hpp"
 #include "Model/InputData.hpp"
@@ -118,7 +118,7 @@ namespace Control
 
 }  // End namespace Control
 
-#endif /* INCLUDE_CONTROL_GUICONTROLLER_HPP_ */
+#endif /* INCLUDE_GUICONTROLLER_HPP_ */
 /**
  * @}
  */

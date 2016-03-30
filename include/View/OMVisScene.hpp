@@ -17,15 +17,15 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** @addtogroup Visualization
+/** @addtogroup View
  *  @{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_OMVISUALVIEWER_HPP_
-#define INCLUDE_OMVISUALVIEWER_HPP_
+#ifndef INCLUDE_OMVISSCENE_HPP_
+#define INCLUDE_OMVISSCENE_HPP_
 
 #include "View/OSGScene.hpp"
 
@@ -58,7 +58,7 @@ namespace View
 
 }  // End namespace View
 
-#endif /* INCLUDE_OMVISUALVIEWER_HPP_ */
+#endif /* INCLUDE_OMVISSCENE_HPP_ */
 /**
  * @}
  */

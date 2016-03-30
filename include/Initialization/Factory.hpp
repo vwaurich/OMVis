@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_INITIALIZATION_FACTORY_HPP_
-#define INCLUDE_INITIALIZATION_FACTORY_HPP_
+#ifndef INCLUDE_FACTORY_HPP_
+#define INCLUDE_FACTORY_HPP_
 
 #include <string>
 
@@ -93,7 +93,7 @@ namespace Initialization
 
 }  // End namespace Initialization
 
-#endif /* INCLUDE_INITIALIZATION_FACTORY_HPP_ */
+#endif /* INCLUDE_FACTORY_HPP_ */
 /**
  * @}
  */

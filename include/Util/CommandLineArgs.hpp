@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_UTIL_COMMANDLINEARGS_HPP_
-#define INCLUDE_UTIL_COMMANDLINEARGS_HPP_
+#ifndef INCLUDE_COMMANDLINEARGS_HPP_
+#define INCLUDE_COMMANDLINEARGS_HPP_
 
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
@@ -92,7 +92,7 @@ namespace Util
 
 }  // End namespace Util
 
-#endif /* INCLUDE_UTIL_COMMANDLINEARGS_HPP_ */
+#endif /* INCLUDE_COMMANDLINEARGS_HPP_ */
 /**
  * @}
  */

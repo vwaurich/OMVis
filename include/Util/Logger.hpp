@@ -24,8 +24,8 @@
  *  \date Oct 2015
  */
 
-#ifndef INCLUDE_UTIL_LOGGER_HPP_
-#define INCLUDE_UTIL_LOGGER_HPP_
+#ifndef INCLUDE_LOGGER_HPP_
+#define INCLUDE_LOGGER_HPP_
 
 #ifdef USE_LOGGER
 #define LOGGER_WRITE(message,category,level) Util::Logger::write(message,category,level)

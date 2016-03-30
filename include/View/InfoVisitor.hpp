@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_VIEW_INFOVISITOR_HPP_
-#define INCLUDE_VIEW_INFOVISITOR_HPP_
+#ifndef INCLUDE_INFOVISITOR_HPP_
+#define INCLUDE_INFOVISITOR_HPP_
 
 #include <osg/NodeVisitor>
 #include <osg/Geode>
@@ -69,7 +69,7 @@ namespace View
 
 }  // End namespace View
 
-#endif /* INCLUDE_VIEW_INFOVISITOR_HPP_ */
+#endif /* INCLUDE_INFOVISITOR_HPP_ */
 /**
  * @}
  */

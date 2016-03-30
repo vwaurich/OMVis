@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_UTIL_UTIL_HPP_
-#define INCLUDE_UTIL_UTIL_HPP_
+#ifndef INCLUDE_UTIL_HPP_
+#define INCLUDE_UTIL_HPP_
 
 namespace Util
 {
@@ -44,7 +44,7 @@ namespace Util
 
 }  // End namespace Util
 
-#endif /* INCLUDE_UTIL_UTIL_HPP_ */
+#endif /* INCLUDE_UTIL_HPP_ */
 /**
  * @}
  */

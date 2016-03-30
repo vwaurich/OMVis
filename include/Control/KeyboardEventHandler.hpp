@@ -17,15 +17,15 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** @addtogroup Model
+/** @addtogroup Control
  *  @{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_KEYBOARDEVENTHANDLER_HPP_
-#define INCLUDE_KEYBOARDEVENTHANDLER_HPP_
+#ifndef INCLUDE_CONTROL_KEYBOARDEVENTHANDLER_HPP_
+#define INCLUDE_CONTROL_KEYBOARDEVENTHANDLER_HPP_
 
 namespace Model{
     class InputData;
@@ -68,7 +68,7 @@ namespace Control
 
 }  // End namespace control
 
-#endif /* INCLUDE_KEYBOARDEVENTHANDLER_HPP_ */
+#endif /* INCLUDE_CONTROL_KEYBOARDEVENTHANDLER_HPP_ */
 /**
  * @}
  */
