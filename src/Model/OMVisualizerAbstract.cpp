@@ -7,6 +7,9 @@
 
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Control/OMVisManager.hpp"
+#include "Util/Logger.hpp"
+
+#include <string>
 
 namespace Model
 {
@@ -39,21 +42,21 @@ namespace Model
         if (_omvManager->_visTime < _omvManager->_endTime - 1.e-6)
         {
             _omvManager->_pause = false;
-            std::cout << "start visualization" << std::endl;
+            LOGGER_WRITE(std::string("Start visualization."), Util::LC_CTR, Util::LL_INFO);
         }
         else
-            std::cout << "There is nothing left to visualize. Initialize first." << std::endl;
+            LOGGER_WRITE(std::string("There is nothing left to visualize. Initialize the model first."), Util::LC_CTR, Util::LL_INFO);
     }
 
     void OMVisualizerAbstract::pauseVisualization()
     {
-        std::cout << "pause visualization" << std::endl;
+        LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_omvManager->_visTime) + std::string("."), Util::LC_CTR, Util::LL_INFO);
         _omvManager->_pause = true;
     }
 
     void OMVisualizerAbstract::initVisualization()
     {
-        std::cout << "init visualization" << std::endl;
+        LOGGER_WRITE(std::string("Initialize visualization."), Util::LC_CTR, Util::LL_INFO);
         initializeVisAttributes(_omvManager->_startTime);
         _omvManager->_visTime = _omvManager->_startTime;
         _omvManager->_pause = true;
@@ -61,7 +64,7 @@ namespace Model
 
     void OMVisualizerAbstract::donationVisualization()
     {
-        std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
+        LOGGER_WRITE(std::string("Want to support Martin and Volker? Buy us a coffee."), Util::LC_CTR, Util::LL_INFO);
     }
 
     void OMVisualizerAbstract::sceneUpdate()
@@ -70,7 +73,10 @@ namespace Model
         {
             updateScene(_omvManager->_visTime);
             _omvManager->_visTime = _omvManager->_visTime + _omvManager->_hVisual;
-            std::cout << "update scene at " << (_omvManager->_visTime) << " simTime " << (_omvManager->_simTime) << " _visStepSize " << (_omvManager->_hVisual) << std::endl;
+
+            LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_omvManager->_visTime) + std::string(" simTime ")
+                + std::to_string(_omvManager->_simTime) + std::string(" _visStepSize ") + std::to_string(_omvManager->_hVisual)
+                , Util::LC_CTR, Util::LL_INFO);
             if (_omvManager->_visTime >= _omvManager->_endTime - 1.e-6)
             {
                 std::cout << "PASUE!!!!!!!!!!!!!!" << std::endl;
