@@ -77,7 +77,7 @@ namespace Model
         ModelicaMatReader _matReader;
     };
 
-}  // End namepsace Model
+}  // End namespace Model
 
 #endif /* INCLUDE_OMVISUALIZERMAT_HPP_ */
 /**

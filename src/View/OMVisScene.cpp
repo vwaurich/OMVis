@@ -35,7 +35,11 @@ namespace View
 	{
 		// The node traverser which dumps the tree
 		InfoVisitor infoVisitor;
-		_scene._rootNode->accept(infoVisitor);
+		_scene.getRootNode()->accept(infoVisitor);
 	}
+
+	OSGScene& OMVisScene::getScene() {
+        return _scene;
+    }
 
 }  // End namespace View

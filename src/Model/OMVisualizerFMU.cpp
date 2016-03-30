@@ -244,7 +244,7 @@ namespace Model
 			//_nodeUpdater->_visAttr.dumpVisAttributes();
 
             //get the scene graph nodes and stuff
-            child = _viewerStuff->_scene._rootNode->getChild(shapeIdx);  // the transformation
+            child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
             child->accept(*_nodeUpdater);
             ++shapeIdx;
         }

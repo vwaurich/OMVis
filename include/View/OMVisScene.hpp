@@ -50,7 +50,9 @@ namespace View
 		*/
 		void dumpOSGTreeDebug();
 
-     public:
+		OSGScene& getScene();
+
+     private:
         /// \todo Can this attr. be private?
         OSGScene _scene;
     };

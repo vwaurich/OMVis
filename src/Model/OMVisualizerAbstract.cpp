@@ -28,13 +28,13 @@ namespace Model
               _nodeUpdater(new Model::UpdateVisitor),
               _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
     {
-        _viewerStuff->_scene._path = dir;
+        _viewerStuff->getScene().setPath(dir);
     }
 
     void OMVisualizerAbstract::setUpScene()
     {
         //build scene graph
-        _viewerStuff->_scene.setUpScene(_baseData->_xmlDoc.first_node());
+        _viewerStuff->getScene().setUpScene(_baseData->_xmlDoc.first_node());
     }
 
     void OMVisualizerAbstract::startVisualization()

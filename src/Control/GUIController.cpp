@@ -112,7 +112,7 @@ namespace Control
 
     osg::ref_ptr<osg::Node> GUIController::getSceneRootNode()
     {
-        return _omVisualizer->_viewerStuff->_scene._rootNode;
+        return _omVisualizer->_viewerStuff->getScene().getRootNode();
     }
 
     void GUIController::sceneUpdate()
