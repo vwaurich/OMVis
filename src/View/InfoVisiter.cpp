@@ -47,7 +47,7 @@ namespace View
     {
         std::cout << spaces() << geode.libraryName() << "::" << geode.className() << std::endl;
         ++_level;
-        for (unsigned int i = 0; i < geode.getNumDrawables(); ++i)
+        for (size_t i = 0; i < geode.getNumDrawables(); ++i)
         {
             osg::Drawable* drawable = geode.getDrawable(i);
             std::cout << spaces() << drawable->libraryName() << "::" << drawable->className() << std::endl;
