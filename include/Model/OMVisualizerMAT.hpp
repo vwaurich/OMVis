@@ -63,7 +63,7 @@ namespace Model
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		*/
-		void initializeVisAttributes(const double time);
+		void initializeVisAttributes(const double time = -1.0);
 
 		/*! \brief For MAT-file based visualization, nothing has to be done. Just get the visualizationAttributes
 		*/

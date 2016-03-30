@@ -107,11 +107,15 @@ namespace Model
 
     void OMVisualizerMAT::initializeVisAttributes(const double time)
     {
+        if (0.0 > time)
+            LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER, Util::LL_ERROR);
         updateVisAttributes(time);
     }
 
     void OMVisualizerMAT::updateScene(const double time)
     {
+        if (0.0 > time)
+            LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER, Util::LL_ERROR);
         updateVisAttributes(time);
     }
 
