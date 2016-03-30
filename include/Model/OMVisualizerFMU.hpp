@@ -85,13 +85,15 @@ namespace Model
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		 *
-		 * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract.
+		 * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
 		 */
 		void initializeVisAttributes(const double time = 0.0);
 
 		/*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
+		 *
+		 *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
 		 */
-		void updateScene(const double time);
+		void updateScene(const double time = 0.0);
 
 		/*! \brief Returns a 0 if we use a MAT file, 1 if we use FMU for visualization.
 		*/
