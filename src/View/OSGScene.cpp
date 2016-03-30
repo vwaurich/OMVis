@@ -88,4 +88,19 @@ namespace View
         }
     }
 
+    osg::ref_ptr<osg::Group> OSGScene::getRootNode()
+    {
+        return _rootNode;
+    }
+
+    std::string OSGScene::getPath() const
+    {
+        return _path;
+    }
+
+    void OSGScene::setPath(const std::string path)
+    {
+        _path = path;
+    }
+
 }  // End namespace View

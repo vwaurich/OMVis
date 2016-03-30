@@ -52,9 +52,20 @@ namespace View
          */
         void setUpScene(rapidxml::xml_node<>* xmlRoot);
 
-     public:
-        /// \todo Can this attr. be private?
+        /*! \brief Return shared pointer to rootNode. */
+        osg::ref_ptr<osg::Group> getRootNode();
+
+        /*! \brief Return path to scene. */
+        std::string getPath() const;
+
+        /*! \brief Set path to scene. */
+        void setPath(const std::string path);
+
+     private:
+        /*! Root node of the scene. */
         osg::ref_ptr<osg::Group> _rootNode;
+
+        /*! Path to scene. */
 		std::string _path;
     };
 
