@@ -36,7 +36,6 @@
 #include "Control/KeyboardEventHandler.hpp"
 
 #include <string>
-//#include <memory>
 
 // Forward declaration
 namespace View
@@ -106,8 +105,6 @@ namespace Model
 
      private:
 		FMU _fmu;
-        //!fmul_t _fmul;
-        //!fmuData _fmuData;
         SimSettings* _simSettings;
 		int _numJoysticks;
 

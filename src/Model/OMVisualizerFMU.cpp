@@ -83,15 +83,12 @@ namespace Model
         std::string fmuFileName = dir + model + ".fmu";
 
         //load and initialize fmu
-        //_fmul = load(dir.c_str(), fmuFileName.c_str());
         _fmu.load(dir.c_str(), fmuFileName.c_str());
         LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
 
-        //_fmuData = initializeFMU(_fmul._fmu, _simSettings);
         _fmu.initialize(_simSettings);
         LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
 
-        //_inputData.initializeInputs(_fmul._fmu);
         _inputData.initializeInputs(_fmu._fmu);
         _inputData.printValues();
         //assign interactive inputs
@@ -255,7 +252,6 @@ namespace Model
 
     void OMVisualizerFMU::initializeVisAttributes(const double time)
     {
-        //_fmuData = initializeFMU(_fmul._fmu, _simSettings);
         _fmu.initialize(_simSettings);
         _omvManager->_visTime = _omvManager->_startTime;
         _omvManager->_simTime = _omvManager->_startTime;
