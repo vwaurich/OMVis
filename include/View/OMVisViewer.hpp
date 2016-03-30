@@ -45,13 +45,11 @@ namespace Control
     class GUIController;
 }
 
-//X7 class ToolBar;
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QLabel)
 QT_FORWARD_DECLARE_CLASS(QHBoxLayout)
 QT_FORWARD_DECLARE_CLASS(QAction)
 QT_FORWARD_DECLARE_CLASS(QSlider)
-//X7QT_FORWARD_DECLARE_CLASS(QSignalMapper)
 
 class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
 //If we want to use a toolbar, we have to derive from QMainWindow.
@@ -77,16 +75,6 @@ Q_OBJECT
     /*-----------------------------------------
      * INITIALIZATION FUNCTIONS
      *---------------------------------------*/
-
-    /*! \brief Adds a view-widget to the main-widget.
-     *
-     * The OMVisualizer object has to be present and initialized.
-     *
-     * @param gw The graphical window.
-     * @param scene The osg scene.
-     * @return The widget for the osg-viewer.
-     */
-    //X1QWidget* addViewWidget(osgQt::GraphicsWindowQt* gw, osg::ref_ptr<osg::Node> scene);
 
     /*! \brief Adds an empty view-widget to the main-widget
      *
