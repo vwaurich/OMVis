@@ -35,7 +35,7 @@ namespace Model
         std::string resFileName = dirString + modelString + "_res.mat";
         //checks
         if (!exists(resFileName))
-            LOGGER_WRITE(std::string("Mat file ") + resFileName + std::string(" could not be found. Is it in the same directory as the model file?"), Util::LC_INIT, Util::LL_ERROR);
+            LOGGER_WRITE(std::string("Mat file ") + resFileName + std::string(" could not be found. Is it in the same directory as the model file?"), Util::LC_LOADER, Util::LL_ERROR);
 
         // read mat file
         omc_new_matlab4_reader(resFileName.c_str(), &_matReader);

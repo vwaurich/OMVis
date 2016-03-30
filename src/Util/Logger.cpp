@@ -18,8 +18,9 @@
 */
 
 
-#include <iostream>
 #include "Util/Logger.hpp"
+
+#include <iostream>
 
 namespace Util
 {
@@ -100,8 +101,6 @@ namespace Util
                 return "VIEWER";
             case LC_SOLVER:
                 return "SOLVER";
-            case LC_INIT:
-                return "INIT";
             case LC_GUI:
                 return "GUI";
             case LC_OTHER:

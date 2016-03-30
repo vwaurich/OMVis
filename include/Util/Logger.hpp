@@ -48,9 +48,8 @@ namespace Util
         LC_CTR = 1,
         LC_VIEWER = 2,
         LC_SOLVER = 3,
-        LC_INIT = 4,
-        LC_GUI = 5,
-        LC_OTHER = 6
+        LC_GUI = 4,
+        LC_OTHER = 5
     };
     enum LogLevel
     {
@@ -76,7 +75,7 @@ namespace Util
          */
         LogSettings()
         {
-            modes = std::vector<LogLevel>(7, LL_DEBUG);
+            modes = std::vector<LogLevel>(6, LL_DEBUG);
         }
         /**
          * Set all categories at once to the given level.

@@ -33,14 +33,11 @@ namespace Model
 	OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
 		: OMVisualizerAbstract(modelName, modelPath),
 		_fmu(),
-		//_fmul(),
-		//_fmuData(),
-		_simSettings(new SimSettings),
+		_simSettings(new SimSettings()),
 		_inputData(),
 		_joysticks()
     {
-		std::cout << "INIT JOYSTICKS!!!!!!!!!" << std::endl;
-
+	    LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
 		initJoySticks();
     }
 
@@ -90,11 +87,11 @@ namespace Model
         //load and initialize fmu
         //_fmul = load(dir.c_str(), fmuFileName.c_str());
         _fmu.load(dir.c_str(), fmuFileName.c_str());
-        LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_INIT, Util::LL_DEBUG);
+        LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
 
         //_fmuData = initializeFMU(_fmul._fmu, _simSettings);
         _fmu.initialize(_simSettings);
-        LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_INIT, Util::LL_DEBUG);
+        LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
 
         //_inputData.initializeInputs(_fmul._fmu);
         _inputData.initializeInputs(_fmu._fmu);

@@ -17,11 +17,12 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <string>
 #include "Model/InputData.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
+
+#include <iostream>
+#include <string>
 
 namespace Model
 {
@@ -82,16 +83,16 @@ namespace Model
         getVariableNames(booleanInputs, _data.getNumBoolean(), &_data._namesBool);
         getVariableNames(stringInputs, _data.getNumString(), &_data._namesString);
 
-        LOGGER_WRITE(std::string(), Util::LC_INIT, Util::LL_INFO);
+        LOGGER_WRITE(std::string(), Util::LC_LOADER, Util::LL_INFO);
 
-        LOGGER_WRITE(std::string("Number of Reals: ") + std::to_string(_data._namesReal.size()), Util::LC_INIT, Util::LL_INFO);
-        LOGGER_WRITE(std::string("Number of Integers: ") + std::to_string(_data._namesInteger.size()), Util::LC_INIT, Util::LL_INFO);
-        LOGGER_WRITE(std::string("Number of Booleans: ") + std::to_string(_data._namesBool.size()), Util::LC_INIT, Util::LL_INFO);
-        LOGGER_WRITE(std::string("Number of Strings: ") + std::to_string(_data._namesString.size()), Util::LC_INIT, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Reals: ") + std::to_string(_data._namesReal.size()), Util::LC_LOADER, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Integers: ") + std::to_string(_data._namesInteger.size()), Util::LC_LOADER, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Booleans: ") + std::to_string(_data._namesBool.size()), Util::LC_LOADER, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Number of Strings: ") + std::to_string(_data._namesString.size()), Util::LC_LOADER, Util::LL_INFO);
 
         LOGGER_WRITE(std::string("There are ") + std::to_string(_data.getNumBoolean()) + std::string(" boolean inputs, ")
-        + std::to_string(_data.getNumReal()) + std::string(" real inputs, ") + std::to_string(_data.getNumInteger())
-        + std::string(" integer inputs and ") + std::to_string(_data.getNumString()) + std::string(" string inputs."), Util::LC_INIT, Util::LL_INFO);
+            + std::to_string(_data.getNumReal()) + std::string(" real inputs, ") + std::to_string(_data.getNumInteger())
+            + std::string(" integer inputs and ") + std::to_string(_data.getNumString()) + std::string(" string inputs."), Util::LC_LOADER, Util::LL_INFO);
 
         // the values for the inputs per type
         _data._valuesReal = (fmi1_real_t*) calloc(_data.getNumReal(), sizeof(fmi1_real_t));
@@ -114,14 +115,14 @@ namespace Model
         {
             KeyMapValue mapValue = { fmi1_base_type_real, r };
             _keyToInputMap[keys_real[r]] = mapValue;
-            LOGGER_WRITE(std::string("Assign real input ") + std::to_string(r) + std::string(" to key ") + std::to_string(keys_real[r]), Util::LC_INIT, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Assign real input ") + std::to_string(r) + std::string(" to key ") + std::to_string(keys_real[r]), Util::LC_LOADER, Util::LL_INFO);
             //std::cout << "assign realinput " << r << " to key " << keys_real[r] << std::endl;
             fmi1_import_real_variable_t* var = fmi1_import_get_variable_as_real(fmi1_import_get_variable(realInputs, r));
             _data._attrReal[r]._max = fmi1_import_get_real_variable_max(var);
             _data._attrReal[r]._min = fmi1_import_get_real_variable_min(var);
             _data._attrReal[r]._start = fmi1_import_get_real_variable_start(var);
             _data._attrReal[r]._nominal = fmi1_import_get_real_variable_nominal(var);
-            LOGGER_WRITE(std::string("min ") + std::to_string(_data._attrReal[r]._min) + std::string(" max ") + std::to_string(_data._attrReal[r]._max), Util::LC_INIT, Util::LL_INFO);
+            LOGGER_WRITE(std::string("min ") + std::to_string(_data._attrReal[r]._min) + std::string(" max ") + std::to_string(_data._attrReal[r]._max), Util::LC_LOADER, Util::LL_INFO);
             ++k;
         }
         for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
@@ -134,7 +135,7 @@ namespace Model
         {
             KeyMapValue mapValue = { fmi1_base_type_bool, b };
             _keyToInputMap[keys_bool[b]] = mapValue;
-            LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(b) + std::string(" to key ") + std::to_string(keys_bool[b]), Util::LC_INIT, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(b) + std::string(" to key ") + std::to_string(keys_bool[b]), Util::LC_LOADER, Util::LL_INFO);
             ++k;
         }
         for (unsigned int s = 0; s < _data.getNumString(); ++s)
@@ -145,7 +146,7 @@ namespace Model
         }
 
         for (keyMapIter iter = _keyToInputMap.begin(); iter != _keyToInputMap.end(); ++iter)
-            LOGGER_WRITE(std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ") + std::to_string(iter->second._baseType) + std::string(" ") + std::to_string(iter->second._valueIdx), Util::LC_INIT, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ") + std::to_string(iter->second._baseType) + std::string(" ") + std::to_string(iter->second._valueIdx), Util::LC_LOADER, Util::LL_INFO);
     }
 
     void InputData::setInputsInFMU(fmi1_import_t* fmu)
@@ -206,7 +207,7 @@ namespace Model
             }
             else
             {
-                LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_INIT, Util::LL_INFO);
+                LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_LOADER, Util::LL_INFO);
                 return false;
             }
         }
