@@ -80,23 +80,6 @@ namespace Model
         FMUData _fmuData;
     };
 
-
-//    typedef struct
-//    {
-//        fmi1_import_t* _fmu;
-//        fmi_import_context_t* _context;  //MF Muss es fmi1_import_context_t* sein?
-//        jm_callbacks* _callbacks;
-//        fmi1_callback_functions_t _callBackFunctions;
-//    } fmul_t;
-
-
-
-    //functions
-
-    //fmuData initializeFMU(fmi1_import_t* fmu, Model::SimSettings* settings);
-
-    //fmul_t load(const char* FMUPath, const char* modelName);
-
     fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string typeString);
 
 }  // End namespace Model
