@@ -17,13 +17,11 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/**
- OMVis
- visualize.h
- Purpose: Class definitions for the visualization
-
- @author Volker Waurich
- @version 0.1
+/** @addtogroup OMVis
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_VISUALIZE_HPP_
@@ -33,7 +31,6 @@
 #include "Util/read_matlab4.h"
 
 #include <osg/Geode>
-//#include <osg/Material>
 #include <osg/Vec3f>
 
 #include <rapidxml.hpp>
@@ -98,3 +95,6 @@ osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
 rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type);
 
 #endif /* INCLUDE_VISUALIZE_HPP_ */
+/**
+ * @}
+ */
