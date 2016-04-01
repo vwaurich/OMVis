@@ -41,32 +41,34 @@ namespace Model
 		initJoySticks();
     }
 
-	void OMVisualizerFMU::initJoySticks()
-	{
-		//Initialize SDL
-		if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
-			LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
+    void OMVisualizerFMU::initJoySticks()
+    {
+        //Initialize SDL
+        if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
+            LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
 
-		//Check for joysticks
-		_numJoysticks = SDL_NumJoysticks();
-		if (SDL_NumJoysticks() < 1)
-			LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
-		else
-		{
-			LOGGER_WRITE(std::string("Start loading joysticks. Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)."), Util::LC_LOADER, Util::LL_INFO);
-			//Load joystick
-			for (size_t i = 0; i < _numJoysticks; ++i)
-			{
-				std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i<<std::endl;
+        //Check for joysticks
+        _numJoysticks = SDL_NumJoysticks();
+        if (SDL_NumJoysticks() < 1)
+            LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+        else
+        {
+            LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+            //Load joystick
+            std::cout << "START LOADING JOYSTICKS!!!!!!!!!" << _numJoysticks << std::endl;
 
-				Control::JoystickDevice* newJoyStick = new Control::JoystickDevice(i);
-				if (newJoyStick == nullptr)
-				    LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
-				else
-				    _joysticks.push_back(newJoyStick);
-			}
-		}
-	}
+            for (int i = 0; i < _numJoysticks; i++)
+            {
+                std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i << std::endl;
+
+                Control::JoystickDevice* newJoyStick = new Control::JoystickDevice(i);
+                _joysticks.push_back(newJoyStick);
+
+                if (newJoyStick == nullptr)
+                    LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+            }
+        }
+    }
 
     void OMVisualizerFMU::initData()
     {
@@ -161,6 +163,7 @@ namespace Model
             _fmu._fmuData._hcur = _simSettings->getTend() - _fmu._fmuData._tcur;
             _fmu._fmuData._tcur = _simSettings->getTend();
         }
+
         //set inputs
 		for (size_t i = 0; i < _numJoysticks; ++i)
 		{
@@ -168,6 +171,9 @@ namespace Model
 			_inputData.setInputsInFMU(_fmu._fmu);
 			//std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
 		}
+
+		//X2 MF: On my system, this line is needed in order to get the keyboard input working
+        _inputData.setInputsInFMU(_fmu._fmu);
 
         /* Solve system */
         _fmu._fmuData._fmiStatus = fmi1_import_get_derivatives(_fmu._fmu, _fmu._fmuData._statesDer, _fmu._fmuData._nStates);
@@ -190,7 +196,8 @@ namespace Model
         _fmu._fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmu._fmu, &_simSettings->_callEventUpdate);
 
 		//vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
-        //_inputData.resetInputValues();
+        //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
+        _inputData.resetInputValues();
         return _fmu._fmuData._tcur;
     }
 
