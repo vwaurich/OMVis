@@ -1,85 +1,95 @@
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(OMVis)
 
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-MESSAGE(STATUS "Using Cmake version ${CMAKE_VERSION} and ${CMAKE_MODULE_PATH}")
+#MESSAGE(STATUS "Using Cmake version ${CMAKE_VERSION} and ${CMAKE_MODULE_PATH}")
+
+# Enable Logger
+ADD_DEFINITIONS(-DUSE_LOGGER)
 
 
 # ---------------------------
 # Find All Dependencies
 # ---------------------------
-
 # Find includes in corresponding build directories
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
+# Instruct CMake to run moc automatically when needed
 SET(CMAKE_AUTOMOC ON)
 # Detect and add SFML
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules" ${CMAKE_MODULE_PATH})
 
 # Find the QtWidgets library
 FIND_PACKAGE(Qt5Widgets)
-IF(NOT(Qt5Widgets_FOUND))
-  MESSAGE(FATAL_ERROR "Qt5Widgets library not found but required.")
+IF(Qt5Widgets_FOUND)
+  MESSAGE(STATUS "Qt5Widgets library version ${Qt5Widgets_VERSION_STRING} found.")
 ELSE(Qt5Widgets_FOUND)
-  MESSAGE(STATUS "Qt5Widgets library found.")
-ENDIF(NOT(Qt5Widgets_FOUND))
+  MESSAGE(FATAL_ERROR "Qt5Widgets library not found but required.")
+ENDIF(Qt5Widgets_FOUND)
 
 # Find the Qt5OpenGL library
 FIND_PACKAGE(Qt5OpenGL)
-IF(NOT(Qt5OpenGL_FOUND))
-  MESSAGE(FATAL_ERROR "Qt5OpenGL library not found but required.")
+IF(Qt5OpenGL_FOUND)
+  MESSAGE(STATUS "Qt5OpenGL library version ${Qt5OpenGL_VERSION_STRING} found.")
 ELSE(Qt5OpenGL_FOUND)
-  MESSAGE(STATUS "Qt5OpenGL library found.")
-ENDIF(NOT(Qt5OpenGL_FOUND))
+  MESSAGE(FATAL_ERROR "Qt5OpenGL library not found but required.")
+ENDIF(Qt5OpenGL_FOUND)
 
 # Find the QtGui library
 FIND_PACKAGE(Qt5Gui)
-IF(NOT(Qt5Gui_FOUND))
-  MESSAGE(FATAL_ERROR "Qt5Gui library not found but required.")
+IF(Qt5Gui_FOUND)
+  MESSAGE(STATUS "Qt5Gui library version ${Qt5Gui_VERSION_STRING} found.")
 ELSE(Qt5Gui_FOUND)
-  MESSAGE(STATUS "Qt5Gui library found.")
-ENDIF(NOT(Qt5Gui_FOUND))
+  MESSAGE(FATAL_ERROR "Qt5Gui library not found but required.")
+ENDIF(Qt5Gui_FOUND)
 
 # Find the Qt5Core library
 FIND_PACKAGE(Qt5Core)
-IF(NOT(Qt5Core_FOUND))
-  MESSAGE(FATAL_ERROR "Qt5Core library not found but required.")
+IF(Qt5Core_FOUND)
+  MESSAGE(STATUS "Qt5Core library version ${Qt5Core_VERSION_STRING} found.")
 ELSE(Qt5Core_FOUND)
-  MESSAGE(STATUS "Qt5Core library found.")
-ENDIF(NOT(Qt5Core_FOUND))
+  MESSAGE(FATAL_ERROR "Qt5Core library not found but required.")
+ENDIF(Qt5Core_FOUND)
 
 # Find FMI library
 FIND_PACKAGE(FMILib)
-IF(NOT(FMILIB_FOUND))
-  MESSAGE(FATAL_ERROR "FMI library not found but required. Set FMILIB_HOME to the location containing lib and include folder.")
-ENDIF(NOT(FMILIB_FOUND))
+IF(FMILIB_FOUND)
+  MESSAGE(STATUS "FMI library found.")
+ELSE(FMILIB_FOUND)
+  MESSAGE(FATAL_ERROR "FMI library not found but required. Set FMILIB_HOME to the location containing lib and include folder of FMI library.")
+ENDIF(FMILIB_FOUND)
 
 # Find OpenSceneGraph
 FIND_PACKAGE(OpenSceneGraph REQUIRED osgDB osgViewer osgUtil osgGA osgQt)
-IF(NOT(OPENSCENEGRAPH_FOUND))
+IF(OPENSCENEGRAPH_FOUND)
+  MESSAGE(STATUS "OpenSceneGraph found123.")
+ELSE(OPENSCENEGRAPH_FOUND)
   MESSAGE(FATAL_ERROR "OpenSceneGraph not found but required.")
-ENDIF()
+ENDIF(OPENSCENEGRAPH_FOUND)
 
 # Find SDL2
 FIND_PACKAGE(SDL2 REQUIRED sdl2)
-IF(NOT(SDL2_FOUND))
-  MESSAGE(FATAL_ERROR "SDL2 not found but required.")
+IF(SDL2_FOUND)
+  MESSAGE(STATUS "SDL2 library found.")
 ELSEIF(SDL2_FOUND)
-  MESSAGE(STATUS "SDL2 FOUND and ${SDL2_INCLUDE_DIR} as well as ${SDL2_LIBRARIES}")
-ENDIF()
-
-# Find Doxygen
-FIND_PACKAGE(Doxygen)
+  MESSAGE(FATAL_ERROR "SDL2 not found but required. Set SDL2DIR to the location containing lib and include folder of SDL2 library.")
+ENDIF(SDL2_FOUND)
 
 # Find Boost
-FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options filesystem system)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options)
 IF(Boost_FOUND)
-    MESSAGE(STATUS "Boost enabled")
+  MESSAGE(STATUS "Boost Program Options library found.")
 ELSE(Boost_FOUND)
-  MESSAGE (FATAL_ERROR "Boost required")
+  MESSAGE (FATAL_ERROR "Boost Program Options library not found.")
 ENDIF(Boost_FOUND)
 
+# Find rapidxml
+FIND_PACKAGE(RapidXML REQUIRED)
+
+
+# ---------------------------
+# Compiler Flags
+# ---------------------------
 # Check for C++11 Support
 INCLUDE(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -88,25 +98,22 @@ IF(COMPILER_SUPPORTS_CXX11)
   ADD_COMPILE_OPTIONS(-std=c++11 -Wall)
 ELSEIF(COMPILER_SUPPORTS_CXX0X)
   ADD_COMPILE_OPTIONS(-std=c++0x -Wall)
-ELSE()
+ELSE(COMPILER_SUPPORTS_CXX11)
   MESSAGE(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-ENDIF()
+ENDIF(COMPILER_SUPPORTS_CXX11)
 
 # Check for Compiler Warnings
 CHECK_CXX_COMPILER_FLAG("-Wextra -Wunused" COMPILER_SUPPORTS_WEXTRA)
-IF(COMPILER_SUPPORTS_WEXTRA)
-  ADD_COMPILE_OPTIONS(-Wextra -Wunused)
-ENDIF()
-
-# Find rapidxml
-#MESSAGE (STATUS "RapidXML ${RAPIDXML_ROOT}")
-FIND_PACKAGE(RapidXML REQUIRED)
+IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+  IF(COMPILER_SUPPORTS_WEXTRA)
+    ADD_COMPILE_OPTIONS(-Wextra -Wunused)
+  ENDIF(COMPILER_SUPPORTS_WEXTRA)
+ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
 
 
 # ---------------------------
 # Windows
 # ---------------------------
-
 SET(LIBRARIES_EXTRA "")
 IF(WIN32) # Check if we are on Windows
   IF(MSVC) # Check if we are using the Visual Studio compiler
@@ -122,53 +129,43 @@ ELSEIF(UNIX)
 ELSE()
   MESSAGE(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
 ENDIF()
-
-MESSAGE(STATUS "Libraries extra: ${LIBRARIES_EXTRA} ...")
-
-
-# ---------------------------
-# Find Sources
-# ---------------------------
-
-FILE(GLOB_RECURSE SRCS "src/*.cpp")
-#FILE(GLOB_RECURSE HEADERS "include/*/*.hpp")
-ADD_DEFINITIONS(-DUSE_LOGGER)
+#MESSAGE(STATUS "Libraries extra: ${LIBRARIES_EXTRA} ...")
 
 
 # ---------------------------
 # Build Documentation
 # ---------------------------
-
 IF(BUILD_DOCUMENTATION)
-  IF(NOT(DOXYGEN_FOUND))
-      MESSAGE(FATAL_ERROR "Doxygen is needed to build the documentation.")
-  ENDIF()
-  MESSAGE(STATUS "Doxygen is used to build the documentation;-)")
+  # Find Doxygen
+  FIND_PACKAGE(Doxygen)
+  IF(DOXYGEN_FOUND)
+    MESSAGE(STATUS "Doxygen found. Documentation can be build.")
+  ELSE(DOXYGEN_FOUND)
+    MESSAGE(FATAL_ERROR "Doxygen is needed to build the documentation.")
+  ENDIF(DOXYGEN_FOUND)
+
   SET(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile)
   SET(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/doxyfile)
   SET(doxyfile_html_in ${CMAKE_CURRENT_SOURCE_DIR}/doc)
-
   SET(DOC_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
   CONFIGURE_FILE(${doxyfile_in} ${doxyfile} @ONLY IMMEDIATE)
-
   ADD_CUSTOM_TARGET(doc ALL
       COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Generating API documentation with Doxygen"
       VERBATIM)
-ENDIF()
+ENDIF(BUILD_DOCUMENTATION)
 
 
 # ---------------------------
 # Setup Build
 # ---------------------------
+# Find Sources
+FILE(GLOB_RECURSE SRCS "src/*.cpp")
 
-INCLUDE_DIRECTORIES("include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} 
-${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR})
-ADD_EXECUTABLE(OMVIS ${SRCS})
-TARGET_LINK_LIBRARIES(OMVIS ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} 
-${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
+INCLUDE_DIRECTORIES("include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR})
+ADD_EXECUTABLE(OMVis ${SRCS})
+TARGET_LINK_LIBRARIES(OMVis ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
 
-MESSAGE(STATUS "SDL2 LIBS: ${SDL2_LIBRARY}")
-MESSAGE(STATUS "OSG LIBS: ${OPENSCENEGRAPH_LIBRARIES}")
+#MESSAGE(STATUS "SDL2 LIBS: ${SDL2_LIBRARY}")
+#MESSAGE(STATUS "OSG LIBS: ${OPENSCENEGRAPH_LIBRARIES}")
