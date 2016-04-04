@@ -57,7 +57,7 @@ namespace Model
             //Load joystick
             std::cout << "START LOADING JOYSTICKS!!!!!!!!!" << _numJoysticks << std::endl;
 
-            for (int i = 0; i < _numJoysticks; i++)
+            for (size_t i = 0; i < _numJoysticks; ++i)
             {
                 std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i << std::endl;
 
