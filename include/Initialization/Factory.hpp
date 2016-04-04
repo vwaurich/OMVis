@@ -62,14 +62,6 @@ namespace Initialization
         Factory(const Factory& f) = delete;
         Factory& operator=(const Factory& f) = delete;
 
-        /*! \brief Creates concrete abstract visualization object.
-         *
-         * This method is used, if the model is not configured via command line argument, but will be selected via
-         * File-open dialog in the GUI.
-         *
-         * @return Visualization object of type OMVisualizationAbstract.
-         */
-        //Model::OMVisualizerAbstract* createVisualization();
         /*! \brief Creates concrete Visualization object according to the command line arguments.
          *
          * @param cLArgs The parsed command line arguments.
@@ -77,11 +69,11 @@ namespace Initialization
          */
         Model::OMVisualizerAbstract* createVisualizationFromCLargs(const Util::CommandLineArgs& cLArgs);
 
-        /*! \brief Creates new visualization object accordingt to the given command line parameters.
+        /*! \brief Creates new visualization object according to the given command line parameters.
          *
-         * According to the command line parameters, a OMVisualizerFMU or OMVisualizerMAT object ist created an a pointer to this
-         * object is returned. If the command line is empty, i.e., only OMVIS is called, than we create a object of base class
-         * OMVisualizerAbstract and return a appropriate pointer.
+         * According to the command line parameters a OMVisualizerFMU or OMVisualizerMAT object is created and a pointer to this
+         * object is returned. If the command line is empty, than we create a object of base class OMVisualizerAbstract and
+         * return a appropriate pointer.
          *
          * @param modelName
          * @param pathName
