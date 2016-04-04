@@ -30,16 +30,16 @@
 
 /*! \file OMVIS.hpp
  *
- * Header file that encapsulates all OMVIS headers in order to provide one header to the application.
+ * Header file that encapsulates all OMVis headers in order to provide one header to the application.
  */
 
 #include "View/InfoVisitor.hpp"
 #include "View/OMVisViewer.hpp"
 #include "Visualize.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
-#include "Control/OMVisManager.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Model/SimSettings.hpp"
+#include "Control/OMVisManager.hpp"
 
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
