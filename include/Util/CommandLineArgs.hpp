@@ -31,7 +31,6 @@
 #include "Util/Util.hpp"
 
 #include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/classification.hpp>
 
