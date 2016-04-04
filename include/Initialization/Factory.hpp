@@ -52,12 +52,6 @@ namespace Initialization
     {
      public:
         Factory() = default;
-
-        /*! \brief Create Factory object from  parsed command line arguments.
-         *
-         * @param cLArgs Command line arguments.
-         */
-        //Factory(Util::CommandLineArgs& cLArgs);
         ~Factory() = default;
         Factory(const Factory& f) = delete;
         Factory& operator=(const Factory& f) = delete;
