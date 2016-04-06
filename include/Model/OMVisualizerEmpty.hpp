@@ -65,8 +65,6 @@ namespace Model
         /// \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
         int initData();
 
-//        void unload() { };
-
 		/*! \brief This method updates the actual data for the visuaslization bodies by using variables from the fmu.
 		*
 		*/
