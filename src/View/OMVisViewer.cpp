@@ -55,8 +55,7 @@ OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::Viewe
           osgViewer::CompositeViewer(),
           _sceneView(new osgViewer::View()),
           _timeDisplay(new QLabel()),
-          _guiController(new Control::GUIController()),
-          _modelLoaded(false)
+          _guiController(new Control::GUIController())
 {
     // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
     setlocale(LC_ALL, "en_US.UTF-8");
@@ -344,7 +343,6 @@ void OMVisViewer::loadModel()
     // Let create a OMVisualizer object by the GUIController.
     _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
 
-    _modelLoaded = true;
     LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
 
     // Set up the osg viewer widget
@@ -373,7 +371,8 @@ void OMVisViewer::loadModelCessna()
     if (scene == nullptr)
         LOGGER_WRITE(std::string("Uiuiui, das Model cessna.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cessna.osg im aktuellen Verzeichnis? "), Util::LC_LOADER, Util::LL_ERROR);
     _sceneView->setSceneData(scene);
-    _modelLoaded = true;
+
+    _guiController->setModelLoaded(true);
     LOGGER_WRITE(std::string("Dort, Cessna geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
 
@@ -385,7 +384,8 @@ void OMVisViewer::loadModelCow()
     if (scene == nullptr)
         LOGGER_WRITE(std::string("Uiuiui, das Model cow.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cow.osg im aktuellen Verzeichnis?"), Util::LC_LOADER, Util::LL_ERROR);
     _sceneView->setSceneData(scene);
-    _modelLoaded = true;
+
+    _guiController->setModelLoaded(true);
     LOGGER_WRITE(std::string("Dort, Kuh geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
 
@@ -393,7 +393,8 @@ void OMVisViewer::unloadModel()
 {
     LOGGER_WRITE(std::string("Hier, entlade das aktuelle Model!"), Util::LC_LOADER, Util::LL_INFO);
     _sceneView->setSceneData(new osg::Node());
-    _modelLoaded = false;
+
+    _guiController->unloadModel();
     LOGGER_WRITE(std::string("Dort, kein Model geladen!"), Util::LC_LOADER, Util::LL_INFO);
 }
 
@@ -413,7 +414,7 @@ void OMVisViewer::exportVideo()
 void OMVisViewer::openDialogInputMapper()
 {
     // Proceed, if a model is already loaded. Otherwise give the user a hint to load a model first.
-    if (!_modelLoaded)
+    if (!_guiController->modelIsLoaded())
     {
         QString information("Please load a model into OMVis first.");
         QMessageBox msgBox(QMessageBox::Information, tr("No Model Loaded"), information, QMessageBox::NoButton);
@@ -471,11 +472,6 @@ void OMVisViewer::openDialogInputMapper()
                 QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool[inputIdx], "bool");
                 layout->addRow(inputRow);
             }
-            //X3 for (auto& b : inputData->_data._namesBool)
-            //X3 {
-            //X3    QHBoxLayout* inputRow = createInputMapperRow(inputIdx, b, "bool");
-            //X3    valueLayout->addLayout(inputRow);
-            //X3 }
             qgroupBox->setLayout(layout);
             mainLayout->addWidget(qgroupBox);
         }

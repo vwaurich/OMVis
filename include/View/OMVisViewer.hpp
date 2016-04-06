@@ -288,10 +288,6 @@ Q_OBJECT
 
     /// The GUIController object will take the users input from GUI and handle it.
     Control::GUIController* _guiController;
-
-    /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
-     * It can be used to determine, what user actions are allowed in the GUI. */
-    bool _modelLoaded;
 };
 
 #endif /* INCLUDE_OMVISVIEWER_HPP_ */
