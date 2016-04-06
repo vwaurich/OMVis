@@ -66,8 +66,7 @@ namespace Initialization
         /*! \brief Creates new visualization object according to the given command line parameters.
          *
          * According to the command line parameters a OMVisualizerFMU or OMVisualizerMAT object is created and a pointer to this
-         * object is returned. If the command line is empty, than we create a object of base class OMVisualizerAbstract and
-         * return a appropriate pointer.
+         * object is returned. If the command line is empty, than nullptr is returned.
          *
          * @param modelName
          * @param pathName

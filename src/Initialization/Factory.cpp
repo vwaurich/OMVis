@@ -40,8 +40,6 @@ namespace Initialization
         // Command line is empty. Model has to be loaded via GUI. Return nullptr.
         if (modelName.empty() && path.empty())
         {
-            //X2 result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerEmpty("",""));
-            //X2 result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerAbstract("",""));
             LOGGER_WRITE("Initialize OMVisalizerAbstract.", Util::LC_LOADER, Util::LL_DEBUG);
         }
         else
