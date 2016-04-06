@@ -60,17 +60,27 @@ namespace Model
 
 
     /// MF: \todo Complete this class and remove the structs and free functions.
+    /**
+     * This class represents a FMU that can be loaded into OMVis for visualization.
+     *
+     * \Remark: Currently we do not provide interfaces to access any function described in the FMI 1.0 standard. Because we do not to.
+     */
     class FMU
     {
      public:
         FMU();
-        ~FMU() = default;
-
+        ~FMU();
         FMU(const FMU&) = delete;
         FMU& operator=(const FMU&) = delete;
 
         void initialize(/*fmi1_import_t* fmu, */ Model::SimSettings* settings);
         void load(const char* FMUPath, const char* modelName);
+
+        /*! \brief Clear FMU structure.
+         *
+         * Associated memory is freed and attributes are set to default values.
+         */
+        void clear();
 
      public:
         fmi1_import_t* _fmu;
@@ -78,6 +88,9 @@ namespace Model
         jm_callbacks* _callbacks;
         fmi1_callback_functions_t _callBackFunctions;
         FMUData _fmuData;
+
+     private:
+        bool _isUnzipped;
     };
 
     fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string typeString);

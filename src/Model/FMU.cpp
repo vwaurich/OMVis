@@ -38,14 +38,36 @@ namespace Model
               _context(nullptr),
               _callbacks(nullptr),
               _callBackFunctions(),
-              _fmuData()
+              _fmuData(),
+              _isUnzipped(false)
     {
+    }
+
+    FMU::~FMU()
+    {
+        // Free memory associated with the fmu and its context.
+        fmi1_import_free(_fmu);
+        fmi_import_free_context(_context);
+        delete _callbacks;
+    }
+
+    void FMU::clear()
+    {
+        // Free memory associated with the fmu and its context.
+        fmi1_import_free(_fmu);
+        fmi_import_free_context(_context);
+        _fmu = nullptr;
+        _context = nullptr;
+
+        delete _callbacks;
+        _callbacks = nullptr;
+        _callBackFunctions = fmi1_callback_functions_t();
+        _fmuData = FMUData();
+        _isUnzipped = false;
     }
 
     void FMU::load(const char* FMUPath, const char* modelName)
     {
-        static int isunzipped(0);
-
         // First we need to define the callbacks and set up the context
         /// \todo MF: From my point of view, this can be done in the constructor.
         _callbacks = (jm_callbacks*) malloc(sizeof(jm_callbacks));
@@ -68,7 +90,7 @@ namespace Model
         _context = fmi_import_allocate_context(_callbacks);
 
         //unzip the fmu and pars it
-        if (isunzipped == 0)
+        if (!_isUnzipped)
         { /* Unzip the FMU only once. Overwriting the dll/so file may cause a segfault. */
             fmi_version_enu_t version = fmi_import_get_fmi_version(_context, modelName, FMUPath);
             if (version != fmi_version_1_enu)
@@ -76,7 +98,7 @@ namespace Model
                 LOGGER_WRITE(std::string("Only version 1.0 is supported so far. Exiting."), Util::LC_LOADER, Util::LL_ERROR);
                 doExit();
             }
-            isunzipped = 1;
+            _isUnzipped = true;
         }
 
         _fmu = fmi1_import_parse_xml(_context, FMUPath);
