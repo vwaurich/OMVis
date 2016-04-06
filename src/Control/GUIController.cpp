@@ -168,12 +168,12 @@ namespace Control
 
     bool GUIController::modelIsMATFile()
     {
-        return (_omVisualizer->getDataTypeID() == 0) ? true : false;
+        return (_omVisualizer->getType() == "mat") ? true : false;
     }
 
     bool GUIController::modelIsFMU()
     {
-        return (_omVisualizer->getDataTypeID() == 1) ? true : false;
+        return (_omVisualizer->getType() == "fmu") ? true : false;
     }
 
     double GUIController::getSimulationStartTime() const

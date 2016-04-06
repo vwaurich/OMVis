@@ -49,9 +49,9 @@ namespace Model
 
     }
 
-    int OMVisualizerEmpty::getDataTypeID()
+    std::string OMVisualizerEmpty::getType() const
     {
-        return -1;
+        return "empty";
     }
 
 }  // End namespace Model

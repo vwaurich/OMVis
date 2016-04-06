@@ -126,9 +126,9 @@ namespace Model
          */
         virtual void updateScene(const double time) { };
 
-		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
+		/*! \brief Returns "abstract"
 		*/
-		virtual int getDataTypeID() = 0;
+		virtual std::string getType() const;
 
         /*! \brief Starts the visualization.
          */

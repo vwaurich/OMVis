@@ -296,9 +296,9 @@ namespace Model
         updateVisAttributes(_omvManager->_visTime);
     }
 
-    int OMVisualizerFMU::getDataTypeID()
+    std::string OMVisualizerFMU::getType() const
     {
-        return 1;
+        return "fmu";
     }
 
     void OMVisualizerFMU::unload()

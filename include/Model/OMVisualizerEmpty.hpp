@@ -78,9 +78,9 @@ namespace Model
 		*/
 		void updateScene(const double time);
 
-		/*! \brief Returns a 0 if we use mat-failes, 1 if we use fmus.
+		/*! \brief Returns "empty".
 		*/
-		int getDataTypeID();
+		std::string getType() const;
 
     };
 

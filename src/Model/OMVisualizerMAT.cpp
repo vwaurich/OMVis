@@ -132,9 +132,9 @@ namespace Model
         updateVisAttributes(time);
     }
 
-    int OMVisualizerMAT::getDataTypeID()
+    std::string OMVisualizerMAT::getType() const
     {
-        return 0;
+        return "mat";
     }
 
 }  // End namepsace Model

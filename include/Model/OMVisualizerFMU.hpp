@@ -105,9 +105,9 @@ namespace Model
 		 */
 		void updateScene(const double time = 0.0);
 
-		/*! \brief Returns a 0 if we use a MAT file, 1 if we use FMU for visualization.
+		/*! \brief Returns "fmu".
 		*/
-		int getDataTypeID();
+		std::string getType() const;
 
 		/*! \brief initializes the attached joysticks
 		 */

@@ -86,4 +86,9 @@ namespace Model
         }
     }
 
+    std::string OMVisualizerAbstract::getType() const
+    {
+        return "abstract";
+    }
+
 }  // End namespace Model
