@@ -37,7 +37,6 @@ namespace Control
     {
     }
 
-    //X13
     void GUIController::unloadModel()
     {
         _omVisualizer->unload();
