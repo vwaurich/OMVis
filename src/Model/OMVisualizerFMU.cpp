@@ -90,7 +90,7 @@ namespace Model
         std::string fmuFileName = dir + model + ".fmu";
 
         //load and initialize fmu
-        _fmu.load(dir.c_str(), fmuFileName.c_str());
+        _fmu.load(dir, fmuFileName);
         LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
 
         _fmu.initialize(_simSettings);

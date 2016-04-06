@@ -74,7 +74,7 @@ namespace Model
         FMU& operator=(const FMU&) = delete;
 
         void initialize(/*fmi1_import_t* fmu, */ Model::SimSettings* settings);
-        void load(const char* FMUPath, const char* modelName);
+        void load(const std::string FMUPath, const std::string modelName);
 
         /*! \brief Clear FMU structure.
          *

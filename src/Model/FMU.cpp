@@ -66,7 +66,7 @@ namespace Model
         _isUnzipped = false;
     }
 
-    void FMU::load(const char* FMUPath, const char* modelName)
+    void FMU::load(const std::string FMUPath, const std::string modelName)
     {
         // First we need to define the callbacks and set up the context
         /// \todo MF: From my point of view, this can be done in the constructor.
@@ -92,7 +92,7 @@ namespace Model
         //unzip the fmu and pars it
         if (!_isUnzipped)
         { /* Unzip the FMU only once. Overwriting the dll/so file may cause a segfault. */
-            fmi_version_enu_t version = fmi_import_get_fmi_version(_context, modelName, FMUPath);
+            fmi_version_enu_t version = fmi_import_get_fmi_version(_context, modelName.c_str(), FMUPath.c_str());
             if (version != fmi_version_1_enu)
             {
                 LOGGER_WRITE(std::string("Only version 1.0 is supported so far. Exiting."), Util::LC_LOADER, Util::LL_ERROR);
@@ -101,7 +101,7 @@ namespace Model
             _isUnzipped = true;
         }
 
-        _fmu = fmi1_import_parse_xml(_context, FMUPath);
+        _fmu = fmi1_import_parse_xml(_context, FMUPath.c_str());
         if (!_fmu)
         {
             LOGGER_WRITE(std::string("Error parsing XML. Exiting."), Util::LC_LOADER, Util::LL_ERROR);
