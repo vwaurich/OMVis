@@ -47,12 +47,15 @@ namespace Model
          */
     }
 
-    void OMVisualizerMAT::initData()
+    int OMVisualizerMAT::initData()
     {
-        OMVisualizerAbstract::initData();
+        int isOk(0);
+        isOk = OMVisualizerAbstract::initData();
         readMat(_baseData->_modelName, _baseData->_dirName);
         _omvManager->_startTime = omc_matlab4_startTime(&_matReader);
         _omvManager->_endTime = omc_matlab4_stopTime(&_matReader);
+
+        return isOk;
     }
 
     double* omc_get_varValue1(ModelicaMatReader* reader, const char* varName, double time)
@@ -69,40 +72,50 @@ namespace Model
         return res;
     }
 
-    void OMVisualizerMAT::updateVisAttributes(const double time)
+    int OMVisualizerMAT::updateVisAttributes(const double time)
     {
+        int isOk(0);
         // Update all shapes
         rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
         unsigned int shapeIdx = 0;
         rAndT rT;
         osg::ref_ptr<osg::Node> child = nullptr;
-        for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+        try
         {
-            // get the values for the scene graph objects
-            _baseData->_visAttr._type = getShapeType(shapeNode);
-            _baseData->_visAttr._length = getShapeAttrMAT((const char*) "length", shapeNode, time, _matReader);
-            _baseData->_visAttr._width = getShapeAttrMAT((const char*) "width", shapeNode, time, _matReader);
-            _baseData->_visAttr._height = getShapeAttrMAT((const char*) "height", shapeNode, time, _matReader);
-            _baseData->_visAttr._r = getShapeVectorMAT((char*) "r", shapeNode, time, _matReader);
-            _baseData->_visAttr._rShape = getShapeVectorMAT((char*) "r_shape", shapeNode, time, _matReader);
-            _baseData->_visAttr._lDir = getShapeVectorMAT((char*) "lengthDir", shapeNode, time, _matReader);
-            _baseData->_visAttr._wDir = getShapeVectorMAT((char*) "widthDir", shapeNode, time, _matReader);
-            _baseData->_visAttr._color = getShapeVectorMAT((char*) "color", shapeNode, time, _matReader);
-            _baseData->_visAttr._T = getShapeMatrixMAT((char*) "T", shapeNode, time, _matReader);
-            rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
-            _baseData->_visAttr._r = rT._r;
-            _baseData->_visAttr._T = rT._T;
-            _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
+            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+            {
+                // get the values for the scene graph objects
+                _baseData->_visAttr._type = getShapeType(shapeNode);
+                _baseData->_visAttr._length = getShapeAttrMAT((const char*) "length", shapeNode, time, _matReader);
+                _baseData->_visAttr._width = getShapeAttrMAT((const char*) "width", shapeNode, time, _matReader);
+                _baseData->_visAttr._height = getShapeAttrMAT((const char*) "height", shapeNode, time, _matReader);
+                _baseData->_visAttr._r = getShapeVectorMAT((char*) "r", shapeNode, time, _matReader);
+                _baseData->_visAttr._rShape = getShapeVectorMAT((char*) "r_shape", shapeNode, time, _matReader);
+                _baseData->_visAttr._lDir = getShapeVectorMAT((char*) "lengthDir", shapeNode, time, _matReader);
+                _baseData->_visAttr._wDir = getShapeVectorMAT((char*) "widthDir", shapeNode, time, _matReader);
+                _baseData->_visAttr._color = getShapeVectorMAT((char*) "color", shapeNode, time, _matReader);
+                _baseData->_visAttr._T = getShapeMatrixMAT((char*) "T", shapeNode, time, _matReader);
+                rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
+                _baseData->_visAttr._r = rT._r;
+                _baseData->_visAttr._T = rT._T;
+                _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
 
-            //update the shapes
-            _nodeUpdater->_visAttr = _baseData->_visAttr;
-            //_baseData->_visAttr.dumpVisAttributes();
+                //update the shapes
+                _nodeUpdater->_visAttr = _baseData->_visAttr;
+                //_baseData->_visAttr.dumpVisAttributes();
 
-            //get the scene graph nodes and stuff
-            child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
-            child->accept(*_nodeUpdater);
-            ++shapeIdx;
+                //get the scene graph nodes and stuff
+                child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
+                child->accept(*_nodeUpdater);
+                ++shapeIdx;
+            }
         }
+        catch (std::exception &e)
+        {
+            LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
+            isOk = 1;
+        }
+        return isOk;
     }
 
     void OMVisualizerMAT::initializeVisAttributes(const double time)

@@ -31,10 +31,11 @@ namespace Model
         _viewerStuff->getScene().setPath(dir);
     }
 
-    void OMVisualizerAbstract::setUpScene()
+    int OMVisualizerAbstract::setUpScene()
     {
         //build scene graph
-        _viewerStuff->getScene().setUpScene(_baseData->_xmlDoc.first_node());
+        int isOk = _viewerStuff->getScene().setUpScene(_baseData->_xmlDoc.first_node());
+        return isOk;
     }
 
     void OMVisualizerAbstract::startVisualization()

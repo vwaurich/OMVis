@@ -49,8 +49,11 @@ namespace Model
         OMVisualBase(const OMVisualBase& omvb) = delete;
         OMVisualBase& operator=(const OMVisualBase& omvb) = delete;
 
-        /// Reads XML file and sets up osg::viewer.
-        void initXMLDoc();
+        /*! \brief Reads XML file and sets up osg::viewer.
+         *
+         * \return Error value.
+         */
+        int initXMLDoc();
 
      public:
         /// \todo Can this attr. be private?

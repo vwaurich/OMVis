@@ -70,16 +70,21 @@ namespace Model
         }
     }
 
-    void OMVisualizerFMU::initData()
+    int OMVisualizerFMU::initData()
     {
-        OMVisualizerAbstract::initData();
-        loadFMU(_baseData->_modelName, _baseData->_dirName);
+        int isOk(0);
+        isOk = OMVisualizerAbstract::initData();
+        isOk += loadFMU(_baseData->_modelName, _baseData->_dirName);
         _simSettings->setTend(_omvManager->_endTime);
         _simSettings->setHdef(0.001);
+
+        return isOk;
     }
 
-    void OMVisualizerFMU::loadFMU(const std::string model, const std::string dir)
+    /// \todo: Set the error varibale isOk.
+    int OMVisualizerFMU::loadFMU(const std::string model, const std::string dir)
     {
+        int isOk(0);
         //setup fmu-simulation stuff
         //_simSettings = new SimSettings;
         std::string fmuFileName = dir + model + ".fmu";
@@ -101,6 +106,7 @@ namespace Model
         //int keyInt = getchar();
         //std::cout<<"the key is "<<keyInt<<" !"<<std::endl;
         //}
+        return isOk;
     }
 
     void OMVisualizerFMU::simulate(Control::OMVisManager& omvm)
@@ -217,44 +223,55 @@ namespace Model
             _inputData._data._valuesString[s] = "";
     }
 
-    void OMVisualizerFMU::updateVisAttributes(const double time)
+    int OMVisualizerFMU::updateVisAttributes(const double time)
     {
+        int isOk(0);
+
         // Update all shapes
         rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
         unsigned int shapeIdx = 0;
         rAndT rT;
         osg::ref_ptr<osg::Node> child = nullptr;
-        for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
-        {
-            // get the values for the scene graph objects
-            _baseData->_visAttr._type = getShapeType(shapeNode);
+        try {
+            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+            {
+                // get the values for the scene graph objects
+                _baseData->_visAttr._type = getShapeType(shapeNode);
 
-            //_baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._length = getShapeAttrFMU(std::string("length").c_str(), shapeNode, time, _fmu._fmu);
+                //_baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._length = getShapeAttrFMU(std::string("length").c_str(), shapeNode, time, _fmu._fmu);
 
-            _baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmu._fmu);
-            _baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmu._fmu);
-            rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
-            _baseData->_visAttr._r = rT._r;
-            _baseData->_visAttr._T = rT._T;
+                _baseData->_visAttr._width = getShapeAttrFMU((const char*) "width", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._height = getShapeAttrFMU((const char*) "height", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._r = getShapeVectorFMU((char*) "r", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._rShape = getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._lDir = getShapeVectorFMU((char*) "lengthDir", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._wDir = getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._color = getShapeVectorFMU((char*) "color", shapeNode, time, _fmu._fmu);
+                _baseData->_visAttr._T = getShapeMatrixFMU((char*) "T", shapeNode, time, _fmu._fmu);
+                rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
+                _baseData->_visAttr._r = rT._r;
+                _baseData->_visAttr._T = rT._T;
 
-            _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
+                _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
 
-            //update the shapes
-            _nodeUpdater->_visAttr = _baseData->_visAttr;
-			//_nodeUpdater->_visAttr.dumpVisAttributes();
+                //update the shapes
+                _nodeUpdater->_visAttr = _baseData->_visAttr;
+                //_nodeUpdater->_visAttr.dumpVisAttributes();
 
-            //get the scene graph nodes and stuff
-            child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
-            child->accept(*_nodeUpdater);
-            ++shapeIdx;
+                //get the scene graph nodes and stuff
+                child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
+                child->accept(*_nodeUpdater);
+                ++shapeIdx;
+            }
         }
+        catch(std::exception &e)
+        {
+            LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."),
+                         Util::LC_SOLVER, Util::LL_WARNING);
+            isOk = 1;
+        }
+        return isOk;
     }
 
     void OMVisualizerFMU::initializeVisAttributes(const double time)
@@ -282,6 +299,11 @@ namespace Model
     int OMVisualizerFMU::getDataTypeID()
     {
         return 1;
+    }
+
+    void OMVisualizerFMU::unload()
+    {
+        _fmu.clear();
     }
 
 }  // End namespace Model

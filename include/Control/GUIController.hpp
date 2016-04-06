@@ -56,12 +56,18 @@ namespace Control
         GUIController(const GUIController& gc) = delete;
         GUIController& operator=(const GUIController& gc) = delete;
 
-        /*! \brief This method gets the name and path of a model which should be loaded into OMVIS.
+        //X13
+        void unloadModel();
+
+        /*! \brief This method loads a model (FMU or MAT file) for visualization.
          *
          * This method parses the given string for model name, path to the model file and whether it is a FMU or a
          * MAT file and asks the factory for creation of an appropriate OMVisualizer object. Furthermore, the
          * OMVisualizer object is initialized.
          * The method checks, if the corresponding XML file is accessible.
+         * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
+         * compatibility issue, than the old model is kept. If the already load and the new model are the very same,
+         * no information/message is "thrown". We just load it and destroy the current settings.
          *
          * \param modelName Path and name of the model to load.
          * \param timeSliderStart Minimum value of the time slider object.
@@ -95,6 +101,9 @@ namespace Control
         void setVisTime(const int val);
         bool modelIsMATFile();
         bool modelIsFMU();
+        bool modelIsLoaded() const;
+        void setModelLoaded(bool b);
+
         void setBackgroundColor(const osg::Vec4 colVec);
 
         /// Returns simulation start time of the loaded model.
@@ -114,6 +123,11 @@ namespace Control
 
      private:
         Model::OMVisualizerAbstract* _omVisualizer;
+
+        //X13
+        /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
+         * It can be used to determine, what user actions are allowed in the GUI. */
+        bool _modelLoaded;
     };
 
 }  // End namespace Control

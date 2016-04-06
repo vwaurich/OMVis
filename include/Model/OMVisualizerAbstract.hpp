@@ -78,13 +78,26 @@ namespace Model
          * \todo Quick and dirty hack by passing OMVmanager, \see OMVisualizerFMU.
          *
          */
-        virtual void initData()
+        virtual int initData()
         {
+            int isOk(0);
+            //X7 In case of reloading, we need to make sure, that we have empty members
+            _baseData->_xmlDoc.clear();
+            //_baseData->_visAttributes
+
             // init xml file and get visAttributes
-            _baseData->initXMLDoc();
+            isOk = _baseData->initXMLDoc();
+            return isOk;
         }
 
-        void setUpScene();
+        /*! \brief Set up the scene.
+         *
+         * @return Error value.
+         */
+        int setUpScene();
+
+        /*! \brief Free memory that was allocated with the loaded model. */
+        virtual void unload() { };
 
         /*! \brief In case of FMU visualization, this methods performs a simulation step.
          *
@@ -97,8 +110,9 @@ namespace Model
          *
          * \remark All classes that derive from OMVisualizerAbstract
          * @param omvm
+         * \return Error value.
          */
-        virtual void updateVisAttributes(const double time) { };
+        virtual int updateVisAttributes(const double time) { };
 
         /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
          *

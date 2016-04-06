@@ -51,15 +51,23 @@ namespace Model
 
         void readMat(const std::string modelString, const std::string dirString);
 
-        virtual void initData();
+        /*! \brief
+         *
+         * @return Error value.
+         */
+        virtual int initData();
+
+        /// \todo: Implement. We need/want to free the memory which is allocated while loading a Mat file.
+        virtual void unload() { };
 
         virtual void simulate(Control::OMVisManager& omvm) { }
 
 		/*! \brief Implementation for OMVisualizerAbstract::updateVisAttributes to update all visualization attributes based on a mat file
 		*
 		* @param time The point of time
+		* \return Error value.
 		*/
-		void updateVisAttributes(const double time);
+		int updateVisAttributes(const double time);
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		*/

@@ -63,12 +63,14 @@ namespace Model
 		OMVisualizerEmpty& operator=(const OMVisualizerEmpty& omvf) = delete;
 
         /// \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
-        void initData();
+        int initData();
+
+//        void unload() { };
 
 		/*! \brief This method updates the actual data for the visuaslization bodies by using variables from the fmu.
 		*
 		*/
-		void updateVisAttributes(const double time);
+		int updateVisAttributes(const double time);
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		*/

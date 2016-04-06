@@ -26,13 +26,23 @@
 #include "Util/Util.hpp"
 
 #include <string>
+#include <exception>
 #include <sys/stat.h>
 
 namespace Control
 {
     GUIController::GUIController()
-            : _omVisualizer(nullptr)
+            : _omVisualizer(nullptr),
+              _modelLoaded(false)
     {
+    }
+
+    //X13
+    void GUIController::unloadModel()
+    {
+        _omVisualizer->unload();
+        _modelLoaded = false;
+        /// \todo: What else has to be done in order to clean up data structures and free memory?
     }
 
     void GUIController::loadModel(const std::string& modelNameIn, const int timeSliderStart, const int timeSliderEnd)
@@ -67,15 +77,42 @@ namespace Control
         LOGGER_WRITE(std::string("Model file: ") + modelName, Util::LC_CTR, Util::LL_DEBUG);
         LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
-        // Ask the factory to create an appropriate OMVisualizer object.
-        Initialization::Factory* factory = new Initialization::Factory();
-        _omVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
-        _omVisualizer->_omvManager->setSliderRange(timeSliderStart, timeSliderEnd);
+        // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
+        // already unpacked shared object, which leads to a seg fault. Thats why we test for this case.
+        // if (_modelLoaded && path.compare(_omVisualizer->_baseData->_dirName) &&  modelName.compare(_omVisualizer->_baseData->_modelName))
+        if (_modelLoaded && path == _omVisualizer->_baseData->_dirName && modelName == _omVisualizer->_baseData->_modelName)
+        {
+            LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. The model will be initialized again."),
+                         Util::LC_LOADER, Util::LL_WARNING);
+            initVisualization();
+        }
+        else
+        {
+            // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model cannot be loaded.
+            int isOk(0);
 
-        // Initialize the OMVisualizer object.
-        _omVisualizer->initData();
-        _omVisualizer->setUpScene();
-        _omVisualizer->updateVisAttributes(0.0);  // set scene to initial position
+            // Ask the factory to create an appropriate OMVisualizer object.
+            Initialization::Factory* factory = new Initialization::Factory();
+            Model::OMVisualizerAbstract* tmpOmVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
+            tmpOmVisualizer->_omvManager->setSliderRange(timeSliderStart, timeSliderEnd);
+
+            // Initialize the OMVisualizer object.
+            isOk += tmpOmVisualizer->initData();
+            isOk += tmpOmVisualizer->setUpScene();
+            isOk += tmpOmVisualizer->updateVisAttributes(0.0);  // set scene to initial position
+
+            // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
+            if (0 == isOk)
+            {
+                _omVisualizer = tmpOmVisualizer;
+                _modelLoaded = true;
+            }
+            else
+            {
+                LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
+                _modelLoaded = false;
+            }
+        }
     }
 
     bool GUIController::checkForXMLFile(const std::string& path, const std::string& modelName) const
@@ -145,21 +182,30 @@ namespace Control
         return _omVisualizer->_omvManager->_startTime;
     }
 
-	double GUIController::getVisStepsize()
-	{
-		return _omVisualizer->_omvManager->_hVisual * 1000.0;
-	}
+    double GUIController::getVisStepsize()
+    {
+        return _omVisualizer->_omvManager->_hVisual * 1000.0;
+    }
 
-	Model::InputData* GUIController::getInputData()
-	{
-		if (modelIsFMU())
-		{
-			Model::OMVisualizerFMU* omVisFMU = (Model::OMVisualizerFMU*)_omVisualizer;
-			return &omVisFMU->_inputData;
-		}
-		else
-			return nullptr;
-	}
+    Model::InputData* GUIController::getInputData()
+    {
+        if (modelIsFMU())
+        {
+            Model::OMVisualizerFMU* omVisFMU = (Model::OMVisualizerFMU*) _omVisualizer;
+            return &omVisFMU->_inputData;
+        }
+        else
+            return nullptr;
+    }
 
+    bool GUIController::modelIsLoaded() const
+    {
+        return _modelLoaded;
+    }
+
+    void GUIController::setModelLoaded(bool b)
+    {
+        _modelLoaded = b;
+    }
 
 }  // End namespace Control

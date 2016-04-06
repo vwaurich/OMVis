@@ -62,15 +62,25 @@ namespace Model
         OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
         OMVisualizerFMU& operator=(const OMVisualizerFMU& omvf) = delete;
 
-        /// Loads and initializes FMU file.
-        void loadFMU(const std::string model, const std::string dir);
+        /*! \brief Loads and initializes FMU file.
+         *
+         * @param model Name of the FMU.
+         * @param dir Path to the FMU file.
+         * @return Error value.
+         */
+        int loadFMU(const std::string model, const std::string dir);
+
+        /*! \brief Unloads the FMU and frees allocated memory. */
+        virtual void unload();
 
         virtual void simulate(Control::OMVisManager& omvm);
 
         double simulateStep(const double time);
 
-        /// \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
-        void initData();
+        /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
+         * @return Error value.
+         */
+        int initData();
 
         /*! \brief This methods resets the input values of a FMU to default ("zero") values.
          *
@@ -79,8 +89,9 @@ namespace Model
 
 		/*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
 		 *
+		 * \return Error value.
 		 */
-		void updateVisAttributes(const double time);
+		int updateVisAttributes(const double time);
 
 		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
 		 *

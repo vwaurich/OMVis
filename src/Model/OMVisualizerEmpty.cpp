@@ -30,12 +30,12 @@ namespace Model
     {
     }
 	
-    void OMVisualizerEmpty::initData()
+    int OMVisualizerEmpty::initData()
     {
         OMVisualizerAbstract::initData();
     }
 
-    void OMVisualizerEmpty::updateVisAttributes(const double time)
+    int OMVisualizerEmpty::updateVisAttributes(const double time)
     {
     }
 

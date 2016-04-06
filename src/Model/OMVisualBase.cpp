@@ -35,29 +35,35 @@ namespace Model
     {
     }
 
-    void OMVisualBase::initXMLDoc()
+    int OMVisualBase::initXMLDoc()
     {
+        int isOk(0);
         // check if xml file is available
         if (!exists(_xmlFileName))
+        {
             LOGGER_WRITE(std::string("There is no xml file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
-        //std::cout << "There is no xml file named: " << _xmlFileName << std::endl;
-
-        // read xml
-        osgDB::ifstream t;
-        // unused const char * titel = _xmlFileName.c_str();
-        t.open(_xmlFileName.c_str(), std::ios::binary);      // open input file
-        t.seekg(0, std::ios::end);    // go to the end
-        int length = t.tellg();           // report location (this is the length)
-        t.seekg(0, std::ios::beg);    // go back to the beginning
-        char* buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
-        t.read(buffer, length);       // read the whole file into the buffer
-        t.close();
-        std::string buff = std::string(buffer);  // strings are good
-        std::string buff2 = buff.substr(0, buff.find("</visualization>"));  // remove the crappy ending
-        buff2.append("</visualization>");
-        char* buff3 = strdup(buff2.c_str());  // cast to char*
-        _xmlDoc.parse<0>(buff3);
-        LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.", Util::LC_LOADER, Util::LL_DEBUG);
+            isOk = 1;
+        }
+        else
+        {
+            // read xml
+            osgDB::ifstream t;
+            // unused const char * titel = _xmlFileName.c_str();
+            t.open(_xmlFileName.c_str(), std::ios::binary);      // open input file
+            t.seekg(0, std::ios::end);    // go to the end
+            int length = t.tellg();       // report location (this is the length)
+            t.seekg(0, std::ios::beg);    // go back to the beginning
+            char* buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
+            t.read(buffer, length);       // read the whole file into the buffer
+            t.close();
+            std::string buff = std::string(buffer);  // strings are good
+            std::string buff2 = buff.substr(0, buff.find("</visualization>"));  // remove the crappy ending
+            buff2.append("</visualization>");
+            char* buff3 = strdup(buff2.c_str());  // cast to char*
+            _xmlDoc.parse<0>(buff3);
+            LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.", Util::LC_LOADER, Util::LL_DEBUG);
+        }
+        return isOk;
     }
 
 }  // End namespace Model
