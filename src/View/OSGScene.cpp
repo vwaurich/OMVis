@@ -35,8 +35,9 @@ namespace View
     {
     }
 
-    void OSGScene::setUpScene(rapidxml::xml_node<>* xmlRoot)
+    int OSGScene::setUpScene(rapidxml::xml_node<>* xmlRoot)
     {
+        int isOk(0);
         for (rapidxml::xml_node<>* shapeNode = xmlRoot->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
         {
             osg::ref_ptr<osg::Geode> geode;
@@ -61,8 +62,11 @@ namespace View
 
 				// \todo What do we do at this point?
                 if (!exists(filename))
+                {
                     LOGGER_WRITE(std::string("Could not find the file ") + filename +std::string(".") ,Util::LC_LOADER, Util::LL_WARNING);
-
+                    isOk = 1;
+                    return isOk;
+                }
 
                 osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
                 osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
@@ -86,6 +90,7 @@ namespace View
 
             _rootNode->addChild(transf.get());
         }
+        return isOk;
     }
 
     osg::ref_ptr<osg::Group> OSGScene::getRootNode()

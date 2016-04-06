@@ -49,8 +49,9 @@ namespace View
         /*! \brief Sets up all nodes initially.
          *
          * @param xmlRoot
+         * \return Error value.
          */
-        void setUpScene(rapidxml::xml_node<>* xmlRoot);
+        int setUpScene(rapidxml::xml_node<>* xmlRoot);
 
         /*! \brief Return shared pointer to rootNode. */
         osg::ref_ptr<osg::Group> getRootNode();
