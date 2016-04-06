@@ -93,18 +93,21 @@ namespace Control
             // Ask the factory to create an appropriate OMVisualizer object.
             Initialization::Factory* factory = new Initialization::Factory();
             Model::OMVisualizerAbstract* tmpOmVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
-            tmpOmVisualizer->_omvManager->setSliderRange(timeSliderStart, timeSliderEnd);
-
-            // Initialize the OMVisualizer object.
-            isOk += tmpOmVisualizer->initData();
-            isOk += tmpOmVisualizer->setUpScene();
-            isOk += tmpOmVisualizer->updateVisAttributes(0.0);  // set scene to initial position
-
-            // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
-            if (0 == isOk)
+            if (tmpOmVisualizer != nullptr)
             {
-                _omVisualizer = tmpOmVisualizer;
-                _modelLoaded = true;
+                tmpOmVisualizer->_omvManager->setSliderRange(timeSliderStart, timeSliderEnd);
+
+                // Initialize the OMVisualizer object.
+                isOk += tmpOmVisualizer->initData();
+                isOk += tmpOmVisualizer->setUpScene();
+                isOk += tmpOmVisualizer->updateVisAttributes(0.0);  // set scene to initial position
+
+                // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
+                if (0 == isOk)
+                {
+                    _omVisualizer = tmpOmVisualizer;
+                    _modelLoaded = true;
+                }
             }
             else
             {

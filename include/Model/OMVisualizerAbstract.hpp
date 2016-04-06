@@ -97,14 +97,14 @@ namespace Model
         int setUpScene();
 
         /*! \brief Free memory that was allocated with the loaded model. */
-        virtual void unload() { };
+        virtual void unload() = 0;
 
         /*! \brief In case of FMU visualization, this methods performs a simulation step.
          *
          * \remark All classes that derive from OMVisualizerAbstract
          * @param omvm
          */
-        virtual void simulate(Control::OMVisManager& omvm) { };
+        virtual void simulate(Control::OMVisManager& omvm) = 0;
 
         /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or mat-file.
          *
@@ -112,19 +112,19 @@ namespace Model
          * @param omvm
          * \return Error value.
          */
-        virtual int updateVisAttributes(const double time) { };
+        virtual int updateVisAttributes(const double time) = 0;
 
         /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
          *
          * \remark All classes that derive from OMVisualizerAbstract
          */
-        virtual void initializeVisAttributes(const double time) { };
+        virtual void initializeVisAttributes(const double time) = 0;
 
         /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
          *
          * \remark All classes that derive from OMVisualizerAbstract
          */
-        virtual void updateScene(const double time) { };
+        virtual void updateScene(const double time) = 0;
 
 		/*! \brief Returns "abstract"
 		*/

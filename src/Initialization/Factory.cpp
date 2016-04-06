@@ -17,17 +17,8 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-/*
- * Factory.cpp
- *
- *  Created on: 18.02.2016
- *      Author: mf
- */
-
 #include "Initialization/Factory.hpp"
 #include "Model/OMVisualizerFMU.hpp"
-#include "Model/OMVisualizerEmpty.hpp"
 #include "Model/OMVisualizerMAT.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Util/Logger.hpp"
@@ -44,12 +35,13 @@ namespace Initialization
 
     Model::OMVisualizerAbstract* Factory::createVisualizationObject(const std::string modelName, const std::string path, const bool useFMU)
     {
-        Model::OMVisualizerAbstract* result;
+        Model::OMVisualizerAbstract* result(nullptr);
 
-        // Command line is empty. Model has to be loaded via GUI. Return pointer to base class object.
+        // Command line is empty. Model has to be loaded via GUI. Return nullptr.
         if (modelName.empty() && path.empty())
         {
-            result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerEmpty("",""));
+            //X2 result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerEmpty("",""));
+            //X2 result = (Model::OMVisualizerAbstract*) (new Model::OMVisualizerAbstract("",""));
             LOGGER_WRITE("Initialize OMVisalizerAbstract.", Util::LC_LOADER, Util::LL_DEBUG);
         }
         else
