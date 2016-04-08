@@ -231,6 +231,22 @@ Q_OBJECT
      */
     void resetCamera();
 
+	/*! \brief This functions resets the camera normal to X-Y-plane
+	*
+	*/
+	void cameraPositionXY();
+
+	/*! \brief This functions resets the camera normal to X-Z-plane
+
+	*
+	*/
+	void cameraPositionXZ();
+
+	/*! \brief This functions resets the camera normal to Y-Z-plane
+	*
+	*/
+	void cameraPositionYZ();
+
     /*! \brief Changes the background color of the scene view.
      * \todo Add some more suitable colors. The currently available colors are a bit too loud.
      */
@@ -260,6 +276,9 @@ Q_OBJECT
     QAction* _aboutOMVisAct;
     /*! This action will reset the camera/view to the initial position. */
     QAction* _resetCameraAct;
+	QAction* _cameraPositionXYAct;
+	QAction* _cameraPositionXZAct;
+	QAction* _cameraPositionYZAct;
 
     //X9 This members are for testing purposes (load, reload functionality) and can be removed in the future.
     QAction* _loadCessnaAct;

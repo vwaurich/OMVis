@@ -22,6 +22,7 @@
 #include "Util/Logger.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisViewer.hpp"
+#include "Util/Algebra.hpp"
 
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
@@ -153,6 +154,12 @@ void OMVisViewer::createActions()
     QObject::connect(_genSetAct, SIGNAL(triggered()), this, SLOT(openDialogSettings()));
     _resetCameraAct = new QAction(tr("Reset Camera"), this);
     QObject::connect(_resetCameraAct, SIGNAL(triggered()), this, SLOT(resetCamera()));
+	_cameraPositionXYAct = new QAction(tr("Set Camera Position normal to X-Y-Plane"), this);
+	QObject::connect(_cameraPositionXYAct, SIGNAL(triggered()), this, SLOT(cameraPositionXY()));
+	_cameraPositionXZAct = new QAction(tr("Set Camera Position normal to X-Z-Plane"), this);
+	QObject::connect(_cameraPositionXZAct, SIGNAL(triggered()), this, SLOT(cameraPositionXZ()));
+	_cameraPositionYZAct = new QAction(tr("Set Camera Position normal to Y-Z-Plane"), this);
+	QObject::connect(_cameraPositionYZAct, SIGNAL(triggered()), this, SLOT(cameraPositionYZ()));
 
     // Menu caption "Inputs".
     _mapInputAct = new QAction(tr("Map Inputs"), this);
@@ -184,7 +191,10 @@ void OMVisViewer::createMenuBar()
     _settingsMenu = new QMenu(tr("Settings"), this);
     _settingsMenu->addAction(_genSetAct);
     _settingsMenu->addAction(_resetCameraAct);
-
+	_settingsMenu->addAction(_cameraPositionXYAct);
+	_settingsMenu->addAction(_cameraPositionXZAct);
+	_settingsMenu->addAction(_cameraPositionYZAct);
+	
     // Menu caption "Inputs".
     _inputMenu = new QMenu(tr("Inputs"), this);
     _inputMenu->addAction(_mapInputAct);
@@ -609,6 +619,69 @@ void OMVisViewer::openDialogSettings()
 void OMVisViewer::resetCamera()
 {
     _sceneView->home();
+}
+
+void OMVisViewer::cameraPositionXY()
+{
+
+	resetCamera();
+	//the new orientation
+	osg::Matrix3 newOrient = osg::Matrix3(	1, 0, 0,
+											0, 1, 0,
+											0, 0, 1);
+
+	osgGA::CameraManipulator* manipulator = _sceneView->getCameraManipulator();
+	osg::Matrixd mat = manipulator->getMatrix();
+
+	//assemble
+	mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
+		newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
+		newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
+		abs(mat(3, 0)), abs(mat(3, 2)), abs(mat(3, 1)), 1);
+	manipulator->setByMatrix(mat);
+}
+
+void OMVisViewer::cameraPositionYZ()
+{
+	//to get the correct distance of the bodies, reset to home position and use the values of this camera position
+	resetCamera();
+	//the new orientation
+	osg::Matrix3 newOrient = osg::Matrix3(	0, 1, 0,
+											0, 0, 1,
+											1, 0, 0);
+
+	osgGA::CameraManipulator* manipulator = _sceneView->getCameraManipulator();
+	osg::Matrixd mat = manipulator->getMatrix();
+
+	//assemble
+	mat = osg::Matrixd(	newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
+						newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
+						newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
+						abs(mat(3, 1)), abs(mat(3, 2)), abs(mat(3, 0)), 1);
+
+	manipulator->setByMatrix(mat);
+}
+
+
+void OMVisViewer::cameraPositionXZ()
+{
+	//to get the correct distance of the bodies, reset to home position and use the values of this camera position
+	resetCamera();
+	//the new orientation
+	osg::Matrix3 newOrient = osg::Matrix3(	1, 0, 0,
+											0, 0, 1,
+											0, -1, 0);
+
+	osgGA::CameraManipulator* manipulator = _sceneView->getCameraManipulator();
+	osg::Matrixd mat = manipulator->getMatrix();
+
+	//assemble
+	mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
+		newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
+		newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
+		abs(mat(3, 0)), -abs(mat(3, 1)), abs(mat(3, 2)), 1);
+
+	manipulator->setByMatrix(mat);
 }
 
 void OMVisViewer::changeBGColourOfSceneView(const int colorIdx)
