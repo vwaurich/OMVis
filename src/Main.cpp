@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
         LOGGER_WRITE(std::string("Okay, let's create the main widget..."), Util::LC_OTHER, Util::LL_INFO);
         QApplication app(argc, argv);
 
-        OMVisViewer omvisViewer;
+        View::OMVisViewer omvisViewer;
         omvisViewer.show();
 
         app.exec();
