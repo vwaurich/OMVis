@@ -19,6 +19,7 @@
 
 #include "Model/OMVisualizerMAT.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Util.hpp"
 #include "Control/OMVisManager.hpp"
 
 namespace Model
@@ -34,7 +35,7 @@ namespace Model
     {
         std::string resFileName = dirString + modelString + "_res.mat";
         //checks
-        if (!exists(resFileName))
+        if (!Util::exists(resFileName))
             LOGGER_WRITE(std::string("Mat file ") + resFileName + std::string(" could not be found. Is it in the same directory as the model file?"), Util::LC_LOADER, Util::LL_ERROR);
 
         // read mat file
@@ -78,27 +79,27 @@ namespace Model
         // Update all shapes
         rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
         unsigned int shapeIdx = 0;
-        rAndT rT;
+        Util::rAndT rT;
         osg::ref_ptr<osg::Node> child = nullptr;
         try
         {
             for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
             {
                 // get the values for the scene graph objects
-                _baseData->_visAttr._type = getShapeType(shapeNode);
-                _baseData->_visAttr._length = getShapeAttrMAT((const char*) "length", shapeNode, time, _matReader);
-                _baseData->_visAttr._width = getShapeAttrMAT((const char*) "width", shapeNode, time, _matReader);
-                _baseData->_visAttr._height = getShapeAttrMAT((const char*) "height", shapeNode, time, _matReader);
-                _baseData->_visAttr._r = getShapeVectorMAT((char*) "r", shapeNode, time, _matReader);
-                _baseData->_visAttr._rShape = getShapeVectorMAT((char*) "r_shape", shapeNode, time, _matReader);
-                _baseData->_visAttr._lDir = getShapeVectorMAT((char*) "lengthDir", shapeNode, time, _matReader);
-                _baseData->_visAttr._wDir = getShapeVectorMAT((char*) "widthDir", shapeNode, time, _matReader);
-                _baseData->_visAttr._color = getShapeVectorMAT((char*) "color", shapeNode, time, _matReader);
-                _baseData->_visAttr._T = getShapeMatrixMAT((char*) "T", shapeNode, time, _matReader);
-                rT = staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
+                _baseData->_visAttr._type = Util::getShapeType(shapeNode);
+                _baseData->_visAttr._length = Util::getShapeAttrMAT((const char*) "length", shapeNode, time, _matReader);
+                _baseData->_visAttr._width = Util::getShapeAttrMAT((const char*) "width", shapeNode, time, _matReader);
+                _baseData->_visAttr._height = Util::getShapeAttrMAT((const char*) "height", shapeNode, time, _matReader);
+                _baseData->_visAttr._r = Util::getShapeVectorMAT((char*) "r", shapeNode, time, _matReader);
+                _baseData->_visAttr._rShape = Util::getShapeVectorMAT((char*) "r_shape", shapeNode, time, _matReader);
+                _baseData->_visAttr._lDir = Util::getShapeVectorMAT((char*) "lengthDir", shapeNode, time, _matReader);
+                _baseData->_visAttr._wDir = Util::getShapeVectorMAT((char*) "widthDir", shapeNode, time, _matReader);
+                _baseData->_visAttr._color = Util::getShapeVectorMAT((char*) "color", shapeNode, time, _matReader);
+                _baseData->_visAttr._T = Util::getShapeMatrixMAT((char*) "T", shapeNode, time, _matReader);
+                rT = Util::staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
                 _baseData->_visAttr._r = rT._r;
                 _baseData->_visAttr._T = rT._T;
-                _baseData->_visAttr._mat = assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
+                _baseData->_visAttr._mat = Util::assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
 
                 //update the shapes
                 _nodeUpdater->_visAttr = _baseData->_visAttr;
@@ -110,7 +111,7 @@ namespace Model
                 ++shapeIdx;
             }
         }
-        catch (std::exception &e)
+        catch (std::exception& e)
         {
             LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
             isOk = 1;
@@ -136,6 +137,9 @@ namespace Model
     {
         return "mat";
     }
+
+
+
 
 }  // End namepsace Model
 

@@ -20,6 +20,7 @@
 #include "View/OSGScene.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Util.hpp"
 
 #include <osg/MatrixTransform>
 #include <osg/ShapeDrawable>
@@ -43,7 +44,7 @@ namespace View
             osg::ref_ptr<osg::Geode> geode;
             osg::ref_ptr<osg::StateSet> ss;
 
-            std::string type = getShapeType(shapeNode);
+            std::string type = Util::getShapeType(shapeNode);
             LOGGER_WRITE(std::string("Shape: ") + shapeNode->value() + std::string(", type: ") + type,Util::LC_LOADER, Util::LL_DEBUG);
 
             //color
@@ -54,14 +55,14 @@ namespace View
             osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform();
 
             //stl node
-            if (isCADType(type))
+            if (Util::isCADType(type))
             {
-                std::string filename = extractCADFilename(type);
+                std::string filename = Util::extractCADFilename(type);
                 LOGGER_WRITE(std::string("Its a STL and the path is ") + _path ,Util::LC_LOADER, Util::LL_INFO);
 				filename = _path + filename;
 
 				// \todo What do we do at this point?
-                if (!exists(filename))
+                if (!Util::exists(filename))
                 {
                     LOGGER_WRITE(std::string("Could not find the file ") + filename +std::string(".") ,Util::LC_LOADER, Util::LL_WARNING);
                     isOk = 1;

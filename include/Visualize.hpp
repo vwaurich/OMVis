@@ -1,27 +1,30 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup OMVis
  *  @{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
+ *
+ *  This file comprises declarations of methods that have two manifestations: One serves for the \ref OMvisualizerFMU
+ *  and the other one for \ref OMVisualizerMat objects.
  */
 
 #ifndef INCLUDE_VISUALIZE_HPP_
@@ -35,64 +38,96 @@
 
 #include <rapidxml.hpp>
 
-
-//-----------------------
-//CLASSES
-//-----------------------
-
-/**
- * struct to handle position vector and rotationMatrix
- * \todo Find a more suitable name for this struct and better place.
- */
-struct rAndT
+namespace Util
 {
-    osg::Vec3f _r;
-    osg::Matrix3 _T;
-};
 
-/**
- length and width direction
- */
-struct Directions
-{
-    osg::Vec3f _lDir;
-    osg::Vec3f _wDir;
-};
+    //-----------------------
+    // CLASSES
+    //-----------------------
 
-//-----------------------
-//FUNCTIONS
-//-----------------------
+    /**
+     * struct to handle position vector and rotationMatrix
+     * \todo Find a more suitable name for this struct and better place.
+     */
+    struct rAndT
+    {
+        osg::Vec3f _r;
+        osg::Matrix3 _T;
+    };
 
-bool isCADType(std::string typeName);
-
-std::string extractCADFilename(std::string s);
-
-bool exists(const std::string& name);
-
-std::string getShapeType(rapidxml::xml_node<>* node);
-
-
-osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
-osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+    /**
+     length and width direction
+     */
+    struct Directions
+    {
+        osg::Vec3f _lDir;
+        osg::Vec3f _wDir;
+    };
 
 
-std::string getShapeIdent(rapidxml::xml_node<>* node);
+    /******************************
+     Calculate Transformations
+     *******************************/
+
+    /*! \brief Modelica.Math.Vectors.normalize
+     * @param
+     * @return
+     */
+    osg::Vec3f normalize(osg::Vec3f vec);
+
+    /*! \brief Cross
+     *
+     * @param
+     * @return
+     */
+    osg::Vec3f cross(osg::Vec3f vec1, osg::Vec3f vec2);
+
+    /*! \brief Bla Bla
+     *
+     * @param
+     * @return
+     */
+    Directions fixDirections(osg::Vec3f lDir, osg::Vec3f wDir);
 
 
-osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+    //-----------------------
+    // FUNCTIONS
+    //-----------------------
 
-osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
-double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
+    /*! \brief Gets the value of the indicated node exp.
+     */
+    double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
+    /*! \brief Gets the value of the indicated node exp.
+     */
+    double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
-rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type);
+    osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
+
+    /*! \brief Updates r and T to cope with the directions.
+     *
+     * @param
+     * @return
+     */
+    rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type);
+
+}  // End namespace Util
 
 #endif /* INCLUDE_VISUALIZE_HPP_ */
 /**

@@ -20,6 +20,7 @@
 #include "Model/OMVisualBase.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Util.hpp"
 
 #include <osgDB/ReadFile>
 
@@ -39,7 +40,7 @@ namespace Model
     {
         int isOk(0);
         // check if xml file is available
-        if (!exists(_xmlFileName))
+        if (!Util::exists(_xmlFileName))
         {
             LOGGER_WRITE(std::string("There is no xml file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
             isOk = 1;

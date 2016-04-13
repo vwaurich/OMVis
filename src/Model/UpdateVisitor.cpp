@@ -20,6 +20,7 @@
 #include "Model/UpdateVisitor.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Util.hpp"
 
 #include <osgDB/ReadFile>
 #include <osg/Material>
@@ -52,9 +53,9 @@ namespace Model
         osg::ref_ptr<osg::StateSet> ss = node.getOrCreateStateSet();
 
         //its a stl-file
-        if (isCADType(_visAttr._type))
+        if (Util::isCADType(_visAttr._type))
         {
-            std::string filename = extractCADFilename(_visAttr._type);
+            std::string filename = Util::extractCADFilename(_visAttr._type);
             osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
 
         }
