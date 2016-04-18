@@ -28,9 +28,9 @@
 #define INCLUDE_EXPRESSION_HPP_
 
 #include "WrapperFMILib.hpp"
-#include "Util/read_matlab4.h"
 #include "Visualize.hpp"
 
+#include <read_matlab4.h>
 #include <rapidxml.hpp>
 
 /*! \brief Gets the value of a variable at a certain time.
@@ -54,7 +54,6 @@ double evaluateBinaryExpMAT(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2
 */
 double evaluateBinaryExpFMU(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2, rapidxml::xml_node<>* exp1, double time, fmi1_import_t* fmu);
 
-
 /*! \brief Evaluates the call-expression. Uses a mat file
  *
  * @param the root node "visualization"
@@ -68,7 +67,6 @@ double evaluateCallExpMAT(rapidxml::xml_node<>* call, rapidxml::xml_node<>* exp1
 * @return the value
 */
 double evaluateCallExpFMU(rapidxml::xml_node<>* call, rapidxml::xml_node<>* exp1, double time, fmi1_import_t* fmu);
-
 
 /*! \brief Gets the numerical value for the given node usign a callback function. Therefore, the AST is traversed.Uses a Mat-file.
 *

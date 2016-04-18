@@ -28,12 +28,15 @@
 #define INCLUDE_VISATTRIBUTES_HPP_
 
 #include "WrapperFMILib.hpp"
-#include "Util/read_matlab4.h"
+
+#include <read_matlab4.h>
+#include <rapidxml.hpp>
 
 #include <osg/Vec3f>
 #include <osg/Matrix>
 #include <osg/Uniform>
-#include <rapidxml.hpp>
+
+#include <string>
 
 namespace Model
 {
@@ -80,7 +83,7 @@ namespace Model
         /// The original T
         osg::Matrix3 _T;
         /// \todo Can these attributes be private?
-        /// The computed(adapted to the lenght direction)
+        /// The computed(adapted to the length direction)
         osg::Matrix _mat;
     };
 

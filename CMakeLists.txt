@@ -87,6 +87,33 @@ ENDIF(Boost_FOUND)
 FIND_PACKAGE(RapidXML REQUIRED)
 
 
+# Find read_matlab4.h and read_matlab4.c from OpenModelica
+# If the environment variable OPENMODELICAHOME is set and points to the OpenModelica installation, 
+# we will find the files. Otherwise, the user can specify the path via argument MATLABREADER to CMake.
+IF(DEFINED ENV{OPENMODELICAHOME})
+  SET(OMC_MATLAB_READER_INC $ENV{OPENMODELICAHOME}/include/omc/c/util/)
+  SET(OMC_MATLAB_READER_C $ENV{OPENMODELICAHOME}/include/omc/c/util/read_matlab4.c)
+  SET(MATLABREADER_FOUND YES)
+ELSEIF(MATLABREADER)
+  IF(EXISTS ${MATLABREADER}/read_matlab4.h)
+    MESSAGE(STATUS "Found read_matlab4.h.")
+    SET(OMC_MATLAB_READER_INC ${MATLABREADER})
+    IF(EXISTS ${MATLABREADER}/read_matlab4.c)
+      MESSAGE(STATUS "Found read_matlab4.c.")
+      SET(OMC_MATLAB_READER_C ${MATLABREADER}/read_matlab4.c)
+      SET(MATLABREADER_FOUND YES)
+    ELSE()
+      SET(MATLABREADER_FOUND NO)
+    ENDIF()
+  ENDIF()
+ELSE(DEFINED ENV{OPENMODELICAHOME})
+  MESSAGE(WARNING "OpenModelica not found. You can specify the environment variable OPENMODELICA_HOME pointing to your OpenModelica installation \
+                   or pass the path to read_matlab4.h and read_matlab4.c via MATLABREADER to cmake file.")
+  SET(MATLABREADER_FOUND NO)
+ENDIF(DEFINED ENV{OPENMODELICAHOME})
+
+MESSAGE(STATUS "BUMS ${MATLABREADER_FOUND} .")
+
 # ---------------------------
 # Compiler Flags
 # ---------------------------
@@ -102,13 +129,17 @@ ELSE(COMPILER_SUPPORTS_CXX11)
   MESSAGE(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 ENDIF(COMPILER_SUPPORTS_CXX11)
 
-# Check for Compiler Warnings
-CHECK_CXX_COMPILER_FLAG("-Wextra -Wunused" COMPILER_SUPPORTS_WEXTRA)
-IF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+# Compiler Flags Used In Debug Mode
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
+  ADD_COMPILE_OPTIONS(-O0)
+  #-fno-elide-constructors -pedantic-errors -ansi -Winit-self -Wold-style-cast -Woverloaded-virtual -Wuninitialized -Wmissing-declarations -Winit-self)
+
+  # Check for Compiler Warnings
+  CHECK_CXX_COMPILER_FLAG("-Wextra -Wunused" COMPILER_SUPPORTS_WEXTRA)
   IF(COMPILER_SUPPORTS_WEXTRA)
     ADD_COMPILE_OPTIONS(-Wextra -Wunused)
   ENDIF(COMPILER_SUPPORTS_WEXTRA)
-ENDIF(CMAKE_BUILD_TYPE MATCHES DEBUG)
+ENDIF(CMAKE_BUILD_TYPE MATCHES Debug)
 
 
 # ---------------------------
@@ -122,7 +153,7 @@ IF(WIN32) # Check if we are on Windows
   ELSEIF(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows") # Tell the project how to behave in this environment
   ELSE()
-    message(SEND_ERROR "You are using an unsupported Windows compiler! (Not MSVC or GCC)")
+    MESSAGE(SEND_ERROR "You are using an unsupported Windows compiler! (Not MSVC or GCC)")
   ENDIF()
 ELSEIF(UNIX)
   #ADD_EXECUTABLE(Test Test.cpp) # Tell the project how to behave in this environment
@@ -160,11 +191,12 @@ ENDIF(BUILD_DOCUMENTATION)
 # ---------------------------
 # Setup Build
 # ---------------------------
+
 # Find Sources
 FILE(GLOB_RECURSE SRCS "src/*.cpp")
 
-INCLUDE_DIRECTORIES("include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR})
-ADD_EXECUTABLE(OMVis ${SRCS})
+INCLUDE_DIRECTORIES("include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR} ${OMC_MATLAB_READER_INC})
+ADD_EXECUTABLE(OMVis ${SRCS} ${OMC_MATLAB_READER_C})
 TARGET_LINK_LIBRARIES(OMVis ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
 
 #MESSAGE(STATUS "SDL2 LIBS: ${SDL2_LIBRARY}")

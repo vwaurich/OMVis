@@ -30,10 +30,12 @@
 #include "OMVisualizerAbstract.hpp"
 #include "Visualize.hpp"
 
+#include <read_matlab4.h>
+
 namespace Model
 {
 
-    /*! \brief Class that stores results in matlab file format.
+    /*! \brief Class that reads results in MAT-file format.
      *
      *
      */

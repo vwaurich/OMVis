@@ -31,12 +31,13 @@
 #define INCLUDE_VISUALIZE_HPP_
 
 #include "WrapperFMILib.hpp"
-#include "Util/read_matlab4.h"
+
+#include <read_matlab4.h>
+#include <rapidxml.hpp>
 
 #include <osg/Geode>
 #include <osg/Vec3f>
 
-#include <rapidxml.hpp>
 
 namespace Util
 {

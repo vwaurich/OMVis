@@ -42,11 +42,14 @@ following we give a list of all necessary dependencies and the version number, w
     5. RapdiXml Library (Boost Software License or MIT)
         - http://rapidxml.sourceforge.net/
         - Download the header only library, extract and give (OMVis) Cmake a hint to the path via 
-          environment variable RAPIDXML_ROOT.         
-    6. read_matlab4.cpp and read_matlab4.h from OpenModelica (OSMC-PL, GPL v3.0) 
+          environment variable RAPIDXML_ROOT.
+    6. read_matlab4.c and read_matlab4.h from OpenModelica (OSMC-PL, GPL v3.0)
         - https://github.com/OpenModelica/OMCompiler/tree/master/SimulationRuntime/c
-        - Copy read_matlab4.cpp and read_matlab4.h to OMVis/src/Util/. 
-        - Uncomment #include "omc_msvc.h".
+        - 1. Case: OpenModelica is present/installed on the system. Specify the installation path 
+                   via OPENMODELICHOME environment variable and the CMake file will automatically 
+                   find the read_matlab files.
+        - 2. Case: Download the files read_matlab.c and read_matlab.h and pass their path to CMake 
+                   via -DMATLABREADER.
     7. Boost C++ Libraries (Boost Software License)
         - http://www.boost.org/
         - Linux: via Package Manager
@@ -55,8 +58,8 @@ following we give a list of all necessary dependencies and the version number, w
             --> libboost-system-dev
             --> libboost-dev
         - Windows: build from source http://www.boost.org/
-        
-        
+
+
 \subsection configure Configure and Build
 \code
 ~> mkdir build
