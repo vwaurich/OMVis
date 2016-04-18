@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
 PROJECT(OMVis)
 
 SET(CMAKE_VERBOSE_MAKEFILE ON)
@@ -15,7 +15,7 @@ ADD_DEFINITIONS(-DUSE_LOGGER)
 # Find includes in corresponding build directories
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
-SET(CMAKE_AUTOMOC ON)
+# SET(CMAKE_AUTOMOC ON)
 # Detect and add SFML
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules" ${CMAKE_MODULE_PATH})
 
@@ -194,8 +194,13 @@ ENDIF(BUILD_DOCUMENTATION)
 # Find Sources
 FILE(GLOB_RECURSE SRCS "src/*.cpp")
 
+# Moc necessary files. Automoc does not work for us, since the header files containing the QObject macro and the source files which 
+# include this files are in separated (sub)folders.
+QT5_WRAP_CPP(MOC_OMVISVIEWER include/View/OMVisViewer.hpp)
+QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/SettingsDialogs.hpp)
+
 INCLUDE_DIRECTORIES("include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR} ${OMC_MATLAB_READER_INC})
-ADD_EXECUTABLE(OMVis ${SRCS} ${OMC_MATLAB_READER_C})
+ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C})
 TARGET_LINK_LIBRARIES(OMVis ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
 
 #MESSAGE(STATUS "SDL2 LIBS: ${SDL2_LIBRARY}")
