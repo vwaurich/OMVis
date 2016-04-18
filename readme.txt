@@ -48,7 +48,7 @@ following we give a list of all necessary dependencies and the version number, w
         - 1. Case: OpenModelica is present/installed on the system. Specify the installation path 
                    via OPENMODELICHOME environment variable and the CMake file will automatically 
                    find the read_matlab files.
-        - 2. Case: Download the files read_matlab.c and read_matlab.h and pass their path to CMake 
+        - 2. Case: Download the files read_matlab.c and read_matlab.h and pass their path to CMake
                    via -DMATLABREADER.
     7. Boost C++ Libraries (Boost Software License)
         - http://www.boost.org/
