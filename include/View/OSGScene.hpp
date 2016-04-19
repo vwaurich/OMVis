@@ -56,17 +56,17 @@ namespace View
         /*! \brief Return shared pointer to rootNode. */
         osg::ref_ptr<osg::Group> getRootNode();
 
-        /*! \brief Return path to scene. */
+        /*! \brief Return path to the scene file. */
         std::string getPath() const;
 
-        /*! \brief Set path to scene. */
+        /*! \brief Set path to the scene file. */
         void setPath(const std::string path);
 
      private:
         /*! Root node of the scene. */
         osg::ref_ptr<osg::Group> _rootNode;
 
-        /*! Path to scene. */
+        /*! Path to the scene file. */
 		std::string _path;
     };
 
