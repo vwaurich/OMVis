@@ -17,11 +17,9 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "Control/OMVisManager.hpp"
 
 #include <cmath>
-#include <osg/Timer>
 
 namespace Control
 {
@@ -32,7 +30,7 @@ namespace Control
               _hVisual(hVisual),
 			  _startTime(startTime),
 			  _endTime(endTime),
-			  _visualTimer(new osg::Timer),
+			  _visualTimer(),
 			  _pause(true),
 			  _sliderRange(0)
     {
@@ -40,8 +38,8 @@ namespace Control
 
     void OMVisManager::updateTick()
     {
-		_visualTimer->tick();
-        _realTime = _visualTimer->time_m() / 1000.0;
+        _visualTimer.tick();
+        _realTime = _visualTimer.time_m() / 1000.0;
     }
 
     bool OMVisManager::simTimeReady()

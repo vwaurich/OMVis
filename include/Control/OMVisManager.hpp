@@ -27,19 +27,34 @@
 #ifndef INCLUDE_OMVISMANAGER_HPP_
 #define INCLUDE_OMVISMANAGER_HPP_
 
-// Forward declaration
-namespace osg {
-   class Timer;
-}
+#include <osg/Timer>
 
 namespace Control
 {
 
+    /*! Class that manages timing for OMVis.
+     *
+     * Since we have at least three different time levels, namely simulation time, visualization time and real time,
+     * we need a manager to properly handle them.
+     *
+     * \todo More documentation.
+     */
     class OMVisManager
     {
      public:
         OMVisManager() = delete;
 
+        /*! \brief Constructs a OMVisManager from the given arguments.
+         *
+         * @param simTime Current simulation time. In general, this is equal to the simulation start time.
+         * @param realTime
+         * @param visTime Time of current scene update.
+         * @param hVisual Step size for the scene updates.
+         * @param startTime Simulation start time.
+         * @param endTime Simulation end time.
+         *
+         * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
+         */
         OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime);
 
         ~OMVisManager() = default;
@@ -71,7 +86,7 @@ namespace Control
 		bool _pause;
 
 	public:
-		osg::Timer* _visualTimer;
+		osg::Timer _visualTimer;
 
 		/*! Range of the slider widget. */
 		int _sliderRange;
