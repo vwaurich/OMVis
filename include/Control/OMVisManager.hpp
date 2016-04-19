@@ -61,8 +61,11 @@ namespace Control
         OMVisManager(const OMVisManager& omvm) = delete;
         OMVisManager& operator=(const OMVisManager& omvm) = delete;
 
+        // 2016-04-19, MF: Currently unused method
         void updateTick();
+        // 2016-04-19, MF: Currently unused method
         bool simTimeReady();
+        // 2016-04-19, MF: Currently unused method
         bool visTimeReady();
 
         /*! \brief Calculates from the current visualization time (_visTime) the slider position. */
