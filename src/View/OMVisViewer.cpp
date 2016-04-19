@@ -406,7 +406,7 @@ namespace View
 
     QString OMVisViewer::modelSelectionDialog()
     {
-        QFileDialog* dialog = new QFileDialog;
+        QFileDialog* dialog = new QFileDialog();
         // The user can filter for *.fmu or *.mat files.
         QString fileName = dialog->getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
         return fileName;
@@ -486,7 +486,7 @@ namespace View
             if (inputData->_data.getNumReal() > 0)
             {
                 qgroupBox = new QGroupBox(tr("Real Inputs"), this);
-                QFormLayout* layout = new QFormLayout;
+                QFormLayout* layout = new QFormLayout();
                 for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumReal(); ++inputIdx)
                 {
                     QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesReal[inputIdx], "real");
@@ -500,7 +500,7 @@ namespace View
             if (inputData->_data.getNumInteger() > 0)
             {
                 qgroupBox = new QGroupBox(tr("Integer Inputs"), this);
-                QFormLayout* layout = new QFormLayout;
+                QFormLayout* layout = new QFormLayout();
                 for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumInteger(); ++inputIdx)
                 {
                     QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger[inputIdx], "integer");

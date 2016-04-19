@@ -88,7 +88,7 @@ namespace Model
             node.addDrawable(draw.get());
         }
         //osg::Material *material = dynamic_cast<osg::Material*>(ss->getAttribute(osg::StateAttribute::MATERIAL));
-        osg::ref_ptr<osg::Material> material = new osg::Material;
+        osg::ref_ptr<osg::Material> material = new osg::Material();
 
         material->setDiffuse(osg::Material::FRONT, osg::Vec4(_visAttr._color / 255, 1.0));
         ss->setAttribute(material);

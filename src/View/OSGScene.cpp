@@ -32,7 +32,7 @@ namespace View
 {
 
     OSGScene::OSGScene()
-            : _rootNode(new osg::Group)
+            : _rootNode(new osg::Group())
     {
     }
 
