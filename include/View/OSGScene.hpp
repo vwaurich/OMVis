@@ -31,6 +31,8 @@
 #include <osg/Group>
 #include <osgDB/ReadFile>
 
+#include <string>
+
 namespace View
 {
 
