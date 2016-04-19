@@ -1,22 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "Control/KeyboardEventHandler.hpp"
 #include "Model/InputData.hpp"
@@ -39,7 +38,7 @@ namespace Control
         {
             case (osgGA::GUIEventAdapter::KEYDOWN):
             {
-				std::cout << "KEYDOWN" << std::endl;
+                std::cout << "KEYDOWN" << std::endl;
                 unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
                 keyBoardMapIter keyboardmapValue = _inputs->_keyboardToKeyMap.find((unsigned int) keyboardValue);
                 if (keyboardmapValue != _inputs->_keyboardToKeyMap.end())
@@ -84,4 +83,4 @@ namespace Control
         return false;
     }
 
-} // End namespace Control
+}  // End namespace Control
