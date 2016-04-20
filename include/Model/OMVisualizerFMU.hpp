@@ -116,6 +116,7 @@ namespace Model
 
      private:
 		FMU _fmu;
+		/// \todo Should be std::unique_ptr, but at least std::shared_ptr
         SimSettings* _simSettings;
 		int _numJoysticks;
 
@@ -124,6 +125,7 @@ namespace Model
         InputData _inputData;
 
         /// \todo Remove, we do not need it because we have inputData.
+        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         std::vector<Control::JoystickDevice*> _joysticks;
     };
 
