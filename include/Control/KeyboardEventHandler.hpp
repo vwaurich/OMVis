@@ -60,9 +60,14 @@ namespace Control
         /// The assignment operator is forbidden.
         KeyboardEventHandler& operator=(const KeyboardEventHandler& keh) = delete;
 
+        /*! \todo According to /.../include/osgGA/GUIEventHandler, this method is deprecated. We should move to
+         *     1. virtual bool handle(osgGA::Event* event, osg::Object* object, osg::NodeVisitor* nv);
+         *  or 2. virtual bool handle(const GUIEventAdapter& ea,GUIActionAdapter& aa, osg::Object*, osg::NodeVisitor*);
+         */
         virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
      private:
+        /// \todo Should be a std::shared_ptr (points to memory managed by other class, i.e. _guiController->getInputData())
         Model::InputData* _inputs;
     };
 
