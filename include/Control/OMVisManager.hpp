@@ -88,7 +88,7 @@ namespace Control
 		double _startTime;
 		bool _pause;
 
-	public:
+	private:
 		osg::Timer _visualTimer;
 
 		/*! Range of the slider widget. */
