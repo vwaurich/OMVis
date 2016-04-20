@@ -68,6 +68,7 @@ namespace Control
 
 
      private:
+		/// \todo Should be a std::unique_ptr, but at least std::shared_ptr. Memory is allocated in this class!
         SDL_Joystick* _joystick;
         SDL_Event _inputEvent;
         int _xDir;
