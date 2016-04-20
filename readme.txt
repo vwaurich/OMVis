@@ -20,44 +20,59 @@ which is comes with OMVis or visit http://www.gnu.org/licenses/gpl.html for furt
 \subsection dependencies Software Dependencies
 OMVis, like most other software projects, builds up on a variety of software packages. In the 
 following we give a list of all necessary dependencies and the version number, which is required.
-  
-    1. SDL (>= 2.0.0) (zlib)
+
+    0. CMake (>= 3.0.0)
+        - https://cmake.org/
+        - Linux: via Package Manager or build from source
+        - Windows: Install binary
+
+    1. C++ Compiler
+        - support of C++ standard 2011 (-std=c++11)
+
+    2. SDL (>= 2.0.0) (zlib)
         - https://www.libsdl.org
         - Linux: via Package Manager --> libsdl2-dev
         - Windows: binaries from https://www.libsdl.org/download-2.0.php
-    2. OpenSceneGraph (Version >= 3.4.0) (OSGPL/LGPL)
+
+    3. OpenSceneGraph (Version >= 3.4.0) (OSGPL/LGPL)
         - http://www.openscenegraph.org
         - Linux: via Package Manager --> libopenscenegraph-dev
         - Windows: 
             - Source http://www.openscenegraph.org/index.php/download-section/stable-releases, 
             - Dependencies http://www.openscenegraph.org/index.php/download-section/dependencies
-    3. FMI Library (>= 2.0) (BSD)
+
+    4. FMI Library (>= 2.0) (BSD)
         - http://www.jmodelica.org/FMILibrary
         - Linux: Download sources, unzip, read FMILIB_Readme.txt, configure, make, install
         - Windows: download binaries
         - Its important to remember where FMIlibary is installed to. The installation path has to 
-          be provided to the CMake file of OMVis. 
-    4. QT (>= 5.0) (LGPL)
+          be provided to the CMake file of OMVis.
+
+    5. QT (>= 5.0) (LGPL)
         - Windows installer http://www.qt.io/
-    5. RapdiXml Library (Boost Software License or MIT)
+
+    6. RapdiXml Library (Boost Software License or MIT)
         - http://rapidxml.sourceforge.net/
         - Download the header only library, extract and give (OMVis) Cmake a hint to the path via 
           environment variable RAPIDXML_ROOT.
-    6. read_matlab4.c and read_matlab4.h from OpenModelica (OSMC-PL, GPL v3.0)
+
+    7. read_matlab4.c and read_matlab4.h from OpenModelica (OSMC-PL, GPL v3.0)
         - https://github.com/OpenModelica/OMCompiler/tree/master/SimulationRuntime/c
         - 1. Case: OpenModelica is present/installed on the system. Specify the installation path 
                    via OPENMODELICHOME environment variable and the CMake file will automatically 
                    find the read_matlab files.
         - 2. Case: Download the files read_matlab.c and read_matlab.h and pass their path to CMake
                    via -DMATLABREADER.
-    7. Boost C++ Libraries (Boost Software License)
+
+    8. Boost C++ Libraries (Boost Software License)
         - http://www.boost.org/
         - Linux: via Package Manager
             --> libboost-filesystem-dev
             --> libboost-program-options-dev
             --> libboost-system-dev
             --> libboost-dev
-        - Windows: build from source http://www.boost.org/
+        - Windows: build from source
+
 
 
 \subsection configure Configure and Build
