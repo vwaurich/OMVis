@@ -151,10 +151,14 @@ namespace Model
 
      public:
         /// \todo: Can this attr. be private?
+        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         OMVisualBase* _baseData;
         /// \todo: Can this attr. be private?
+        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         View::OMVisScene* _viewerStuff;
+        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         UpdateVisitor* _nodeUpdater;
+        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         Control::OMVisManager* _omvManager;
     };
 
