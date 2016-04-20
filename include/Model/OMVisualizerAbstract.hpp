@@ -68,6 +68,17 @@ namespace Model
         /// The assignment operator is forbidden.
         OMVisualizerAbstract& operator=(const OMVisualizerAbstract& omv) = delete;
 
+        /*! \brief This methods initializes a Visualizer object.
+         *
+         * Encapsulates the three stages/methods of initialization process into one single method.
+         */
+        virtual int initialize() {
+            int isOk(0);
+            isOk += initData();
+            isOk += setUpScene();
+            isOk += updateVisAttributes(0.0);
+            return isOk;
+        }
         /*! \brief Initializes OMVisualizer object.
          *
          * XML-file is parsed and the values of the attributes are set.

@@ -98,9 +98,7 @@ namespace Control
                 tmpOmVisualizer->_omvManager->setSliderRange(timeSliderStart, timeSliderEnd);
 
                 // Initialize the OMVisualizer object.
-                isOk += tmpOmVisualizer->initData();
-                isOk += tmpOmVisualizer->setUpScene();
-                isOk += tmpOmVisualizer->updateVisAttributes(0.0);  // set scene to initial position
+                isOk += tmpOmVisualizer->initialize();
 
                 // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
                 if (0 == isOk)
