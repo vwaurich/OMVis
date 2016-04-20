@@ -353,17 +353,21 @@ namespace View
         LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
 
         // Set up the osg viewer widget
-        osg::ref_ptr<osg::Node> scene = _guiController->getSceneRootNode();
-        if (scene == nullptr)
+        osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
+        if (rootNode == nullptr)
             LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
-        _sceneView->setSceneData(scene);
+        _sceneView->setSceneData(rootNode);
 
         //start the timer to trigger model and scene update
         _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
 
         //set the inputData to handle Keyboard-events as inputs
-        Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
-        _sceneView->addEventHandler(kbEventHandler);
+        if (_guiController->modelIsFMU())
+        {
+            Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+            _sceneView->addEventHandler(kbEventHandler);
+        }
+
 
         // Update the slider and the time display.
         updateTimingElements();
