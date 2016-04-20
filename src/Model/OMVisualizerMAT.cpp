@@ -53,8 +53,8 @@ namespace Model
         int isOk(0);
         isOk = OMVisualizerAbstract::initData();
         readMat(_baseData->_modelName, _baseData->_dirName);
-        _omvManager->_startTime = omc_matlab4_startTime(&_matReader);
-        _omvManager->_endTime = omc_matlab4_stopTime(&_matReader);
+        _omvManager->setStartTime(omc_matlab4_startTime(&_matReader));
+        _omvManager->setEndTime(omc_matlab4_stopTime(&_matReader));
 
         return isOk;
     }

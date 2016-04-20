@@ -161,12 +161,12 @@ namespace Control
 
     double GUIController::getVisTime()
     {
-        return _omVisualizer->_omvManager->_visTime;
+        return _omVisualizer->_omvManager->getVisTime();
     }
 
     void GUIController::setVisTime(const int val)
     {
-        _omVisualizer->_omvManager->_visTime = (_omVisualizer->_omvManager->_endTime - _omVisualizer->_omvManager->_startTime) * (float) (val / 100.0);
+        _omVisualizer->_omvManager->setVisTime((_omVisualizer->_omvManager->getEndTime() - _omVisualizer->_omvManager->getStartTime()) * (float) (val / 100.0));
     }
 
     bool GUIController::modelIsMATFile()
@@ -181,12 +181,12 @@ namespace Control
 
     double GUIController::getSimulationStartTime() const
     {
-        return _omVisualizer->_omvManager->_startTime;
+        return _omVisualizer->_omvManager->getStartTime();
     }
 
     double GUIController::getVisStepsize()
     {
-        return _omVisualizer->_omvManager->_hVisual * 1000.0;
+        return _omVisualizer->_omvManager->getHVisual() * 1000.0;
     }
 
     Model::InputData* GUIController::getInputData()

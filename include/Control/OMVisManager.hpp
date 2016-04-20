@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup Control
  *  @{
@@ -69,30 +69,49 @@ namespace Control
         bool visTimeReady();
 
         /*! \brief Calculates from the current visualization time (_visTime) the slider position. */
-		int getTimeProgress();
+        int getTimeProgress();
 
-		/*! Set the slider range. */
-		void setSliderRange(const int min, const int max);
+        /*! Set the slider range. */
+        void setSliderRange(const int min, const int max);
 
-     public:
-        /// \todo Can this attr. be private?
-        double _simTime;//!< Brief Time of current simulation step.
-        /// \todo Can this attr. be private?
-        double _realTime;//!< Brief Current Real Time.
-        /// \todo Can this attr. be private?
-        double _visTime;//!< Brief Time of current scene update
-        /// \todo Can this attr. be private?
-        double _hVisual;//!< Brief Step size for the scene updates in milliseconds
-        /// \todo Can this attr. be private?
+        double getEndTime() const;
+        void setEndTime(const double endTime);
+
+        double getStartTime() const;
+        void setStartTime(const double startTime);
+
+        double getSimTime() const;
+        void setSimTime(const double simTime);
+
+        double getVisTime() const;
+        void setVisTime(const double visTime);
+
+        double getHVisual() const;
+
+        double getRealTime() const;
+
+        /*! Returns true, if the Visualization is currently paused and false otherwise. */
+        bool isPaused() const;
+        /*! Set pause status to new value. */
+        void setPause(const bool status);
+
+     private:
+        //! Time of the current simulation step.
+        double _simTime;
+        //! Current real time.
+        double _realTime;
+        //! Time of current scene update.
+        double _visTime;
+        //! Step size for the scene updates in milliseconds.
+        double _hVisual;
         double _endTime;
-		double _startTime;
-		bool _pause;
+        double _startTime;
+        bool _pause;
 
-	private:
-		osg::Timer _visualTimer;
+        osg::Timer _visualTimer;
 
-		/*! Range of the slider widget. */
-		int _sliderRange;
+        //! Range of the slider widget.
+        int _sliderRange;
     };
 
 }  // End namespace Control

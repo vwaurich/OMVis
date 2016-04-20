@@ -40,9 +40,9 @@ namespace Model
 
     void OMVisualizerAbstract::startVisualization()
     {
-        if (_omvManager->_visTime < _omvManager->_endTime - 1.e-6)
+        if (_omvManager->getVisTime() < _omvManager->getEndTime() - 1.e-6)
         {
-            _omvManager->_pause = false;
+            _omvManager->setPause(false);
             LOGGER_WRITE(std::string("Start visualization."), Util::LC_CTR, Util::LL_INFO);
         }
         else
@@ -51,16 +51,16 @@ namespace Model
 
     void OMVisualizerAbstract::pauseVisualization()
     {
-        LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_omvManager->_visTime) + std::string("."), Util::LC_CTR, Util::LL_INFO);
-        _omvManager->_pause = true;
+        LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_omvManager->getVisTime()) + std::string("."), Util::LC_CTR, Util::LL_INFO);
+        _omvManager->setPause(true);
     }
 
     void OMVisualizerAbstract::initVisualization()
     {
         LOGGER_WRITE(std::string("Initialize visualization."), Util::LC_CTR, Util::LL_INFO);
-        initializeVisAttributes(_omvManager->_startTime);
-        _omvManager->_visTime = _omvManager->_startTime;
-        _omvManager->_pause = true;
+        initializeVisAttributes(_omvManager->getStartTime());
+        _omvManager->setVisTime(_omvManager->getStartTime());
+        _omvManager->setPause(true);
     }
 
     void OMVisualizerAbstract::donationVisualization()
@@ -70,18 +70,18 @@ namespace Model
 
     void OMVisualizerAbstract::sceneUpdate()
     {
-        if (!_omvManager->_pause)
+        if (!_omvManager->isPaused())
         {
-            updateScene(_omvManager->_visTime);
-            _omvManager->_visTime = _omvManager->_visTime + _omvManager->_hVisual;
+            updateScene(_omvManager->getVisTime());
+            _omvManager->setVisTime(_omvManager->getVisTime() + _omvManager->getHVisual());
 
-            LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_omvManager->_visTime) + std::string(" simTime ")
-                + std::to_string(_omvManager->_simTime) + std::string(" _visStepSize ") + std::to_string(_omvManager->_hVisual)
+            LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_omvManager->getVisTime()) + std::string(" simTime ")
+                + std::to_string(_omvManager->getSimTime()) + std::string(" _visStepSize ") + std::to_string(_omvManager->getHVisual())
                 , Util::LC_CTR, Util::LL_INFO);
-            if (_omvManager->_visTime >= _omvManager->_endTime - 1.e-6)
+            if (_omvManager->getVisTime() >= _omvManager->getEndTime() - 1.e-6)
             {
                 LOGGER_WRITE(std::string("The End."), Util::LC_CTR, Util::LL_INFO);
-                _omvManager->_pause = true;
+                _omvManager->setPause(true);
             }
         }
     }

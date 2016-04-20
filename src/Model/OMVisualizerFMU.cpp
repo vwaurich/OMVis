@@ -37,6 +37,7 @@ namespace Model
 		_simSettings(new SimSettings()),
 		_inputData(),
 		_joysticks()
+	    //,_keyboardEventHandler(new Control::KeyboardEventHandler(&_inputData))
     {
 	    LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
 		initJoySticks();
@@ -76,7 +77,7 @@ namespace Model
         int isOk(0);
         isOk = OMVisualizerAbstract::initData();
         isOk += loadFMU(_baseData->_modelName, _baseData->_dirName);
-        _simSettings->setTend(_omvManager->_endTime);
+        _simSettings->setTend(_omvManager->getEndTime());
         _simSettings->setHdef(0.001);
 
         return isOk;
@@ -112,11 +113,11 @@ namespace Model
 
     void OMVisualizerFMU::simulate(Control::OMVisManager& omvm)
     {
-        while (omvm._simTime < omvm._realTime + omvm._hVisual && omvm._simTime < omvm._endTime)
+        while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
         {
             //<<"simulate "<<omvManager.simTime<<endl;
             //omv.fmuData.inputs.printValues();
-            omvm._simTime = simulateStep(omvm._simTime);
+            omvm.setSimTime(simulateStep(omvm.getSimTime()));
         }
     }
 
@@ -278,23 +279,23 @@ namespace Model
     void OMVisualizerFMU::initializeVisAttributes(const double time)
     {
         _fmu.initialize(_simSettings);
-        _omvManager->_visTime = _omvManager->_startTime;
-        _omvManager->_simTime = _omvManager->_startTime;
-        updateVisAttributes(_omvManager->_visTime);
+        _omvManager->setVisTime(_omvManager->getStartTime());
+        _omvManager->setSimTime(_omvManager->getStartTime());
+        updateVisAttributes(_omvManager->getVisTime());
     }
 
     void OMVisualizerFMU::updateScene(const double time)
     {
-        _omvManager->_simTime = _omvManager->_visTime;
-        double nextStep = _omvManager->_visTime + _omvManager->_hVisual;
+        _omvManager->setSimTime(_omvManager->getVisTime());
+        double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
 
-        while (_omvManager->_simTime < nextStep)
+        while (_omvManager->getSimTime() < nextStep)
         {
             //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
             //_inputData.printValues();
-            _omvManager->_simTime = simulateStep(_omvManager->_simTime);
+            _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
         }
-        updateVisAttributes(_omvManager->_visTime);
+        updateVisAttributes(_omvManager->getVisTime());
     }
 
     std::string OMVisualizerFMU::getType() const
