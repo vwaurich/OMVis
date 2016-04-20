@@ -279,7 +279,10 @@ namespace View
         QAction* _loadCowAct;
         QAction* _unloadAct;
 
-        /*! \brief The view which holds the osg scene. */
+        /*! \brief The view which holds the osg scene.
+         *
+         * \todo Should be a unique pointer but at least a shared pointer
+         */
         osgViewer::View* _sceneView;
 
         // --- Widgets---
@@ -300,6 +303,7 @@ namespace View
         QTimer _visTimer;
 
         /// The GUIController object will take the users input from GUI and handle it.
+        /// \todo Should be a unique pointer but at least a shared pointer
         Control::GUIController* _guiController;
     };
 
