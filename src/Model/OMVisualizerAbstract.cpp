@@ -10,6 +10,7 @@
 #include "Util/Logger.hpp"
 
 #include <string>
+#include <stdlib.h>
 
 namespace Model
 {
@@ -22,13 +23,20 @@ namespace Model
     {
     }
 
-    OMVisualizerAbstract::OMVisualizerAbstract(const std::string modelName, const std::string dir)
-            : _baseData(new OMVisualBase(modelName, dir)),
+    OMVisualizerAbstract::OMVisualizerAbstract(const std::string modelName, const std::string path)
+            : //X2 _baseData(new OMVisualBase(modelName, path)),
               _viewerStuff(new View::OMVisScene()),
               _nodeUpdater(new Model::UpdateVisitor()),
               _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
     {
-        _viewerStuff->getScene().setPath(dir);
+        // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
+        char fullPathTmp[PATH_MAX];
+        realpath(path.c_str(), fullPathTmp);
+        std::string fullPath = std::string(fullPathTmp) + "/";
+
+        // Now we can use the full path.
+        _baseData = new OMVisualBase(modelName, fullPath),
+        _viewerStuff->getScene().setPath(fullPath);
     }
 
     int OMVisualizerAbstract::setUpScene()
