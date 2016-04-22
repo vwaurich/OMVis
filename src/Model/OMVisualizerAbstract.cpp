@@ -24,8 +24,7 @@ namespace Model
     }
 
     OMVisualizerAbstract::OMVisualizerAbstract(const std::string modelName, const std::string path)
-            : //X2 _baseData(new OMVisualBase(modelName, path)),
-              _viewerStuff(new View::OMVisScene()),
+            : _viewerStuff(new View::OMVisScene()),
               _nodeUpdater(new Model::UpdateVisitor()),
               _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
     {
