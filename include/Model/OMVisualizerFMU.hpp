@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup Model
  *  @{
@@ -49,7 +49,7 @@ namespace Model
     /*! \brief Class that handles visualization of FMUs.
      *
      *
-     * In contrast to \ref OMVisualizationMAT, this class provides user interaction via joystick device.
+     * In contrast to \ref OMVisualizationMAT, this class provides user interaction via joystick devices.
      */
     class OMVisualizerFMU : public OMVisualizerAbstract
     {
@@ -87,43 +87,52 @@ namespace Model
          */
         void resetInputs();
 
-		/*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
-		 *
-		 * \return Error value.
-		 */
-		int updateVisAttributes(const double time);
+        /*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
+         *
+         * \return Error value.
+         */
+        int updateVisAttributes(const double time);
 
-		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
-		 *
-		 * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
-		 */
-		void initializeVisAttributes(const double time = 0.0);
+        /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+         *
+         * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
+         */
+        void initializeVisAttributes(const double time = 0.0);
 
-		/*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
-		 *
-		 *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
-		 */
-		void updateScene(const double time = 0.0);
+        /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
+         *
+         *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
+         */
+        void updateScene(const double time = 0.0);
 
-		/*! \brief Returns "fmu".
-		*/
-		std::string getType() const;
+        /*! \brief Returns "fmu".
+         */
+        std::string getType() const;
 
-		/*! \brief initializes the attached joysticks
-		 */
-		void initJoySticks();
+        /*! \brief initializes the attached joysticks
+         */
+        void initJoySticks();
 
+        /*! Returns const pointer to \ref FMU member. */
+        const FMU* getFMU() const;
+
+        const InputData* getInputData() const;
+
+        InputData* getInputData();
 
      private:
-		FMU _fmu;
-		/// \todo Should be std::unique_ptr, but at least std::shared_ptr
+        FMU _fmu;
+        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         SimSettings* _simSettings;
-		int _numJoysticks;
 
-     public:
+        /*! Number of attached joysticks. */
+        int _numJoysticks;
+
+     private:
         /// \ todo Make it private again.
         InputData _inputData;
 
+     public:
         /// \todo Remove, we do not need it because we have inputData.
         /// \todo Should be std::unique_ptr, but at least std::shared_ptr
         std::vector<Control::JoystickDevice*> _joysticks;

@@ -31,16 +31,16 @@
 namespace Model
 {
 
-	OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
-		: OMVisualizerAbstract(modelName, modelPath),
-		_fmu(),
-		_simSettings(new SimSettings()),
-		_inputData(),
-		_joysticks()
-	    //,_keyboardEventHandler(new Control::KeyboardEventHandler(&_inputData))
+    OMVisualizerFMU::OMVisualizerFMU(const std::string modelName, const std::string modelPath)
+            : OMVisualizerAbstract(modelName, modelPath),
+              _fmu(),
+              _simSettings(new SimSettings()),
+              _inputData(),
+              _joysticks()
+    //,_keyboardEventHandler(new Control::KeyboardEventHandler(&_inputData))
     {
-	    LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
-		initJoySticks();
+        LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
+        initJoySticks();
     }
 
     void OMVisualizerFMU::initJoySticks()
@@ -173,14 +173,14 @@ namespace Model
         }
 
         //set inputs
-		for (size_t i = 0; i < _numJoysticks; ++i)
-		{
-			_joysticks[i]->detectContinuousInputEvents(_inputData);
-			_inputData.setInputsInFMU(_fmu._fmu);
-			//std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
-		}
+        for (size_t i = 0; i < _numJoysticks; ++i)
+        {
+            _joysticks[i]->detectContinuousInputEvents(_inputData);
+            _inputData.setInputsInFMU(_fmu._fmu);
+            //std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
+        }
 
-		//X2 MF: On my system, this line is needed in order to get the keyboard input working
+        //X2 MF: On my system, this line is needed in order to get the keyboard input working
         _inputData.setInputsInFMU(_fmu._fmu);
 
         /* Solve system */
@@ -203,7 +203,7 @@ namespace Model
         /* Step is complete */
         _fmu._fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmu._fmu, &_simSettings->_callEventUpdate);
 
-		//vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
+        //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
         //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
         _inputData.resetInputValues();
         return _fmu._fmuData._tcur;
@@ -234,7 +234,8 @@ namespace Model
         unsigned int shapeIdx = 0;
         Util::rAndT rT;
         osg::ref_ptr<osg::Node> child = nullptr;
-        try {
+        try
+        {
             for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
             {
                 // get the values for the scene graph objects
@@ -267,10 +268,9 @@ namespace Model
                 ++shapeIdx;
             }
         }
-        catch(std::exception& e)
+        catch (std::exception& e)
         {
-            LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."),
-                         Util::LC_SOLVER, Util::LL_WARNING);
+            LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
             isOk = 1;
         }
         return isOk;
@@ -306,6 +306,21 @@ namespace Model
     void OMVisualizerFMU::unload()
     {
         _fmu.clear();
+    }
+
+    const FMU* OMVisualizerFMU::getFMU() const
+    {
+        return &_fmu;
+    }
+
+    const InputData* OMVisualizerFMU::getInputData() const
+    {
+        return &_inputData;
+    }
+
+    InputData* OMVisualizerFMU::getInputData()
+    {
+        return &_inputData;
     }
 
 }  // End namespace Model

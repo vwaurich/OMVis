@@ -192,7 +192,7 @@ namespace Control
         if (modelIsFMU())
         {
             Model::OMVisualizerFMU* omVisFMU = (Model::OMVisualizerFMU*) _omVisualizer;
-            return &omVisFMU->_inputData;
+            return omVisFMU->getInputData();
         }
         else
             return nullptr;

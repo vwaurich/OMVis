@@ -82,6 +82,14 @@ namespace Model
          */
         void clear();
 
+        /*! Returns if this FMU has been already extracted while loading.
+         *
+         * \Remark: A seg fault will occur, if a already unzipped/extracted FMU is loaded again. Thus, use this method to check the status.
+         */
+        bool isUnzipped() const;
+
+        const FMUData* getFMUData() const;
+
      public:
         fmi1_import_t* _fmu;
         fmi_import_context_t* _context;  //MF Muss es fmi1_import_context_t* sein?

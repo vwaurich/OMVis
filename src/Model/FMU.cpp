@@ -131,7 +131,8 @@ namespace Model
         // calloc everything
         _fmuData._nStates = fmi1_import_get_number_of_continuous_states(_fmu);
         _fmuData._nEventIndicators = fmi1_import_get_number_of_event_indicators(_fmu);
-        LOGGER_WRITE(std::string("n_states: ") + std::to_string(_fmuData._nStates), Util::LC_LOADER, Util::LL_INFO);
+        LOGGER_WRITE(std::string("n_states: ") + std::to_string(_fmuData._nStates) + " " +
+                     std::to_string(_fmuData._nEventIndicators), Util::LC_LOADER, Util::LL_INFO);
 
         _fmuData._states = (fmi1_real_t*) calloc(_fmuData._nStates, sizeof(double));
         _fmuData._statesDer = (fmi1_real_t*) calloc(_fmuData._nStates, sizeof(double));
@@ -179,6 +180,16 @@ namespace Model
             return fmi1_base_type_str;
         else
             std::cout << "getFMI1baseTypeFor4CharString failed" << std::endl;
+    }
+
+    bool FMU::isUnzipped() const
+    {
+        return _isUnzipped;
+    }
+
+    const FMUData* FMU::getFMUData() const
+    {
+        return &_fmuData;
     }
 
 /* alter Code */
