@@ -26,100 +26,102 @@
 #include <QDebug>
 #include <QDialogButtonBox>
 
-namespace View
+namespace OMVIS
 {
-
-    PerspectiveSettingDialog::PerspectiveSettingDialog(QWidget* parent)
-            : QDialog(parent),
-              _perspectiveCombo(new QComboBox())
+    namespace View
     {
-        // Perspective
-        _perspectiveCombo->addItem(QString("to home position"));
-        _perspectiveCombo->addItem(QString("normal to x-y plane"));
-        _perspectiveCombo->addItem(QString("normal to x-z plane"));
-        _perspectiveCombo->addItem(QString("normal to y-z plane"));
 
-        //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
-        QLabel* perspectiveLabel = new QLabel(tr("Set view "));
-        QHBoxLayout* perspectiveLayout = new QHBoxLayout();
-        perspectiveLayout->addWidget(perspectiveLabel);
-        perspectiveLayout->addWidget(_perspectiveCombo);
-        //X11 perspectiveGroup->setLayout(perspectiveLayout);
+        PerspectiveSettingDialog::PerspectiveSettingDialog(QWidget* parent)
+                : QDialog(parent),
+                  _perspectiveCombo(new QComboBox())
+        {
+            // Perspective
+            _perspectiveCombo->addItem(QString("to home position"));
+            _perspectiveCombo->addItem(QString("normal to x-y plane"));
+            _perspectiveCombo->addItem(QString("normal to x-z plane"));
+            _perspectiveCombo->addItem(QString("normal to y-z plane"));
 
-        QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-        QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-        QVBoxLayout* buttonsLayout = new QVBoxLayout();
-        buttonsLayout->addStretch(1);
-        buttonsLayout->addWidget(buttonBox);
+            //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
+            QLabel* perspectiveLabel = new QLabel(tr("Set view "));
+            QHBoxLayout* perspectiveLayout = new QHBoxLayout();
+            perspectiveLayout->addWidget(perspectiveLabel);
+            perspectiveLayout->addWidget(_perspectiveCombo);
+            //X11 perspectiveGroup->setLayout(perspectiveLayout);
 
-        // Main layout
-        QVBoxLayout* mainLayout = new QVBoxLayout();
-        //X11 mainLayout->addWidget(perspectiveGroup);
-        mainLayout->addLayout(perspectiveLayout);
-        mainLayout->addLayout(buttonsLayout);
-        mainLayout->addStretch(1);
-        setLayout(mainLayout);
-        setWindowTitle(tr("Perspective"));
-    }
+            QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+            QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+            QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+            QVBoxLayout* buttonsLayout = new QVBoxLayout();
+            buttonsLayout->addStretch(1);
+            buttonsLayout->addWidget(buttonBox);
 
-    void PerspectiveSettingDialog::accept()
-    {
-        // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
-        _perspective = static_cast<Perspective>(_perspectiveCombo->currentIndex());
-        QDialog::accept();
-    }
+            // Main layout
+            QVBoxLayout* mainLayout = new QVBoxLayout();
+            //X11 mainLayout->addWidget(perspectiveGroup);
+            mainLayout->addLayout(perspectiveLayout);
+            mainLayout->addLayout(buttonsLayout);
+            mainLayout->addStretch(1);
+            setLayout(mainLayout);
+            setWindowTitle(tr("Perspective"));
+        }
 
-    Perspective PerspectiveSettingDialog::getResult() const
-    {
-        return _perspective;
-    }
+        void PerspectiveSettingDialog::accept()
+        {
+            // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
+            _perspective = static_cast<Perspective>(_perspectiveCombo->currentIndex());
+            QDialog::accept();
+        }
 
-    BackgroundColorSettingDialog::BackgroundColorSettingDialog(QWidget* parent)
-            : QDialog(parent),
-              _bgcCombo(new QComboBox())
-    {
-        // Perspective
-        _bgcCombo->addItem(QString("midnight blue"));
-        _bgcCombo->addItem(QString("lovely lila"));
-        _bgcCombo->addItem(QString("ivory white"));
-        _bgcCombo->addItem(QString("froggy green"));
+        Perspective PerspectiveSettingDialog::getResult() const
+        {
+            return _perspective;
+        }
 
-        //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
-        QLabel* bgcLabel = new QLabel(tr("Set background color of scene view to "));
-        QHBoxLayout* bgcLayout = new QHBoxLayout();
-        bgcLayout->addWidget(bgcLabel);
-        bgcLayout->addWidget(_bgcCombo);
-        //X11 perspectiveGroup->setLayout(bgcLayout);
+        BackgroundColorSettingDialog::BackgroundColorSettingDialog(QWidget* parent)
+                : QDialog(parent),
+                  _bgcCombo(new QComboBox())
+        {
+            // Perspective
+            _bgcCombo->addItem(QString("midnight blue"));
+            _bgcCombo->addItem(QString("lovely lila"));
+            _bgcCombo->addItem(QString("ivory white"));
+            _bgcCombo->addItem(QString("froggy green"));
 
-        QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-        QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-        QVBoxLayout* buttonsLayout = new QVBoxLayout();
-        buttonsLayout->addStretch(1);
-        buttonsLayout->addWidget(buttonBox);
+            //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
+            QLabel* bgcLabel = new QLabel(tr("Set background color of scene view to "));
+            QHBoxLayout* bgcLayout = new QHBoxLayout();
+            bgcLayout->addWidget(bgcLabel);
+            bgcLayout->addWidget(_bgcCombo);
+            //X11 perspectiveGroup->setLayout(bgcLayout);
 
-        // Main layout
-        QVBoxLayout* mainLayout = new QVBoxLayout();
-        //X11 mainLayout->addWidget(perspectiveGroup);
-        mainLayout->addLayout(bgcLayout);
-        mainLayout->addLayout(buttonsLayout);
-        mainLayout->addStretch(1);
-        setLayout(mainLayout);
-        setWindowTitle(tr("Perspective"));
-    }
+            QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+            QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+            QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+            QVBoxLayout* buttonsLayout = new QVBoxLayout();
+            buttonsLayout->addStretch(1);
+            buttonsLayout->addWidget(buttonBox);
 
-    void BackgroundColorSettingDialog::accept()
-    {
-        // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
-        _bgc = static_cast<BackgroundColor>(_bgcCombo->currentIndex());
-        QDialog::accept();
-    }
+            // Main layout
+            QVBoxLayout* mainLayout = new QVBoxLayout();
+            //X11 mainLayout->addWidget(perspectiveGroup);
+            mainLayout->addLayout(bgcLayout);
+            mainLayout->addLayout(buttonsLayout);
+            mainLayout->addStretch(1);
+            setLayout(mainLayout);
+            setWindowTitle(tr("Perspective"));
+        }
 
-    BackgroundColor BackgroundColorSettingDialog::getResult() const
-    {
-        return _bgc;
-    }
+        void BackgroundColorSettingDialog::accept()
+        {
+            // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
+            _bgc = static_cast<BackgroundColor>(_bgcCombo->currentIndex());
+            QDialog::accept();
+        }
 
-}  // End namespace View
+        BackgroundColor BackgroundColorSettingDialog::getResult() const
+        {
+            return _bgc;
+        }
 
+    }  // End namespace View
+}  // End namespace OMVIS

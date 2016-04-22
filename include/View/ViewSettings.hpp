@@ -22,51 +22,57 @@
 
 #include <vector>
 
-namespace View
+namespace OMVIS
 {
 
-    /**
-     * This enum holds the available background colors for the scene window.
-     */
-    enum BackgroundColor {
-        blue, //!< blue
-        lila, //!< lila
-        white,//!< white
-        green,//!< green
-        black //!< black
-    };
-
-    /**
-     * The predefined perspectives of the scene view are normal to the x-y, x-z or y-z plane.
-     */
-    enum Perspective {
-        home, //!< original perspective while loading the scene
-        xy,//!< normal to x-y plane
-        xz,//!< normal to x-z plane
-        yz,//!< normal to y-z plane
-    };
-
-    // MF: May  be we need this later?
-    /*! \brief This struct holds the view settings which can be specified for OMVis.
-     */
-    struct ViewSettings
+    namespace View
     {
-        /**
-         * This attribute represents the chosen background color for the scene window.
-         */
-        BackgroundColor _bgc;
 
         /**
-         * \todo Implement me in a proper way. The aim is to provide "continuous" zoom handling.
+         * This enum holds the available background colors for the scene window.
          */
-        float _zoom;
+        enum BackgroundColor
+        {
+            blue,  //!< blue
+            lila,  //!< lila
+            white,  //!< white
+            green,  //!< green
+            black  //!< black
+        };
 
         /**
-         * This attribute represents the perspective.
+         * The predefined perspectives of the scene view are normal to the x-y, x-z or y-z plane.
          */
-        Perspective _perspective;
-    };
+        enum Perspective
+        {
+            home,  //!< original perspective while loading the scene
+            xy,  //!< normal to x-y plane
+            xz,  //!< normal to x-z plane
+            yz,  //!< normal to y-z plane
+        };
 
-}  // End namespace View
+        // MF: May  be we need this later?
+        /*! \brief This struct holds the view settings which can be specified for OMVis.
+         */
+        struct ViewSettings
+        {
+            /**
+             * This attribute represents the chosen background color for the scene window.
+             */
+            BackgroundColor _bgc;
+
+            /**
+             * \todo Implement me in a proper way. The aim is to provide "continuous" zoom handling.
+             */
+            float _zoom;
+
+            /**
+             * This attribute represents the perspective.
+             */
+            Perspective _perspective;
+        };
+
+    }  // End namespace View
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_VIEW_VIEWSETTINGS_HPP_ */

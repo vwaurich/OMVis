@@ -32,87 +32,114 @@
 #include <string>
 #include <vector>
 
-namespace Model
+namespace OMVIS
 {
-
-    typedef struct
+    namespace Model
     {
-        fmi1_real_t _min;
-        fmi1_real_t _max;
-        fmi1_real_t _nominal;
-        fmi1_real_t _start;
-    } AttributesReal;
 
-    /*! \brief Base class for all inputValues.
-     *
-     * \todo Can the attributes be private?
-     */
-    class InputValues
-    {
-     public:
-        /*! \brief Default constructor. Attributes are initialized with default values. */
-        InputValues()
-                : _vrReal(nullptr),
-                  _vrInteger(nullptr),
-                  _vrBoolean(nullptr),
-                  _vrString(nullptr),
-                  _valuesReal(nullptr),
-                  _valuesInteger(nullptr),
-                  _valuesBoolean(nullptr),
-                  _valuesString(nullptr),
-                  _namesReal(),
-                  _namesInteger(),
-                  _namesBool(),
-                  _namesString(),
-                  _numReal(0),
-                  _numInteger(0),
-                  _numBoolean(0),
-                  _numString(0),
-                  _attrReal(nullptr)
+        typedef struct
         {
-        }
+            fmi1_real_t _min;
+            fmi1_real_t _max;
+            fmi1_real_t _nominal;
+            fmi1_real_t _start;
+        } AttributesReal;
 
-        /*! Let the compiler provide the destructor. */
-        ~InputValues() = default;
+        /*! \brief Base class for all inputValues.
+         *
+         * \todo Can the attributes be private?
+         */
+        class InputValues
+        {
+         public:
+            /*! \brief Default constructor. Attributes are initialized with default values. */
+            InputValues()
+                    : _vrReal(nullptr),
+                      _vrInteger(nullptr),
+                      _vrBoolean(nullptr),
+                      _vrString(nullptr),
+                      _valuesReal(nullptr),
+                      _valuesInteger(nullptr),
+                      _valuesBoolean(nullptr),
+                      _valuesString(nullptr),
+                      _namesReal(),
+                      _namesInteger(),
+                      _namesBool(),
+                      _namesString(),
+                      _numReal(0),
+                      _numInteger(0),
+                      _numBoolean(0),
+                      _numString(0),
+                      _attrReal(nullptr)
+            {
+            }
 
-        /// \todo Check: Do we copy the pointer or should we copy the values the pointers point to?!
-        InputValues(const InputValues& ipv) = default;
-        InputValues& operator=(const InputValues& ipv) = delete;
+            /*! Let the compiler provide the destructor. */
+            ~InputValues() = default;
 
-        void setNumReal(const size_t num)    { _numReal = num; }
-        void setNumInteger(const size_t num) { _numInteger = num; }
-        void setNumBoolean(const size_t num) { _numBoolean = num; }
-        void setNumString(const size_t num)  { _numString = num; }
+            /// \todo Check: Do we copy the pointer or should we copy the values the pointers point to?!
+            InputValues(const InputValues& ipv) = default;
+            InputValues& operator=(const InputValues& ipv) = delete;
 
-        size_t getNumReal() const    { return _numReal; }
-        size_t getNumBoolean() const { return _numBoolean; }
-        size_t getNumInteger() const { return _numInteger; }
-        size_t getNumString() const  { return _numString; }
+            void setNumReal(const size_t num)
+            {
+                _numReal = num;
+            }
+            void setNumInteger(const size_t num)
+            {
+                _numInteger = num;
+            }
+            void setNumBoolean(const size_t num)
+            {
+                _numBoolean = num;
+            }
+            void setNumString(const size_t num)
+            {
+                _numString = num;
+            }
 
-     public:
-        const fmi1_value_reference_t* _vrReal;
-        const fmi1_value_reference_t* _vrInteger;
-        const fmi1_value_reference_t* _vrBoolean;
-        const fmi1_value_reference_t* _vrString;
-        fmi1_real_t* _valuesReal;
-        fmi1_integer_t* _valuesInteger;
-        fmi1_boolean_t* _valuesBoolean;
-        fmi1_string_t* _valuesString;
-        std::vector<std::string> _namesReal;
-        std::vector<std::string> _namesInteger;
-        std::vector<std::string> _namesBool;
-        std::vector<std::string> _namesString;
+            size_t getNumReal() const
+            {
+                return _numReal;
+            }
+            size_t getNumBoolean() const
+            {
+                return _numBoolean;
+            }
+            size_t getNumInteger() const
+            {
+                return _numInteger;
+            }
+            size_t getNumString() const
+            {
+                return _numString;
+            }
 
-     private:
-        size_t _numReal;
-        size_t _numInteger;
-        size_t _numBoolean;
-        size_t _numString;
+         public:
+            const fmi1_value_reference_t* _vrReal;
+            const fmi1_value_reference_t* _vrInteger;
+            const fmi1_value_reference_t* _vrBoolean;
+            const fmi1_value_reference_t* _vrString;
+            fmi1_real_t* _valuesReal;
+            fmi1_integer_t* _valuesInteger;
+            fmi1_boolean_t* _valuesBoolean;
+            fmi1_string_t* _valuesString;
+            std::vector<std::string> _namesReal;
+            std::vector<std::string> _namesInteger;
+            std::vector<std::string> _namesBool;
+            std::vector<std::string> _namesString;
 
-     public:
-        AttributesReal* _attrReal;
-    };
+         private:
+            size_t _numReal;
+            size_t _numInteger;
+            size_t _numBoolean;
+            size_t _numString;
 
-}  // End namespace Model
+         public:
+            AttributesReal* _attrReal;
+        };
+
+    }  // End namespace Model
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_INPUTVALUES_HPP_ */

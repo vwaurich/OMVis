@@ -20,82 +20,83 @@
 #ifndef INCLUDE_VIEW_SETTINGSDIALOGS_HPP_
 #define INCLUDE_VIEW_SETTINGSDIALOGS_HPP_
 
-
 #include "View/ViewSettings.hpp"
 
 #include <QDialog>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
-namespace View
+namespace OMVIS
 {
 
-    /*! \brief Class that encapsulates the dialog to specify the perspective settings.
-     *
-     * There are four predefined perspective settings which can be chosen from this dialog window, see \ref Perspective.
-     */
-    class PerspectiveSettingDialog : public QDialog
+    namespace View
     {
-    Q_OBJECT
 
-     public:
-        /*! \brief Constructor which creates the Qt dialog window to chose the perspective.
+        /*! \brief Class that encapsulates the dialog to specify the perspective settings.
          *
+         * There are four predefined perspective settings which can be chosen from this dialog window, see \ref Perspective.
          */
-        PerspectiveSettingDialog(QWidget* parent = Q_NULLPTR);
+        class PerspectiveSettingDialog : public QDialog
+        {
+        Q_OBJECT
 
-        /*! \brief
+         public:
+            /*! \brief Constructor which creates the Qt dialog window to chose the perspective.
+             *
+             */
+            PerspectiveSettingDialog(QWidget* parent = Q_NULLPTR);
+
+            /*! \brief
+             *
+             * @return Perspective which was selected.
+             */
+            Perspective getResult() const;
+
+         private slots:
+            /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _perspective.
+             *
+             */
+            void accept() Q_DECL_OVERRIDE;
+
+         private:
+            /*! Qt combo box which provides the predefined perspectives. */
+            QComboBox* _perspectiveCombo;
+            Perspective _perspective;
+        };
+
+        /*! \brief Class that encapsulates the dialog to specify the background color for the scene view.
          *
-         * @return Perspective which was selected.
+         * There are four predefined background colors  which can be chosen from this dialog window, see \ref BackgroundColor.
          */
-        Perspective getResult() const;
+        class BackgroundColorSettingDialog : public QDialog
+        {
+        Q_OBJECT
 
-     private slots:
-        /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _perspective.
-         *
-         */
-        void accept() Q_DECL_OVERRIDE;
+         public:
+            /*! \brief Constructor which creates the Qt dialog window to chose the background color.
+             *
+             */
+            BackgroundColorSettingDialog(QWidget* parent = Q_NULLPTR);
 
-     private:
-        /*! Qt combo box which provides the predefined perspectives. */
-        QComboBox* _perspectiveCombo;
-        Perspective _perspective;
-    };
+            /*! \brief
+             *
+             * @return BackgroundColor which was selected.
+             */
+            BackgroundColor getResult() const;
 
+         private slots:
+            /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _bgc.
+             *
+             */
+            void accept() Q_DECL_OVERRIDE;
 
-    /*! \brief Class that encapsulates the dialog to specify the background color for the scene view.
-     *
-     * There are four predefined background colors  which can be chosen from this dialog window, see \ref BackgroundColor.
-     */
-    class BackgroundColorSettingDialog : public QDialog
-    {
-    Q_OBJECT
+         private:
+            /*! Qt combo box which provides the predefined perspectives. */
+            QComboBox* _bgcCombo;
+            BackgroundColor _bgc;
+        };
 
-     public:
-        /*! \brief Constructor which creates the Qt dialog window to chose the background color.
-         *
-         */
-        BackgroundColorSettingDialog(QWidget* parent = Q_NULLPTR);
-
-        /*! \brief
-         *
-         * @return BackgroundColor which was selected.
-         */
-        BackgroundColor getResult() const;
-
-     private slots:
-        /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _bgc.
-         *
-         */
-        void accept() Q_DECL_OVERRIDE;
-
-     private:
-        /*! Qt combo box which provides the predefined perspectives. */
-        QComboBox* _bgcCombo;
-        BackgroundColor _bgc;
-    };
-
-}  // End namespace View
-
+    }  // End namespace View
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_VIEW_SETTINGSDIALOGS_HPP_ */

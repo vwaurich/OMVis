@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup Control
  *  @{
@@ -31,52 +31,58 @@
 #include <SDL_joystick.h>
 
 // Forward declaration
-namespace Model{
-    class InputData;
+namespace OMVIS
+{
+    namespace Model
+    {
+        class InputData;
+    }
 }
 
-namespace Control
+namespace OMVIS
 {
-    /*! \brief Class that serves as controller for input from joystick.
-     *
-     */
-    class JoystickDevice
+    namespace Control
     {
-     public:
-        /*! \brief Default constructor.
+        /*! \brief Class that serves as controller for input from joystick.
          *
-         * Initialices the joystick with the corresponding ID
          */
-        JoystickDevice(int joyID);
-
-        /// Destructor.
-        ~JoystickDevice()
+        class JoystickDevice
         {
-        }
+         public:
+            /*! \brief Default constructor.
+             *
+             * Initialices the joystick with the corresponding ID
+             */
+            JoystickDevice(int joyID);
 
-        /// The copy constructor is forbidden.
-        //JoystickDevice(const JoystickDevice& jd) = delete;
+            /// Destructor.
+            ~JoystickDevice()
+            {
+            }
 
-        /// The assignment operator is forbidden.
-        JoystickDevice& operator=(const JoystickDevice& jd) = delete;
+            /// The copy constructor is forbidden.
+            //JoystickDevice(const JoystickDevice& jd) = delete;
 
-        void detectContinuousInputEvents(Model::InputData inputInfo);
+            /// The assignment operator is forbidden.
+            JoystickDevice& operator=(const JoystickDevice& jd) = delete;
 
-		int getXDir();
+            void detectContinuousInputEvents(Model::InputData inputInfo);
 
-		int getYDir();
+            int getXDir();
 
+            int getYDir();
 
-     private:
-		/// \todo Should be a std::unique_ptr, but at least std::shared_ptr. Memory is allocated in this class!
-        SDL_Joystick* _joystick;
-        SDL_Event _inputEvent;
-        int _xDir;
-        int _yDir;
-		int _joystickId;
-    };
+         private:
+            /// \todo Should be a std::unique_ptr, but at least std::shared_ptr. Memory is allocated in this class!
+            SDL_Joystick* _joystick;
+            SDL_Event _inputEvent;
+            int _xDir;
+            int _yDir;
+            int _joystickId;
+        };
 
-}  // End namespace Control
+    }  // End namespace Control
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_JOYSTICKDEVICE_HPP_ */
 /**

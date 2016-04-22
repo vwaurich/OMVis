@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "View/OSGScene.hpp"
 #include "Visualize.hpp"
@@ -28,85 +28,88 @@
 
 #include <string>
 
-namespace View
+namespace OMVIS
 {
-
-    OSGScene::OSGScene()
-            : _rootNode(new osg::Group())
+    namespace View
     {
-    }
 
-    int OSGScene::setUpScene(rapidxml::xml_node<>* xmlRoot)
-    {
-        int isOk(0);
-        for (rapidxml::xml_node<>* shapeNode = xmlRoot->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+        OSGScene::OSGScene()
+                : _rootNode(new osg::Group())
         {
-            osg::ref_ptr<osg::Geode> geode;
-            osg::ref_ptr<osg::StateSet> ss;
+        }
 
-            std::string type = Util::getShapeType(shapeNode);
-            LOGGER_WRITE(std::string("Shape: ") + shapeNode->value() + std::string(", type: ") + type,Util::LC_LOADER, Util::LL_DEBUG);
-
-            //color
-            osg::ref_ptr<osg::Material> material = new osg::Material();
-            material->setDiffuse(osg::Material::FRONT, osg::Vec4f(0.0, 0.0, 0.0, 0.0));
-
-            //matrix transformation
-            osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform();
-
-            //stl node
-            if (Util::isCADType(type))
+        int OSGScene::setUpScene(rapidxml::xml_node<>* xmlRoot)
+        {
+            int isOk(0);
+            for (rapidxml::xml_node<>* shapeNode = xmlRoot->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
             {
-                std::string filename = Util::extractCADFilename(type);
-                LOGGER_WRITE(std::string("Its a STL and the path is ") + _path ,Util::LC_LOADER, Util::LL_INFO);
-				filename = _path + filename;
+                osg::ref_ptr<osg::Geode> geode;
+                osg::ref_ptr<osg::StateSet> ss;
 
-				// \todo What do we do at this point?
-                if (!Util::exists(filename))
+                std::string type = Util::getShapeType(shapeNode);
+                LOGGER_WRITE(std::string("Shape: ") + shapeNode->value() + std::string(", type: ") + type, Util::LC_LOADER, Util::LL_DEBUG);
+
+                //color
+                osg::ref_ptr<osg::Material> material = new osg::Material();
+                material->setDiffuse(osg::Material::FRONT, osg::Vec4f(0.0, 0.0, 0.0, 0.0));
+
+                //matrix transformation
+                osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform();
+
+                //stl node
+                if (Util::isCADType(type))
                 {
-                    LOGGER_WRITE(std::string("Could not find the file ") + filename +std::string(".") ,Util::LC_LOADER, Util::LL_WARNING);
-                    isOk = 1;
-                    return isOk;
+                    std::string filename = Util::extractCADFilename(type);
+                    LOGGER_WRITE(std::string("Its a STL and the path is ") + _path, Util::LC_LOADER, Util::LL_INFO);
+                    filename = _path + filename;
+
+                    // \todo What do we do at this point?
+                    if (!Util::exists(filename))
+                    {
+                        LOGGER_WRITE(std::string("Could not find the file ") + filename + std::string("."), Util::LC_LOADER, Util::LL_WARNING);
+                        isOk = 1;
+                        return isOk;
+                    }
+
+                    osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
+                    osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
+
+                    ss->setAttribute(material.get());
+                    node->setStateSet(ss);
+                    transf->addChild(node.get());
+                }
+                //geode with shape drawable
+                else
+                {
+                    osg::ref_ptr<osg::ShapeDrawable> shapeDraw = new osg::ShapeDrawable();
+                    shapeDraw->setColor(osg::Vec4(1.0, 1.0, 1.0, 1.0));
+                    geode = new osg::Geode();
+                    geode->addDrawable(shapeDraw.get());
+                    osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
+                    ss->setAttribute(material.get());
+                    geode->setStateSet(ss);
+                    transf->addChild(geode.get());
                 }
 
-                osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
-                osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
-
-                ss->setAttribute(material.get());
-                node->setStateSet(ss);
-                transf->addChild(node.get());
+                _rootNode->addChild(transf.get());
             }
-            //geode with shape drawable
-            else
-            {
-                osg::ref_ptr<osg::ShapeDrawable> shapeDraw = new osg::ShapeDrawable();
-                shapeDraw->setColor(osg::Vec4(1.0, 1.0, 1.0, 1.0));
-                geode = new osg::Geode();
-                geode->addDrawable(shapeDraw.get());
-                osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
-                ss->setAttribute(material.get());
-                geode->setStateSet(ss);
-                transf->addChild(geode.get());
-            }
-
-            _rootNode->addChild(transf.get());
+            return isOk;
         }
-        return isOk;
-    }
 
-    osg::ref_ptr<osg::Group> OSGScene::getRootNode()
-    {
-        return _rootNode;
-    }
+        osg::ref_ptr<osg::Group> OSGScene::getRootNode()
+        {
+            return _rootNode;
+        }
 
-    std::string OSGScene::getPath() const
-    {
-        return _path;
-    }
+        std::string OSGScene::getPath() const
+        {
+            return _path;
+        }
 
-    void OSGScene::setPath(const std::string path)
-    {
-        _path = path;
-    }
+        void OSGScene::setPath(const std::string path)
+        {
+            _path = path;
+        }
 
-}  // End namespace View
+    }  // End namespace View
+}  // End namespace OMVIS

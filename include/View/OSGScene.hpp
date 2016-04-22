@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup View
  *  @{
@@ -33,46 +33,50 @@
 
 #include <string>
 
-namespace View
+namespace OMVIS
 {
 
-    /*! \brief Class that stores the pointer to the root node of the models OSG scene.
-     *
-     * \todo This class handles access to the root node. Encapsulate access to the pointer.
-     */
-    class OSGScene
+    namespace View
     {
-     public:
-        OSGScene();
-        ~OSGScene() = default;
-        OSGScene(const OSGScene& osgs) = delete;
-        OSGScene& operator=(const OSGScene& osgs) = delete;
 
-        /*! \brief Sets up all nodes initially.
+        /*! \brief Class that stores the pointer to the root node of the models OSG scene.
          *
-         * @param xmlRoot
-         * \return Error value.
+         * \todo This class handles access to the root node. Encapsulate access to the pointer.
          */
-        int setUpScene(rapidxml::xml_node<>* xmlRoot);
+        class OSGScene
+        {
+         public:
+            OSGScene();
+            ~OSGScene() = default;
+            OSGScene(const OSGScene& osgs) = delete;
+            OSGScene& operator=(const OSGScene& osgs) = delete;
 
-        /*! \brief Return shared pointer to rootNode. */
-        osg::ref_ptr<osg::Group> getRootNode();
+            /*! \brief Sets up all nodes initially.
+             *
+             * @param xmlRoot
+             * \return Error value.
+             */
+            int setUpScene(rapidxml::xml_node<>* xmlRoot);
 
-        /*! \brief Return path to the scene file. */
-        std::string getPath() const;
+            /*! \brief Return shared pointer to rootNode. */
+            osg::ref_ptr<osg::Group> getRootNode();
 
-        /*! \brief Set path to the scene file. */
-        void setPath(const std::string path);
+            /*! \brief Return path to the scene file. */
+            std::string getPath() const;
 
-     private:
-        /*! Root node of the scene. */
-        osg::ref_ptr<osg::Group> _rootNode;
+            /*! \brief Set path to the scene file. */
+            void setPath(const std::string path);
 
-        /*! Path to the scene file. */
-		std::string _path;
-    };
+         private:
+            /*! Root node of the scene. */
+            osg::ref_ptr<osg::Group> _rootNode;
 
-}  // End namespace View
+            /*! Path to the scene file. */
+            std::string _path;
+        };
+
+    }  // End namespace View
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_OSGSCENE_HPP_ */
 /**

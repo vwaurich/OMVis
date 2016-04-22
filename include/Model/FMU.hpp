@@ -32,78 +32,83 @@
 #include <string>
 
 // Forward Declaration
-namespace Model
+namespace OMVIS
 {
-    class SimSettings;
+    namespace Model
+    {
+        class SimSettings;
+    }
 }
 
 #define BUFFER 1000
 
+namespace OMVIS
+{
 /// \todo Can we find a better place for this structs and functions?
 ///
-namespace Model
-{
-
-    typedef struct
+    namespace Model
     {
-        fmi1_real_t* _states;
-        fmi1_real_t* _statesDer;
-        fmi1_real_t* _eventIndicators;
-        fmi1_real_t* _eventIndicatorsPrev;
-        size_t _nStates;
-        size_t _nEventIndicators;
-        fmi1_status_t _fmiStatus;
-        fmi1_event_info_t _eventInfo;
-        fmi1_real_t _tcur;
-        fmi1_real_t _hcur;
-    } FMUData;
 
+        typedef struct
+        {
+            fmi1_real_t* _states;
+            fmi1_real_t* _statesDer;
+            fmi1_real_t* _eventIndicators;
+            fmi1_real_t* _eventIndicatorsPrev;
+            size_t _nStates;
+            size_t _nEventIndicators;
+            fmi1_status_t _fmiStatus;
+            fmi1_event_info_t _eventInfo;
+            fmi1_real_t _tcur;
+            fmi1_real_t _hcur;
+        } FMUData;
 
-    /// MF: \todo Complete this class and remove the structs and free functions.
-    /**
-     * This class represents a FMU that can be loaded into OMVis for visualization.
-     *
-     * \Remark: Currently we do not provide interfaces to access any function described in the FMI 1.0 standard. Because we do not to.
-     */
-    class FMU
-    {
-     public:
-        FMU();
-        ~FMU();
-        FMU(const FMU&) = delete;
-        FMU& operator=(const FMU&) = delete;
-
-        void initialize(/*fmi1_import_t* fmu, */ Model::SimSettings* settings);
-        void load(const std::string FMUPath, const std::string modelName);
-
-        /*! \brief Clear FMU structure.
+        /// MF: \todo Complete this class and remove the structs and free functions.
+        /**
+         * This class represents a FMU that can be loaded into OMVis for visualization.
          *
-         * Associated memory is freed and attributes are set to default values.
+         * \Remark: Currently we do not provide interfaces to access any function described in the FMI 1.0 standard. Because we do not to.
          */
-        void clear();
+        class FMU
+        {
+         public:
+            FMU();
+            ~FMU();
+            FMU(const FMU&) = delete;
+            FMU& operator=(const FMU&) = delete;
 
-        /*! Returns if this FMU has been already extracted while loading.
-         *
-         * \Remark: A seg fault will occur, if a already unzipped/extracted FMU is loaded again. Thus, use this method to check the status.
-         */
-        bool isUnzipped() const;
+            void initialize(/*fmi1_import_t* fmu, */Model::SimSettings* settings);
+            void load(const std::string FMUPath, const std::string modelName);
 
-        const FMUData* getFMUData() const;
+            /*! \brief Clear FMU structure.
+             *
+             * Associated memory is freed and attributes are set to default values.
+             */
+            void clear();
 
-     public:
-        fmi1_import_t* _fmu;
-        fmi_import_context_t* _context;  //MF Muss es fmi1_import_context_t* sein?
-        jm_callbacks* _callbacks;
-        fmi1_callback_functions_t _callBackFunctions;
-        FMUData _fmuData;
+            /*! Returns if this FMU has been already extracted while loading.
+             *
+             * \Remark: A seg fault will occur, if a already unzipped/extracted FMU is loaded again. Thus, use this method to check the status.
+             */
+            bool isUnzipped() const;
 
-     private:
-        bool _isUnzipped;
-    };
+            const FMUData* getFMUData() const;
 
-    fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string typeString);
+         public:
+            fmi1_import_t* _fmu;
+            fmi_import_context_t* _context;  //MF Muss es fmi1_import_context_t* sein?
+            jm_callbacks* _callbacks;
+            fmi1_callback_functions_t _callBackFunctions;
+            FMUData _fmuData;
 
-}  // End namespace Model
+         private:
+            bool _isUnzipped;
+        };
+
+        fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string typeString);
+
+    }  // End namespace Model
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_FMUSIMULATE_HPP_ */
 /**

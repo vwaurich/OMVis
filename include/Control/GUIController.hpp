@@ -33,104 +33,109 @@
 #include <osg/Vec4>
 
 // Forward declarations
-namespace Model
+namespace OMVIS
 {
-    class OMVisualizerAbstract;
+    namespace Model
+    {
+        class OMVisualizerAbstract;
+    }
 }
 
-
-namespace Control
+namespace OMVIS
 {
-
-    /*! \brief This class is a controller class which handles user interaction with OMVis via GUI.
-     *
-     * The GUIcontroller receives the user input (,e.g., clicking a menu point), process it and induces
-     * the appropriate action.
-     */
-    class GUIController
+    namespace Control
     {
-     public:
-        GUIController();
-        ~GUIController() = default;
 
-        GUIController(const GUIController& gc) = delete;
-        GUIController& operator=(const GUIController& gc) = delete;
-
-        //X13
-        void unloadModel();
-
-        /*! \brief This method loads a model (FMU or MAT file) for visualization.
+        /*! \brief This class is a controller class which handles user interaction with OMVis via GUI.
          *
-         * This method parses the given string for model name, path to the model file and whether it is a FMU or a
-         * MAT file and asks the factory for creation of an appropriate OMVisualizer object. Furthermore, the
-         * OMVisualizer object is initialized.
-         * The method checks, if the corresponding XML file is accessible.
-         * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
-         * compatibility issue, than the old model is kept. If the already load and the new model are the very same,
-         * no information/message is "thrown". We just load it and destroy the current settings.
-         *
-         * \param modelName Path and name of the model to load.
-         * \param timeSliderStart Minimum value of the time slider object.
-         * \param timeSliderEnd Maximum value of the time slider object.
-         * \return Pointer to OMVisualizer object which is created by the factory.
-         *
-         * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
+         * The GUIcontroller receives the user input (,e.g., clicking a menu point), process it and induces
+         * the appropriate action.
          */
-        void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
+        class GUIController
+        {
+         public:
+            GUIController();
+            ~GUIController() = default;
 
-        /*! \brief Check if the XML file for a given path and model name can be accessed.
-         *
-         * The XML file name is created by "path + modelName + "_visual.xml"". Thus, the XML file has to be renamed
-         * if it does not fit this convention.
-         *
-         * @param path Path to the XML file.
-         * @param modelName Name of the model.
-         * @return True, if the XML file is accessible. False, otherwise.
-         */
-        bool checkForXMLFile(const std::string& path, const std::string& modelName) const;
+            GUIController(const GUIController& gc) = delete;
+            GUIController& operator=(const GUIController& gc) = delete;
 
-        void startVisualization();
-        void pauseVisualization();
-        void initVisualization();
-        void donationVisualization();
+            //X13
+            void unloadModel();
 
-        int getTimeProgress();
-        osg::ref_ptr<osg::Node> getSceneRootNode();
-        void sceneUpdate();
-        double getVisTime();
-        void setVisTime(const int val);
-        bool modelIsMATFile();
-        bool modelIsFMU();
-        bool modelIsLoaded() const;
-        void setModelLoaded(bool b);
+            /*! \brief This method loads a model (FMU or MAT file) for visualization.
+             *
+             * This method parses the given string for model name, path to the model file and whether it is a FMU or a
+             * MAT file and asks the factory for creation of an appropriate OMVisualizer object. Furthermore, the
+             * OMVisualizer object is initialized.
+             * The method checks, if the corresponding XML file is accessible.
+             * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
+             * compatibility issue, than the old model is kept. If the already load and the new model are the very same,
+             * no information/message is "thrown". We just load it and destroy the current settings.
+             *
+             * \param modelName Path and name of the model to load.
+             * \param timeSliderStart Minimum value of the time slider object.
+             * \param timeSliderEnd Maximum value of the time slider object.
+             * \return Pointer to OMVisualizer object which is created by the factory.
+             *
+             * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
+             */
+            void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
 
-        void setBackgroundColor(const osg::Vec4 colVec);
+            /*! \brief Check if the XML file for a given path and model name can be accessed.
+             *
+             * The XML file name is created by "path + modelName + "_visual.xml"". Thus, the XML file has to be renamed
+             * if it does not fit this convention.
+             *
+             * @param path Path to the XML file.
+             * @param modelName Name of the model.
+             * @return True, if the XML file is accessible. False, otherwise.
+             */
+            bool checkForXMLFile(const std::string& path, const std::string& modelName) const;
 
-        /// Returns simulation start time of the loaded model.
-        double getSimulationStartTime() const;
+            void startVisualization();
+            void pauseVisualization();
+            void initVisualization();
+            void donationVisualization();
 
-        /*! \brief Gets the visualization step size in milliseconds from the omvManager
-         * @return The visualization step size in milliseconds
-         */
-		double getVisStepsize();
+            int getTimeProgress();
+            osg::ref_ptr<osg::Node> getSceneRootNode();
+            void sceneUpdate();
+            double getVisTime();
+            void setVisTime(const int val);
+            bool modelIsMATFile();
+            bool modelIsFMU();
+            bool modelIsLoaded() const;
+            void setModelLoaded(bool b);
 
-        /*! \brief Gets the InputData from the omVisualizer.
-         *
-         * If we visualize a MAT file, we return a proper nullptr.
-         * @return The input data object pointer
-         */
-		Model::InputData* getInputData();
+            void setBackgroundColor(const osg::Vec4 colVec);
 
-     private:
-        Model::OMVisualizerAbstract* _omVisualizer;
+            /// Returns simulation start time of the loaded model.
+            double getSimulationStartTime() const;
 
-        //X13
-        /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
-         * It can be used to determine, what user actions are allowed in the GUI. */
-        bool _modelLoaded;
-    };
+            /*! \brief Gets the visualization step size in milliseconds from the omvManager
+             * @return The visualization step size in milliseconds
+             */
+            double getVisStepsize();
 
-}  // End namespace Control
+            /*! \brief Gets the InputData from the omVisualizer.
+             *
+             * If we visualize a MAT file, we return a proper nullptr.
+             * @return The input data object pointer
+             */
+            Model::InputData* getInputData();
+
+         private:
+            Model::OMVisualizerAbstract* _omVisualizer;
+
+            //X13
+            /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
+             * It can be used to determine, what user actions are allowed in the GUI. */
+            bool _modelLoaded;
+        };
+
+    }  // End namespace Control
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_GUICONTROLLER_HPP_ */
 /**

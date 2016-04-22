@@ -38,107 +38,114 @@
 #include <string>
 
 // Forward declaration
-namespace View
+namespace OMVIS
 {
-    class OMVManager;
+    namespace View
+    {
+        class OMVManager;
+    }
 }
 
-namespace Model
+namespace OMVIS
 {
 
-    /*! \brief Class that handles visualization of FMUs.
-     *
-     *
-     * In contrast to \ref OMVisualizationMAT, this class provides user interaction via joystick devices.
-     */
-    class OMVisualizerFMU : public OMVisualizerAbstract
+    namespace Model
     {
-     public:
-        OMVisualizerFMU() = delete;
 
-        OMVisualizerFMU(const std::string modelName, const std::string modelPath);
-
-        virtual ~OMVisualizerFMU() = default;
-        OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
-        OMVisualizerFMU& operator=(const OMVisualizerFMU& omvf) = delete;
-
-        /*! \brief Loads and initializes FMU file.
+        /*! \brief Class that handles visualization of FMUs.
          *
-         * @param model Name of the FMU.
-         * @param dir Path to the FMU file.
-         * @return Error value.
-         */
-        int loadFMU(const std::string model, const std::string dir);
-
-        /*! \brief Unloads the FMU and frees allocated memory. */
-        virtual void unload();
-
-        virtual void simulate(Control::OMVisManager& omvm);
-
-        double simulateStep(const double time);
-
-        /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
-         * @return Error value.
-         */
-        int initData();
-
-        /*! \brief This methods resets the input values of a FMU to default ("zero") values.
          *
+         * In contrast to \ref OMVisualizationMAT, this class provides user interaction via joystick devices.
          */
-        void resetInputs();
+        class OMVisualizerFMU : public OMVisualizerAbstract
+        {
+         public:
+            OMVisualizerFMU() = delete;
 
-        /*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
-         *
-         * \return Error value.
-         */
-        int updateVisAttributes(const double time);
+            OMVisualizerFMU(const std::string modelName, const std::string modelPath);
 
-        /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
-         *
-         * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
-         */
-        void initializeVisAttributes(const double time = 0.0);
+            virtual ~OMVisualizerFMU() = default;
+            OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
+            OMVisualizerFMU& operator=(const OMVisualizerFMU& omvf) = delete;
 
-        /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
-         *
-         *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
-         */
-        void updateScene(const double time = 0.0);
+            /*! \brief Loads and initializes FMU file.
+             *
+             * @param model Name of the FMU.
+             * @param dir Path to the FMU file.
+             * @return Error value.
+             */
+            int loadFMU(const std::string model, const std::string dir);
 
-        /*! \brief Returns "fmu".
-         */
-        std::string getType() const;
+            /*! \brief Unloads the FMU and frees allocated memory. */
+            virtual void unload();
 
-        /*! \brief initializes the attached joysticks
-         */
-        void initJoySticks();
+            virtual void simulate(Control::OMVisManager& omvm);
 
-        /*! Returns const pointer to \ref FMU member. */
-        const FMU* getFMU() const;
+            double simulateStep(const double time);
 
-        const InputData* getInputData() const;
+            /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
+             * @return Error value.
+             */
+            int initData();
 
-        InputData* getInputData();
+            /*! \brief This methods resets the input values of a FMU to default ("zero") values.
+             *
+             */
+            void resetInputs();
 
-     private:
-        FMU _fmu;
-        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-        SimSettings* _simSettings;
+            /*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
+             *
+             * \return Error value.
+             */
+            int updateVisAttributes(const double time);
 
-        /*! Number of attached joysticks. */
-        int _numJoysticks;
+            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+             *
+             * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
+             */
+            void initializeVisAttributes(const double time = 0.0);
 
-     private:
-        /// \ todo Make it private again.
-        InputData _inputData;
+            /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
+             *
+             *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
+             */
+            void updateScene(const double time = 0.0);
 
-     public:
-        /// \todo Remove, we do not need it because we have inputData.
-        /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-        std::vector<Control::JoystickDevice*> _joysticks;
-    };
+            /*! \brief Returns "fmu".
+             */
+            std::string getType() const;
 
-}  // End namespace Model
+            /*! \brief initializes the attached joysticks
+             */
+            void initJoySticks();
+
+            /*! Returns const pointer to \ref FMU member. */
+            const FMU* getFMU() const;
+
+            const InputData* getInputData() const;
+
+            InputData* getInputData();
+
+         private:
+            FMU _fmu;
+            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
+            SimSettings* _simSettings;
+
+            /*! Number of attached joysticks. */
+            int _numJoysticks;
+
+         private:
+            /// \ todo Make it private again.
+            InputData _inputData;
+
+         public:
+            /// \todo Remove, we do not need it because we have inputData.
+            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
+            std::vector<Control::JoystickDevice*> _joysticks;
+        };
+
+    }  // End namespace Model
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_OMVISUALIZERFMU_HPP_ */
 /**

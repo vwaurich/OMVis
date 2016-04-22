@@ -55,23 +55,23 @@ int main(int argc, char* argv[])
     try
     {
         // Parse command line arguments for logger specific settings.
-        Util::CommandLineArgs clArgs = Util::getCommandLineArguments(argc, argv);
+        OMVIS::Util::CommandLineArgs clArgs = OMVIS::Util::getCommandLineArguments(argc, argv);
 
         // Initialize logger with logger settings from command line.
-        Util::Logger::initialize(clArgs._logSettings);
-        Util::Logger logger = Util::Logger::getInstance();
+        OMVIS::Util::Logger::initialize(clArgs._logSettings);
+        OMVIS::Util::Logger logger = OMVIS::Util::Logger::getInstance();
 
-        LOGGER_WRITE(std::string("Okay, let's create the main widget..."), Util::LC_OTHER, Util::LL_INFO);
+        LOGGER_WRITE(std::string("Okay, let's create the main widget..."), OMVIS::Util::LC_OTHER, OMVIS::Util::LL_INFO);
         QApplication app(argc, argv);
 
-        View::OMVisViewer omvisViewer;
+        OMVIS::View::OMVisViewer omvisViewer;
         omvisViewer.show();
 
         app.exec();
     }
     catch (std::exception &ex)
     {
-        LOGGER_WRITE(std::string("Execution failed. Error: ") + std::string(ex.what()), Util::LC_OTHER, Util::LL_ERROR);
+        LOGGER_WRITE(std::string("Execution failed. Error: ") + std::string(ex.what()), OMVIS::Util::LC_OTHER, OMVIS::Util::LL_ERROR);
         return -1;
     }
 

@@ -33,60 +33,64 @@
 
 #include <osgDB/ReadFile>
 
-namespace Util
+namespace OMVIS
 {
-    /*! \brief Checks if the type is a cad file
-     */
-    inline bool isCADType(const std::string typeName)
-    {
-        return (typeName.size() >= 12 && std::string(typeName.begin(), typeName.begin() + 11) == "modelica://");
-    }
 
-    /*! \brief Get file name of the cad file
-     */
-    inline std::string extractCADFilename(const std::string s)
+    namespace Util
     {
-        std::string fileKey = "modelica://";
-        std::string s2 = s.substr(fileKey.length(), s.length());
-        int pos = s2.find("/");
-        return s2.substr(pos + 1, s.length());
-    }
-
-    /*! \brief Gets the type of the shape.
-     */
-    inline std::string getShapeType(rapidxml::xml_node<>* node)
-    {
-        return node->first_node("type")->value();
-    }
-
-    inline bool exists(const std::string& name)
-    {
-        osgDB::ifstream f(name.c_str());
-        if (f.good())
+        /*! \brief Checks if the type is a cad file
+         */
+        inline bool isCADType(const std::string typeName)
         {
-            f.close();
-            return true;
+            return (typeName.size() >= 12 && std::string(typeName.begin(), typeName.begin() + 11) == "modelica://");
         }
-        else
+
+        /*! \brief Get file name of the cad file
+         */
+        inline std::string extractCADFilename(const std::string s)
         {
-            f.close();
-            return false;
+            std::string fileKey = "modelica://";
+            std::string s2 = s.substr(fileKey.length(), s.length());
+            int pos = s2.find("/");
+            return s2.substr(pos + 1, s.length());
         }
-    }
 
-    /*! \brief Converts a bool into a std::string, i.e., returning "true" or "false".
-     *
-     * By using this quite simple function we do not need to include any fancy third party method
-     * or library, like boost cast.
-     * @param b Bool to convert.
-     * @return "true" or "false".
-     */
-    inline const char* const boolToString(bool b)
-    {
-        return b ? "true" : "false";
-    }
+        /*! \brief Gets the type of the shape.
+         */
+        inline std::string getShapeType(rapidxml::xml_node<>* node)
+        {
+            return node->first_node("type")->value();
+        }
 
-}  // End namespace Util
+        inline bool exists(const std::string& name)
+        {
+            osgDB::ifstream f(name.c_str());
+            if (f.good())
+            {
+                f.close();
+                return true;
+            }
+            else
+            {
+                f.close();
+                return false;
+            }
+        }
+
+        /*! \brief Converts a bool into a std::string, i.e., returning "true" or "false".
+         *
+         * By using this quite simple function we do not need to include any fancy third party method
+         * or library, like boost cast.
+         * @param b Bool to convert.
+         * @return "true" or "false".
+         */
+        inline const char* const boolToString(bool b)
+        {
+            return b ? "true" : "false";
+        }
+
+    }  // End namespace Util
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_UTIL_HPP_ */
 /**

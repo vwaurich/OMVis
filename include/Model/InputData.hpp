@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup Model
  *  @{
@@ -36,9 +36,9 @@ enum inputKey
 {
     JOY_1_X,
     JOY_1_Y,
-	JOY_2_X,
-	JOY_2_Y,
-	KEY_W,
+    JOY_2_X,
+    JOY_2_Y,
+    KEY_W,
     KEY_A,
     KEY_S,
     KEY_D
@@ -57,76 +57,78 @@ typedef keyMap::const_iterator keyMapIter;
 typedef std::map<unsigned int, inputKey> keyboardMap;
 typedef keyboardMap::const_iterator keyBoardMapIter;
 
-namespace Model
+namespace OMVIS
 {
-
-    /*! \brief Base class for input data.
-     *
-     * Only FMU
-     */
-    class InputData
+    namespace Model
     {
-     public:
-        /*! \brief Default constructor. Attributes are initialized with default values. */
-        InputData();
 
-        /*! \brief Let the compiler create the destructor. */
-        ~InputData() = default;
+        /*! \brief Base class for input data.
+         *
+         * Only FMU
+         */
+        class InputData
+        {
+         public:
+            /*! \brief Default constructor. Attributes are initialized with default values. */
+            InputData();
 
-        /*! \brief Copy constructor. */
-        InputData(const InputData& ipd);
+            /*! \brief Let the compiler create the destructor. */
+            ~InputData() = default;
 
-        /*! The assignment operator is forbidden. */
-        InputData& operator=(const InputData& ipd) = delete;
+            /*! \brief Copy constructor. */
+            InputData(const InputData& ipd);
 
-        /*! \brief Initializes all input data including the keymap. */
-        void initializeInputs(fmi1_import_t* fmu);
+            /*! The assignment operator is forbidden. */
+            InputData& operator=(const InputData& ipd) = delete;
 
-        /*! \brief Sets the input variables in the fmu. */
-        void setInputsInFMU(fmi1_import_t* fmu);
+            /*! \brief Initializes all input data including the keymap. */
+            void initializeInputs(fmi1_import_t* fmu);
 
-        /*! \brief Resets the input values to zero. */
-        void resetInputValues();
+            /*! \brief Sets the input variables in the fmu. */
+            void setInputsInFMU(fmi1_import_t* fmu);
 
-        /*! \brief Prints the current input values. */
-        void printValues();
+            /*! \brief Resets the input values to zero. */
+            void resetInputValues();
 
-		/*! \brief Gets the names of the variables*/
-		void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames);
+            /*! \brief Prints the current input values. */
+            void printValues();
 
-		/*! \brief Prints the keyToInputMap*/
-		void printKeyToInputMap();
+            /*! \brief Gets the names of the variables*/
+            void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames);
 
-	public:
-        /// \todo Can this attribute be private?
-        InputValues _data;
-        /// \todo Can this attribute be private?
-        keyMap _keyToInputMap;
-        /// \todo Can this attribute be private?
-        keyboardMap _keyboardToKeyMap;
-    };
+            /*! \brief Prints the keyToInputMap*/
+            void printKeyToInputMap();
 
+         public:
+            /// \todo Can this attribute be private?
+            InputValues _data;
+            /// \todo Can this attribute be private?
+            keyMap _keyToInputMap;
+            /// \todo Can this attribute be private?
+            keyboardMap _keyboardToKeyMap;
+        };
 
-    /*-----------------------------------------
-     * Free Functions
-     *---------------------------------------*/
-    bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data);
+        /*-----------------------------------------
+         * Free Functions
+         *---------------------------------------*/
+        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data);
 
-	/*! \brief Converts the given std::string to inputKey enum. */
-	inputKey getInputDataKeyForString(std::string keyString);
+        /*! \brief Converts the given std::string to inputKey enum. */
+        inputKey getInputDataKeyForString(std::string keyString);
 
-	std::string keyMapValueToString(KeyMapValue);
+        std::string keyMapValueToString(KeyMapValue);
 
-	/*! \brief Checks the causality of the var and outputs 1 if they are equal, 0 otherwise.
-	 *
-	 */
-	int causalityEqual(fmi1_import_variable_t* var, void* enumIdx);
+        /*! \brief Checks the causality of the var and outputs 1 if they are equal, 0 otherwise.
+         *
+         */
+        int causalityEqual(fmi1_import_variable_t* var, void* enumIdx);
 
-	/*! \brief Checks the type of the var and outputs 1 if they are equal.
-	 *
-	 */
-	int baseTypeEqual(fmi1_import_variable_t* var, void* refBaseType);
+        /*! \brief Checks the type of the var and outputs 1 if they are equal.
+         *
+         */
+        int baseTypeEqual(fmi1_import_variable_t* var, void* refBaseType);
 
-}  // End namespace Model
+    }  // End namespace Model
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_INPUTDATA_HPP_ */

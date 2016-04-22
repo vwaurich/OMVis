@@ -21,39 +21,42 @@
 
 #include <iostream>
 
-namespace View
+namespace OMVIS
 {
-
-    InfoVisitor::InfoVisitor()
-            : _level(0)
+    namespace View
     {
-        setTraversalMode(NodeVisitor::TRAVERSE_ALL_CHILDREN);
-    }
 
-    std::string InfoVisitor::spaces()
-    {
-        return std::string(_level * 2, ' ');
-    }
-
-    void InfoVisitor::apply(osg::Node& node)
-    {
-        std::cout << spaces() << node.libraryName() << "::" << node.className() << std::endl;
-        ++_level;
-        traverse(node);
-        --_level;
-    }
-
-    void InfoVisitor::apply(osg::Geode& geode)
-    {
-        std::cout << spaces() << geode.libraryName() << "::" << geode.className() << std::endl;
-        ++_level;
-        for (size_t i = 0; i < geode.getNumDrawables(); ++i)
+        InfoVisitor::InfoVisitor()
+                : _level(0)
         {
-            osg::Drawable* drawable = geode.getDrawable(i);
-            std::cout << spaces() << drawable->libraryName() << "::" << drawable->className() << std::endl;
+            setTraversalMode(NodeVisitor::TRAVERSE_ALL_CHILDREN);
         }
-        traverse(geode);
-        --_level;
-    }
 
-}  //End namespace view
+        std::string InfoVisitor::spaces()
+        {
+            return std::string(_level * 2, ' ');
+        }
+
+        void InfoVisitor::apply(osg::Node& node)
+        {
+            std::cout << spaces() << node.libraryName() << "::" << node.className() << std::endl;
+            ++_level;
+            traverse(node);
+            --_level;
+        }
+
+        void InfoVisitor::apply(osg::Geode& geode)
+        {
+            std::cout << spaces() << geode.libraryName() << "::" << geode.className() << std::endl;
+            ++_level;
+            for (size_t i = 0; i < geode.getNumDrawables(); ++i)
+            {
+                osg::Drawable* drawable = geode.getDrawable(i);
+                std::cout << spaces() << drawable->libraryName() << "::" << drawable->className() << std::endl;
+            }
+            traverse(geode);
+            --_level;
+        }
+
+    }  //End namespace view
+}  // End namespace OMVIS

@@ -29,92 +29,95 @@
 
 #include <osg/Timer>
 
-namespace Control
+namespace OMVIS
 {
-
-    /*! Class that manages timing for OMVis.
-     *
-     * Since we have at least three different time levels, namely simulation time, visualization time and real time,
-     * we need a manager to properly handle them.
-     *
-     * \todo More documentation.
-     */
-    class OMVisManager
+    namespace Control
     {
-     public:
-        OMVisManager() = delete;
 
-        /*! \brief Constructs a OMVisManager from the given arguments.
+        /*! Class that manages timing for OMVis.
          *
-         * @param simTime Current simulation time. In general, this is equal to the simulation start time.
-         * @param realTime
-         * @param visTime Time of current scene update.
-         * @param hVisual Step size for the scene updates.
-         * @param startTime Simulation start time.
-         * @param endTime Simulation end time.
+         * Since we have at least three different time levels, namely simulation time, visualization time and real time,
+         * we need a manager to properly handle them.
          *
-         * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
+         * \todo More documentation.
          */
-        OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime);
+        class OMVisManager
+        {
+         public:
+            OMVisManager() = delete;
 
-        ~OMVisManager() = default;
-        OMVisManager(const OMVisManager& omvm) = delete;
-        OMVisManager& operator=(const OMVisManager& omvm) = delete;
+            /*! \brief Constructs a OMVisManager from the given arguments.
+             *
+             * @param simTime Current simulation time. In general, this is equal to the simulation start time.
+             * @param realTime
+             * @param visTime Time of current scene update.
+             * @param hVisual Step size for the scene updates.
+             * @param startTime Simulation start time.
+             * @param endTime Simulation end time.
+             *
+             * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
+             */
+            OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime);
 
-        // 2016-04-19, MF: Currently unused method
-        void updateTick();
-        // 2016-04-19, MF: Currently unused method
-        bool simTimeReady();
-        // 2016-04-19, MF: Currently unused method
-        bool visTimeReady();
+            ~OMVisManager() = default;
+            OMVisManager(const OMVisManager& omvm) = delete;
+            OMVisManager& operator=(const OMVisManager& omvm) = delete;
 
-        /*! \brief Calculates from the current visualization time (_visTime) the slider position. */
-        int getTimeProgress();
+            // 2016-04-19, MF: Currently unused method
+            void updateTick();
+            // 2016-04-19, MF: Currently unused method
+            bool simTimeReady();
+            // 2016-04-19, MF: Currently unused method
+            bool visTimeReady();
 
-        /*! Set the slider range. */
-        void setSliderRange(const int min, const int max);
+            /*! \brief Calculates from the current visualization time (_visTime) the slider position. */
+            int getTimeProgress();
 
-        double getEndTime() const;
-        void setEndTime(const double endTime);
+            /*! Set the slider range. */
+            void setSliderRange(const int min, const int max);
 
-        double getStartTime() const;
-        void setStartTime(const double startTime);
+            double getEndTime() const;
+            void setEndTime(const double endTime);
 
-        double getSimTime() const;
-        void setSimTime(const double simTime);
+            double getStartTime() const;
+            void setStartTime(const double startTime);
 
-        double getVisTime() const;
-        void setVisTime(const double visTime);
+            double getSimTime() const;
+            void setSimTime(const double simTime);
 
-        double getHVisual() const;
+            double getVisTime() const;
+            void setVisTime(const double visTime);
 
-        double getRealTime() const;
+            double getHVisual() const;
 
-        /*! Returns true, if the Visualization is currently paused and false otherwise. */
-        bool isPaused() const;
-        /*! Set pause status to new value. */
-        void setPause(const bool status);
+            double getRealTime() const;
 
-     private:
-        //! Time of the current simulation step.
-        double _simTime;
-        //! Current real time.
-        double _realTime;
-        //! Time of current scene update.
-        double _visTime;
-        //! Step size for the scene updates in milliseconds.
-        double _hVisual;
-        double _endTime;
-        double _startTime;
-        bool _pause;
+            /*! Returns true, if the Visualization is currently paused and false otherwise. */
+            bool isPaused() const;
+            /*! Set pause status to new value. */
+            void setPause(const bool status);
 
-        osg::Timer _visualTimer;
+         private:
+            //! Time of the current simulation step.
+            double _simTime;
+            //! Current real time.
+            double _realTime;
+            //! Time of current scene update.
+            double _visTime;
+            //! Step size for the scene updates in milliseconds.
+            double _hVisual;
+            double _endTime;
+            double _startTime;
+            bool _pause;
 
-        //! Range of the slider widget.
-        int _sliderRange;
-    };
+            osg::Timer _visualTimer;
 
-}  // End namespace Control
+            //! Range of the slider widget.
+            int _sliderRange;
+        };
+
+    }  // End namespace Control
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_OMVISMANAGER_HPP_ */
 /**

@@ -32,42 +32,45 @@
 
 #include <string>
 
-namespace View
+namespace OMVIS
 {
-
-    /*! \brief InfoVisitor to print the osg tree.
-     *
-     *
-     */
-    class InfoVisitor : public osg::NodeVisitor
+    namespace View
     {
-     public:
-        /// Default constructor. Attributes are set to default values and call osg::setTraversalMode method.
-        InfoVisitor();
 
-        /// Let the compiler provide the destructor.
-        ~InfoVisitor() = default;
+        /*! \brief InfoVisitor to print the osg tree.
+         *
+         *
+         */
+        class InfoVisitor : public osg::NodeVisitor
+        {
+         public:
+            /// Default constructor. Attributes are set to default values and call osg::setTraversalMode method.
+            InfoVisitor();
 
-        /// The copy constructor is forbidden.
-        InfoVisitor(const InfoVisitor& iv) = delete;
+            /// Let the compiler provide the destructor.
+            ~InfoVisitor() = default;
 
-        /// The assignment operator is forbidden.
-        InfoVisitor& operator=(const InfoVisitor& iv) = delete;
+            /// The copy constructor is forbidden.
+            InfoVisitor(const InfoVisitor& iv) = delete;
 
-        /// Returns some spaces
-        std::string spaces();
+            /// The assignment operator is forbidden.
+            InfoVisitor& operator=(const InfoVisitor& iv) = delete;
 
-        /// Node information
-        virtual void apply(osg::Node& node);
+            /// Returns some spaces
+            std::string spaces();
 
-        /// Geode information
-        virtual void apply(osg::Geode& node);
+            /// Node information
+            virtual void apply(osg::Node& node);
 
-     private:
-        unsigned int _level;
-    };
+            /// Geode information
+            virtual void apply(osg::Geode& node);
 
-}  // End namespace View
+         private:
+            unsigned int _level;
+        };
+
+    }  // End namespace View
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_INFOVISITOR_HPP_ */
 /**

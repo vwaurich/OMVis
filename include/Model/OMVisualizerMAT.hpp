@@ -1,21 +1,21 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2016, Volker Waurich
+ *
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /** @addtogroup Model
  *  @{
@@ -32,62 +32,70 @@
 
 #include <read_matlab4.h>
 
-namespace Model
+namespace OMVIS
 {
-
-    /*! \brief Class that reads results in MAT-file format.
-     *
-     *
-     */
-    class OMVisualizerMAT : public OMVisualizerAbstract
+    namespace Model
     {
-     public:
-        OMVisualizerMAT() = delete;
 
-        OMVisualizerMAT(const std::string model, const std::string path);
-
-        virtual ~OMVisualizerMAT() = default;
-
-        OMVisualizerMAT(const OMVisualizerMAT& omvm) = delete;
-        OMVisualizerMAT& operator=(const OMVisualizerMAT& omvm) = delete;
-
-        void readMat(const std::string modelString, const std::string dirString);
-
-        /*! \brief
+        /*! \brief Class that reads results in MAT-file format.
          *
-         * @return Error value.
+         *
          */
-        virtual int initData();
+        class OMVisualizerMAT : public OMVisualizerAbstract
+        {
+         public:
+            OMVisualizerMAT() = delete;
 
-        /// \todo: Implement. We need/want to free the memory which is allocated while loading a Mat file.
-        virtual void unload() { };
+            OMVisualizerMAT(const std::string model, const std::string path);
 
-        virtual void simulate(Control::OMVisManager& omvm) { }
+            virtual ~OMVisualizerMAT() = default;
 
-		/*! \brief Implementation for OMVisualizerAbstract::updateVisAttributes to update all visualization attributes based on a mat file
-		*
-		* @param time The point of time
-		* \return Error value.
-		*/
-		int updateVisAttributes(const double time);
+            OMVisualizerMAT(const OMVisualizerMAT& omvm) = delete;
+            OMVisualizerMAT& operator=(const OMVisualizerMAT& omvm) = delete;
 
-		/*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
-		*/
-		void initializeVisAttributes(const double time = -1.0);
+            void readMat(const std::string modelString, const std::string dirString);
 
-		/*! \brief For MAT-file based visualization, nothing has to be done. Just get the visualizationAttributes
-		*/
-		void updateScene(const double time);
+            /*! \brief
+             *
+             * @return Error value.
+             */
+            virtual int initData();
 
-		/*! \brief Returns "mat".
-		*/
-		std::string getType() const;
+            /// \todo: Implement. We need/want to free the memory which is allocated while loading a Mat file.
+            virtual void unload()
+            {
+            }
+            ;
 
-     private:
-        ModelicaMatReader _matReader;
-    };
+            virtual void simulate(Control::OMVisManager& omvm)
+            {
+            }
 
-}  // End namespace Model
+            /*! \brief Implementation for OMVisualizerAbstract::updateVisAttributes to update all visualization attributes based on a mat file
+             *
+             * @param time The point of time
+             * \return Error value.
+             */
+            int updateVisAttributes(const double time);
+
+            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+             */
+            void initializeVisAttributes(const double time = -1.0);
+
+            /*! \brief For MAT-file based visualization, nothing has to be done. Just get the visualizationAttributes
+             */
+            void updateScene(const double time);
+
+            /*! \brief Returns "mat".
+             */
+            std::string getType() const;
+
+         private:
+            ModelicaMatReader _matReader;
+        };
+
+    }  // End namespace Model
+}  // End namespace OMVIS
 
 #endif /* INCLUDE_OMVISUALIZERMAT_HPP_ */
 /**

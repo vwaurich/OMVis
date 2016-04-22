@@ -21,105 +21,108 @@
 
 #include <cmath>
 
-namespace Control
+namespace OMVIS
 {
-    OMVisManager::OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime)
-            : _simTime(simTime),
-              _realTime(realTime),
-              _visTime(visTime),
-              _hVisual(hVisual),
-              _startTime(startTime),
-              _endTime(endTime),
-              _visualTimer(),
-              _pause(true),
-              _sliderRange(0)
+    namespace Control
     {
-    }
+        OMVisManager::OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime)
+                : _simTime(simTime),
+                  _realTime(realTime),
+                  _visTime(visTime),
+                  _hVisual(hVisual),
+                  _startTime(startTime),
+                  _endTime(endTime),
+                  _visualTimer(),
+                  _pause(true),
+                  _sliderRange(0)
+        {
+        }
 
-    void OMVisManager::updateTick()
-    {
-        _visualTimer.tick();
-        _realTime = _visualTimer.time_m() / 1000.0;
-    }
+        void OMVisManager::updateTick()
+        {
+            _visualTimer.tick();
+            _realTime = _visualTimer.time_m() / 1000.0;
+        }
 
-    bool OMVisManager::simTimeReady()
-    {
-        return _realTime > _simTime && _simTime <= _endTime;
-    }
+        bool OMVisManager::simTimeReady()
+        {
+            return _realTime > _simTime && _simTime <= _endTime;
+        }
 
-    bool OMVisManager::visTimeReady()
-    {
-        return _simTime >= _visTime;
-    }
+        bool OMVisManager::visTimeReady()
+        {
+            return _simTime >= _visTime;
+        }
 
-    void OMVisManager::setSliderRange(const int min, const int max)
-    {
-        _sliderRange = max - min;
-    }
+        void OMVisManager::setSliderRange(const int min, const int max)
+        {
+            _sliderRange = max - min;
+        }
 
-    int OMVisManager::getTimeProgress()
-    {
-        return std::round(_visTime * _sliderRange / (_endTime - _startTime));
-    }
+        int OMVisManager::getTimeProgress()
+        {
+            return std::round(_visTime * _sliderRange / (_endTime - _startTime));
+        }
 
-    double OMVisManager::getEndTime() const
-    {
-        return _endTime;
-    }
+        double OMVisManager::getEndTime() const
+        {
+            return _endTime;
+        }
 
-    void OMVisManager::setEndTime(const double endTime)
-    {
-        _endTime = endTime;
-    }
+        void OMVisManager::setEndTime(const double endTime)
+        {
+            _endTime = endTime;
+        }
 
-    double OMVisManager::getStartTime() const
-    {
-        return _startTime;
-    }
+        double OMVisManager::getStartTime() const
+        {
+            return _startTime;
+        }
 
-    void OMVisManager::setStartTime(const double startTime)
-    {
-        _startTime = startTime;
-    }
+        void OMVisManager::setStartTime(const double startTime)
+        {
+            _startTime = startTime;
+        }
 
-    double OMVisManager::getSimTime() const
-    {
-        return _simTime;
-    }
+        double OMVisManager::getSimTime() const
+        {
+            return _simTime;
+        }
 
-    void OMVisManager::setSimTime(const double simTime)
-    {
-        _simTime = simTime;
-    }
+        void OMVisManager::setSimTime(const double simTime)
+        {
+            _simTime = simTime;
+        }
 
-    double OMVisManager::getVisTime() const
-    {
-        return _visTime;
-    }
+        double OMVisManager::getVisTime() const
+        {
+            return _visTime;
+        }
 
-    void OMVisManager::setVisTime(const double visTime)
-    {
-        _visTime = visTime;
-    }
+        void OMVisManager::setVisTime(const double visTime)
+        {
+            _visTime = visTime;
+        }
 
-    double OMVisManager::getRealTime() const
-    {
-        return _realTime;
-    }
+        double OMVisManager::getRealTime() const
+        {
+            return _realTime;
+        }
 
-    double OMVisManager::getHVisual() const
-    {
-        return _hVisual;
-    }
+        double OMVisManager::getHVisual() const
+        {
+            return _hVisual;
+        }
 
-    bool OMVisManager::isPaused() const
-    {
-        return _pause;
-    }
+        bool OMVisManager::isPaused() const
+        {
+            return _pause;
+        }
 
-    void OMVisManager::setPause(const bool status)
-    {
-        _pause = status;
-    }
+        void OMVisManager::setPause(const bool status)
+        {
+            _pause = status;
+        }
 
-}  // End namespace Control
+    }  // End namespace Control
+}  // End namespace OMVIS
