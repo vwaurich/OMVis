@@ -13,7 +13,7 @@ ADD_DEFINITIONS(-DUSE_LOGGER)
 # Find All Dependencies
 # ---------------------------
 # Find includes in corresponding build directories
-SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+SET(CMAKE_INCLUDE_CURRENT_DIR OFF)
 # Instruct CMake to run moc automatically when needed
 # SET(CMAKE_AUTOMOC ON)
 # Detect and add SFML
@@ -62,7 +62,7 @@ ENDIF(FMILIB_FOUND)
 # Find OpenSceneGraph
 FIND_PACKAGE(OpenSceneGraph REQUIRED osgDB osgViewer osgUtil osgGA osgQt)
 IF(OPENSCENEGRAPH_FOUND)
-  MESSAGE(STATUS "OpenSceneGraph found123.")
+  MESSAGE(STATUS "OpenSceneGraph found.")
 ELSE(OPENSCENEGRAPH_FOUND)
   MESSAGE(FATAL_ERROR "OpenSceneGraph not found but required.")
 ENDIF(OPENSCENEGRAPH_FOUND)
@@ -114,9 +114,9 @@ ENDIF(DEFINED ENV{OPENMODELICAHOME})
 
 
 # Find GTest
-SET(GTEST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include")
-SET(GTEST_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/build")
-LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${GTEST_LIBRARIES})
+#SET(GTEST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include")
+#SET(GTEST_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/build")
+# LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${GTEST_LIBRARIES})
 
 
 # ---------------------------
@@ -194,8 +194,35 @@ ENDIF(BUILD_DOCUMENTATION)
 
 
 # ---------------------------
+# Custom make targes
+# ---------------------------
+
+# Clean all
+ADD_CUSTOM_TARGET(cleanAll
+   COMMAND ${CMAKE_MAKE_PROGRAM} clean
+   COMMAND ${CMAKE_COMMAND} -E chdir ./examples/ make -f ${PROJECT_BINARY_DIR}/examples/Makefile clean
+)
+
+# Clean in examples folder
+ADD_CUSTOM_TARGET(cleanExamples
+   COMMAND ${CMAKE_COMMAND} -E chdir ./examples/ make -f ${PROJECT_BINARY_DIR}/examples/Makefile clean
+)
+
+# Make examples: Copy examples files and execute Makefile that runs omc *mos
+ADD_CUSTOM_TARGET(buildExamples
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/examples
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/examples ${PROJECT_BINARY_DIR}/examples
+    COMMAND ${CMAKE_COMMAND} -E chdir ./examples/ make -f ${PROJECT_BINARY_DIR}/examples/Makefile build
+    COMMENT "Build examples"
+)
+
+
+# ---------------------------
 # Setup Build
 # ---------------------------
+
+# Dependencies
+ADD_SUBDIRECTORY(thirdparty/gtest-1.7.0/)
 
 # Find Sources
 FILE(GLOB_RECURSE SRCS "src/*/*.cpp" "src/Visualize.cpp" "src/Expression.cpp")
@@ -205,13 +232,15 @@ FILE(GLOB_RECURSE SRCS "src/*/*.cpp" "src/Visualize.cpp" "src/Expression.cpp")
 QT5_WRAP_CPP(MOC_OMVISVIEWER include/View/OMVisViewer.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/SettingsDialogs.hpp)
 
-INCLUDE_DIRECTORIES("include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR} ${OMC_MATLAB_READER_INC} ${GTEST_INCLUDE_DIR} "test/include")
-
 ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")
-ADD_EXECUTABLE(OMVis_test ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "test/Main.cpp")
+ADD_EXECUTABLE(OMVisTests EXCLUDE_FROM_ALL ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "test/Main.cpp")
 
-TARGET_LINK_LIBRARIES(OMVis ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
-TARGET_LINK_LIBRARIES(OMVis_test ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core "gtest")
+SET(INCLUDEDIRS "include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR} ${OMC_MATLAB_READER_INC})
+TARGET_INCLUDE_DIRECTORIES(OMVis PRIVATE ${INCLUDEDIRS})
+TARGET_INCLUDE_DIRECTORIES(OMVisTests PRIVATE ${INCLUDEDIRS} "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include" "test/include")
 
-#MESSAGE(STATUS "SDL2 LIBS: ${SDL2_LIBRARY}")
-#MESSAGE(STATUS "OSG LIBS: ${OPENSCENEGRAPH_LIBRARIES}")
+SET(LINKLIBRARIES ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
+TARGET_LINK_LIBRARIES(OMVis ${LINKLIBRARIES})
+TARGET_LINK_LIBRARIES(OMVisTests ${LINKLIBRARIES} "gtest")
+
+#ADD_DEPENDENCIES(OMVisTests buildExamples)
