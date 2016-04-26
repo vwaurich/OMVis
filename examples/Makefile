@@ -7,7 +7,6 @@ DEPENDENCIES = \
 *.mo \
 *.mos \
 *.mat \
-*.fmu \
 Makefile
 
 
