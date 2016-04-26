@@ -24,9 +24,7 @@
 
 #include <gtest/gtest.h>
 
-/*!
- *
- * Class to test the class \ref Control::OMVisManager.
+/*! \brief Class to test the class \ref Control::OMVisManager.
  *
  * \todo: What else needs to be tested?
  *   - getTimeProgress function
@@ -35,8 +33,8 @@
 class TestOMVisManager : public ::testing::Test
 {
  public:
-
     OMVIS::Control::OMVisManager _omvManager;
+
     TestOMVisManager()
             //(simTime, realTime, visTime, hVisual, startTime, endTime)
             : _omvManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0)

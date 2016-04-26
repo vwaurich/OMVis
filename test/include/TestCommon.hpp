@@ -20,22 +20,37 @@
 #ifndef TEST_INCLUDE_TESTCOMMON_HPP_
 #define TEST_INCLUDE_TESTCOMMON_HPP_
 
-#include <gtest/gtest.h>
-#include <Initialization/OMVisFactory.hpp>
+#include "Initialization/OMVisFactory.hpp"
 
-#include "Model/OMVisualizerAbstract.hpp"
+#include <gtest/gtest.h>
 
 #include <string>
-#include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
+#include <climits>
 
-/*! Base class for testing of OMVis. */
+/*! \brief Base class for testing OMVis.
+ *
+ * This class encapsulates a model file name and path and provides a "reload"
+ * functionality in the sense, that model file and path can be changed. The
+ * given (absolute or relative) path is transformed to be absolute. Thus, if a
+ * testing class needs a model file name or path, it should inherit from
+ * this class.
+ *  */
 class TestCommon : public ::testing::Test
 {
  public:
-    std::string _modelName, _path;
-    bool _useFMU;
-
+    /*! Constructs a TestCommon object from the passed model file name and path.
+     *
+     * The model file name has to be passed without extension, e.g., BouncingBall.
+     * The extension is implicitly specified via boolean value useFMU: If useBool
+     * is true, we look for MODEL.fmu, otherwise we assume to handle a MAT file
+     * named MODEL.mat.
+     * The path is made to be absolute.
+     *
+     * @param modelName Name of the model file without extension
+     * @param path Relative or absolute path to the model file.
+     * @param useFMU True, if model is a FMU, false if the model is a MAT file.
+     */
     TestCommon(std::string modelName, std::string path, bool useFMU)
             : _modelName(modelName),
               _useFMU(useFMU)
@@ -52,16 +67,16 @@ class TestCommon : public ::testing::Test
 
     virtual void SetUp()
     {
-//        _omVisualizer = _factory.createVisualizationObject(_modelName, _path, _useFMU);
-//        _omVisualizer->initialize();
-//        std::cout << "hier" << std::endl;
     }
 
     virtual void TearDown()
     {
-        //?_omVisualizer.reset();
     }
 
+    /*! \brief Resets the member variables to the given values.
+     *
+     * This serves as first step of a reload functionality.
+     */
     void reset(std::string modelName, std::string path, bool useFMU)
     {
         _modelName = modelName;
@@ -71,6 +86,11 @@ class TestCommon : public ::testing::Test
         realpath(path.c_str(), fullPath);
         _path = std::string(fullPath) + "/";
     }
+
+ protected:
+    std::string _modelName;
+    std::string _path;
+    bool _useFMU;
 };
 
 #endif /* TEST_INCLUDE_TESTCOMMON_HPP_ */

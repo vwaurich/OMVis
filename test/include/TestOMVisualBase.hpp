@@ -34,7 +34,7 @@ class TestOMVisualBase : public TestCommon
     OMVIS::Model::OMVisualBase* _omVisualBase;
 
     TestOMVisualBase()
-        : TestCommon("BouncingBall", "./data/BouncingBall/", false),
+        : TestCommon("BouncingBall", "./examples/", false),
           _omVisualBase(nullptr)
     {
     }

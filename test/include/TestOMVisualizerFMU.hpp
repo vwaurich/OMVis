@@ -26,15 +26,17 @@
 
 #include <gtest/gtest.h>
 
-#include <iostream>
-
+/*! \brief Class to test the class \ref Control::OMVisualizerFMU.
+ *
+ */
 class TestOMVisualizerFMU : public TestCommon
 {
  public:
 
     OMVIS::Model::OMVisualizerFMU* _omVisualizerFMU;
+
     TestOMVisualizerFMU()
-            : TestCommon("BouncingBall", "./data/BouncingBall/", true),
+            : TestCommon("BouncingBall", "./examples/", true),
               _omVisualizerFMU(nullptr)
     {
     }

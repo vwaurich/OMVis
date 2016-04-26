@@ -20,24 +20,24 @@
 #ifndef TEST_INCLUDE_TESTOMVISFACTORY_HPP_
 #define TEST_INCLUDE_TESTOMVISFACTORY_HPP_
 
+#include "Initialization/OMVisFactory.hpp"
+#include "Model/OMVisualizerFMU.hpp"
+#include "Model/OMVisualizerAbstract.hpp"
+
 #include <gtest/gtest.h>
-#include <Initialization/OMVisFactory.hpp>
 
-#include <iostream>
-
-/*!
+/*! \brief Class to test the class \ref Control::OMVisFactory.
  *
- * Class to test the class \ref Control::OMVisManager.
+ *
  */
 class TestOMVisFactory : public TestCommon
 {
  public:
-
     OMVIS::Initialization::Factory* _factory;
-    TestOMVisFactory()
-            : TestCommon("BouncingBall", "./data/BouncingBall/", true),
-              _factory(nullptr)
 
+    TestOMVisFactory()
+            : TestCommon("BouncingBall", "./examples/", true),
+              _factory(nullptr)
     {
     }
 
@@ -55,21 +55,21 @@ class TestOMVisFactory : public TestCommon
 };
 
 /*!
- * Test fixture to test that the factory creates the right "product", i.e., if we visualize a FMU we want
- * a OMVisualizerFMU object to be created and if we visualize a MAT file we want a OMVisualizerMAT object
- * to be created. Default case is to create OMVisualizerAbstract object.
+ * Test fixture to test that the factory creates the right "product", i.e., if we
+ * visualize a FMU we want a OMVisualizerFMU object to be created and if we
+ * visualize a MAT file we want a OMVisualizerMAT object to be created. Default
+ * case is to create OMVisualizerAbstract object.
  */
 TEST_F (TestOMVisFactory, TestCreateVisualizationObject)
 {
     OMVIS::Model::OMVisualizerAbstract* omvisualizerAbstract(nullptr);
 
     // FMU.
-    //TestCommon("BouncingBall", "./data/BouncingBall/", true);
     omvisualizerAbstract = _factory->createVisualizationObject(_modelName, _path, _useFMU);
     ASSERT_EQ("fmu", omvisualizerAbstract->getType());
 
     // MAT.
-    reset("pendulum", "./data/Pendulum/", false);
+    reset("pendulum", "./examples/", false);
     omvisualizerAbstract = _factory->createVisualizationObject(_modelName, _path, _useFMU);
     ASSERT_EQ("mat", omvisualizerAbstract->getType());
 
@@ -79,3 +79,4 @@ TEST_F (TestOMVisFactory, TestCreateVisualizationObject)
 }
 
 #endif /* TEST_INCLUDE_TESTOMVISFACTORY_HPP_ */
+
