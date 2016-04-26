@@ -1,0 +1,6 @@
+loadModel(Modelica);getErrorString();
+loadFile("cranes.mo");getErrorString();
+setCommandLineOptions("+simCodeTarget=Cpp"); getErrorString();
+setDebugFlags("hardcodedStartValues,visxml"); getErrorString();
+translateModelFMU(cranes.crane_input5, version = "1.0", fmuType = "me");getErrorString();
+//simulate(cranes.crane, stopTime=10.0);getErrorString();
