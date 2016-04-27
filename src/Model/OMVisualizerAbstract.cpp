@@ -8,6 +8,7 @@
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Control/OMVisManager.hpp"
 #include "Util/Logger.hpp"
+#include <boost/filesystem.hpp>
 
 #include <string>
 #include <stdlib.h>
@@ -31,9 +32,12 @@ namespace OMVIS
                   _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
         {
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
-            char fullPathTmp[PATH_MAX];
-            realpath(path.c_str(), fullPathTmp);
-            std::string fullPath = std::string(fullPathTmp) + "/";
+            //char fullPathTmp[PATH_MAX];
+            //realpath(path.c_str(), fullPathTmp);
+			boost::filesystem::path bPath = boost::filesystem::path(path.c_str());
+			bPath = boost::filesystem::absolute(bPath);
+
+			std::string fullPath = bPath.string();
 
             // Now we can use the full path.
             _baseData = new OMVisualBase(modelName, fullPath), _viewerStuff->getScene().setPath(fullPath);

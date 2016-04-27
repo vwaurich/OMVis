@@ -45,7 +45,7 @@ namespace OMVIS
             {
                 LOGGER_WRITE("Initialize OMVisalizerAbstract because path and model name are empty.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            else if (Util::exists(path))
+            else if (Util::exists(path + "/" + modelName + "_visual.xml"))
             {
                 //FMU based visualization
                 if (useFMU)
@@ -62,7 +62,7 @@ namespace OMVIS
             }
             else
             {
-                LOGGER_WRITE("Initialize OMVisalizerAbstract because path " + path + std::string(" can not be accessed."), Util::LC_LOADER, Util::LL_DEBUG);
+                LOGGER_WRITE("Initialize OMVisalizerAbstract because path " + (path + "/" + modelName) + std::string(" can not be accessed."), Util::LC_LOADER, Util::LL_DEBUG);
             }
             return result;
         }

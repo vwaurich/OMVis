@@ -76,12 +76,13 @@ ELSEIF(SDL2_FOUND)
 ENDIF(SDL2_FOUND)
 
 # Find Boost
-FIND_PACKAGE(Boost REQUIRED COMPONENTS program_options)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem program_options system)
 IF(Boost_FOUND)
-  MESSAGE(STATUS "Boost Program Options library found.")
+  MESSAGE(STATUS "Boost libraries found.")
 ELSE(Boost_FOUND)
-  MESSAGE (FATAL_ERROR "Boost Program Options library not found.")
+  MESSAGE (FATAL_ERROR "Boost libraries not found.")
 ENDIF(Boost_FOUND)
+
 
 # Find rapidxml
 FIND_PACKAGE(RapidXML REQUIRED)
