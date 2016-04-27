@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<visualization>
+  <shape>
+      <ident>world.x_label.cylinders[1]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.x_label.R.T[1,1]</cref>	
+          <cref>world.x_label.R.T[1,2]</cref>	
+          <cref>world.x_label.R.T[1,3]</cref>
+          <cref>world.x_label.R.T[2,1]</cref>	
+          <cref>world.x_label.R.T[2,2]</cref>	
+          <cref>world.x_label.R.T[2,3]</cref>
+          <cref>world.x_label.R.T[3,1]</cref>	
+          <cref>world.x_label.R.T[3,2]</cref>	
+          <cref>world.x_label.R.T[3,3]</cref></T>
+      <r>    <cref>world.x_label.r_abs[1]</cref>	
+          <cref>world.x_label.r_abs[2]</cref>	
+          <cref>world.x_label.r_abs[3]</cref></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.03750000000000001</exp>	
+          <exp>0.03750000000000001</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.05303300858899107</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.x_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.x_label.cylinders[2]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.x_label.R.T[1,1]</cref>	
+          <cref>world.x_label.R.T[1,2]</cref>	
+          <cref>world.x_label.R.T[1,3]</cref>
+          <cref>world.x_label.R.T[2,1]</cref>	
+          <cref>world.x_label.R.T[2,2]</cref>	
+          <cref>world.x_label.R.T[2,3]</cref>
+          <cref>world.x_label.R.T[3,1]</cref>	
+          <cref>world.x_label.R.T[3,2]</cref>	
+          <cref>world.x_label.R.T[3,3]</cref></T>
+      <r>    <exp>0.525</exp>	
+          <exp>0.03750000000000001</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.03750000000000001</exp>	
+          <exp>-0.03750000000000001</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.05303300858899107</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.x_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.y_label.cylinders[1]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.y_label.R.T[1,1]</cref>	
+          <cref>world.y_label.R.T[1,2]</cref>	
+          <cref>world.y_label.R.T[1,3]</cref>
+          <cref>world.y_label.R.T[2,1]</cref>	
+          <cref>world.y_label.R.T[2,2]</cref>	
+          <cref>world.y_label.R.T[2,3]</cref>
+          <cref>world.y_label.R.T[3,1]</cref>	
+          <cref>world.y_label.R.T[3,2]</cref>	
+          <cref>world.y_label.R.T[3,3]</cref></T>
+      <r>    <cref>world.y_label.r_abs[1]</cref>	
+          <cref>world.y_label.r_abs[2]</cref>	
+          <cref>world.y_label.r_abs[3]</cref></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>-0.05625000000000001</exp>	
+          <exp>0.03750000000000001</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.0676040864149498</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.y_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.y_label.cylinders[2]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.y_label.R.T[1,1]</cref>	
+          <cref>world.y_label.R.T[1,2]</cref>	
+          <cref>world.y_label.R.T[1,3]</cref>
+          <cref>world.y_label.R.T[2,1]</cref>	
+          <cref>world.y_label.R.T[2,2]</cref>	
+          <cref>world.y_label.R.T[2,3]</cref>
+          <cref>world.y_label.R.T[3,1]</cref>	
+          <cref>world.y_label.R.T[3,2]</cref>	
+          <cref>world.y_label.R.T[3,3]</cref></T>
+      <r>    <exp>-0.05625000000000001</exp>	
+          <exp>0.525</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.028125</exp>	
+          <exp>0.01875</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.0338020432074749</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.y_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.z_label.cylinders[1]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.z_label.R.T[1,1]</cref>	
+          <cref>world.z_label.R.T[1,2]</cref>	
+          <cref>world.z_label.R.T[1,3]</cref>
+          <cref>world.z_label.R.T[2,1]</cref>	
+          <cref>world.z_label.R.T[2,2]</cref>	
+          <cref>world.z_label.R.T[2,3]</cref>
+          <cref>world.z_label.R.T[3,1]</cref>	
+          <cref>world.z_label.R.T[3,2]</cref>	
+          <cref>world.z_label.R.T[3,3]</cref></T>
+      <r>    <cref>world.z_label.r_abs[1]</cref>	
+          <cref>world.z_label.r_abs[2]</cref>	
+          <cref>world.z_label.r_abs[3]</cref></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.03750000000000001</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.03750000000000001</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.z_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.z_label.cylinders[2]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.z_label.R.T[1,1]</cref>	
+          <cref>world.z_label.R.T[1,2]</cref>	
+          <cref>world.z_label.R.T[1,3]</cref>
+          <cref>world.z_label.R.T[2,1]</cref>	
+          <cref>world.z_label.R.T[2,2]</cref>	
+          <cref>world.z_label.R.T[2,3]</cref>
+          <cref>world.z_label.R.T[3,1]</cref>	
+          <cref>world.z_label.R.T[3,2]</cref>	
+          <cref>world.z_label.R.T[3,3]</cref></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.03750000000000001</exp>	
+          <exp>0.525</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.03750000000000001</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.03750000000000001</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.z_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.z_label.cylinders[3]</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.z_label.R.T[1,1]</cref>	
+          <cref>world.z_label.R.T[1,2]</cref>	
+          <cref>world.z_label.R.T[1,3]</cref>
+          <cref>world.z_label.R.T[2,1]</cref>	
+          <cref>world.z_label.R.T[2,2]</cref>	
+          <cref>world.z_label.R.T[2,3]</cref>
+          <cref>world.z_label.R.T[3,1]</cref>	
+          <cref>world.z_label.R.T[3,2]</cref>	
+          <cref>world.z_label.R.T[3,3]</cref></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.03750000000000001</exp>	
+          <exp>0.525</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>-0.03750000000000001</exp>	
+          <exp>0.03750000000000001</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.05303300858899107</exp></length>
+      <width>    <cref>world.axisDiameter</cref></width>
+      <height>    <cref>world.axisDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.z_label.specularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.gravityArrowLine</ident>
+      <type>cylinder</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <cref>world.gravityArrowTail[1]</cref>	
+          <cref>world.gravityArrowTail[2]</cref>	
+          <cref>world.gravityArrowTail[3]</cref></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>-1.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.2</exp></length>
+      <width>    <cref>world.gravityArrowDiameter</cref></width>
+      <height>    <cref>world.gravityArrowDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>230.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>body.sphere</ident>
+      <type>sphere</type>
+      <T>    <cref>fixedTranslation.frame_a.R.T[1,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[1,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[1,3]</cref>
+          <cref>fixedTranslation.frame_a.R.T[2,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[2,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[2,3]</cref>
+          <cref>fixedTranslation.frame_a.R.T[3,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[3,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[3,3]</cref></T>
+      <r>    <cref>body.frame_a.r_0[1]</cref>	
+          <cref>body.frame_a.r_0[2]</cref>	
+          <cref>fixedTranslation.r[3]</cref></r>
+      <r_shape><binary>
+          <cref>body.r_CM[1]</cref>
+          <op>add</op>
+      <binary>
+          <exp>-0.5</exp>
+          <op>mul</op>
+          <cref>body.sphereDiameter</cref>
+      </binary>
+      </binary>	
+          <cref>body.r_CM[2]</cref>	
+          <cref>body.r_CM[3]</cref></r_shape>
+      <lengthDir>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <cref>body.sphereDiameter</cref></length>
+      <width>    <cref>body.sphereDiameter</cref></width>
+      <height>    <cref>body.sphereDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>128.0</exp>	
+          <exp>255.0</exp></color>
+      <specCoeff>    <cref>world.defaultSpecularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>body.cylinder</ident>
+      <type>cylinder</type>
+      <T>    <cref>fixedTranslation.frame_a.R.T[1,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[1,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[1,3]</cref>
+          <cref>fixedTranslation.frame_a.R.T[2,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[2,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[2,3]</cref>
+          <cref>fixedTranslation.frame_a.R.T[3,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[3,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[3,3]</cref></T>
+      <r>    <cref>body.frame_a.r_0[1]</cref>	
+          <cref>body.frame_a.r_0[2]</cref>	
+          <cref>fixedTranslation.r[3]</cref></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <cref>body.r_CM[1]</cref>	
+          <cref>body.r_CM[2]</cref>	
+          <cref>body.r_CM[3]</cref></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length><ifexp>
+          <cond><relation>
+              <exp1><call>
+                  <path>sqrt</path>
+                  <expLst><binary>
+                  <binary>
+                  <binary>
+                      <cref>body.r_CM[1]</cref>
+                      <op>pow</op>
+                      <exp>2.0</exp>
+                  </binary>
+                      <op>add</op>
+                  <binary>
+                      <cref>body.r_CM[2]</cref>
+                      <op>pow</op>
+                      <exp>2.0</exp>
+                  </binary>
+                  </binary>
+                      <op>add</op>
+                  <binary>
+                      <cref>body.r_CM[3]</cref>
+                      <op>pow</op>
+                      <exp>2.0</exp>
+                  </binary>
+                  </binary></expLst>
+              </call></exp1>
+              <op>greater</op>
+              <exp2><binary>
+                  <exp>0.5</exp>
+                  <op>mul</op>
+                  <cref>body.sphereDiameter</cref>
+              </binary></exp2>
+          </relation></cond>
+          <then><binary>
+          <call>
+              <path>sqrt</path>
+              <expLst><binary>
+              <binary>
+              <binary>
+                  <cref>body.r_CM[1]</cref>
+                  <op>pow</op>
+                  <exp>2.0</exp>
+              </binary>
+                  <op>add</op>
+              <binary>
+                  <cref>body.r_CM[2]</cref>
+                  <op>pow</op>
+                  <exp>2.0</exp>
+              </binary>
+              </binary>
+                  <op>add</op>
+              <binary>
+                  <cref>body.r_CM[3]</cref>
+                  <op>pow</op>
+                  <exp>2.0</exp>
+              </binary>
+              </binary></expLst>
+          </call>
+              <op>sub</op>
+          <ifexp>
+              <cond><relation>
+                  <exp1>    <cref>body.cylinderDiameter</cref></exp1>
+                  <op>greater</op>
+                  <exp2><binary>
+                      <exp>1.1</exp>
+                      <op>mul</op>
+                      <cref>body.sphereDiameter</cref>
+                  </binary></exp2>
+              </relation></cond>
+              <then><binary>
+                  <exp>0.5</exp>
+                  <op>mul</op>
+                  <cref>body.sphereDiameter</cref>
+              </binary></then>
+              <else>    <exp>0.0</exp></else>
+          </ifexp>
+          </binary></then>
+          <else>    <exp>0.0</exp></else>
+      </ifexp></length>
+      <width>    <cref>body.cylinderDiameter</cref></width>
+      <height>    <cref>body.cylinderDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>128.0</exp>	
+          <exp>255.0</exp></color>
+      <specCoeff>    <cref>world.defaultSpecularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>fixedTranslation.shape</ident>
+      <type>cylinder</type>
+      <T>    <cref>fixedTranslation.frame_a.R.T[1,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[1,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[1,3]</cref>
+          <cref>fixedTranslation.frame_a.R.T[2,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[2,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[2,3]</cref>
+          <cref>fixedTranslation.frame_a.R.T[3,1]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[3,2]</cref>	
+          <cref>fixedTranslation.frame_a.R.T[3,3]</cref></T>
+      <r>    <cref>world.frame_b.r_0[1]</cref>	
+          <cref>world.frame_b.r_0[2]</cref>	
+          <cref>world.frame_b.r_0[3]</cref></r>
+      <r_shape>    <cref>fixedTranslation.r_shape[1]</cref>	
+          <cref>fixedTranslation.r_shape[2]</cref>	
+          <cref>fixedTranslation.r_shape[3]</cref></r_shape>
+      <lengthDir>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <cref>fixedTranslation.length</cref></length>
+      <width>    <cref>fixedTranslation.width</cref></width>
+      <height>    <cref>fixedTranslation.height</cref></height>
+      <extra>    <cref>fixedTranslation.extra</cref></extra>
+      <color>    <exp>155.0</exp>	
+          <exp>155.0</exp>	
+          <exp>155.0</exp></color>
+      <specCoeff>    <cref>world.defaultSpecularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>revolute.cylinder</ident>
+      <type>cylinder</type>
+      <T>    <cref>world.frame_b.R.T[1,1]</cref>	
+          <cref>world.frame_b.R.T[1,2]</cref>	
+          <cref>world.frame_b.R.T[1,3]</cref>
+          <cref>world.frame_b.R.T[2,1]</cref>	
+          <cref>world.frame_b.R.T[2,2]</cref>	
+          <cref>world.frame_b.R.T[2,3]</cref>
+          <cref>world.frame_b.R.T[3,1]</cref>	
+          <cref>world.frame_b.R.T[3,2]</cref>	
+          <cref>world.frame_b.R.T[3,3]</cref></T>
+      <r>    <cref>world.frame_b.r_0[1]</cref>	
+          <cref>world.frame_b.r_0[2]</cref>	
+          <cref>world.frame_b.r_0[3]</cref></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+      <binary>
+          <exp>-0.5</exp>
+          <op>mul</op>
+          <cref>revolute.cylinderLength</cref>
+      </binary></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <cref>revolute.cylinderLength</cref></length>
+      <width>    <cref>revolute.cylinderDiameter</cref></width>
+      <height>    <cref>revolute.cylinderDiameter</cref></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>255.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <cref>world.defaultSpecularCoefficient</cref></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.gravityArrowHead</ident>
+      <type>cone</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <cref>world.gravityArrowTail[1]</cref>	
+      <binary>
+          <cref>world.gravityArrowTail[2]</cref>
+          <op>add</op>
+          <exp>-0.2</exp>
+      </binary>	
+          <cref>world.gravityArrowTail[3]</cref></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>-1.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.05</exp></length>
+      <width>    <exp>0.03750000000000001</exp></width>
+      <height>    <exp>0.03750000000000001</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>230.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.z_arrowHead</ident>
+      <type>cone</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.4375</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.0625</exp></length>
+      <width>    <exp>0.03750000000000001</exp></width>
+      <height>    <exp>0.03750000000000001</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.z_arrowLine</ident>
+      <type>cylinder</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.4375</exp></length>
+      <width>    <exp>0.0125</exp></width>
+      <height>    <exp>0.0125</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.y_arrowHead</ident>
+      <type>cone</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.4375</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.0625</exp></length>
+      <width>    <exp>0.03750000000000001</exp></width>
+      <height>    <exp>0.03750000000000001</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.y_arrowLine</ident>
+      <type>cylinder</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.4375</exp></length>
+      <width>    <exp>0.0125</exp></width>
+      <height>    <exp>0.0125</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.x_arrowHead</ident>
+      <type>cone</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.4375</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.0625</exp></length>
+      <width>    <exp>0.03750000000000001</exp></width>
+      <height>    <exp>0.03750000000000001</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+  <shape>
+      <ident>world.x_arrowLine</ident>
+      <type>cylinder</type>
+      <T>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp>
+          <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>1.0</exp></T>
+      <r>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r>
+      <r_shape>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></r_shape>
+      <lengthDir>    <exp>1.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></lengthDir>
+      <widthDir>    <exp>0.0</exp>	
+          <exp>1.0</exp>	
+          <exp>0.0</exp></widthDir>
+      <length>    <exp>0.4375</exp></length>
+      <width>    <exp>0.0125</exp></width>
+      <height>    <exp>0.0125</exp></height>
+      <extra>    <exp>0.0</exp></extra>
+      <color>    <exp>0.0</exp>	
+          <exp>0.0</exp>	
+          <exp>0.0</exp></color>
+      <specCoeff>    <exp>0.0</exp></specCoeff>
+  </shape>
+</visualization>
