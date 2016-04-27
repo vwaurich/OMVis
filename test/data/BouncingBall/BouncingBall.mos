@@ -1,5 +1,0 @@
-loadFile("BouncingBall.mo"); getErrorString();
-setDebugFlags("hardcodedStartValues,initialization,visxml"); getErrorString();
-setCommandLineOptions("+simCodeTarget=Cpp"); getErrorString();
-translateModelFMU(BouncingBall, version = "1.0", fmuType = "me"); getErrorString();
-//simulate(BouncingBall); getErrorString();
