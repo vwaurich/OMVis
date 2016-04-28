@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Initialization/OMVisFactory.hpp>
+#include "Initialization/OMVisFactory.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerMAT.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
@@ -45,7 +45,8 @@ namespace OMVIS
             {
                 LOGGER_WRITE("Initialize OMVisalizerAbstract because path and model name are empty.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            else if (Util::exists(path + "/" + modelName + "_visual.xml"))
+            //else if (Util::exists(path + "/" + modelName + "_visual.xml"))
+            else if (Util::exists(path))
             {
                 //FMU based visualization
                 if (useFMU)
