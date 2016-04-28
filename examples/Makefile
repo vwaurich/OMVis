@@ -7,6 +7,7 @@ DEPENDENCIES = \
 *.mo \
 *.mos \
 *.mat \
+*visual.xml \
 Makefile
 
 
