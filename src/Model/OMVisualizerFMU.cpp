@@ -39,7 +39,6 @@ namespace OMVIS
                   _simSettings(new SimSettings()),
                   _inputData(),
                   _joysticks()
-        //,_keyboardEventHandler(new Control::KeyboardEventHandler(&_inputData))
         {
             LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
             initJoySticks();
