@@ -1,14 +1,26 @@
 /*
- * OMVisualizerAbstract.cpp
+ * Copyright (C) 2016, Volker Waurich
  *
- *  Created on: 01.03.2016
- *      Author: mf
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Control/OMVisManager.hpp"
 #include "Util/Logger.hpp"
-#include <boost/filesystem.hpp>
+#include "Util/Util.hpp"
 
 #include <string>
 #include <stdlib.h>
@@ -32,14 +44,7 @@ namespace OMVIS
                   _omvManager(new Control::OMVisManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
         {
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
-            //char fullPathTmp[PATH_MAX];
-            //realpath(path.c_str(), fullPathTmp);
-			boost::filesystem::path bPath = boost::filesystem::path(path.c_str());
-			bPath = boost::filesystem::absolute(bPath);
-
-			std::string fullPath = bPath.string();
-
-            // Now we can use the full path.
+            std::string fullPath = Util::makeAbsolutePath(path);
             _baseData = new OMVisualBase(modelName, fullPath), _viewerStuff->getScene().setPath(fullPath);
         }
 
