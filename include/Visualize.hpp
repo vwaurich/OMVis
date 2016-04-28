@@ -35,6 +35,8 @@
 #include <read_matlab4.h>
 #include <rapidxml.hpp>
 
+#include "Util/ObjectAttribute.hpp"
+
 #include <osg/Geode>
 #include <osg/Vec3f>
 
@@ -44,91 +46,105 @@ namespace OMVIS
     namespace Util
     {
 
-        //-----------------------
-        // CLASSES
-        //-----------------------
+    //-----------------------
+    // CLASSES
+    //-----------------------
 
-        /**
-         * struct to handle position vector and rotationMatrix
-         * \todo Find a more suitable name for this struct and better place.
-         */
-        struct rAndT
-        {
-            osg::Vec3f _r;
-            osg::Matrix3 _T;
-        };
+    /**
+     * struct to handle position vector and rotationMatrix
+     * \todo Find a more suitable name for this struct and better place.
+     */
+    struct rAndT
+    {
+        osg::Vec3f _r;
+        osg::Matrix3 _T;
+    };
 
-        /**
-         length and width direction
-         */
-        struct Directions
-        {
-            osg::Vec3f _lDir;
-            osg::Vec3f _wDir;
-        };
+    /**
+     length and width direction
+     */
+    struct Directions
+    {
+        osg::Vec3f _lDir;
+        osg::Vec3f _wDir;
+    };
 
-        /******************************
-         Calculate Transformations
-         *******************************/
 
-        /*! \brief Modelica.Math.Vectors.normalize
-         * @param
-         * @return
-         */
-        osg::Vec3f normalize(osg::Vec3f vec);
+    /******************************
+     Calculate Transformations
+     *******************************/
 
-        /*! \brief Cross
-         *
-         * @param
-         * @return
-         */
-        osg::Vec3f cross(osg::Vec3f vec1, osg::Vec3f vec2);
+    /*! \brief Modelica.Math.Vectors.normalize
+     * @param
+     * @return
+     */
+    osg::Vec3f normalize(osg::Vec3f vec);
 
-        /*! \brief Bla Bla
-         *
-         * @param
-         * @return
-         */
-        Directions fixDirections(osg::Vec3f lDir, osg::Vec3f wDir);
+    /*! \brief Cross
+     *
+     * @param
+     * @return
+     */
+    osg::Vec3f cross(osg::Vec3f vec1, osg::Vec3f vec2);
 
-        //-----------------------
-        // FUNCTIONS
-        //-----------------------
+    /*! \brief Bla Bla
+     *
+     * @param
+     * @return
+     */
+    Directions fixDirections(osg::Vec3f lDir, osg::Vec3f wDir);
 
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         */
-        osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         */
-        osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+    //-----------------------
+    // FUNCTIONS
+    //-----------------------
 
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         */
-        osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         */
-        osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
-        /*! \brief Gets the value of the indicated node exp.
-         */
-        double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-        /*! \brief Gets the value of the indicated node exp.
-         */
-        double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+    /*! \brief Gets the vector of the indicated node exp of the shape.
+     */
+    osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
-        osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
+    /*! \brief Gets the value of the indicated node exp.
+     */
+    double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-        /*! \brief Updates r and T to cope with the directions.
-         *
-         * @param
-         * @return
-         */
-        rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type);
+	/*! \brief Update the attribute of the Object using a mat-file result
+	*/
+	void updateObjectAttributeMAT(ObjectAttribute* attr, double time, ModelicaMatReader reader);
 
-    }  // End namespace Util
+	/*! \brief Update the attribute of the Object using a mat-file result
+	*/
+	void updateObjectAttributeFMU(ObjectAttribute* attr, double time, fmi1_import_t* fmu);
+
+	/*! \brief Gets the value of the indicated node exp.
+     */
+    double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+
+	/*! \brief Gets the ObjectAttribute for a certain node
+	*/
+	ObjectAttribute getObjectAttributeForNode(rapidxml::xml_node<>*);	
+
+    osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
+
+    /*! \brief Updates r and T to cope with the directions.
+     *
+     * @param
+     * @return
+     */
+	rAndT rotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, float length, float width, float height, std::string type);
+
+}  // End namespace Util
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_VISUALIZE_HPP_ */

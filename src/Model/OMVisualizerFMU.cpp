@@ -210,96 +210,125 @@ namespace OMVIS
             return _fmu._fmuData._tcur;
         }
 
-        void OMVisualizerFMU::resetInputs()
+    void OMVisualizerFMU::initializeVisAttributes(const double time)
+    {
+        _fmu.initialize(_simSettings);
+        _omvManager->setVisTime(_omvManager->getStartTime());
+        _omvManager->setSimTime(_omvManager->getStartTime());
+        updateVisAttributes(_omvManager->getVisTime());
+    }
+
+    void OMVisualizerFMU::resetInputs()
+    {
+        //reset real input values to 0
+        for (size_t r = 0; r < _inputData._data.getNumReal(); ++r)
+            _inputData._data._valuesReal[r] = 0.0;
+        //reset integer input values to 0
+        for (size_t i = 0; i < _inputData._data.getNumInteger(); ++i)
+            _inputData._data._valuesInteger[i] = 0;
+        //reset boolean input values to 0
+        for (size_t b = 0; b < _inputData._data.getNumBoolean(); ++b)
+            _inputData._data._valuesBoolean[b] = false;
+        //reset string input values to 0
+        for (size_t s = 0; s < _inputData._data.getNumString(); ++s)
+            _inputData._data._valuesString[s] = "";
+    }
+
+    int OMVisualizerFMU::updateVisAttributes(const double time)
+    {
+        int isOk(0);
+
+        // Update all shapes
+        OMVIS::Util::rAndT rT;
+        osg::ref_ptr<osg::Node> child = nullptr;
+		try {
+			_baseData->_shapes;
+			for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); i++)
+			{
+				ShapeObject shape = _baseData->_shapes[i];
+			
+				// get the values for the scene graph objects
+				Util::updateObjectAttributeFMU(&shape._length, time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._width, time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._height, time, _fmu._fmu);
+											   
+				Util::updateObjectAttributeFMU(&shape._lDir[0], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._lDir[1], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._lDir[2], time, _fmu._fmu);
+											   
+				Util::updateObjectAttributeFMU(&shape._wDir[0], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._wDir[1], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._wDir[2], time, _fmu._fmu);
+											   
+				Util::updateObjectAttributeFMU(&shape._r[0], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._r[1], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._r[2], time, _fmu._fmu);
+											   
+				Util::updateObjectAttributeFMU(&shape._rShape[0], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._rShape[1], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._rShape[2], time, _fmu._fmu);
+											   
+											   
+				Util::updateObjectAttributeFMU(&shape._T[0], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[1], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[2], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[3], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[4], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[5], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[6], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[7], time, _fmu._fmu);
+				Util::updateObjectAttributeFMU(&shape._T[8], time, _fmu._fmu);
+				
+				rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+					osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+					osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
+					shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
+					shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
+					osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+					osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
+					shape._length.exp,
+					shape._width.exp,
+					shape._height.exp,
+					shape._type);
+
+				shape._mat = Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
+				
+				//update the shapes
+				_nodeUpdater->_shape = shape;
+				//_baseData->_visAttr.dumpVisAttributes();
+
+				//get the scene graph nodes and stuff
+				child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
+				child->accept(*_nodeUpdater);
+
+			} //end for
+		} // end try
+
+        catch(std::exception& e)
         {
-            //reset real input values to 0
-            for (size_t r = 0; r < _inputData._data.getNumReal(); ++r)
-                _inputData._data._valuesReal[r] = 0.0;
-            //reset integer input values to 0
-            for (size_t i = 0; i < _inputData._data.getNumInteger(); ++i)
-                _inputData._data._valuesInteger[i] = 0;
-            //reset boolean input values to 0
-            for (size_t b = 0; b < _inputData._data.getNumBoolean(); ++b)
-                _inputData._data._valuesBoolean[b] = false;
-            //reset string input values to 0
-            for (size_t s = 0; s < _inputData._data.getNumString(); ++s)
-                _inputData._data._valuesString[s] = "";
+            LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."),
+                         Util::LC_SOLVER, Util::LL_WARNING);
+            isOk = 1;
         }
+        return isOk;
+    }
 
-        int OMVisualizerFMU::updateVisAttributes(const double time)
+
+    void OMVisualizerFMU::updateScene(const double time)
+    {
+        _omvManager->setSimTime(_omvManager->getVisTime());
+        double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
+
+        while (_omvManager->getSimTime() < nextStep)
         {
-            int isOk(0);
-
-            // Update all shapes
-            rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
-            unsigned int shapeIdx = 0;
-            Util::rAndT rT;
-            osg::ref_ptr<osg::Node> child = nullptr;
-            try
-            {
-                for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
-                {
-                    // get the values for the scene graph objects
-                    _baseData->_visAttr._type = Util::getShapeType(shapeNode);
-
-                    //_baseData->_visAttr._length = getShapeAttrFMU((const char*) "length", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._length = Util::getShapeAttrFMU(std::string("length").c_str(), shapeNode, time, _fmu._fmu);
-
-                    _baseData->_visAttr._width = Util::getShapeAttrFMU((const char*) "width", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._height = Util::getShapeAttrFMU((const char*) "height", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._r = Util::getShapeVectorFMU((char*) "r", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._rShape = Util::getShapeVectorFMU((char*) "r_shape", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._lDir = Util::getShapeVectorFMU((char*) "lengthDir", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._wDir = Util::getShapeVectorFMU((char*) "widthDir", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._color = Util::getShapeVectorFMU((char*) "color", shapeNode, time, _fmu._fmu);
-                    _baseData->_visAttr._T = Util::getShapeMatrixFMU((char*) "T", shapeNode, time, _fmu._fmu);
-                    rT = Util::staticRotation(_baseData->_visAttr._r, _baseData->_visAttr._rShape, _baseData->_visAttr._T, _baseData->_visAttr._lDir, _baseData->_visAttr._wDir, _baseData->_visAttr._length, _baseData->_visAttr._width, _baseData->_visAttr._height, _baseData->_visAttr._type);
-                    _baseData->_visAttr._r = rT._r;
-                    _baseData->_visAttr._T = rT._T;
-
-                    _baseData->_visAttr._mat = Util::assemblePokeMatrix(_baseData->_visAttr._mat, _baseData->_visAttr._T, _baseData->_visAttr._r);
-
-                    //update the shapes
-                    _nodeUpdater->_visAttr = _baseData->_visAttr;
-                    //_nodeUpdater->_visAttr.dumpVisAttributes();
-
-                    //get the scene graph nodes and stuff
-                    child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
-                    child->accept(*_nodeUpdater);
-                    ++shapeIdx;
-                }
-            }
-            catch (std::exception& e)
-            {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
-                isOk = 1;
-            }
-            return isOk;
+            //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
+            //_inputData.printValues();
+            _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
         }
+        updateVisAttributes(_omvManager->getVisTime());
+    }
 
-        void OMVisualizerFMU::initializeVisAttributes(const double time)
-        {
-            _fmu.initialize(_simSettings);
-            _omvManager->setVisTime(_omvManager->getStartTime());
-            _omvManager->setSimTime(_omvManager->getStartTime());
-            updateVisAttributes(_omvManager->getVisTime());
-        }
-
-        void OMVisualizerFMU::updateScene(const double time)
-        {
-            _omvManager->setSimTime(_omvManager->getVisTime());
-            double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
-
-            while (_omvManager->getSimTime() < nextStep)
-            {
-                //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
-                //_inputData.printValues();
-                _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
-            }
-            updateVisAttributes(_omvManager->getVisTime());
-        }
-
-        std::string OMVisualizerFMU::getType() const
+    std::string OMVisualizerFMU::getType() const
         {
             return "fmu";
         }

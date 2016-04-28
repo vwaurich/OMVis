@@ -27,9 +27,11 @@
 #include <QDebug>
 #include <QDialogButtonBox>
 #include <QMessageBox>
-
-#include <arpa/inet.h>
 #include <string>
+
+#ifndef _WIN32
+	#include <arpa/inet.h>
+#endif;
 
 namespace OMVIS
 {
@@ -42,6 +44,7 @@ namespace OMVIS
          */
         bool isValidIpAddressV4(const std::string& ipAddress)
         {
+		#ifndef _WIN32
             struct sockaddr_in sa;
             int result = inet_pton(AF_INET, ipAddress.c_str(), &(sa.sin_addr));
 
@@ -55,6 +58,11 @@ namespace OMVIS
                 LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv4 address."), Util::LC_GUI, Util::LL_WARNING);
                 return false;
             }
+		#elif _WIN32
+			LOGGER_WRITE("isValidIpAddressV4 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
+			return false;
+		#endif;
+
             // Short way without logger usage.
             //return result != 0;
         }
@@ -66,6 +74,8 @@ namespace OMVIS
          */
         bool isValidIpAddressV6(const std::string& ipAddress)
         {
+		#ifndef _WIN32
+
             struct sockaddr_in6 sa;
             int result = inet_pton(AF_INET6, ipAddress.c_str(), &(sa.sin6_addr));
 
@@ -82,6 +92,10 @@ namespace OMVIS
             LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
             // Short way without logger usage.
             //return result != 0;
+		#elif _WIN32
+			LOGGER_WRITE("isValidIpAddressV6 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
+			return false;
+		#endif;
         }
 
         /// \todo Implement me!

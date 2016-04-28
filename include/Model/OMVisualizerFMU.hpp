@@ -32,6 +32,7 @@
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Visualize.hpp"
+
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
 

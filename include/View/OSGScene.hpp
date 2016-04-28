@@ -31,8 +31,7 @@
 #include <osg/Group>
 #include <osgDB/ReadFile>
 
-#include <string>
-
+#include "Model/ShapeObject.hpp"
 namespace OMVIS
 {
 
@@ -43,20 +42,20 @@ namespace OMVIS
          *
          * \todo This class handles access to the root node. Encapsulate access to the pointer.
          */
-        class OSGScene
-        {
-         public:
-            OSGScene();
-            ~OSGScene() = default;
-            OSGScene(const OSGScene& osgs) = delete;
-            OSGScene& operator=(const OSGScene& osgs) = delete;
+    class OSGScene
+    {
+     public:
+        OSGScene();
+        ~OSGScene() = default;
+        OSGScene(const OSGScene& osgs) = delete;
+        OSGScene& operator=(const OSGScene& osgs) = delete;
 
-            /*! \brief Sets up all nodes initially.
-             *
-             * @param xmlRoot
-             * \return Error value.
-             */
-            int setUpScene(rapidxml::xml_node<>* xmlRoot);
+        /*! \brief Sets up all nodes initially.
+         *
+         * @param xmlRoot
+         * \return Error value.
+         */
+        int setUpScene(std::vector<Model::ShapeObject> allShapes);
 
             /*! \brief Return shared pointer to rootNode. */
             osg::ref_ptr<osg::Group> getRootNode();

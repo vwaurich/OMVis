@@ -33,83 +33,87 @@ namespace OMVIS
     namespace View
     {
 
-        OSGScene::OSGScene()
-                : _rootNode(new osg::Group())
+    OSGScene::OSGScene()
+            : _rootNode(new osg::Group)
+    {
+    }
+
+    int OSGScene::setUpScene(std::vector<Model::ShapeObject> allShapes)
+    {
+        int isOk(0);
+		for (std::vector<Model::ShapeObject>::size_type i = 0; i != allShapes.size(); i++)
         {
-        }
+			Model::ShapeObject shape = allShapes[i];
 
-        int OSGScene::setUpScene(rapidxml::xml_node<>* xmlRoot)
-        {
-            int isOk(0);
-            for (rapidxml::xml_node<>* shapeNode = xmlRoot->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
-            {
-                osg::ref_ptr<osg::Geode> geode;
-                osg::ref_ptr<osg::StateSet> ss;
+			osg::ref_ptr<osg::Geode> geode;
+			osg::ref_ptr<osg::StateSet> ss;
+ 
+            std::string type = shape._type;
+			LOGGER_WRITE(std::string("Shape: ") + shape._id + std::string(", type: ") + type,Util::LC_LOADER, Util::LL_DEBUG);
 
-                std::string type = Util::getShapeType(shapeNode);
-                LOGGER_WRITE(std::string("Shape: ") + shapeNode->value() + std::string(", type: ") + type, Util::LC_LOADER, Util::LL_DEBUG);
+			//color
+			osg::ref_ptr<osg::Material> material = new osg::Material();
+			material->setDiffuse(osg::Material::FRONT, osg::Vec4f(0.0, 0.0, 0.0, 0.0));
 
-                //color
-                osg::ref_ptr<osg::Material> material = new osg::Material();
-                material->setDiffuse(osg::Material::FRONT, osg::Vec4f(0.0, 0.0, 0.0, 0.0));
+			//matrix transformation
+			osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform();
 
-                //matrix transformation
-                osg::ref_ptr<osg::MatrixTransform> transf = new osg::MatrixTransform();
+			//stl node
+			if (Util::isCADType(type))
+			{
 
-                //stl node
-                if (Util::isCADType(type))
-                {
-                    std::string filename = Util::extractCADFilename(type);
-                    LOGGER_WRITE(std::string("Its a STL and the path is ") + _path, Util::LC_LOADER, Util::LL_INFO);
-                    filename = _path + filename;
-
-                    // \todo What do we do at this point?
-                    if (!Util::exists(filename))
-                    {
-                        LOGGER_WRITE(std::string("Could not find the file ") + filename + std::string("."), Util::LC_LOADER, Util::LL_WARNING);
-                        isOk = 1;
-                        return isOk;
-                    }
-
-                    osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
-                    osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
-
-                    ss->setAttribute(material.get());
-                    node->setStateSet(ss);
-                    transf->addChild(node.get());
-                }
-                //geode with shape drawable
-                else
-                {
-                    osg::ref_ptr<osg::ShapeDrawable> shapeDraw = new osg::ShapeDrawable();
-                    shapeDraw->setColor(osg::Vec4(1.0, 1.0, 1.0, 1.0));
-                    geode = new osg::Geode();
-                    geode->addDrawable(shapeDraw.get());
-                    osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
-                    ss->setAttribute(material.get());
-                    geode->setStateSet(ss);
-                    transf->addChild(geode.get());
+				std::string filename = Util::extractCADFilename(type);
+				LOGGER_WRITE(std::string("Its a STL and the path is ") + _path ,Util::LC_LOADER, Util::LL_INFO);
+				filename = _path + filename;
+				// \todo What do we do at this point?
+				if (!Util::exists(filename))
+				{
+					LOGGER_WRITE(std::string("Could not find the file ") + filename +std::string(".") ,Util::LC_LOADER, Util::LL_WARNING);
+					isOk = 1;
+					return isOk;
                 }
 
-                _rootNode->addChild(transf.get());
+                osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
+                osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
+
+                ss->setAttribute(material.get());
+                node->setStateSet(ss);
+                transf->addChild(node.get());
             }
-            return isOk;
+            //geode with shape drawable
+            else
+            {
+                osg::ref_ptr<osg::ShapeDrawable> shapeDraw = new osg::ShapeDrawable();
+                shapeDraw->setColor(osg::Vec4(1.0, 1.0, 1.0, 1.0));
+                geode = new osg::Geode();
+                geode->addDrawable(shapeDraw.get());
+                osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
+                ss->setAttribute(material.get());
+                geode->setStateSet(ss);
+                transf->addChild(geode.get());
+            }
+
+            _rootNode->addChild(transf.get());
+
         }
 
-        osg::ref_ptr<osg::Group> OSGScene::getRootNode()
-        {
-            return _rootNode;
-        }
+        return isOk;
+    }
 
-        std::string OSGScene::getPath() const
-        {
-            return _path;
-        }
+    osg::ref_ptr<osg::Group> OSGScene::getRootNode()
+    {
+        return _rootNode;
+    }
 
-        void OSGScene::setPath(const std::string path)
-        {
-            _path = path;
-        }
+    std::string OSGScene::getPath() const
+    {
+        return _path;
+    }
+
+    void OSGScene::setPath(const std::string path)
+    {
+        _path = path;
+    }
 
     }  // End namespace View
 }  // End namespace OMVIS

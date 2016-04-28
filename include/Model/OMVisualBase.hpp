@@ -27,7 +27,8 @@
 #ifndef INCLUDE_OMVISUALBASE_HPP_
 #define INCLUDE_OMVISUALBASE_HPP_
 
-#include "VisAttributes.hpp"
+#include "Visualize.hpp"
+#include "Model/ShapeObject.hpp"
 
 #include <rapidxml.hpp>
 #include <string>
@@ -58,20 +59,25 @@ namespace OMVIS
              */
             int initXMLDoc();
 
-         public:
-            /// \todo Can this attr. be private?
-            std::string _modelName;
-            /// \todo Can this attr. be private?
-            std::string _dirName;
-            /// \todo Can this attr. be private?
-            /// The XML file containing the information about the visualization.
-            rapidxml::xml_document<> _xmlDoc;
-            /// \todo Can this attr. be private?
-            /// Stores the current visualization data.
-            VisAttributes _visAttr;
+		/*! \brief Get all Visual objects from the XML
+		*
+		* \return Error value.
+		*/
+		int initVisObjects();
+		
 
-         public:
-            std::string _xmlFileName;
+     public:
+        /// \todo Can this attr. be private?
+        std::string _modelName;
+        /// \todo Can this attr. be private?
+        std::string _dirName;
+        /// \todo Can this attr. be private?
+        /// The XML file containing the information about the visualization.
+        rapidxml::xml_document<> _xmlDoc;
+        /// Stores all visualization objects.
+        std::vector<ShapeObject> _shapes;
+        
+		std::string _xmlFileName;
         };
 
     }  // End namespace Model

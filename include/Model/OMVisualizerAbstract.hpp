@@ -30,6 +30,9 @@
 #include "View/OMVisScene.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
+#include "Util/ObjectAttribute.hpp"
+#include "Visualize.hpp"
+
 
 // Forward declaration
 namespace OMVIS
@@ -42,148 +45,134 @@ namespace OMVIS
 
 namespace OMVIS
 {
+namespace Model
+{
 
-    namespace Model
+    /*! \brief This class serves as abstract class for visualization.
+     *
+     * It provides basic methods for visualization.
+     * Concrete implementations are \ref OMVisualizerMat and \ref OMVisualizerFMU.
+     */
+    class OMVisualizerAbstract
     {
+     public:
+        /// The default constructor.
+        OMVisualizerAbstract();
 
-        /*! \brief This class serves as abstract class for visualization.
+        /*! \brief Constructs OMVisualizer object from arguments.
          *
-         * It provides basic methods for visualization.
-         * Concrete implementations are \ref OMVisualizerMat and \ref OMVisualizerFMU.
+         * @param model Name of the model.
+         * @param dir Path to the FMU or result file and corresponding XML-file.
          */
-        class OMVisualizerAbstract
+        OMVisualizerAbstract(const std::string modelName, const std::string dir);
+
+        /// Destructs OMVisualizer object.
+        virtual ~OMVisualizerAbstract() = default;
+
+        /// The copy constructor is forbidden.
+        OMVisualizerAbstract(const OMVisualizerAbstract& omv) = delete;
+
+        /// The assignment operator is forbidden.
+        OMVisualizerAbstract& operator=(const OMVisualizerAbstract& omv) = delete;
+
+        /*! \brief This methods initializes a Visualizer object.
+            *
+            * Encapsulates the three stages/methods of initialization process into one single method.
+            */
+        virtual int initialize()
         {
-         public:
-            /// The default constructor.
-            OMVisualizerAbstract();
-
-            /*! \brief Constructs OMVisualizer object from arguments.
-             *
-             * @param model Name of the model.
-             * @param dir Path to the FMU or result file and corresponding XML-file.
-             */
-            OMVisualizerAbstract(const std::string modelName, const std::string dir);
-
-            /// Destructs OMVisualizer object.
-            virtual ~OMVisualizerAbstract() = default;
-
-            /// The copy constructor is forbidden.
-            OMVisualizerAbstract(const OMVisualizerAbstract& omv) = delete;
-
-            /// The assignment operator is forbidden.
-            OMVisualizerAbstract& operator=(const OMVisualizerAbstract& omv) = delete;
-
-            /*! \brief This methods initializes a Visualizer object.
-             *
-             * Encapsulates the three stages/methods of initialization process into one single method.
-             *
-             * \todo: In case a function returns isOk!=1, shall we proceed with the other function calls?
-             */
-            virtual int initialize()
-            {
-                int isOk(0);
-                isOk += initData();
-                isOk += setUpScene();
-                isOk += updateVisAttributes(0.0);
-                return isOk;
-            }
-
-            /*! \brief Initializes OMVisualizer object.
-             *
-             * XML-file is parsed and the values of the attributes are set.
-             * The viewer is initialized and the scene is set up.
-             * FMU is loaded if used, or the Matfile is read.
-             * @return 1
-             *
-             * \todo Quick and dirty hack by passing OMVmanager, \see OMVisualizerFMU.
-             *
-             */
-            virtual int initData()
-            {
-                int isOk(0);
-                //X7 In case of reloading, we need to make sure, that we have empty members
-                _baseData->_xmlDoc.clear();
-                //_baseData->_visAttributes
-
-                // init xml file and get visAttributes
-                isOk = _baseData->initXMLDoc();
-                return isOk;
-            }
-
-            /*! \brief Set up the scene.
-             *
-             * @return Error value.
-             */
-            int setUpScene();
-
-            /*! \brief Free memory that was allocated with the loaded model. */
-            virtual void unload() = 0;
-
-            /*! \brief In case of FMU visualization, this methods performs a simulation step.
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             * @param omvm
-             */
-            virtual void simulate(Control::OMVisManager& omvm) = 0;
-
-            /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or mat-file.
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             * @param omvm
-             * \return Error value.
-             */
-            virtual int updateVisAttributes(const double time) = 0;
-
-            /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             */
-            virtual void initializeVisAttributes(const double time) = 0;
-
-            /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             */
-            virtual void updateScene(const double time) = 0;
-
-            /*! \brief Returns "abstract"
-             */
-            virtual std::string getType() const;
-
-            /*! \brief Starts the visualization.
-             */
-            void startVisualization();
-
-            /*! \brief Pauses the visualization.
-             */
-            void pauseVisualization();
-            /*! \brief Sets the scene to start position.
-             */
-            void initVisualization();
-
-            /*! \brief Prints a message which tells you to buy us a coffee.
-             */
-            void donationVisualization();
-
-            /*! \brief Calls for a scene update.
-             */
-            void sceneUpdate();
-
-         public:
-            /// \todo: Can this attr. be private?
-            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-            OMVisualBase* _baseData;
-            /// \todo: Can this attr. be private?
-            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-            View::OMVisScene* _viewerStuff;
-            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-            UpdateVisitor* _nodeUpdater;
-            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-            Control::OMVisManager* _omvManager;
+            int isOk(0);
+            isOk += initData();
+            isOk += setUpScene();
+            isOk += updateVisAttributes(0.0);
+            return isOk;
         }
-        ;
 
-    }  // End namespace Model
+        /*! \brief Initializes OMVisualizer object.
+         *
+         * XML-file is parsed and the values of the attributes are set.
+         * The viewer is initialized and the scene is set up.
+         * FMU is loaded if used, or the Matfile is read.
+         * @return 1
+         *
+         * \todo Quick and dirty hack by passing OMVmanager, \see OMVisualizerFMU.
+         *
+         */
+		virtual int initData();
+
+        /*! \brief Set up the scene.
+         *
+         * @return Error value.
+         */
+        int setUpScene();
+
+        /*! \brief Free memory that was allocated with the loaded model. */
+        virtual void unload() = 0;
+
+        /*! \brief In case of FMU visualization, this methods performs a simulation step.
+         *
+         * \remark All classes that derive from OMVisualizerAbstract
+         * @param omvm
+         */
+        virtual void simulate(Control::OMVisManager& omvm) = 0;
+
+        /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or mat-file.
+         *
+         * \remark All classes that derive from OMVisualizerAbstract
+         * @param omvm
+         * \return Error value.
+         */
+        virtual int updateVisAttributes(const double time) = 0;
+
+        /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
+         *
+         * \remark All classes that derive from OMVisualizerAbstract
+         */
+        virtual void initializeVisAttributes(const double time) = 0;
+
+        /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
+         *
+         * \remark All classes that derive from OMVisualizerAbstract
+         */
+        virtual void updateScene(const double time) = 0;
+
+		/*! \brief Returns "abstract"
+		*/
+		virtual std::string getType() const;
+
+        /*! \brief Starts the visualization.
+         */
+        void startVisualization();
+
+        /*! \brief Pauses the visualization.
+         */
+        void pauseVisualization();
+        /*! \brief Sets the scene to start position.
+         */
+        void initVisualization();
+
+        /*! \brief Prints a message which tells you to buy us a coffee.
+         */
+        void donationVisualization();
+
+        /*! \brief Calls for a scene update.
+         */
+        void sceneUpdate();
+
+     public:
+        /// \todo: Can this attr. be private?
+                /// \todo Should be std::unique_ptr, but at least std::shared_ptr
+        OMVisualBase* _baseData;
+        /// \todo: Can this attr. be private?
+                /// \todo Should be std::unique_ptr, but at least std::shared_ptr
+        View::OMVisScene* _viewerStuff;
+                /// \todo Should be std::unique_ptr, but at least std::shared_ptr
+        UpdateVisitor* _nodeUpdater;
+                /// \todo Should be std::unique_ptr, but at least std::shared_ptr
+        Control::OMVisManager* _omvManager;
+    };
+
+}  // End namespace Model
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_OMVISUALIZERABSTRACT_HPP_ */

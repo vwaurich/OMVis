@@ -123,77 +123,77 @@ namespace OMVIS
             return M;
         }
 
-        rAndT staticRotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, double length, double width, double height, std::string type)
-        {
-            rAndT res;
+		rAndT rotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, float length, float width, float height, std::string type)
+		{
+			rAndT res;
 
-            Directions dirs = fixDirections(lDirIn, wDirIn);
-            osg::Vec3f hDir = dirs._lDir ^ dirs._wDir;
+			Directions dirs = fixDirections(lDirIn, wDirIn);
+			osg::Vec3f hDir = dirs._lDir ^ dirs._wDir;
 
-            //std::cout<<"lDir1 "<<dirs.lDir[0]<<", "<<dirs.lDir[1]<<", "<<dirs.lDir[2]<<", "<<std::endl;
-            //std::cout<<"wDir1 "<<dirs.wDir[0]<<", "<<dirs.wDir[1]<<", "<<dirs.wDir[2]<<", "<<std::endl;
-            //std::cout<<"hDir "<<hDir[0]<<", "<<hDir[1]<<", "<<hDir[2]<<", "<<std::endl;
+			//std::cout<<"lDir1 "<<dirs.lDir[0]<<", "<<dirs.lDir[1]<<", "<<dirs.lDir[2]<<", "<<std::endl;
+			//std::cout<<"wDir1 "<<dirs.wDir[0]<<", "<<dirs.wDir[1]<<", "<<dirs.wDir[2]<<", "<<std::endl;
+			//std::cout<<"hDir "<<hDir[0]<<", "<<hDir[1]<<", "<<hDir[2]<<", "<<std::endl;
 
-            osg::Vec3f r_offset = osg::Vec3f(0.0, 0.0, 0.0);  // since in osg, the rotation starts in the symmetric centre and in msl at the end of the body, we need an offset here of l/2 for some geometries
-            osg::Matrix3 T0 = osg::Matrix3(dirs._wDir[0], dirs._wDir[1], dirs._wDir[2], hDir[0], hDir[1], hDir[2], dirs._lDir[0], dirs._lDir[1], dirs._lDir[2]);
+			osg::Vec3f r_offset = osg::Vec3f(0.0, 0.0, 0.0);  // since in osg, the rotation starts in the symmetric centre and in msl at the end of the body, we need an offset here of l/2 for some geometries
+			osg::Matrix3 T0 = osg::Matrix3(dirs._wDir[0], dirs._wDir[1], dirs._wDir[2], hDir[0], hDir[1], hDir[2], dirs._lDir[0], dirs._lDir[1], dirs._lDir[2]);
 
-            if (type == "cylinder")
-            {
-                /*
-                 r = r + r_shape;
-                 r_offset = dirs.lDir*length/2.0;
-                 r_offset = V3mulMat3(r_offset,T);
-                 res.r = r+r_offset;
-                 */
-                r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
-            else if (type == "sphere")
-            {
-                T0 = osg::Matrix3(dirs._lDir[0], dirs._lDir[1], dirs._lDir[2], dirs._wDir[0], dirs._wDir[1], dirs._wDir[2], hDir[0], hDir[1], hDir[2]);
-                r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
-            else if (type == "cone")
-            {
-                // no offset needed
-                res._r = Util::V3mulMat3(r_shape, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
-            else if (type == "box")
-            {
-                r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
-            else if (Util::isCADType(type))
-            {
-                r = r + r_shape;
-                res._T = T;
-                res._r = r;
-                //r_offset = dirs.lDir*length/2.0;
-            }
-            else
-            {
-                r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
+			if (type == "cylinder")
+			{
+				/*
+				r = r + r_shape;
+				r_offset = dirs.lDir*length/2.0;
+				r_offset = V3mulMat3(r_offset,T);
+				res.r = r+r_offset;
+				*/
+				r_offset = dirs._lDir * length / 2.0;
+				res._r = Util::V3mulMat3(r_shape + r_offset, T);
+				res._r = res._r + r;
+				res._T = Util::Mat3mulMat3(T0, T);
+			}
+			else if (type == "sphere")
+			{
+				T0 = osg::Matrix3(dirs._lDir[0], dirs._lDir[1], dirs._lDir[2], dirs._wDir[0], dirs._wDir[1], dirs._wDir[2], hDir[0], hDir[1], hDir[2]);
+				r_offset = dirs._lDir * length / 2.0;
+				res._r = Util::V3mulMat3(r_shape + r_offset, T);
+				res._r = res._r + r;
+				res._T = Util::Mat3mulMat3(T0, T);
+			}
+			else if (type == "cone")
+			{
+				// no offset needed
+				res._r = Util::V3mulMat3(r_shape, T);
+				res._r = res._r + r;
+				res._T = Util::Mat3mulMat3(T0, T);
+			}
+			else if (type == "box")
+			{
+				r_offset = dirs._lDir * length / 2.0;
+				res._r = Util::V3mulMat3(r_shape + r_offset, T);
+				res._r = res._r + r;
+				res._T = Util::Mat3mulMat3(T0, T);
+			}
+			else if (Util::isCADType(type))
+			{
+				r = r + r_shape;
+				res._T = T;
+				res._r = r;
+				//r_offset = dirs.lDir*length/2.0;
+			}
+			else
+			{
+				r_offset = dirs._lDir * length / 2.0;
+				res._r = Util::V3mulMat3(r_shape + r_offset, T);
+				res._r = res._r + r;
+				res._T = Util::Mat3mulMat3(T0, T);
+			}
 
-            //std::cout<<"lDir "<<dirs.lDir[0]<<", "<<dirs.lDir[1]<<", "<<dirs.lDir[2]<<", "<<std::endl;
-            //std::cout<<"wDir "<<dirs.wDir[0]<<", "<<dirs.wDir[1]<<", "<<dirs.wDir[2]<<", "<<std::endl;
-            //std::cout<<"hDir "<<hDir[0]<<", "<<hDir[1]<<", "<<hDir[2]<<", "<<std::endl;
-            //cout<<"rin "<<r[0]<<", "<<r[1]<<", "<<r[2]<<", "<<std::endl;
-            //cout<<"roffset "<<r_offset[0]<<", "<<r_offset[1]<<", "<<r_offset[2]<<", "<<std::endl;
-            return res;
-        }
+			//std::cout<<"lDir "<<dirs.lDir[0]<<", "<<dirs.lDir[1]<<", "<<dirs.lDir[2]<<", "<<std::endl;
+			//std::cout<<"wDir "<<dirs.wDir[0]<<", "<<dirs.wDir[1]<<", "<<dirs.wDir[2]<<", "<<std::endl;
+			//std::cout<<"hDir "<<hDir[0]<<", "<<hDir[1]<<", "<<hDir[2]<<", "<<std::endl;
+			//cout<<"rin "<<r[0]<<", "<<r[1]<<", "<<r[2]<<", "<<std::endl;
+			//cout<<"roffset "<<r_offset[0]<<", "<<r_offset[1]<<", "<<r_offset[2]<<", "<<std::endl;
+			return res;
+		}
 
         /****************************
          * Extract Shape information
@@ -267,28 +267,69 @@ namespace OMVIS
             return osg::Vec3f(x, y, z);
         }
 
-        double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
-        {
-            rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
-            double val = evaluateExpressionMAT(expNode, time, reader);
-            return val;
-        }
+	void updateObjectAttributeMAT(ObjectAttribute* attr, double time, ModelicaMatReader reader)
+	{
+		if (!attr->isConst)
+		{
+			attr->exp = *omc_get_varValue(&reader, attr->cref.c_str(), time);
+		}
+	}
 
-        double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
-        {
-            rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
-            return evaluateExpressionFMU(expNode, time, fmu);
-        }
+	void updateObjectAttributeFMU(ObjectAttribute* attr, double time, fmi1_import_t* fmu)
+	{
+		if (!attr->isConst)
+		{
+			fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(fmu, attr->cref.c_str());
+			const fmi1_value_reference_t vr = fmi1_import_get_variable_vr(var);
+			fmi1_real_t a = attr->exp;
+			fmi1_import_get_real(fmu, &vr, 1, &a);
+			attr->exp = (float)a;
+		}
+	}
 
-        /**
-         Gets the number of shapes from the xml-file.
+    double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+    {
+        rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
+        double val = evaluateExpressionMAT(expNode, time, reader);
+        return val;
+    }
 
-         @param the root node "visualization"
-         @return the number of shape-nodes
-         */
-        unsigned int numShapes(rapidxml::xml_node<>* rootNode)
-        {
-            unsigned int num = 0;
+    double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
+    {
+        rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
+        return evaluateExpressionFMU(expNode, time, fmu);
+    }
+
+
+	ObjectAttribute getObjectAttributeForNode(rapidxml::xml_node<>* node)
+	{
+		ObjectAttribute oa;
+		if (strcmp("exp", node->name()) == 0)
+		{
+			oa.exp = std::strtod(node->value(), nullptr);
+			oa.cref = "NONE";
+			oa.isConst = true;
+		}
+		else if (strcmp("cref", node->name()) == 0)
+		{
+			char* cref = node->value();
+			oa.cref = std::string(cref);
+			oa.exp = -1.0;
+			oa.isConst = false;
+		}
+	    return oa;
+	}
+
+
+    /**
+     Gets the number of shapes from the xml-file.
+
+     @param the root node "visualization"
+     @return the number of shape-nodes
+     */
+    unsigned int numShapes(rapidxml::xml_node<>* rootNode)
+    {
+        unsigned int num = 0;
 
             if (NULL == rootNode->first_node("shape"))
                 return num;
@@ -297,7 +338,7 @@ namespace OMVIS
                     ++num;
 
             return num;
-        }
+    }
 
     }  // End namespace Util
 }  // End namespace OMVIS
