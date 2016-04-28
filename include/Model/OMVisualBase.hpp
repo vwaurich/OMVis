@@ -53,6 +53,7 @@ namespace OMVIS
 
             /*! \brief Reads XML file and sets up osg::viewer.
              *
+             * Returns 0 if every thing went fine.
              * \return Error value.
              */
             int initXMLDoc();
