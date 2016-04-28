@@ -141,11 +141,11 @@ namespace OMVIS
         void OMVisViewer::createActions()
         {
             // Menu caption "File".
-            _openAct = new QAction(tr("&Open ..."), this);
+            _openAct = new QAction(tr("&Open..."), this);
             _openAct->setShortcut(tr("Ctrl+O"));
             QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(loadModel()));
 
-            _openRCAct = new QAction(tr("Open Remote Connection ..."), this);
+            _openRCAct = new QAction(tr("Open Remote Connection..."), this);
             _openRCAct->setShortcut(tr("Ctrl+R"));
             QObject::connect(_openRCAct, SIGNAL(triggered()), this, SLOT(openRemoteConnection()));
 
@@ -164,19 +164,19 @@ namespace OMVIS
             QObject::connect(_exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
             // Menu caption "Settings".
-            _perspectiveAct = new QAction(tr("Perspective ..."), this);
+            _perspectiveAct = new QAction(tr("Perspective..."), this);
             QObject::connect(_perspectiveAct, SIGNAL(triggered()), this, SLOT(perspectiveDialog()));
-            _bgcAct = new QAction(tr("Background Color ..."), this);
+            _bgcAct = new QAction(tr("Background Color..."), this);
             QObject::connect(_bgcAct, SIGNAL(triggered()), this, SLOT(backgroundColorDialog()));
 
             // Menu caption "Inputs".
-            _mapInputAct = new QAction(tr("Map Inputs ..."), this);
+            _mapInputAct = new QAction(tr("Map Inputs..."), this);
             QObject::connect(_mapInputAct, SIGNAL(triggered()), this, SLOT(openDialogInputMapper()));
             _dontCareAct = new QAction(tr("I Don't Care About Inputs"), this);
             //QObject::connect(_dontCareAct, SIGNAL(triggered()), this, SLOT());
 
             // Menu caption "Help".
-            _aboutOMVisAct = new QAction(tr("About OMVis ..."), this);
+            _aboutOMVisAct = new QAction(tr("About OMVis..."), this);
             QObject::connect(_aboutOMVisAct, SIGNAL(triggered()), this, SLOT(aboutOMVis()));
         }
 
@@ -713,16 +713,19 @@ namespace OMVIS
 
         void OMVisViewer::aboutOMVis()
         {
-            QString information("<p><b>OMVis</b> is a tool to visualize and animate simulation models. "
+            QString information("OMVis - The open-source FMU visualization<br><br>"
+                                "Copyright (C) 2016 Volker Waurich and Martin Flehmig,<br>"
+                                "TU Dresden, Federal Republic of Germany"
+                                "<p>Version: 0.01 <br>"
+                                "License: GPLv3, see LICENSE file<br>"
+                                "Website: https://github.com/vwaurich/OMVis<br></p>"
+                                "<p><b>OMVis</b> is a tool to visualize and animate simulation models. "
                                 "It is meant to visualize models from different simulation tools. "
                                 "What shall be visualized is described in a XML-file and the result files "
                                 "provide the corresponding data."
                                 "Besides the animation of result files, there is a possibility to animate "
                                 "multibody-systems with a FMU interactively.</p>"
-                                "<p>Version: 0.01 <br>"
-                                "Website: https://github.com/vwaurich/OMVis<br>"
-                                "(c) Copyright: See license text.<br>"
-                                "Authors: Volker Waurich, Martin Flehmig</p>");
+                                );
 
             QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information, QMessageBox::NoButton);
             QPushButton* coffeeButton = msgBox.addButton(QMessageBox::tr("Support: Buy us a coffee."), QMessageBox::ActionRole);
