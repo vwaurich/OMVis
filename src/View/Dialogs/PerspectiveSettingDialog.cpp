@@ -17,7 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "View/SettingsDialogs.hpp"
+
+#include "View/Dialogs/PerspectiveSettingDialog.hpp"
 
 #include <QComboBox>
 #include <QGroupBox>
@@ -30,7 +31,6 @@ namespace OMVIS
 {
     namespace View
     {
-
         PerspectiveSettingDialog::PerspectiveSettingDialog(QWidget* parent)
                 : QDialog(parent),
                   _perspectiveCombo(new QComboBox())
@@ -77,51 +77,5 @@ namespace OMVIS
             return _perspective;
         }
 
-        BackgroundColorSettingDialog::BackgroundColorSettingDialog(QWidget* parent)
-                : QDialog(parent),
-                  _bgcCombo(new QComboBox())
-        {
-            // Perspective
-            _bgcCombo->addItem(QString("midnight blue"));
-            _bgcCombo->addItem(QString("lovely lila"));
-            _bgcCombo->addItem(QString("ivory white"));
-            _bgcCombo->addItem(QString("froggy green"));
-
-            //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
-            QLabel* bgcLabel = new QLabel(tr("Set background color of scene view to "));
-            QHBoxLayout* bgcLayout = new QHBoxLayout();
-            bgcLayout->addWidget(bgcLabel);
-            bgcLayout->addWidget(_bgcCombo);
-            //X11 perspectiveGroup->setLayout(bgcLayout);
-
-            QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-            QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-            QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-            QVBoxLayout* buttonsLayout = new QVBoxLayout();
-            buttonsLayout->addStretch(1);
-            buttonsLayout->addWidget(buttonBox);
-
-            // Main layout
-            QVBoxLayout* mainLayout = new QVBoxLayout();
-            //X11 mainLayout->addWidget(perspectiveGroup);
-            mainLayout->addLayout(bgcLayout);
-            mainLayout->addLayout(buttonsLayout);
-            mainLayout->addStretch(1);
-            setLayout(mainLayout);
-            setWindowTitle(tr("Perspective"));
-        }
-
-        void BackgroundColorSettingDialog::accept()
-        {
-            // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
-            _bgc = static_cast<BackgroundColor>(_bgcCombo->currentIndex());
-            QDialog::accept();
-        }
-
-        BackgroundColor BackgroundColorSettingDialog::getResult() const
-        {
-            return _bgc;
-        }
-
     }  // End namespace View
-}  // End namespace OMVIS
+ }  // End namespace OMVIS

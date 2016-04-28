@@ -222,6 +222,9 @@ namespace OMVIS
             void loadModelCessna();
             void unloadModel();
 
+            /*! \brief Open remote connection. */
+            void openRemoteConnection();
+
             /*! \todo Implement me. */
             void exportVideo();
 
@@ -272,6 +275,7 @@ namespace OMVIS
 
             // --- Actions ---
             QAction* _openAct;
+            QAction* _openRCAct;
             QAction* _exportAct;
             QAction* _exitAct;
             QAction* _mapInputAct;

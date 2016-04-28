@@ -231,7 +231,10 @@ FILE(GLOB_RECURSE SRCS "src/*/*.cpp" "src/Visualize.cpp" "src/Expression.cpp")
 # Moc necessary files. Automoc does not work for us, since the header files containing the QObject macro and the source files which 
 # include this files are in separated (sub)folders.
 QT5_WRAP_CPP(MOC_OMVISVIEWER include/View/OMVisViewer.hpp)
-QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/SettingsDialogs.hpp)
+QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/BackgroundColorSettingDialog.hpp)
+QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/PerspectiveSettingDialog.hpp)
+QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenRemoteConnectionDialog.hpp)
+
 
 ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")
 ADD_EXECUTABLE(OMVisTests EXCLUDE_FROM_ALL ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "test/Main.cpp")

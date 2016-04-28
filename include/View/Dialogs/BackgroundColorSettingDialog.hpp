@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_VIEW_SETTINGSDIALOGS_HPP_
-#define INCLUDE_VIEW_SETTINGSDIALOGS_HPP_
+#ifndef INCLUDE_VIEW_BACKGROUNDCOLORSETTINGDIALOG_HPP_
+#define INCLUDE_VIEW_BACKGROUNDCOLORSETTINGDIALOG_HPP_
 
 #include "View/ViewSettings.hpp"
 
@@ -31,38 +31,6 @@ namespace OMVIS
 
     namespace View
     {
-
-        /*! \brief Class that encapsulates the dialog to specify the perspective settings.
-         *
-         * There are four predefined perspective settings which can be chosen from this dialog window, see \ref Perspective.
-         */
-        class PerspectiveSettingDialog : public QDialog
-        {
-        Q_OBJECT
-
-         public:
-            /*! \brief Constructor which creates the Qt dialog window to chose the perspective.
-             *
-             */
-            PerspectiveSettingDialog(QWidget* parent = Q_NULLPTR);
-
-            /*! \brief
-             *
-             * @return Perspective which was selected.
-             */
-            Perspective getResult() const;
-
-         private slots:
-            /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _perspective.
-             *
-             */
-            void accept() Q_DECL_OVERRIDE;
-
-         private:
-            /*! Qt combo box which provides the predefined perspectives. */
-            QComboBox* _perspectiveCombo;
-            Perspective _perspective;
-        };
 
         /*! \brief Class that encapsulates the dialog to specify the background color for the scene view.
          *
@@ -99,4 +67,4 @@ namespace OMVIS
     }  // End namespace View
 }  // End namespace OMVIS
 
-#endif /* INCLUDE_VIEW_SETTINGSDIALOGS_HPP_ */
+#endif /* INCLUDE_VIEW_BACKGROUNDCOLORSETTINGDIALOG_HPP_ */
