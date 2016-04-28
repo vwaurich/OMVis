@@ -27,17 +27,17 @@
 #ifndef INCLUDE_UTIL_HPP_
 #define INCLUDE_UTIL_HPP_
 
-#include <string>
-
 #include <rapidxml.hpp>
-
+#include <boost/filesystem.hpp>
 #include <osgDB/ReadFile>
+
+#include <string>
 
 namespace OMVIS
 {
-
     namespace Util
     {
+
         /*! \brief Checks if the type is a cad file
          */
         inline bool isCADType(const std::string typeName)
@@ -87,6 +87,19 @@ namespace OMVIS
         inline const char* const boolToString(bool b)
         {
             return b ? "true" : "false";
+        }
+
+        /*! \brief Returns absolute path to the given path.
+         *
+         * \remark: It seems to be no other platform independent way than boost::filesystem.
+         *          With the use of some ifdefs to encapsulate the platform dependent functions,
+         *          we could resolve the dependency from boost::filesystem.
+         */
+        inline std::string makeAbsolutePath(const std::string& path)
+        {
+            boost::filesystem::path bPath = boost::filesystem::path(path.c_str());
+            bPath = boost::filesystem::absolute(bPath);
+            return bPath.string();
         }
 
     }  // End namespace Util
