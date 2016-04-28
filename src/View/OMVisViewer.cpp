@@ -23,7 +23,7 @@
 #include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisViewer.hpp"
 #include "Util/Algebra.hpp"
-#include "View/SettingsDialogs.hpp"
+#include "View/Dialogs.hpp"
 
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
@@ -50,6 +50,7 @@
 #include <QMenuBar>
 
 #include <assert.h>
+#include <stdexcept>
 
 namespace OMVIS
 {
@@ -144,6 +145,10 @@ namespace OMVIS
             _openAct->setShortcut(tr("Ctrl+O"));
             QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(loadModel()));
 
+            _openRCAct = new QAction(tr("Open Remote Connection ..."), this);
+            _openRCAct->setShortcut(tr("Ctrl+R"));
+            QObject::connect(_openRCAct, SIGNAL(triggered()), this, SLOT(openRemoteConnection()));
+
             //X9
             _loadCowAct = new QAction(tr("Load Cow"), this);
             QObject::connect(_loadCowAct, SIGNAL(triggered()), this, SLOT(loadModelCow()));
@@ -180,6 +185,7 @@ namespace OMVIS
             // Menu caption "File".
             _fileMenu = new QMenu(tr("&File"), this);
             _fileMenu->addAction(_openAct);
+            _fileMenu->addAction(_openRCAct);
 
             //X9
             _fileMenu->addAction(_loadCowAct);
@@ -344,36 +350,51 @@ namespace OMVIS
             _guiController->sceneUpdate();
         }
 
+        /// \todo FIXME We the user clicks "Cancel" the error message is shown.
         void OMVisViewer::loadModel()
         {
-            // User has to select model from file. _modelName, _pathName and _visFMU are set.
-            QString modelName = modelSelectionDialog();
-
-            // Let create a OMVisualizer object by the GUIController.
-            _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
-
-            LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
-
-            // Set up the osg viewer widget
-            osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
-            if (rootNode == nullptr)
-                LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
-            _sceneView->setSceneData(rootNode);
-
-            //start the timer to trigger model and scene update
-            _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
-
-            //set the inputData to handle Keyboard-events as inputs
-            if (_guiController->modelIsFMU())
+            try
             {
-                Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
-                _sceneView->addEventHandler(kbEventHandler);
+                // User has to select model from file. _modelName, _pathName and _visFMU are set.
+                QString modelName = modelSelectionDialog();
+
+                // Let create a OMVisualizer object by the GUIController.
+                _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
+
+                LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
+
+                // Set up the osg viewer widget
+                osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
+                if (rootNode == nullptr)
+                    LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
+                _sceneView->setSceneData(rootNode);
+
+                //start the timer to trigger model and scene update
+                _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
+
+                //set the inputData to handle Keyboard-events as inputs
+                if (_guiController->modelIsFMU())
+                {
+                    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+                    _sceneView->addEventHandler(kbEventHandler);
+                }
+
+                // Update the slider and the time display.
+                updateTimingElements();
+
+                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
             }
+            catch (std::exception& ex)
+            {
+                QMessageBox::critical(0, QString("Error"), QString(ex.what()));
+                std::cout << ex.what();
+            }
+        }
 
-            // Update the slider and the time display.
-            updateTimingElements();
-
-            LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
+        void OMVisViewer::openRemoteConnection()
+        {
+            OpenRemoteConnectionDialog dialog(this);
+            dialog.exec();
         }
 
         void OMVisViewer::loadModelCessna()
