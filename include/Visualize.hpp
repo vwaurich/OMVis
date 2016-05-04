@@ -42,7 +42,6 @@
 
 namespace OMVIS
 {
-
     namespace Util
     {
 
