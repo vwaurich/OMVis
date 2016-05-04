@@ -32,6 +32,8 @@
 
 #include <osg/Vec4>
 
+#include <memory>
+
 // Forward declarations
 namespace OMVIS
 {
@@ -60,7 +62,7 @@ namespace OMVIS
             GUIController(const GUIController& gc) = delete;
             GUIController& operator=(const GUIController& gc) = delete;
 
-            //X13
+            /*! \brief Unloads the currently loaded model and frees associated memory. */
             void unloadModel();
 
             /*! \brief This method loads a model (FMU or MAT file) for visualization.
@@ -91,7 +93,7 @@ namespace OMVIS
              * @param modelName Name of the model.
              * @return True, if the XML file is accessible. False, otherwise.
              */
-            bool checkForXMLFile(const std::string& path, const std::string& modelName) const;
+            bool checkForXMLFile(const std::string& modelName, const std::string& path) const;
 
             void startVisualization();
             void pauseVisualization();
@@ -127,7 +129,7 @@ namespace OMVIS
             Model::InputData* getInputData();
 
          private:
-            Model::OMVisualizerAbstract* _omVisualizer;
+            std::shared_ptr<Model::OMVisualizerAbstract> _omVisualizer;
 
             //X13
             /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.

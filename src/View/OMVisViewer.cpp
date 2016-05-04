@@ -93,8 +93,9 @@ namespace OMVIS
             createLayout();
 
             // To trigger the paint event which renders the view.
-            QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
-            _renderTimer.start(10);
+            //MF: What is this good for?
+            //QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
+            //_renderTimer.start(10);
 
             // To trigger the scene updates with the visualization step size.
             QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
@@ -386,7 +387,7 @@ namespace OMVIS
                     _sceneView->addEventHandler(kbEventHandler);
                 }
 
-                // Update the slider and the time display.
+                // Update the slider and the time displays.
                 updateTimingElements();
 
                 LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
@@ -430,11 +431,14 @@ namespace OMVIS
 
         void OMVisViewer::unloadModel()
         {
-            LOGGER_WRITE(std::string("Hier, entlade das aktuelle Model!"), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Unload model..."), Util::LC_LOADER, Util::LL_INFO);
             _sceneView->setSceneData(new osg::Node());
 
             _guiController->unloadModel();
-            LOGGER_WRITE(std::string("Dort, kein Model geladen!"), Util::LC_LOADER, Util::LL_INFO);
+
+            _visTimer.stop();
+            resetTimingElements();
+            LOGGER_WRITE(std::string("Model unloaded."), Util::LC_LOADER, Util::LL_INFO);
         }
 
         QString OMVisViewer::modelSelectionDialog()
@@ -557,7 +561,7 @@ namespace OMVIS
             }
         }
 
-        QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::string varName, const std::string type) const
+        QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::string& varName, const std::string& type) const
         {
             QHBoxLayout* inputRow = new QHBoxLayout();
             QLabel* inputLabel = new QLabel(QString("Input ").append(QString::number(inputIdx)));
@@ -753,18 +757,24 @@ namespace OMVIS
 //    msgBox.setStandardButtons(QMessageBox::Close);
 //    msgBox.exec();
 //}
-
-        void OMVisViewer::updateTimingElements()
-        {
-            updateTimeDisplay();
-            updateTimeSliderPosition();
-        }
-
         /*-----------------------------------------
          * OTHER FUNCTIONS
          *---------------------------------------*/
 
-        void OMVisViewer::updateTimeDisplay()
+        void OMVisViewer::resetTimingElements()
+        {
+            _timeSlider->setSliderPosition(0);
+            _timeDisplay->setText(QString("Time ").append(QString::fromStdString("-1.0")));
+            _RTFactorDisplay->setText(QString("RT ").append(QString::fromStdString("-1.0")));
+        }
+
+        void OMVisViewer::updateTimingElements()
+        {
+            updateTimeDisplays();
+            updateTimeSliderPosition();
+        }
+
+        void OMVisViewer::updateTimeDisplays()
         {
             double visTime = _guiController->getVisTime();
 			double rtf = _guiController->getRealTimeFactor();

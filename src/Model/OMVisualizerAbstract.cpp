@@ -38,32 +38,33 @@ namespace OMVIS
         {
         }
 
-    OMVisualizerAbstract::OMVisualizerAbstract(const std::string modelName, const std::string dir)
-            : _baseData(new OMVisualBase(modelName, dir)),
-              _viewerStuff(new View::OMVisScene),
-              _nodeUpdater(new Model::UpdateVisitor),
-              _omvManager(new Control::OMVisManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
+        OMVisualizerAbstract::OMVisualizerAbstract(const std::string& modelName, const std::string& dir)
+                : _baseData(new OMVisualBase(modelName, dir)),
+                  _viewerStuff(new View::OMVisScene),
+                  _nodeUpdater(new Model::UpdateVisitor),
+                  _omvManager(new Control::OMVisManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
         {
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
             //char fullPathTmp[PATH_MAX];
             //realpath(path.c_str(), fullPathTmp);
-			boost::filesystem::path bPath = boost::filesystem::path(dir.c_str());
-			bPath = boost::filesystem::absolute(bPath);
+            boost::filesystem::path bPath = boost::filesystem::path(dir.c_str());
+            bPath = boost::filesystem::absolute(bPath);
 
-			std::string fullPath = bPath.string();
+            std::string fullPath = bPath.string();
 
             // Now we can use the full path.
-            _baseData = new OMVisualBase(modelName, fullPath), _viewerStuff->getScene().setPath(fullPath);
+            _baseData = std::shared_ptr<OMVisualBase>(new OMVisualBase(modelName, fullPath));
+            _viewerStuff->getScene().setPath(fullPath);
         }
 
         int OMVisualizerAbstract::setUpScene()
         {
             //build scene graph
-		std::cout << "SETUPSCENE FOR " <<_baseData->_shapes.size()<< std::endl;
+            std::cout << "SETUPSCENE FOR " << _baseData->_shapes.size() << std::endl;
 
-        int isOk = _viewerStuff->getScene().setUpScene(_baseData->_shapes);
-        return isOk;
-		}
+            int isOk = _viewerStuff->getScene().setUpScene(_baseData->_shapes);
+            return isOk;
+        }
 
         void OMVisualizerAbstract::startVisualization()
         {
@@ -97,7 +98,7 @@ namespace OMVIS
 
         void OMVisualizerAbstract::sceneUpdate()
         {
-			_omvManager->updateTick();
+            _omvManager->updateTick();
 
             if (!_omvManager->isPaused())
             {
@@ -118,18 +119,19 @@ namespace OMVIS
             return "abstract";
         }
 
-	int OMVisualizerAbstract::initData()
-	{
-		int isOk(0);
-		//X7 In case of reloading, we need to make sure, that we have empty members
-		_baseData->_xmlDoc.clear();
+        int OMVisualizerAbstract::initData()
+        {
+            int isOk(0);
+            //X7 In case of reloading, we need to make sure, that we have empty members
+//            _baseData->_xmlDoc.clear();
+            _baseData->clearXMLDoc();
 
-		// init xml file and get visAttributes
-		isOk = _baseData->initXMLDoc();
+            // init xml file and get visAttributes
+            isOk = _baseData->initXMLDoc();
 
-		isOk = _baseData->initVisObjects();
-		return isOk;
-	}
+            isOk = _baseData->initVisObjects();
+            return isOk;
+        }
 
-}  // End namespace Model
+    }  // End namespace Model
 }  // End namespace OMVIS

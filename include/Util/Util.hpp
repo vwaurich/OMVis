@@ -32,6 +32,7 @@
 #include <osgDB/ReadFile>
 
 #include <string>
+#include <sys/stat.h>
 
 namespace OMVIS
 {
@@ -62,19 +63,26 @@ namespace OMVIS
             return node->first_node("type")->value();
         }
 
-        inline bool exists(const std::string& name)
+//        inline bool exists(const std::string& name)
+//        {
+//            osgDB::ifstream f(name.c_str());
+//            if (f.good())
+//            {
+//                f.close();
+//                return true;
+//            }
+//            else
+//            {
+//                f.close();
+//                return false;
+//            }
+//        }
+
+        /*! \brief Checks if the file is accessible. */
+        inline bool fileExists(const std::string& file)
         {
-            osgDB::ifstream f(name.c_str());
-            if (f.good())
-            {
-                f.close();
-                return true;
-            }
-            else
-            {
-                f.close();
-                return false;
-            }
+            struct stat buffer;
+            return (stat (file.c_str(), &buffer) == 0);
         }
 
         /*! \brief Converts a bool into a std::string, i.e., returning "true" or "false".

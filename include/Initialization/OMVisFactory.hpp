@@ -28,6 +28,7 @@
 #define INCLUDE_FACTORY_HPP_
 
 #include <string>
+#include <memory>
 
 // Forward declarations
 namespace OMVIS
@@ -66,7 +67,7 @@ namespace OMVIS
              * @param cLArgs The parsed command line arguments.
              * @return Visualization object of type OMVisualizationMAT or OMVisualizationFMU.
              */
-            Model::OMVisualizerAbstract* createVisualizationFromCLargs(const Util::CommandLineArgs& cLArgs);
+            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationFromCLargs(const Util::CommandLineArgs& cLArgs);
 
             /*! \brief Creates new visualization object according to the given command line parameters.
              *
@@ -78,7 +79,7 @@ namespace OMVIS
              * @param useFMU
              * @return
              */
-            Model::OMVisualizerAbstract* createVisualizationObject(const std::string modelName = "", const std::string pathName = "", const bool useFMU = false);
+            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const std::string modelName = "", const std::string pathName = "", const bool useFMU = false);
         };
 
     }  // End namespace Initialization

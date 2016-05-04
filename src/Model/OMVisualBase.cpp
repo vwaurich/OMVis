@@ -29,7 +29,7 @@ namespace OMVIS
 namespace Model
     {
 
-    OMVisualBase::OMVisualBase(std::string model, std::string dir)
+    OMVisualBase::OMVisualBase(const std::string& model, const std::string& dir)
             : _modelName(model),
               _dirName(dir),
               _xmlDoc(),
@@ -42,7 +42,7 @@ namespace Model
     {
         int isOk(0);
         // check if xml file is available
-        if (!Util::exists(_xmlFileName))
+        if (!Util::fileExists(_xmlFileName))
         {
             LOGGER_WRITE(std::string("There is no xml file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
             isOk = 1;
@@ -155,6 +155,26 @@ namespace Model
 		}
 		return 0;
 	}
+
+	void OMVisualBase::clearXMLDoc()
+	{
+	    _xmlDoc.clear();
+	}
+
+	rapidxml::xml_node<>* OMVisualBase::getFirstXMLNode()
+	{
+	    return _xmlDoc.first_node();
+	}
+
+	const std::string OMVisualBase::getModelName() const
+	{
+	    return _modelName;
+	}
+
+    const std::string OMVisualBase::getDirName() const
+    {
+        return _dirName;
+    }
 
 }  // End namespace Model
 }  // End namespace OMVIS

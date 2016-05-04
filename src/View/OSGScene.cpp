@@ -66,7 +66,7 @@ namespace OMVIS
 				LOGGER_WRITE(std::string("Its a STL and the path is ") + _path ,Util::LC_LOADER, Util::LL_INFO);
 				filename = _path + filename;
 				// \todo What do we do at this point?
-				if (!Util::exists(filename))
+				if (!Util::fileExists(filename))
 				{
 					LOGGER_WRITE(std::string("Could not find the file ") + filename +std::string(".") ,Util::LC_LOADER, Util::LL_WARNING);
 					isOk = 1;

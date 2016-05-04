@@ -63,7 +63,7 @@ namespace OMVIS
          public:
             OMVisualizerFMU() = delete;
 
-            OMVisualizerFMU(const std::string modelName, const std::string modelPath);
+            OMVisualizerFMU(const std::string& fileName, const std::string& dirPath);
 
             virtual ~OMVisualizerFMU() = default;
             OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
@@ -75,10 +75,7 @@ namespace OMVIS
              * @param dir Path to the FMU file.
              * @return Error value.
              */
-            int loadFMU(const std::string model, const std::string dir);
-
-            /*! \brief Unloads the FMU and frees allocated memory. */
-            virtual void unload();
+            int loadFMU(const std::string& model, const std::string& dir);
 
             virtual void simulate(Control::OMVisManager& omvm);
 
@@ -128,9 +125,8 @@ namespace OMVIS
             InputData* getInputData();
 
          private:
-            FMU _fmu;
-            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
-            SimSettings* _simSettings;
+            std::shared_ptr<FMU> _fmu;
+            std::shared_ptr<SimSettings> _simSettings;
 
             /*! Number of attached joysticks. */
             int _numJoysticks;

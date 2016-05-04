@@ -47,7 +47,7 @@ namespace OMVIS
         {
          public:
             OMVisualBase() = delete;
-            OMVisualBase(std::string model, std::string dir);
+            OMVisualBase(const std::string& model, const std::string& dir);
             ~OMVisualBase() = default;
             OMVisualBase(const OMVisualBase& omvb) = delete;
             OMVisualBase& operator=(const OMVisualBase& omvb) = delete;
@@ -59,25 +59,35 @@ namespace OMVIS
              */
             int initXMLDoc();
 
-		/*! \brief Get all Visual objects from the XML
-		*
-		* \return Error value.
-		*/
-		int initVisObjects();
-		
+            void clearXMLDoc();
 
-     public:
-        /// \todo Can this attr. be private?
-        std::string _modelName;
-        /// \todo Can this attr. be private?
-        std::string _dirName;
-        /// \todo Can this attr. be private?
-        /// The XML file containing the information about the visualization.
-        rapidxml::xml_document<> _xmlDoc;
-        /// Stores all visualization objects.
-        std::vector<ShapeObject> _shapes;
-        
-		std::string _xmlFileName;
+            /*! \brief Get all Visual objects from the XML
+             *
+             * \return Error value.
+             */
+            int initVisObjects();
+
+            /*! \brief Returns name of the model. */
+            const std::string getModelName() const;
+
+            /*! \brief Returns directory path of XML document. */
+            const std::string getDirName() const;
+
+            /*! \brief Returns pointer to first node of the XML document. */
+            rapidxml::xml_node<>* getFirstXMLNode();
+
+         private:
+            std::string _modelName;
+            std::string _dirName;
+            /// The XML file containing the information about the visualization.
+            rapidxml::xml_document<> _xmlDoc;
+
+         public:
+            /// Stores all visualization objects.
+            std::vector<ShapeObject> _shapes;
+
+         private:
+            std::string _xmlFileName;
         };
 
     }  // End namespace Model

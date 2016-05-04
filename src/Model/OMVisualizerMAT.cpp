@@ -28,17 +28,17 @@ namespace OMVIS
     namespace Model
     {
 
-    OMVisualizerMAT::OMVisualizerMAT(const std::string model, const std::string path)
-            : OMVisualizerAbstract(model, path),
+    OMVisualizerMAT::OMVisualizerMAT(const std::string& fileName, const std::string& dirPath)
+            : OMVisualizerAbstract(fileName, dirPath),
               _matReader()
     {
     }
 
-    void OMVisualizerMAT::readMat(const std::string modelString, const std::string dirString)
+    void OMVisualizerMAT::readMat(const std::string& modelString, const std::string& dirString)
     {
         std::string resFileName = dirString + modelString + "_res.mat";
         //checks
-        if (!Util::exists(resFileName))
+        if (!Util::fileExists(resFileName))
             LOGGER_WRITE(std::string("Mat file ") + resFileName + std::string(" could not be found. Is it in the same directory as the model file?"), Util::LC_LOADER, Util::LL_ERROR);
 
         // read mat file
@@ -55,7 +55,7 @@ namespace OMVIS
     {
         int isOk(0);
         isOk = OMVisualizerAbstract::initData();
-        readMat(_baseData->_modelName, _baseData->_dirName);
+        readMat(_baseData->getModelName(), _baseData->getDirName());
         _omvManager->setStartTime(omc_matlab4_startTime(&_matReader));
         _omvManager->setEndTime(omc_matlab4_stopTime(&_matReader));
         return isOk;
@@ -79,7 +79,8 @@ namespace OMVIS
     {
         int isOk(0);
         // Update all shapes
-        rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
+//        rapidxml::xml_node<>* rootNode = _baseData->_xmlDoc.first_node();
+        rapidxml::xml_node<>* rootNode = _baseData->getFirstXMLNode();
         unsigned int shapeIdx = 0;
 		OMVIS::Util::rAndT rT;
         osg::ref_ptr<osg::Node> child = nullptr;

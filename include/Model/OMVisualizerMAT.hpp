@@ -46,7 +46,7 @@ namespace OMVIS
          public:
             OMVisualizerMAT() = delete;
 
-            OMVisualizerMAT(const std::string& model, const std::string& path);
+            OMVisualizerMAT(const std::string& fileName, const std::string& dirPath);
 
             virtual ~OMVisualizerMAT() = default;
 
@@ -60,12 +60,6 @@ namespace OMVIS
              * @return Error value.
              */
             virtual int initData();
-
-            /// \todo: Implement. We need/want to free the memory which is allocated while loading a Mat file.
-            virtual void unload()
-            {
-            }
-            ;
 
             virtual void simulate(Control::OMVisManager& omvm)
             {

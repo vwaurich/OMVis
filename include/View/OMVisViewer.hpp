@@ -171,7 +171,10 @@ namespace OMVIS
              *
              * The current visualization time is provided by the function \ref Control::GUIController::->getVisProgress().
              */
-            void updateTimeDisplay();
+            void updateTimeDisplays();
+
+            /*! \brief Resets the time slider and time display. */
+            void resetTimingElements();
 
             /*-----------------------------------------
              * SLOT FUNCTIONS
@@ -265,6 +268,8 @@ namespace OMVIS
 
             /*! \brief Shows information about OMVis. */
             void aboutOMVis();
+
+
 
          private:
             // --- Menus ---
