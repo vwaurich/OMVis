@@ -28,7 +28,6 @@ QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 namespace OMVIS
 {
-
     namespace View
     {
 
