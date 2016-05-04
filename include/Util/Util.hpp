@@ -40,14 +40,14 @@ namespace OMVIS
 
         /*! \brief Checks if the type is a cad file
          */
-        inline bool isCADType(const std::string typeName)
+        inline bool isCADType(const std::string& typeName)
         {
             return (typeName.size() >= 12 && std::string(typeName.begin(), typeName.begin() + 11) == "modelica://");
         }
 
         /*! \brief Get file name of the cad file
          */
-        inline std::string extractCADFilename(const std::string s)
+        inline std::string extractCADFilename(const std::string& s)
         {
             std::string fileKey = "modelica://";
             std::string s2 = s.substr(fileKey.length(), s.length());
