@@ -84,6 +84,8 @@ namespace OMVIS
             /*! \brief Initializes all input data including the keymap. */
             void initializeInputs(fmi1_import_t* fmu);
 
+            void resetInputValues();
+
             /*! \brief Sets the input variables in the fmu. */
             void setInputsInFMU(fmi1_import_t* fmu);
 

@@ -58,7 +58,7 @@ TEST_F (TestOMVisualBase, TestInitialization)
     // Not nullptr
     ASSERT_TRUE(_omVisualBase);
 
-    ASSERT_EQ(_modelName, _omVisualBase->_modelName);
+    ASSERT_EQ(_modelName, _omVisualBase->getModelName());
     std::string xmlFile = _path + _modelName + "_visual.xml";
     ASSERT_EQ(xmlFile, _omVisualBase->_xmlFileName);
 }

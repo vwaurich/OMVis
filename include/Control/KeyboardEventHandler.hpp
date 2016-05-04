@@ -29,6 +29,8 @@
 
 #include <osgGA/GUIEventHandler>
 
+#include <memory>
+
 namespace OMVIS
 {
     namespace Model
@@ -41,6 +43,7 @@ namespace OMVIS
 {
     namespace Control
     {
+
         /*! \brief This class handles keyboard events.
          *
          * Inherits from osg GUIEventHandler.
@@ -55,7 +58,8 @@ namespace OMVIS
              *
              * @param inputs
              */
-            KeyboardEventHandler(Model::InputData* inputs);
+//            KeyboardEventHandler(Model::InputData* inputs);
+            KeyboardEventHandler(std::shared_ptr<Model::InputData> inputs);
 
             /// Let the compiler provide the destructor.
             ~KeyboardEventHandler() = default;
@@ -74,7 +78,7 @@ namespace OMVIS
 
          private:
             /// \todo Should be a std::shared_ptr (points to memory managed by other class, i.e. _guiController->getInputData())
-            Model::InputData* _inputs;
+            std::shared_ptr<Model::InputData> _inputs;
         };
 
     }  // End namespace Control

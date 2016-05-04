@@ -29,7 +29,7 @@ namespace OMVIS
 {
     namespace Control
     {
-        JoystickDevice::JoystickDevice(int joyID)
+        JoystickDevice::JoystickDevice(const int joyID)
                 : _joystick(nullptr),
                   _xDir(0),
                   _yDir(0),
@@ -62,10 +62,10 @@ namespace OMVIS
             return _yDir;
         }
 
-        void JoystickDevice::detectContinuousInputEvents(Model::InputData inputInfo)
+        void JoystickDevice::detectContinuousInputEvents(std::shared_ptr<Model::InputData> inputInfo)
         {
 
-            SDL_PollEvent(&_inputEvent);
+            SDL_PollEvent (&_inputEvent);
 
             if (_inputEvent.type == SDL_JOYAXISMOTION)
             {
@@ -76,13 +76,13 @@ namespace OMVIS
                     if (_inputEvent.jaxis.axis == 0)
                     {
                         _xDir = _inputEvent.jaxis.value;
-                        Model::setRealInputValueForInputKey(inputKey(_joystickId), _xDir, inputInfo);
+                        Model::setRealInputValueForInputKey(inputKey(_joystickId), _xDir, *inputInfo);
                     }
                     //Y axis motion
                     else if (_inputEvent.jaxis.axis == 1)
                     {
                         _yDir = _inputEvent.jaxis.value;
-                        Model::setRealInputValueForInputKey(inputKey(_joystickId + 1), _yDir, inputInfo);
+                        Model::setRealInputValueForInputKey(inputKey(_joystickId + 1), _yDir, *inputInfo);
                     }
                     else
                     {

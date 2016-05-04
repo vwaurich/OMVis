@@ -86,7 +86,6 @@ namespace OMVIS
                 // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
                 // already unpacked shared object, which leads to a seg fault. Thats why we test for this case.
                 // if (_modelLoaded && path.compare(_omVisualizer->_baseData->_dirName) &&  modelName.compare(_omVisualizer->_baseData->_modelName))
-//                if (_modelLoaded && path == _omVisualizer->_baseData->_dirName && modelName == _omVisualizer->_baseData->_modelName)
                 if (_modelLoaded && path == _omVisualizer->getBaseData()->getDirName() && modelName == _omVisualizer->getBaseData()->getModelName())
                 {
                     LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
@@ -205,7 +204,7 @@ namespace OMVIS
             return _omVisualizer->getOMVisManager()->getHVisual() * 1000.0;
         }
 
-        Model::InputData* GUIController::getInputData()
+        std::shared_ptr<Model::InputData> GUIController::getInputData()
         {
             if (modelIsFMU())
             {

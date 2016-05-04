@@ -133,5 +133,21 @@ namespace OMVIS
             return isOk;
         }
 
+        std::shared_ptr<OMVisualBase> OMVisualizerAbstract::getBaseData() const
+        {
+            return _baseData;
+        }
+
+        std::shared_ptr<Control::OMVisManager> OMVisualizerAbstract::getOMVisManager() const
+        {
+            return _omvManager;
+        }
+
+        std::shared_ptr<View::OMVisScene> OMVisualizerAbstract::getOMVisScene() const
+        {
+            return _viewerStuff;
+        }
+
+
     }  // End namespace Model
 }  // End namespace OMVIS

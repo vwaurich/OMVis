@@ -30,6 +30,8 @@
 #include <SDL_events.h>
 #include <SDL_joystick.h>
 
+#include <memory>
+
 // Forward declaration
 namespace OMVIS
 {
@@ -43,17 +45,18 @@ namespace OMVIS
 {
     namespace Control
     {
+
         /*! \brief Class that serves as controller for input from joystick.
          *
          */
         class JoystickDevice
         {
          public:
-            /*! \brief Default constructor.
+            /*! \brief Constructor.
              *
-             * Initialices the joystick with the corresponding ID
+             * Initializes the joystick with the corresponding ID
              */
-            JoystickDevice(int joyID);
+            JoystickDevice(const int joyID);
 
             /// Destructor.
             ~JoystickDevice()
@@ -66,7 +69,7 @@ namespace OMVIS
             /// The assignment operator is forbidden.
             JoystickDevice& operator=(const JoystickDevice& jd) = delete;
 
-            void detectContinuousInputEvents(Model::InputData inputInfo);
+            void detectContinuousInputEvents(std::shared_ptr<Model::InputData> inputInfo);
 
             int getXDir();
 

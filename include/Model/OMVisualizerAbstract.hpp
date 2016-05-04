@@ -157,20 +157,11 @@ namespace OMVIS
              */
             void sceneUpdate();
 
-            std::shared_ptr<OMVisualBase> getBaseData() const
-            {
-                return _baseData;
-            }
+            std::shared_ptr<OMVisualBase> getBaseData() const;
 
-            std::shared_ptr<Control::OMVisManager> getOMVisManager() const
-            {
-                return _omvManager;
-            }
+            std::shared_ptr<Control::OMVisManager> getOMVisManager() const;
 
-            std::shared_ptr<View::OMVisScene> getOMVisScene() const
-            {
-                return _viewerStuff;
-            }
+            std::shared_ptr<View::OMVisScene> getOMVisScene() const;
 
          protected:
             std::shared_ptr<OMVisualBase> _baseData;

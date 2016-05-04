@@ -106,7 +106,7 @@ namespace OMVIS
             double _simTime;
             //! Current real time.
             double _realTime;
-			//! realtime factor
+			//! Realtime factor
 			double _realTimeFactor;
             //! Time of current scene update.
             double _visTime;

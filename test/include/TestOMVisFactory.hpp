@@ -62,7 +62,8 @@ class TestOMVisFactory : public TestCommon
  */
 TEST_F (TestOMVisFactory, TestCreateVisualizationObject)
 {
-    OMVIS::Model::OMVisualizerAbstract* omvisualizerAbstract(nullptr);
+    _factory = new OMVIS::Initialization::Factory();
+    std::shared_ptr<OMVIS::Model::OMVisualizerAbstract> omvisualizerAbstract(nullptr);
 
     // FMU.
     omvisualizerAbstract = _factory->createVisualizationObject(_modelName, _path, _useFMU);

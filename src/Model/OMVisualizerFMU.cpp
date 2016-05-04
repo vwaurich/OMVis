@@ -33,16 +33,67 @@ namespace OMVIS
 {
     namespace Model
     {
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
 
         OMVisualizerFMU::OMVisualizerFMU(const std::string& fileName, const std::string& dirPath)
                 : OMVisualizerAbstract(fileName, dirPath),
                   _fmu(new FMU()),
                   _simSettings(new SimSettings()),
-                  _inputData(),
+                  _inputData(new InputData()),
                   _joysticks()
         {
             LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
             initJoySticks();
+        }
+
+        /*-----------------------------------------
+         * INITIALIZATION METHODS
+         *---------------------------------------*/
+
+        /// \todo: Set the error variable isOk.
+        int OMVisualizerFMU::loadFMU(const std::string& modelFile, const std::string& dirPath)
+        {
+            int isOk(0);
+            //setup fmu-simulation stuff
+            //_simSettings = new SimSettings;
+            //std::string fmuFileName = dir + model + ".fmu";
+
+            //load and initialize fmu
+            _fmu->load(modelFile, dirPath);
+            LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
+
+            _fmu->initialize(_simSettings);
+            LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
+
+            _inputData->initializeInputs(_fmu->getFMU());
+            _inputData->printValues();
+            //assign interactive inputs
+            //for (unsigned int i = 0; i < inputs.n_inputs; i++){
+            //string key = "";
+            //std::cout<<"assign input "<<i<<" :"<<std::endl;
+            //getline(cin,key);
+            //int keyInt = getchar();
+            //std::cout<<"the key is "<<keyInt<<" !"<<std::endl;
+            //}
+            return isOk;
+        }
+
+        int OMVisualizerFMU::initData()
+        {
+            int isOk(0);
+            isOk = OMVisualizerAbstract::initData();
+            isOk += loadFMU(_baseData->getModelName(), _baseData->getDirName());
+            _simSettings->setTend(_omvManager->getEndTime());
+            _simSettings->setHdef(0.001);
+
+            return isOk;
+        }
+
+        void OMVisualizerFMU::resetInputs()
+        {
+            _inputData->resetInputValues();
         }
 
         void OMVisualizerFMU::initJoySticks()
@@ -74,44 +125,28 @@ namespace OMVIS
             }
         }
 
-        int OMVisualizerFMU::initData()
-        {
-            int isOk(0);
-            isOk = OMVisualizerAbstract::initData();
-            isOk += loadFMU(_baseData->getModelName(), _baseData->getDirName());
-            _simSettings->setTend(_omvManager->getEndTime());
-            _simSettings->setHdef(0.001);
+        /*-----------------------------------------
+         * GETTERS and SETTERS
+         *---------------------------------------*/
 
-            return isOk;
+        std::string OMVisualizerFMU::getType() const
+        {
+            return "fmu";
         }
 
-        /// \todo: Set the error variable isOk.
-        int OMVisualizerFMU::loadFMU(const std::string& modelFile, const std::string& dirPath)
+        const FMU* OMVisualizerFMU::getFMU() const
         {
-            int isOk(0);
-            //setup fmu-simulation stuff
-            //_simSettings = new SimSettings;
-            //std::string fmuFileName = dirPath + modelFile + ".fmu";
-
-            //load and initialize fmu
-            _fmu->load(modelFile, dirPath);
-            LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
-
-            _fmu->initialize(_simSettings);
-            LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
-
-            _inputData.initializeInputs(_fmu->getFMU());
-            _inputData.printValues();
-            //assign interactive inputs
-            //for (unsigned int i = 0; i < inputs.n_inputs; i++){
-            //string key = "";
-            //std::cout<<"assign input "<<i<<" :"<<std::endl;
-            //getline(cin,key);
-            //int keyInt = getchar();
-            //std::cout<<"the key is "<<keyInt<<" !"<<std::endl;
-            //}
-            return isOk;
+            return _fmu.get();
         }
+
+        std::shared_ptr<InputData> OMVisualizerFMU::getInputData()
+        {
+            return _inputData;
+        }
+
+        /*-----------------------------------------
+         * SIMULATION METHODS
+         *---------------------------------------*/
 
         void OMVisualizerFMU::simulate(Control::OMVisManager& omvm)
         {
@@ -186,13 +221,13 @@ namespace OMVIS
             for (size_t i = 0; i < _numJoysticks; ++i)
             {
                 _joysticks[i]->detectContinuousInputEvents(_inputData);
-                _inputData.setInputsInFMU(_fmu->getFMU());
+                _inputData->setInputsInFMU(_fmu->getFMU());
                 //std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
             }
 
             //_inputData.printValues();
             //X2 MF: On my system, this line is needed in order to get the keyboard input working
-            _inputData.setInputsInFMU(_fmu->getFMU());
+            _inputData->setInputsInFMU(_fmu->getFMU());
 
             /* Solve system */
 //X9            _fmu->_fmuData._fmiStatus = fmi1_import_get_derivatives(_fmu->getFmu(), _fmu->_fmuData._statesDer, _fmu->_fmuData._nStates);
@@ -221,7 +256,7 @@ namespace OMVIS
 
             //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
             //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
-            _inputData.resetDiscreteInputValues();
+            _inputData->resetDiscreteInputValues();
 //X9            return _fmu->_fmuData._tcur;
             return _fmu->getFMUData()->_tcur;
         }
@@ -232,22 +267,6 @@ namespace OMVIS
             _omvManager->setVisTime(_omvManager->getStartTime());
             _omvManager->setSimTime(_omvManager->getStartTime());
             updateVisAttributes(_omvManager->getVisTime());
-        }
-
-        void OMVisualizerFMU::resetInputs()
-        {
-            //reset real input values to 0
-            for (size_t r = 0; r < _inputData._data.getNumReal(); ++r)
-                _inputData._data._valuesReal[r] = 0.0;
-            //reset integer input values to 0
-            for (size_t i = 0; i < _inputData._data.getNumInteger(); ++i)
-                _inputData._data._valuesInteger[i] = 0;
-            //reset boolean input values to 0
-            for (size_t b = 0; b < _inputData._data.getNumBoolean(); ++b)
-                _inputData._data._valuesBoolean[b] = false;
-            //reset string input values to 0
-            for (size_t s = 0; s < _inputData._data.getNumString(); ++s)
-                _inputData._data._valuesString[s] = "";
         }
 
         int OMVisualizerFMU::updateVisAttributes(const double time)
@@ -261,7 +280,7 @@ namespace OMVIS
             {
                 fmi1_import_t* fmu = _fmu->getFMU();
                 ShapeObject shape;
-                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); i++)
+                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
                 {
                     shape = _baseData->_shapes[i];
 
@@ -348,30 +367,6 @@ namespace OMVIS
 
         }
 
-        std::string OMVisualizerFMU::getType() const
-        {
-            return "fmu";
-        }
-
-//        void OMVisualizerFMU::unload()
-//        {
-//            _fmu->clear();
-//        }
-
-        const FMU* OMVisualizerFMU::getFMU() const
-        {
-            return _fmu.get();
-        }
-
-        const InputData* OMVisualizerFMU::getInputData() const
-        {
-            return &_inputData;
-        }
-
-        InputData* OMVisualizerFMU::getInputData()
-        {
-            return &_inputData;
-        }
 
     }  // End namespace Model
 }  // End namespace OMVIS

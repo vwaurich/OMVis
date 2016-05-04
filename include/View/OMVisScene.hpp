@@ -55,7 +55,6 @@ namespace OMVIS
             OSGScene& getScene();
 
          private:
-            /// \todo Can this attr. be private?
             OSGScene _scene;
         };
 

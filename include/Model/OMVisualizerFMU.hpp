@@ -37,6 +37,7 @@
 #include "Control/KeyboardEventHandler.hpp"
 
 #include <string>
+#include <memory>
 
 // Forward declaration
 namespace OMVIS
@@ -49,7 +50,6 @@ namespace OMVIS
 
 namespace OMVIS
 {
-
     namespace Model
     {
 
@@ -61,6 +61,10 @@ namespace OMVIS
         class OMVisualizerFMU : public OMVisualizerAbstract
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             OMVisualizerFMU() = delete;
 
             OMVisualizerFMU(const std::string& fileName, const std::string& dirPath);
@@ -69,6 +73,10 @@ namespace OMVIS
             OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
             OMVisualizerFMU& operator=(const OMVisualizerFMU& omvf) = delete;
 
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
+
             /*! \brief Loads and initializes FMU file.
              *
              * @param model Name of the FMU.
@@ -76,10 +84,6 @@ namespace OMVIS
              * @return Error value.
              */
             int loadFMU(const std::string& model, const std::string& dir);
-
-            virtual void simulate(Control::OMVisManager& omvm);
-
-            double simulateStep(const double time);
 
             /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
              * @return Error value.
@@ -90,6 +94,32 @@ namespace OMVIS
              *
              */
             void resetInputs();
+
+            /*! \brief initializes the attached joysticks
+             */
+            void initJoySticks();
+
+            /*-----------------------------------------
+             * GETTERS and SETTERS
+             *---------------------------------------*/
+
+            /*! \brief Returns "fmu".
+             */
+            std::string getType() const;
+
+            /*! Returns const pointer to \ref FMU member. */
+            const FMU* getFMU() const;
+
+            // const InputData* getInputData() const;
+            std::shared_ptr<InputData> getInputData();
+
+            /*-----------------------------------------
+             * SIMULATION METHODS
+             *---------------------------------------*/
+
+            virtual void simulate(Control::OMVisManager& omvm);
+
+            double simulateStep(const double time);
 
             /*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
              *
@@ -109,35 +139,23 @@ namespace OMVIS
              */
             void updateScene(const double time = 0.0);
 
-            /*! \brief Returns "fmu".
-             */
-            std::string getType() const;
-
-            /*! \brief initializes the attached joysticks
-             */
-            void initJoySticks();
-
-            /*! Returns const pointer to \ref FMU member. */
-            const FMU* getFMU() const;
-
-            const InputData* getInputData() const;
-
-            InputData* getInputData();
-
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            /*! The encapsulated FMU data. */
             std::shared_ptr<FMU> _fmu;
+            /*! Simulation settings, e.g., start and end time. */
             std::shared_ptr<SimSettings> _simSettings;
 
             /*! Number of attached joysticks. */
             int _numJoysticks;
 
-         private:
-            /// \ todo Make it private again.
-            InputData _inputData;
+            std::shared_ptr<InputData> _inputData;
 
          public:
             /// \todo Remove, we do not need it because we have inputData.
-            /// \todo Should be std::unique_ptr, but at least std::shared_ptr
             std::vector<Control::JoystickDevice*> _joysticks;
         };
 

@@ -50,7 +50,10 @@ namespace OMVIS
     namespace Model
     {
 
-        /*! \brief The encapsulated FMU data, e.g., pointer to states and state derivatives. */
+        /*! \brief The encapsulated FMU data, e.g., pointer to states and state derivatives.
+         *
+         * @remark: We do not use smart pointers at this point because of performance.
+         */
         typedef struct
         {
             fmi1_real_t* _states;
@@ -158,12 +161,6 @@ namespace OMVIS
 
             /*! \brief Wraps fmi1_import_completed_integrator_step. */
             void completedIntegratorStep(fmi1_boolean_t* callEventUpdate);
-
-            fmi1_import_t* getFMU()
-            {
-                return _fmu.get();
-            }
-
 
          private:
             /*-----------------------------------------

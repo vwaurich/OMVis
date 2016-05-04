@@ -35,7 +35,6 @@
 
 namespace OMVIS
 {
-
     namespace Model
     {
 

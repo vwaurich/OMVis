@@ -383,6 +383,7 @@ namespace OMVIS
                 //set the inputData to handle Keyboard-events as inputs
                 if (_guiController->modelIsFMU())
                 {
+                    //X3 Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
                 }
@@ -499,7 +500,8 @@ namespace OMVIS
 
                 QVBoxLayout* mainLayout = new QVBoxLayout();
                 QGroupBox* qgroupBox;
-                Model::InputData* inputData = _guiController->getInputData();
+                //X3
+                std::shared_ptr<Model::InputData> inputData = _guiController->getInputData();
 
                 // Boolean inputs
                 if (inputData->_data.getNumBoolean() > 0)

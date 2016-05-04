@@ -126,7 +126,7 @@ namespace OMVIS
              * If we visualize a MAT file, we return a proper nullptr.
              * @return The input data object pointer
              */
-            Model::InputData* getInputData();
+            std::shared_ptr<Model::InputData> getInputData();
 
          private:
             std::shared_ptr<Model::OMVisualizerAbstract> _omVisualizer;

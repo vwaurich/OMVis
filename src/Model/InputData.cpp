@@ -149,6 +149,22 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ") + std::to_string(iter->second._baseType) + std::string(" ") + std::to_string(iter->second._valueIdx), Util::LC_LOADER, Util::LL_INFO);
         }
 
+        void InputData::resetInputValues()
+        {
+            //reset real input values to 0
+            for (size_t r = 0; r < _data.getNumReal(); ++r)
+                _data._valuesReal[r] = 0.0;
+            //reset integer input values to 0
+            for (size_t i = 0; i < _data.getNumInteger(); ++i)
+                _data._valuesInteger[i] = 0;
+            //reset boolean input values to 0
+            for (size_t b = 0; b < _data.getNumBoolean(); ++b)
+                _data._valuesBoolean[b] = false;
+            //reset string input values to 0
+            for (size_t s = 0; s < _data.getNumString(); ++s)
+                _data._valuesString[s] = "";
+        }
+
         void InputData::setInputsInFMU(fmi1_import_t* fmu)
         {
             fmi1_status_t status = fmi1_import_set_real(fmu, _data._vrReal, _data.getNumReal(), _data._valuesReal);
@@ -181,6 +197,7 @@ namespace OMVIS
 
         /// \todo: The attributes of the object 'data' are changed in line 206, but we pass not by reference. Thus,
         /// this update has no effect on the original object.
+        /// \todo Todo pass INputData by reference or pointer with respect to performance!
         bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data)
         {
             keyMapIter iter = data._keyToInputMap.find(key);
