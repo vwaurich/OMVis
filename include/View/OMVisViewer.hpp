@@ -58,9 +58,9 @@ QT_FORWARD_DECLARE_CLASS(QSlider)
 
 namespace OMVIS
 {
-
     namespace View
     {
+
         class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
         //If we want to use a toolbar, we have to derive from QMainWindow.
         {
@@ -158,7 +158,7 @@ namespace OMVIS
 
             /*! \brief Creates a GUI element to set the mapping for a input value.
              */
-            QHBoxLayout* createInputMapperRow(const int inputIdx, const std::string varName, const std::string type) const;
+            QHBoxLayout* createInputMapperRow(const int inputIdx, const std::string& varName, const std::string& type) const;
 
             /*! \brief Updates the time slider to the position which corresponds to the current visualization time.
              *
