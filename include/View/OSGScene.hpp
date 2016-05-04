@@ -34,7 +34,6 @@
 #include "Model/ShapeObject.hpp"
 namespace OMVIS
 {
-
     namespace View
     {
 
