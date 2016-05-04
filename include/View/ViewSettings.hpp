@@ -24,7 +24,6 @@
 
 namespace OMVIS
 {
-
     namespace View
     {
 
