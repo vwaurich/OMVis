@@ -46,14 +46,14 @@ namespace OMVIS
          public:
             OMVisualizerMAT() = delete;
 
-            OMVisualizerMAT(const std::string model, const std::string path);
+            OMVisualizerMAT(const std::string& model, const std::string& path);
 
             virtual ~OMVisualizerMAT() = default;
 
             OMVisualizerMAT(const OMVisualizerMAT& omvm) = delete;
             OMVisualizerMAT& operator=(const OMVisualizerMAT& omvm) = delete;
 
-            void readMat(const std::string modelString, const std::string dirString);
+            void readMat(const std::string& modelString, const std::string& dirString);
 
             /*! \brief
              *
