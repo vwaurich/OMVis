@@ -316,15 +316,20 @@ namespace OMVIS
 
     void OMVisualizerFMU::updateScene(const double time)
     {
+		_omvManager->updateTick();//for real-time measurement
+
         _omvManager->setSimTime(_omvManager->getVisTime());
         double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
 
+		double vis1 = _omvManager->getRealTime();
         while (_omvManager->getSimTime() < nextStep)
         {
             //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
             //_inputData.printValues();
             _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
         }
+		_omvManager->updateTick();//for real-time measurement
+		_omvManager->setRealTimeFactor(_omvManager->getHVisual()/(_omvManager->getRealTime()- vis1));
         updateVisAttributes(_omvManager->getVisTime());
     }
 

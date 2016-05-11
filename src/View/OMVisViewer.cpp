@@ -66,6 +66,7 @@ namespace OMVIS
                   osgViewer::CompositeViewer(),
                   _sceneView(new osgViewer::View()),
                   _timeDisplay(new QLabel()),
+			      _RTFactorDisplay(new QLabel()),
                   _guiController(new Control::GUIController())
         {
             // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
@@ -295,6 +296,11 @@ namespace OMVIS
             _timeDisplay->setFixedWidth(60);
             _timeDisplay->setFixedHeight(20);
 
+			// Time value of -1.0 indicates, that no model is loaded into OMVis.
+			_RTFactorDisplay->setText(QString("RT-Factor ").append(QString::fromStdString("-1.0")));
+			_RTFactorDisplay->setFixedWidth(60);
+			_RTFactorDisplay->setFixedHeight(20);
+
             //the button row
             QHBoxLayout* buttonRowLayOut = new QHBoxLayout();
             QGroupBox* buttonRowBox = new QGroupBox();
@@ -302,6 +308,7 @@ namespace OMVIS
             buttonRowLayOut->addWidget(playButton);
             buttonRowLayOut->addWidget(pauseButton);
             buttonRowLayOut->addWidget(coffeeButton);
+			buttonRowLayOut->addWidget(_RTFactorDisplay);
             buttonRowLayOut->addWidget(_timeDisplay);
             buttonRowBox->setLayout(buttonRowLayOut);
             buttonRowBox->setFixedHeight(60);
@@ -760,7 +767,9 @@ namespace OMVIS
         void OMVisViewer::updateTimeDisplay()
         {
             double visTime = _guiController->getVisTime();
+			double rtf = _guiController->getRealTimeFactor();
             _timeDisplay->setText(QString("time ").append(QString::number(visTime)).append(QString(" sec")));
+			_RTFactorDisplay->setText(QString("RT ").append(QString::number(rtf)));
         }
 
         void OMVisViewer::updateTimeSliderPosition()

@@ -102,6 +102,7 @@ namespace OMVIS
             osg::ref_ptr<osg::Node> getSceneRootNode();
             void sceneUpdate();
             double getVisTime();
+			double getRealTimeFactor();
             void setVisTime(const int val);
             bool modelIsMATFile();
             bool modelIsFMU();

@@ -174,6 +174,11 @@ namespace OMVIS
             return _omVisualizer->_omvManager->getVisTime();
         }
 
+		double GUIController::getRealTimeFactor()
+		{
+			return _omVisualizer->_omvManager->getRealTimeFactor();
+		}
+
         void GUIController::setVisTime(const int val)
         {
             _omVisualizer->_omvManager->setVisTime((_omVisualizer->_omvManager->getEndTime() - _omVisualizer->_omvManager->getStartTime()) * (float) (val / 100.0));

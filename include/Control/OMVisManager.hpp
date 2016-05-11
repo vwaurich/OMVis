@@ -57,7 +57,7 @@ namespace OMVIS
              *
              * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
              */
-            OMVisManager(double simTime, double realTime, double visTime, double hVisual, double startTime, double endTime);
+            OMVisManager(double simTime, double realTime, double realTimeFactor, double visTime, double hVisual, double startTime, double endTime);
 
             ~OMVisManager() = default;
             OMVisManager(const OMVisManager& omvm) = delete;
@@ -92,6 +92,10 @@ namespace OMVIS
 
             double getRealTime() const;
 
+			double getRealTimeFactor() const;
+
+			void setRealTimeFactor(double rtf);
+
             /*! Returns true, if the Visualization is currently paused and false otherwise. */
             bool isPaused() const;
             /*! Set pause status to new value. */
@@ -102,6 +106,8 @@ namespace OMVIS
             double _simTime;
             //! Current real time.
             double _realTime;
+			//! realtime factor
+			double _realTimeFactor;
             //! Time of current scene update.
             double _visTime;
             //! Step size for the scene updates in milliseconds.

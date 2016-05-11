@@ -307,6 +307,8 @@ namespace OMVIS
             QSlider* _timeSlider;
             /// This label displays the current visualization time.
             QLabel* _timeDisplay;
+			/// This labele displays the current real time factor
+			QLabel* _RTFactorDisplay;
             /// Triggers a new frame.
             QTimer _renderTimer;
             /// Triggers a new scene-update.
