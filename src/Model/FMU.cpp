@@ -163,7 +163,7 @@ namespace OMVIS
             _fmuData._fmiStatus = fmi1_import_set_debug_logging(_fmu, fmi1_false);
 
             // Turn on logging in FMI library.
-            fmi1_import_set_debug_logging(_fmu, fmi1_true);
+            fmi1_import_set_debug_logging(_fmu, fmi1_false);
 
             LOGGER_WRITE(std::string("FMU::initialize(). Finished."), Util::LC_LOADER, Util::LL_INFO);
         }
