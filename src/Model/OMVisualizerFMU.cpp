@@ -141,7 +141,6 @@ namespace OMVIS
                     break;
                 }
             }
-
             /* Handle any events */
             if (_simSettings->getCallEventUpdate() || zero_crossning_event || (_fmu._fmuData._eventInfo.upcomingTimeEvent && _fmu._fmuData._tcur == _fmu._fmuData._eventInfo.nextEventTime))
             {
@@ -181,6 +180,8 @@ namespace OMVIS
                 //std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
             }
 
+
+			//_inputData.printValues();
             //X2 MF: On my system, this line is needed in order to get the keyboard input working
             _inputData.setInputsInFMU(_fmu._fmu);
 
@@ -188,7 +189,7 @@ namespace OMVIS
             _fmu._fmuData._fmiStatus = fmi1_import_get_derivatives(_fmu._fmu, _fmu._fmuData._statesDer, _fmu._fmuData._nStates);
 
             //print out some values for debugging:
-            //std::cout<<"DO EULER at "<<data.tcur<<std::endl;
+            //std::cout<<"DO EULER at "<< _fmu._fmuData._tcur<<std::endl;
             //fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmul._fmu, "prismatic.s");
             //const fmi1_value_reference_t vr  = fmi1_import_get_variable_vr(var);
             //double value = -1.0;
@@ -324,7 +325,7 @@ namespace OMVIS
 
         while (_omvManager->getSimTime() < nextStep)
         {
-            //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
+            //std::cout<<"simulate "<< _omvManager->getSimTime()<<" to "<<nextStep<<std::endl;
             //_inputData.printValues();
             _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
         }

@@ -79,6 +79,12 @@ namespace Model
 			shape._id = std::string(expNode->value());
 
 			expNode = shapeNode->first_node((const char*) "type")->first_node();
+			if (expNode == 0) 
+			{
+				LOGGER_WRITE(std::string("The type of  ") + shape._id + " is not supported right in the visxml file.", Util::LC_LOADER, Util::LL_DEBUG);
+				break;
+			}
+
 			shape._type = std::string(expNode->value());
 
 			expNode = shapeNode->first_node((const char*) "length")->first_node();

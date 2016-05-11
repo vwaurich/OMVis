@@ -154,7 +154,7 @@ namespace OMVIS
             fmi1_status_t status = fmi1_import_set_real(fmu, _data._vrReal, _data.getNumReal(), _data._valuesReal);
             status = fmi1_import_set_integer(fmu, _data._vrInteger, _data.getNumInteger(), _data._valuesInteger);
             status = fmi1_import_set_boolean(fmu, _data._vrBoolean, _data.getNumBoolean(), _data._valuesBoolean);
-            status = fmi1_import_set_string(fmu, _data._vrBoolean, _data.getNumBoolean(), _data._valuesString);
+            status = fmi1_import_set_string(fmu, _data._vrBoolean, _data.getNumString(), _data._valuesString);
         }
 
         void InputData::printValues()
