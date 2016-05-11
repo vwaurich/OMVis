@@ -169,7 +169,15 @@ namespace OMVIS
     {
         if (0.0 > time)
             LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER, Util::LL_ERROR);
+
+		_omvManager->updateTick();//for real-time measurement
+		double visTime = _omvManager->getRealTime();
+
         updateVisAttributes(time);
+
+		_omvManager->updateTick();//for real-time measurement
+		visTime = _omvManager->getRealTime() - visTime;
+		_omvManager->setRealTimeFactor(_omvManager->getHVisual() / visTime);
     }
 
     std::string OMVisualizerMAT::getType() const
