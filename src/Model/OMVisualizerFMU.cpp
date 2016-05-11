@@ -317,11 +317,11 @@ namespace OMVIS
     void OMVisualizerFMU::updateScene(const double time)
     {
 		_omvManager->updateTick();//for real-time measurement
+		double simTime = _omvManager->getRealTime();
 
         _omvManager->setSimTime(_omvManager->getVisTime());
         double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
 
-		double vis1 = _omvManager->getRealTime();
         while (_omvManager->getSimTime() < nextStep)
         {
             //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
@@ -329,8 +329,18 @@ namespace OMVIS
             _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
         }
 		_omvManager->updateTick();//for real-time measurement
-		_omvManager->setRealTimeFactor(_omvManager->getHVisual()/(_omvManager->getRealTime()- vis1));
+		simTime = _omvManager->getRealTime() - simTime;
+
+		_omvManager->updateTick();//for real-time measurement
+		double visTime = _omvManager->getRealTime();
+
         updateVisAttributes(_omvManager->getVisTime());
+		_omvManager->updateTick();//for real-time measurement
+		visTime = _omvManager->getRealTime() - visTime;
+		//std::cout << "SIMTIME " << _omvManager->getHVisual() / (simTime) << "     VISTIME" << _omvManager->getHVisual() / (visTime) << std::endl;
+		_omvManager->setRealTimeFactor(_omvManager->getHVisual() / (visTime+simTime));
+
+
     }
 
     std::string OMVisualizerFMU::getType() const
