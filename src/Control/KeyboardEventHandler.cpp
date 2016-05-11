@@ -78,7 +78,7 @@ namespace OMVIS
                 }
                 default:
                 {
-                    //inputs.resetInputValues();
+                    //inputs.resetDiscreteInputValues();
                     break;
                 }
             }

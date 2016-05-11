@@ -169,14 +169,8 @@ namespace OMVIS
                 std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
         }
 
-        void InputData::resetInputValues()
+        void InputData::resetDiscreteInputValues()
         {
-            //reset real input values to 0
-            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
-                _data._valuesReal[r] = 0.0;
-            //reset integer input values to 0
-            for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
-                _data._valuesInteger[i] = 0;
             //reset boolean input values to 0
             for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
                 _data._valuesBoolean[b] = false;

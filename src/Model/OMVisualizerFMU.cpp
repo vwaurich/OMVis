@@ -207,7 +207,7 @@ namespace OMVIS
 
             //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
             //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
-            _inputData.resetInputValues();
+            _inputData.resetDiscreteInputValues();
             return _fmu._fmuData._tcur;
         }
 

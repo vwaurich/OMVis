@@ -87,8 +87,8 @@ namespace OMVIS
             /*! \brief Sets the input variables in the fmu. */
             void setInputsInFMU(fmi1_import_t* fmu);
 
-            /*! \brief Resets the input values to zero. */
-            void resetInputValues();
+            /*! \brief Resets the discrete input values to zero (no reals and integers). */
+            void resetDiscreteInputValues();
 
             /*! \brief Prints the current input values. */
             void printValues();
