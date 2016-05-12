@@ -152,8 +152,6 @@ namespace OMVIS
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
             {
-                //<<"simulate "<<omvManager.simTime<<endl;
-                //omv.fmuData.inputs.printValues();
                 omvm.setSimTime(simulateStep(omvm.getSimTime()));
             }
         }
@@ -163,58 +161,21 @@ namespace OMVIS
             //tcur = settings.tstart;
             //hcur = settings.hdef;
             int zero_crossning_event = 0;
-//X9            _fmu->_fmuData._fmiStatus = fmi1_import_set_time(_fmu->_fmu, time);
-//X9            _fmu->_fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu->_fmu, _fmu->_fmuData->_eventIndicators, _fmu->_fmuData._nEventIndicators);
             _fmu->prepareSimulationStep(time);
 
             /* Check if an event indicator has triggered */
-//X9            for (size_t k = 0; k < _fmu->_fmuData._nEventIndicators; ++k)
-//X9            {
-//X9                if (_fmu->_fmuData._eventIndicators[k] * _fmu->_fmuData._eventIndicatorsPrev[k] < 0)
-//                {
-//                    zero_crossning_event = 1;
-//                    LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: Event occurred at ") + std::to_string(_fmu->_fmuData._tcur), Util::LC_CTR, Util::LL_DEBUG);
-//                    //std::cout << "AN EVENT at " << _fmuData._tcur << std::endl;
-//                    break;
-//X9                }
-//X9            }
             bool zeroCrossingEvent = _fmu->checkForTriggeredEvent();
 
             /* Handle any events */
-//X9            if (_simSettings->getCallEventUpdate() || zero_crossning_event || (_fmu->_fmuData._eventInfo.upcomingTimeEvent && _fmu->_fmuData._tcur == _fmu->_fmuData._eventInfo.nextEventTime))
-//X9            {
-//                std::cout << "HANDLE EVENT at " << _fmu->_fmuData._tcur << std::endl;
-//                _fmu->_fmuData._fmiStatus = fmi1_import_eventUpdate(_fmu->getFmu(), _simSettings->getIntermediateResults(), &_fmu->_fmuData._eventInfo);
-//                _fmu->_fmuData._fmiStatus = fmi1_import_get_continuous_states(_fmu->_fmu, _fmu->_fmuData._states, _fmu->_fmuData._nStates);
-//                _fmu->_fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu->_fmu, _fmu->_fmuData._eventIndicators, _fmu->_fmuData._nEventIndicators);
-//                _fmu->_fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu->_fmu, _fmu->_fmuData._eventIndicatorsPrev, _fmu->_fmuData._nEventIndicators);
-//X9            }
             if (_simSettings->getCallEventUpdate() || zeroCrossingEvent || _fmu->itsEventTime())
             {
                 _fmu->handleEvents(_simSettings->getIntermediateResults());
             }
 
             /* Updated next time step */
-//X9            if (_fmu->_fmuData._eventInfo.upcomingTimeEvent)
-//X9            {
-//                if (_fmu->_fmuData._tcur + _simSettings->getHdef() < _fmu->_fmuData._eventInfo.nextEventTime)
-//                    _fmu->_fmuData._hcur = _simSettings->getHdef();
-//                else
-//                    _fmu->_fmuData._hcur = _fmu->_fmuData._eventInfo.nextEventTime - _fmu->_fmuData._tcur;
-//            }
-//            else
-//X9                _fmu->_fmuData._hcur = _simSettings->getHdef();
-//X9            /* increase with step size*/
-//X9            _fmu->_fmuData._tcur += _fmu->_fmuData._hcur;
             _fmu->updateNextTimeStep(_simSettings->getHdef());
 
             /* last step */
-//X9            if (_fmu->_fmuData._tcur > _simSettings->getTend() - _fmu->_fmuData._hcur / 1e16)
-//X9            {
-//                _fmu->_fmuData._tcur -= _fmu->_fmuData._hcur;
-//                _fmu->_fmuData._hcur = _simSettings->getTend() - _fmu->_fmuData._tcur;
-//                _fmu->_fmuData._tcur = _simSettings->getTend();
-//X9            }
             _fmu->updateTimes(_simSettings->getTend());
 
             //set inputs
@@ -230,7 +191,6 @@ namespace OMVIS
             _inputData->setInputsInFMU(_fmu->getFMU());
 
             /* Solve system */
-//X9            _fmu->_fmuData._fmiStatus = fmi1_import_get_derivatives(_fmu->getFmu(), _fmu->_fmuData._statesDer, _fmu->_fmuData._nStates);
             _fmu->solveSystem();
 
             //print out some values for debugging:
@@ -242,22 +202,17 @@ namespace OMVIS
             //std::cout<<"value "<<value<<std::endl;
 
             // integrate a step with euler
-//X9            for (size_t k = 0; k < _fmu->_fmuData._nStates; ++k)
-//X9                _fmu->_fmuData._states[k] = _fmu->_fmuData._states[k] + _fmu->_fmuData._hcur * _fmu->_fmuData._statesDer[k];
             _fmu->doEulerStep();
 
             /* Set states */
-//X9            _fmu->_fmuData._fmiStatus = fmi1_import_set_continuous_states(_fmu->_fmu, _fmu->_fmuData._states, _fmu->_fmuData._nStates);
             _fmu->setContinuousStates();
 
             /* Step is complete */
-//X9            _fmu->_fmuData._fmiStatus = fmi1_import_completed_integrator_step(_fmu->_fmu, &_simSettings->_callEventUpdate);
             _fmu->completedIntegratorStep(&_simSettings->_callEventUpdate);
 
             //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
             //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
             _inputData->resetDiscreteInputValues();
-//X9            return _fmu->_fmuData._tcur;
             return _fmu->getFMUData()->_tcur;
         }
 
@@ -341,32 +296,22 @@ namespace OMVIS
 
         void OMVisualizerFMU::updateScene(const double time)
         {
-            _omvManager->updateTick();  //for real-time measurement
-            double simTime = _omvManager->getRealTime();
+            _omvManager->updateTick();            //for real-time measurement
 
             _omvManager->setSimTime(_omvManager->getVisTime());
             double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
 
+            double vis1 = _omvManager->getRealTime();
             while (_omvManager->getSimTime() < nextStep)
             {
-                //std::cout<<"simulate "<< _omvManager->getSimTime()<<" to "<<nextStep<<std::endl;
+                //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
                 //_inputData.printValues();
                 _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
             }
-            _omvManager->updateTick();            //for real-time measurement
-            simTime = _omvManager->getRealTime() - simTime;
-
-            _omvManager->updateTick();            //for real-time measurement
-            double visTime = _omvManager->getRealTime();
-
+            _omvManager->updateTick();                     //for real-time measurement
+            _omvManager->setRealTimeFactor(_omvManager->getHVisual() / (_omvManager->getRealTime() - vis1));
             updateVisAttributes(_omvManager->getVisTime());
-            _omvManager->updateTick();            //for real-time measurement
-            visTime = _omvManager->getRealTime() - visTime;
-            //std::cout << "SIMTIME " << _omvManager->getHVisual() / (simTime) << "     VISTIME" << _omvManager->getHVisual() / (visTime) << std::endl;
-            _omvManager->setRealTimeFactor(_omvManager->getHVisual() / (visTime + simTime));
-
         }
-
 
     }  // End namespace Model
 }  // End namespace OMVIS
