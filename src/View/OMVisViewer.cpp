@@ -383,7 +383,6 @@ namespace OMVIS
                 //set the inputData to handle Keyboard-events as inputs
                 if (_guiController->modelIsFMU())
                 {
-                    //X3 Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
                 }
