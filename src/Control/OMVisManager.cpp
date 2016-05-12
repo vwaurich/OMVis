@@ -26,10 +26,10 @@ namespace OMVIS
 {
     namespace Control
     {
-		OMVisManager::OMVisManager(double simTime, double realTime,double realTimeFactor, double visTime, double hVisual, double startTime, double endTime)
-			:	  _simTime(simTime),
-				  _realTime(realTime),
-				  _realTimeFactor(realTimeFactor),
+        OMVisManager::OMVisManager(double simTime, double realTime, double realTimeFactor, double visTime, double hVisual, double startTime, double endTime)
+                : _simTime(simTime),
+                  _realTime(realTime),
+                  _realTimeFactor(realTimeFactor),
                   _visTime(visTime),
                   _hVisual(hVisual),
                   _startTime(startTime),
@@ -111,15 +111,15 @@ namespace OMVIS
             return _realTime;
         }
 
-		double OMVisManager::getRealTimeFactor() const
-		{
-			return _realTimeFactor;
-		}
+        double OMVisManager::getRealTimeFactor() const
+        {
+            return _realTimeFactor;
+        }
 
-		void OMVisManager::setRealTimeFactor(double rtf)
-		{
-			_realTimeFactor = rtf;
-		}
+        void OMVisManager::setRealTimeFactor(double rtf)
+        {
+            _realTimeFactor = rtf;
+        }
 
         double OMVisManager::getHVisual() const
         {
