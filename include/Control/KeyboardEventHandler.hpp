@@ -58,7 +58,6 @@ namespace OMVIS
              *
              * @param inputs
              */
-//            KeyboardEventHandler(Model::InputData* inputs);
             KeyboardEventHandler(std::shared_ptr<Model::InputData> inputs);
 
             /// Let the compiler provide the destructor.
@@ -77,7 +76,6 @@ namespace OMVIS
             virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
          private:
-            /// \todo Should be a std::shared_ptr (points to memory managed by other class, i.e. _guiController->getInputData())
             std::shared_ptr<Model::InputData> _inputs;
         };
 
