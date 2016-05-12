@@ -28,12 +28,6 @@ namespace OMVIS
     namespace Control
     {
 
-//        KeyboardEventHandler::KeyboardEventHandler(Model::InputData* inputs)
-//                : GUIEventHandler(),
-//                  _inputs(inputs)
-//        {
-//        }
-
         KeyboardEventHandler::KeyboardEventHandler(std::shared_ptr<Model::InputData> inputs)
                 : GUIEventHandler(),
                   _inputs(inputs)
