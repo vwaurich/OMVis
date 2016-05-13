@@ -46,7 +46,7 @@ namespace OMVIS
         }
 
         /*-----------------------------------------
-         *
+         * SIMULATION METHODS
          *---------------------------------------*/
 
         void OMVisManager::updateTick()

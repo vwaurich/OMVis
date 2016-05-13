@@ -69,10 +69,9 @@ namespace OMVIS
             OMVisManager& operator=(const OMVisManager& omvm) = delete;
 
             /*-----------------------------------------
-             *
+             * SIMULATION METHODS
              *---------------------------------------*/
 
-            // 2016-04-19, MF: Currently unused method
             void updateTick();
             // 2016-04-19, MF: Currently unused method
             bool simTimeReady();

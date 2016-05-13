@@ -166,6 +166,7 @@ namespace OMVIS
             /*-----------------------------------------
              * MEMBERS
              *---------------------------------------*/
+
             std::shared_ptr<fmi1_import_t> _fmu;
             std::shared_ptr<fmi_import_context_t> _context;
             jm_callbacks _callbacks;
