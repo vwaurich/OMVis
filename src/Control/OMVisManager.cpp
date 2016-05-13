@@ -26,7 +26,12 @@ namespace OMVIS
 {
     namespace Control
     {
-        OMVisManager::OMVisManager(double simTime, double realTime, double realTimeFactor, double visTime, double hVisual, double startTime, double endTime)
+
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+        OMVisManager::OMVisManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime, const double hVisual,
+                                   const double startTime, const double endTime)
                 : _simTime(simTime),
                   _realTime(realTime),
                   _realTimeFactor(realTimeFactor),
@@ -39,6 +44,10 @@ namespace OMVIS
                   _sliderRange(0)
         {
         }
+
+        /*-----------------------------------------
+         *
+         *---------------------------------------*/
 
         void OMVisManager::updateTick()
         {
@@ -56,12 +65,16 @@ namespace OMVIS
             return _simTime >= _visTime;
         }
 
+        /*-----------------------------------------
+         * GETTERS and SETTERS
+         *---------------------------------------*/
+
         void OMVisManager::setSliderRange(const int min, const int max)
         {
             _sliderRange = max - min;
         }
 
-        int OMVisManager::getTimeProgress()
+        int OMVisManager::getTimeProgress() const
         {
             return std::round(_visTime * _sliderRange / (_endTime - _startTime));
         }

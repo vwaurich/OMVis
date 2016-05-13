@@ -44,6 +44,10 @@ namespace OMVIS
         class OMVisManager
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             OMVisManager() = delete;
 
             /*! \brief Constructs a OMVisManager from the given arguments.
@@ -57,11 +61,16 @@ namespace OMVIS
              *
              * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
              */
-            OMVisManager(double simTime, double realTime, double realTimeFactor, double visTime, double hVisual, double startTime, double endTime);
+            OMVisManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
+                         const double hVisual, const double startTime, const double endTime);
 
             ~OMVisManager() = default;
             OMVisManager(const OMVisManager& omvm) = delete;
             OMVisManager& operator=(const OMVisManager& omvm) = delete;
+
+            /*-----------------------------------------
+             *
+             *---------------------------------------*/
 
             // 2016-04-19, MF: Currently unused method
             void updateTick();
@@ -70,8 +79,12 @@ namespace OMVIS
             // 2016-04-19, MF: Currently unused method
             bool visTimeReady();
 
-            /*! \brief Calculates from the current visualization time (_visTime) the slider position. */
-            int getTimeProgress();
+            /*-----------------------------------------
+             * GETTERS and SETTERS
+             *---------------------------------------*/
+
+            /*! \brief Calculates from the current visualization time (_visTime) the position of the time slider. */
+            int getTimeProgress() const;
 
             /*! Set the slider range. */
             void setSliderRange(const int min, const int max);
@@ -92,9 +105,8 @@ namespace OMVIS
 
             double getRealTime() const;
 
-			double getRealTimeFactor() const;
-
-			void setRealTimeFactor(double rtf);
+            double getRealTimeFactor() const;
+            void setRealTimeFactor(double rtf);
 
             /*! Returns true, if the Visualization is currently paused and false otherwise. */
             bool isPaused() const;
@@ -102,12 +114,16 @@ namespace OMVIS
             void setPause(const bool status);
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             //! Time of the current simulation step.
             double _simTime;
             //! Current real time.
             double _realTime;
-			//! Realtime factor
-			double _realTimeFactor;
+            //! Realtime factor.
+            double _realTimeFactor;
             //! Time of current scene update.
             double _visTime;
             //! Step size for the scene updates in milliseconds.
