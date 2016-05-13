@@ -122,11 +122,10 @@ namespace OMVIS
         int OMVisualizerAbstract::initData()
         {
             int isOk(0);
-            //X7 In case of reloading, we need to make sure, that we have empty members
-//            _baseData->_xmlDoc.clear();
+            // In case of reloading, we need to make sure, that we have empty members
             _baseData->clearXMLDoc();
 
-            // init xml file and get visAttributes
+            // Initialize xml file and get visAttributes
             isOk = _baseData->initXMLDoc();
 
             isOk = _baseData->initVisObjects();
