@@ -34,17 +34,27 @@ namespace OMVIS
 {
     namespace Control
     {
+
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         GUIController::GUIController()
-                : _omVisualizer(nullptr),
-                  _modelLoaded(false)
+                : _omVisualizer(nullptr)
+//X1        ,
+//X1                  _modelLoaded(false)
         {
         }
+
+        /*-----------------------------------------
+         * INITIALIZATION METHODS
+         *---------------------------------------*/
 
         void GUIController::unloadModel()
         {
             // Implicitly calls destructors and thus frees memory handled by shared pointers.
             _omVisualizer = nullptr;
-            _modelLoaded = false;
+//X1            _modelLoaded = false;
             /// \todo: What else has to be done in order to clean up data structures and free memory?
         }
 
@@ -86,7 +96,7 @@ namespace OMVIS
                 // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
                 // already unpacked shared object, which leads to a seg fault. Thats why we test for this case.
                 // if (_modelLoaded && path.compare(_omVisualizer->_baseData->_dirName) &&  modelName.compare(_omVisualizer->_baseData->_modelName))
-                if (_modelLoaded && path == _omVisualizer->getBaseData()->getDirName() && modelName == _omVisualizer->getBaseData()->getModelName())
+                if (modelIsLoaded() && path == _omVisualizer->getBaseData()->getDirName() && modelName == _omVisualizer->getBaseData()->getModelName())
                 {
                     LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
                     initVisualization();
@@ -110,13 +120,11 @@ namespace OMVIS
                         if (0 == isOk)
                         {
                             _omVisualizer = tmpOmVisualizer;
-                            _modelLoaded = true;
                         }
                     }
                     else
                     {
                         LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
-                        _modelLoaded = false;
                     }
                 }
             }
@@ -154,6 +162,15 @@ namespace OMVIS
             std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
         }
 
+        void GUIController::sceneUpdate()
+        {
+            _omVisualizer->sceneUpdate();
+        }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
+
         int GUIController::getTimeProgress()
         {
             return _omVisualizer->getOMVisManager()->getTimeProgress();
@@ -164,9 +181,9 @@ namespace OMVIS
             return _omVisualizer->getOMVisScene()->getScene().getRootNode();
         }
 
-        void GUIController::sceneUpdate()
+        void GUIController::setVisTime(const int val)
         {
-            _omVisualizer->sceneUpdate();
+            _omVisualizer->getOMVisManager()->setVisTime((_omVisualizer->getOMVisManager()->getEndTime() - _omVisualizer->getOMVisManager()->getStartTime()) * (float) (val / 100.0));
         }
 
         double GUIController::getVisTime()
@@ -174,14 +191,9 @@ namespace OMVIS
             return _omVisualizer->getOMVisManager()->getVisTime();
         }
 
-		double GUIController::getRealTimeFactor()
-		{
-			return _omVisualizer->getOMVisManager()->getRealTimeFactor();
-		}
-
-        void GUIController::setVisTime(const int val)
+        double GUIController::getRealTimeFactor()
         {
-            _omVisualizer->getOMVisManager()->setVisTime((_omVisualizer->getOMVisManager()->getEndTime() - _omVisualizer->getOMVisManager()->getStartTime()) * (float) (val / 100.0));
+            return _omVisualizer->getOMVisManager()->getRealTimeFactor();
         }
 
         bool GUIController::modelIsMATFile()
@@ -215,14 +227,9 @@ namespace OMVIS
                 return nullptr;
         }
 
-        bool GUIController::modelIsLoaded() const
+        bool GUIController::modelIsLoaded()
         {
-            return _modelLoaded;
-        }
-
-        void GUIController::setModelLoaded(bool b)
-        {
-            _modelLoaded = b;
+            return (nullptr != _omVisualizer);
         }
 
     }  // End namespace Control

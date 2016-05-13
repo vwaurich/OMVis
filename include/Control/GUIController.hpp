@@ -56,14 +56,19 @@ namespace OMVIS
         class GUIController
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             GUIController();
             ~GUIController() = default;
 
             GUIController(const GUIController& gc) = delete;
             GUIController& operator=(const GUIController& gc) = delete;
 
-            /*! \brief Unloads the currently loaded model and frees associated memory. */
-            void unloadModel();
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
 
             /*! \brief This method loads a model (FMU or MAT file) for visualization.
              *
@@ -84,6 +89,9 @@ namespace OMVIS
              */
             void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
 
+            /*! \brief Unloads the currently loaded model and frees associated memory. */
+            void unloadModel();
+
             /*! \brief Check if the XML file for a given path and model name can be accessed.
              *
              * The XML file name is created by "path + modelName + "_visual.xml"". Thus, the XML file has to be renamed
@@ -95,25 +103,38 @@ namespace OMVIS
              */
             bool checkForXMLFile(const std::string& modelName, const std::string& path) const;
 
+            /*-----------------------------------------
+             * SIMULATION METHODS
+             *---------------------------------------*/
+
             void startVisualization();
             void pauseVisualization();
             void initVisualization();
             void donationVisualization();
 
+            void sceneUpdate();
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
             int getTimeProgress();
             osg::ref_ptr<osg::Node> getSceneRootNode();
-            void sceneUpdate();
-            double getVisTime();
-			double getRealTimeFactor();
+
             void setVisTime(const int val);
+            double getVisTime();
+
+            double getRealTimeFactor();
+
+            /*! \brief Returns true, if the currently loaded model is a MAT result file simulation. */
             bool modelIsMATFile();
+            /*! \brief Returns true, if the currently loaded model is a FMU simulation. */
             bool modelIsFMU();
-            bool modelIsLoaded() const;
-            void setModelLoaded(bool b);
 
-            void setBackgroundColor(const osg::Vec4 colVec);
+            /*! \brief Returns true, if a model is loaded into OMVis, i.e., the OMVisualizer object is not nullptr. */
+            bool modelIsLoaded();
 
-            /// Returns simulation start time of the loaded model.
+            /*! \brief Returns simulation start time of the loaded model. */
             double getSimulationStartTime() const;
 
             /*! \brief Gets the visualization step size in milliseconds from the omvManager
@@ -129,12 +150,23 @@ namespace OMVIS
             std::shared_ptr<Model::InputData> getInputData();
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            /*! \brief Pointer to the OMVisualizer object, which handles the model visualization.
+             *
+             * OMVis provides three concrete implementations of OMVisualizerAbstract class:
+             *  1. OMVisualizerMat for visualization of simulation results present in MAT file format.
+             *  2. OMVisualizerFMU for FMU simulations.
+             *  3. OMVisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system (server).
+             *
+             */
             std::shared_ptr<Model::OMVisualizerAbstract> _omVisualizer;
 
-            //X13
             /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
              * It can be used to determine, what user actions are allowed in the GUI. */
-            bool _modelLoaded;
+//X1            bool _modelLoaded;
         };
 
     }  // End namespace Control

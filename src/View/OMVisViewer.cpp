@@ -413,7 +413,6 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("Uiuiui, das Model cessna.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cessna.osg im aktuellen Verzeichnis? "), Util::LC_LOADER, Util::LL_ERROR);
             _sceneView->setSceneData(scene);
 
-            _guiController->setModelLoaded(true);
             LOGGER_WRITE(std::string("Dort, Cessna geladen!"), Util::LC_LOADER, Util::LL_INFO);
         }
 
@@ -425,7 +424,6 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("Uiuiui, das Model cow.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cow.osg im aktuellen Verzeichnis?"), Util::LC_LOADER, Util::LL_ERROR);
             _sceneView->setSceneData(scene);
 
-            _guiController->setModelLoaded(true);
             LOGGER_WRITE(std::string("Dort, Kuh geladen!"), Util::LC_LOADER, Util::LL_INFO);
         }
 
