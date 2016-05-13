@@ -1,0 +1,3 @@
+[submodule "thirdparty/NetworkOffloader"]
+	path = thirdparty/NetworkOffloader
+	url = https://github.com/marchartung/NetworkOffloader.git
