@@ -23,6 +23,6 @@
 #include "Dialogs/BackgroundColorSettingDialog.hpp"
 #include "Dialogs/PerspectiveSettingDialog.hpp"
 #include "Dialogs/OpenRemoteConnectionDialog.hpp"
-
+#include "Dialogs/SimSettingDialog.hpp"
 
 #endif /* INCLUDE_VIEW_DIALOGS_HPP_ */

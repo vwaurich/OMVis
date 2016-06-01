@@ -236,6 +236,7 @@ QT5_WRAP_CPP(MOC_OMVISVIEWER include/View/OMVisViewer.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/BackgroundColorSettingDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/PerspectiveSettingDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenRemoteConnectionDialog.hpp)
+QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/SimSettingDialog.hpp)
 
 
 ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")

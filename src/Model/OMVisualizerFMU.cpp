@@ -160,6 +160,7 @@ namespace OMVIS
         {
             //tcur = settings.tstart;
             //hcur = settings.hdef;
+			//std::cout << "start" << std::endl;
             int zero_crossning_event = 0;
             _fmu->prepareSimulationStep(time);
 
@@ -190,6 +191,8 @@ namespace OMVIS
             //X2 MF: On my system, this line is needed in order to get the keyboard input working
             _inputData->setInputsInFMU(_fmu->getFMU());
 
+
+			//std::cout << "inputs" << std::endl;
             /* Solve system */
             _fmu->solveSystem();
 
