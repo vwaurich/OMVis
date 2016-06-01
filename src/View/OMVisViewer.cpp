@@ -94,8 +94,8 @@ namespace OMVIS
 
             // To trigger the paint event which renders the view.
             //MF: What is this good for?
-            //QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
-            //_renderTimer.start(10);
+            QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
+            _renderTimer.start(10);
 
             // To trigger the scene updates with the visualization step size.
             QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
