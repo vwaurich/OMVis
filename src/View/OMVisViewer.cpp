@@ -95,8 +95,8 @@ namespace OMVIS
 
             // To trigger the paint event which renders the view.
             //MF: What is this good for?
-            //QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
-            //_renderTimer.start(10);
+            QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
+            _renderTimer.start(10);
 
             // To trigger the scene updates with the visualization step size.
             QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
@@ -171,7 +171,9 @@ namespace OMVIS
             QObject::connect(_perspectiveAct, SIGNAL(triggered()), this, SLOT(perspectiveDialog()));
             _bgcAct = new QAction(tr("Background Color..."), this);
             QObject::connect(_bgcAct, SIGNAL(triggered()), this, SLOT(backgroundColorDialog()));
-
+			_simSettingscAct = new QAction(tr("Simulation Settings..."), this);
+			QObject::connect(_simSettingscAct, SIGNAL(triggered()), this, SLOT(simSettingsDialog()));
+			
             // Menu caption "Inputs".
             _mapInputAct = new QAction(tr("Map Inputs..."), this);
             QObject::connect(_mapInputAct, SIGNAL(triggered()), this, SLOT(openDialogInputMapper()));
@@ -203,6 +205,7 @@ namespace OMVIS
             _settingsMenu = new QMenu(tr("Settings"), this);
             _settingsMenu->addAction(_perspectiveAct);
             _settingsMenu->addAction(_bgcAct);
+			_settingsMenu->addAction(_simSettingscAct);
 
             // Menu caption "Inputs".
             _inputMenu = new QMenu(tr("Inputs"), this);
@@ -422,6 +425,7 @@ namespace OMVIS
                 QMessageBox::critical(0, QString("Error"), QString(ex.what()));
                 std::cout << ex.what();
             }
+
         }
 
         void OMVisViewer::loadModelCessna()
@@ -661,6 +665,16 @@ namespace OMVIS
                 }
             }
         }
+
+		
+		void OMVisViewer::simSettingsDialog()
+		{
+			SimSettingDialog dialog(this);
+			if (dialog.exec())
+			{
+				std::cout << "implement me" << std::endl;
+			}
+		}
 
         void OMVisViewer::backgroundColorDialog()
         {

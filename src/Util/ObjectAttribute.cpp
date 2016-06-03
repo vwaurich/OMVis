@@ -22,23 +22,18 @@
 ObjectAttribute::ObjectAttribute() :
 	isConst(true),
 	exp(0.0),
-	cref("NONE")
+	cref("NONE"),
+	fmuValueRef(0)
 {}
 
 ObjectAttribute::ObjectAttribute(float value) :
 	isConst(true),
 	exp(value),
-	cref("NONE")
+	cref("NONE"),
+	fmuValueRef(0)
 {}
 
 
 std::string ObjectAttribute::getValueString() const {
-	if (isConst)
-	{
-		return std::to_string(exp);
-	}
-	else
-	{
-		return std::to_string(exp);
-	}
+		return std::to_string(exp)+"  ("+std::to_string(fmuValueRef)+") "+std::to_string(isConst)+" ";
 };

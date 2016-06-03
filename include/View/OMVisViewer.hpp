@@ -262,6 +262,10 @@ namespace OMVIS
              */
             void backgroundColorDialog();
 
+			/*! \brief Creates dialog window to specify the simulationSettings
+			*/
+			void simSettingsDialog();
+
             /*! \brief Updates the key-input-map
              */
             void updateKeyMapValue(QString key);
@@ -288,6 +292,7 @@ namespace OMVIS
             QAction* _aboutOMVisAct;
             QAction* _perspectiveAct;
             QAction* _bgcAct;
+			QAction* _simSettingscAct;
 
             //X9 This members are for testing purposes (load, reload functionality) and can be removed in the future.
             QAction* _loadCessnaAct;
