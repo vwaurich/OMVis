@@ -41,8 +41,6 @@ namespace OMVIS
 
         GUIController::GUIController()
                 : _omVisualizer(nullptr)
-//X1        ,
-//X1                  _modelLoaded(false)
         {
         }
 
@@ -54,7 +52,6 @@ namespace OMVIS
         {
             // Implicitly calls destructors and thus frees memory handled by shared pointers.
             _omVisualizer = nullptr;
-//X1            _modelLoaded = false;
             /// \todo: What else has to be done in order to clean up data structures and free memory?
         }
 
@@ -62,32 +59,35 @@ namespace OMVIS
         {
             LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
 
+            // The plan for the factory to construct the appropriate OMVisualization object.
+            Initialization::VisualizationConstructionPlan plan;
+
             // Get file name and path from the users selection.
             std::size_t pos = modelNameIn.find_last_of("/");
-            std::string path = modelNameIn.substr(0, pos + 1);
+            plan.dirPath = modelNameIn.substr(0, pos + 1);
             std::string modelName = modelNameIn.substr(pos + 1, modelNameIn.length());
 
             // Do we visualize fmu or mat file?
-            bool visFMU(false);
             std::size_t fmu = modelName.find(".fmu");
             if (fmu != std::string::npos)
             {
-                visFMU = true;
+                plan.isFMU = true;
                 modelName = modelName.substr(0, fmu);
+                plan.fileName = modelName.substr(0, fmu);
             }
             else
             {
-                visFMU = false;
+                plan.isFMU = false;
                 // Remove '_res' from the model file name, because the XML file for MODEL_res.mat it named MODEL_visual.xml.
-                modelName = modelName.substr(0, modelName.find("_res"));
+                plan.fileName = modelName.substr(0, modelName.find("_res"));
             }
 
             // Check for XML description file.
-            bool xmlExists = checkForXMLFile(modelName, path);
+            bool xmlExists = checkForXMLFile(plan.fileName, plan.dirPath);
 
             // Some useful output for the user and developer.
-            LOGGER_WRITE(std::string("Path to model: ") + path, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Model file: ") + modelName, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("Path to model: ") + plan.dirPath, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("Model file: ") + plan.fileName, Util::LC_CTR, Util::LL_DEBUG);
             LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
             // Proceed only if XML file is present.
@@ -96,7 +96,7 @@ namespace OMVIS
                 // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
                 // already unpacked shared object, which leads to a seg fault. Thats why we test for this case.
                 // if (_modelLoaded && path.compare(_omVisualizer->_baseData->_dirName) &&  modelName.compare(_omVisualizer->_baseData->_modelName))
-                if (modelIsLoaded() && path == _omVisualizer->getBaseData()->getDirName() && modelName == _omVisualizer->getBaseData()->getModelName())
+                if (modelIsLoaded() && plan.dirPath == _omVisualizer->getBaseData()->getDirName() && plan.fileName == _omVisualizer->getBaseData()->getModelName())
                 {
                     LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
                     initVisualization();
@@ -108,7 +108,7 @@ namespace OMVIS
 
                     // Ask the factory to create an appropriate OMVisualizer object.
                     Initialization::Factory* factory = new Initialization::Factory();
-                    std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createVisualizationObject(modelName, path, visFMU);
+                    std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createVisualizationObject(plan);
                     if (tmpOmVisualizer != nullptr)
                     {
                         tmpOmVisualizer->getOMVisManager()->setSliderRange(timeSliderStart, timeSliderEnd);
@@ -118,14 +118,10 @@ namespace OMVIS
 
                         // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
                         if (0 == isOk)
-                        {
                             _omVisualizer = tmpOmVisualizer;
-                        }
                     }
                     else
-                    {
                         LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
-                    }
                 }
             }
             else

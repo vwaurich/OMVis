@@ -51,6 +51,24 @@ namespace OMVIS
 {
     namespace Initialization
     {
+        /*! \brief Struct that holds information to create a OMVisualizer object by the factory. */
+        struct VisualizationConstructionPlan
+        {
+            /* Essential information. */
+            /*! Name of the model file. */
+            std::string fileName;
+            /*! Path of the model file. */
+            std::string dirPath;
+            bool isFMU;
+
+            /* Additional information. */
+            /*! Server that handles the remote computation. */
+            std::string serverName = "";
+            /*! Port that is used for remote computation. */
+            int port = -1;
+        };
+
+
         /*! \brief This factory class can create OMVisualization objects that are required for an FMU or result file based visualization.
          *
          */
@@ -80,6 +98,8 @@ namespace OMVIS
              * @return
              */
             std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const std::string modelName = "", const std::string pathName = "", const bool useFMU = false);
+
+            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const VisualizationConstructionPlan& in);
         };
 
     }  // End namespace Initialization
