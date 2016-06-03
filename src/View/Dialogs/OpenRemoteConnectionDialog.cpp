@@ -30,7 +30,7 @@
 #include <string>
 
 #ifndef _WIN32
-	#include <arpa/inet.h>
+#include <arpa/inet.h>
 #endif;
 
 namespace OMVIS
@@ -44,7 +44,7 @@ namespace OMVIS
          */
         bool isValidIpAddressV4(const std::string& ipAddress)
         {
-		#ifndef _WIN32
+#ifndef _WIN32
             struct sockaddr_in sa;
             int result = inet_pton(AF_INET, ipAddress.c_str(), &(sa.sin_addr));
 
@@ -58,10 +58,10 @@ namespace OMVIS
                 LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv4 address."), Util::LC_GUI, Util::LL_WARNING);
                 return false;
             }
-		#elif _WIN32
-			LOGGER_WRITE("isValidIpAddressV4 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
-			return false;
-		#endif;
+#elif _WIN32
+            LOGGER_WRITE("isValidIpAddressV4 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
+            return false;
+#endif;
 
             // Short way without logger usage.
             //return result != 0;
@@ -74,7 +74,7 @@ namespace OMVIS
          */
         bool isValidIpAddressV6(const std::string& ipAddress)
         {
-		#ifndef _WIN32
+#ifndef _WIN32
 
             struct sockaddr_in6 sa;
             int result = inet_pton(AF_INET6, ipAddress.c_str(), &(sa.sin6_addr));
@@ -92,10 +92,10 @@ namespace OMVIS
             LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
             // Short way without logger usage.
             //return result != 0;
-		#elif _WIN32
-			LOGGER_WRITE("isValidIpAddressV6 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
-			return false;
-		#endif;
+#elif _WIN32
+            LOGGER_WRITE("isValidIpAddressV6 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
+            return false;
+#endif;
         }
 
         /// \todo Implement me!
@@ -113,20 +113,30 @@ namespace OMVIS
 
         OpenRemoteConnectionDialog::OpenRemoteConnectionDialog(QWidget* parent)
                 : QDialog(parent),
-                  _serverName("")
+                  _serverName(""),
+                  _portNumber(4444)
         {
             setWindowTitle(tr("Open Remote Connection"));
 
-            QLabel* label = new QLabel(tr("&Server Name or IP:"));
-            _lineEdit = new QLineEdit();
-            _lineEdit->setPlaceholderText("taurus.hrsk.tu-dresden.de or 203.0.113.195 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
-            _lineEdit->setMaximumWidth(400);
-            _lineEdit->setFixedWidth(320);
-            label->setBuddy(_lineEdit);
+            QLabel* serverLabel = new QLabel(tr("&Server Name or IP:"));
+            _ServerNameLineEdit = new QLineEdit();
+            _ServerNameLineEdit->setPlaceholderText("taurus.hrsk.tu-dresden.de or 203.0.113.195 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
+            _ServerNameLineEdit->setMaximumWidth(400);
+            _ServerNameLineEdit->setFixedWidth(320);
+            serverLabel->setBuddy(_ServerNameLineEdit);
 
-            QHBoxLayout* perspectiveLayout = new QHBoxLayout();
-            perspectiveLayout->addWidget(label);
-            perspectiveLayout->addWidget(_lineEdit);
+            QLabel* portLabel = new QLabel(tr("&Port:"));
+            _PortNumberLineEdit = new QLineEdit();
+            _PortNumberLineEdit->setPlaceholderText("4444");
+            _PortNumberLineEdit->setMaximumWidth(400);
+            _PortNumberLineEdit->setFixedWidth(320);
+            portLabel->setBuddy(_PortNumberLineEdit);
+
+            QVBoxLayout* perspectiveLayout = new QVBoxLayout();
+            perspectiveLayout->addWidget(serverLabel);
+            perspectiveLayout->addWidget(_ServerNameLineEdit);
+            perspectiveLayout->addWidget(portLabel);
+            perspectiveLayout->addWidget(_PortNumberLineEdit);
 
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -143,12 +153,18 @@ namespace OMVIS
 
         void OpenRemoteConnectionDialog::accept()
         {
-            if (_lineEdit->isModified())
+            if (_ServerNameLineEdit->isModified())
             {
-                if (checkServerName(_lineEdit->text()))
-                    _serverName = _lineEdit->text();
+                if (checkServerName(_ServerNameLineEdit->text()))
+                    _serverName = _ServerNameLineEdit->text();
                 else
                     QMessageBox::warning(0, QString("Information"), QString("Invalid Server Name or IP "));
+            }
+            if (_PortNumberLineEdit->isModified())
+            {
+                if (checkServerName(_PortNumberLineEdit->text()))
+                    _portNumber = _PortNumberLineEdit->text();
+                // else: Use default port number which is set in the constructor of this class.
             }
             QDialog::accept();
         }
