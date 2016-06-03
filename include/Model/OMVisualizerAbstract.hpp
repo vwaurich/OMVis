@@ -57,6 +57,10 @@ namespace OMVIS
         class OMVisualizerAbstract
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /// The default constructor.
             OMVisualizerAbstract();
 
@@ -75,6 +79,10 @@ namespace OMVIS
 
             /// The assignment operator is forbidden.
             OMVisualizerAbstract& operator=(const OMVisualizerAbstract& omv) = delete;
+
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
 
             /*! \brief This methods initializes a Visualizer object.
              *
