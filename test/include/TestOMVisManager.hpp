@@ -36,8 +36,7 @@ class TestOMVisManager : public ::testing::Test
     OMVIS::Control::OMVisManager _omvManager;
 
     TestOMVisManager()
-            //(simTime, realTime, visTime, hVisual, startTime, endTime)
-            : _omvManager(0.0, 0.0, 0.0, 0.1, 0.0, 100.0)
+            : _omvManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0)
     {
     }
 

@@ -43,7 +43,7 @@ class TestOMVisualizerFMU : public TestCommon
 
     void SetUp()
     {
-        _omVisualizerFMU = std::shared_ptr<OMVIS::Model::OMVisualizerFMU>(new OMVIS::Model::OMVisualizerFMU(_modelName, _path));
+        _omVisualizerFMU = std::shared_ptr<OMVIS::Model::OMVisualizerFMU>(new OMVIS::Model::OMVisualizerFMU(plan.fileName, plan.dirPath));
     }
 
     void TearDown()
@@ -66,10 +66,6 @@ TEST_F (TestOMVisualizerFMU, TestLoad)
 
     // Knows its type.
     ASSERT_EQ("fmu", _omVisualizerFMU->getType());
-
-    // FMU is not yet unzipped.
-    const OMVIS::Model::FMU* fmu = _omVisualizerFMU->getFMU();
-    ASSERT_FALSE(fmu->isUnzipped());
 }
 
 TEST_F (TestOMVisualizerFMU, TestInitialization)
@@ -80,9 +76,6 @@ TEST_F (TestOMVisualizerFMU, TestInitialization)
     // Check FMU.
     const OMVIS::Model::FMU* fmu = _omVisualizerFMU->getFMU();
     ASSERT_TRUE(fmu);
-    //ASSERT_TRUE(fmu->_context);
-    //ASSERT_TRUE(fmu->_callbacks);
-    ASSERT_TRUE(fmu->isUnzipped());
 
     // Check FMUData.
     const OMVIS::Model::FMUData* fmuData = fmu->getFMUData();

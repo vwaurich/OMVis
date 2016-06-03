@@ -52,13 +52,14 @@ class TestCommon : public ::testing::Test
      * @param useFMU True, if model is a FMU, false if the model is a MAT file.
      */
     TestCommon(std::string modelName, std::string path, bool useFMU)
-            : _modelName(modelName),
-              _useFMU(useFMU)
     {
         // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
-        _path = std::string(fullPath) + "/";
+        std::string modelPath = std::string(fullPath) + "/";
+        plan.fileName = modelName;
+        plan.dirPath = modelPath;
+        plan.isFMU = useFMU;
     }
 
     ~TestCommon()
@@ -79,18 +80,17 @@ class TestCommon : public ::testing::Test
      */
     void reset(std::string modelName, std::string path, bool useFMU)
     {
-        _modelName = modelName;
-        _useFMU = useFMU;
         // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
-        _path = std::string(fullPath) + "/";
+        std::string modelPath = std::string(fullPath) + "/";
+        plan.fileName = modelName;
+        plan.dirPath = modelPath;
+        plan.isFMU = useFMU;
     }
 
  protected:
-    std::string _modelName;
-    std::string _path;
-    bool _useFMU;
+    OMVIS::Initialization::VisualizationConstructionPlan plan;
 };
 
 #endif /* TEST_INCLUDE_TESTCOMMON_HPP_ */

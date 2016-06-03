@@ -66,12 +66,12 @@ TEST_F (TestOMVisFactory, TestCreateVisualizationObject)
     std::shared_ptr<OMVIS::Model::OMVisualizerAbstract> omvisualizerAbstract(nullptr);
 
     // FMU.
-    omvisualizerAbstract = _factory->createVisualizationObject(_modelName, _path, _useFMU);
+    omvisualizerAbstract = _factory->createVisualizationObject(plan);
     ASSERT_EQ("fmu", omvisualizerAbstract->getType());
 
     // MAT.
     reset("pendulum", "./examples/", false);
-    omvisualizerAbstract = _factory->createVisualizationObject(_modelName, _path, _useFMU);
+    omvisualizerAbstract = _factory->createVisualizationObject(plan);
     ASSERT_EQ("mat", omvisualizerAbstract->getType());
 
     // Abstract -> nullptr

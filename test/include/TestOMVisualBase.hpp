@@ -34,14 +34,14 @@ class TestOMVisualBase : public TestCommon
     OMVIS::Model::OMVisualBase* _omVisualBase;
 
     TestOMVisualBase()
-        : TestCommon("BouncingBall", "./examples/", false),
-          _omVisualBase(nullptr)
+            : TestCommon("BouncingBall", "./examples/", false),
+              _omVisualBase(nullptr)
     {
     }
 
     void SetUp()
     {
-        _omVisualBase = new OMVIS::Model::OMVisualBase(_modelName, _path);
+        _omVisualBase = new OMVIS::Model::OMVisualBase(plan.fileName, plan.dirPath);
     }
 
     void TearDown()
@@ -58,9 +58,9 @@ TEST_F (TestOMVisualBase, TestInitialization)
     // Not nullptr
     ASSERT_TRUE(_omVisualBase);
 
-    ASSERT_EQ(_modelName, _omVisualBase->getModelName());
-    std::string xmlFile = _path + _modelName + "_visual.xml";
-    ASSERT_EQ(xmlFile, _omVisualBase->_xmlFileName);
+    ASSERT_EQ(plan.fileName, _omVisualBase->getModelName());
+    std::string xmlFile = plan.dirPath + plan.fileName + "_visual.xml";
+    ASSERT_EQ(xmlFile, _omVisualBase->getXMLFileName());
 }
 
 #endif /* TEST_INCLUDE_TESTOMVISUALBASE_HPP_ */
