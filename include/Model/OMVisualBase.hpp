@@ -75,6 +75,9 @@ namespace OMVIS
             /*! \brief Returns pointer to first node of the XML document. */
             rapidxml::xml_node<>* getFirstXMLNode();
 
+            /*! \brief Returns name of the XML document. */
+            const std::string getXMLFileName() const;
+
          private:
             std::string _modelName;
             std::string _dirName;
