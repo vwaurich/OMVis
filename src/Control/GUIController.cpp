@@ -173,6 +173,7 @@ namespace OMVIS
                 }
                 else
                     LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
+
             }
 
         }
