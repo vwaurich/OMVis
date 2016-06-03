@@ -63,8 +63,10 @@ namespace OMVIS
             void accept() Q_DECL_OVERRIDE;
 
          private:
-            QLineEdit* _lineEdit;
+            QLineEdit* _ServerNameLineEdit;
+            QLineEdit* _PortNumberLineEdit;
             QString _serverName;
+            int _portNumber;
         };
 
     }  // End namespace View
