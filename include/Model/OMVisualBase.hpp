@@ -66,6 +66,12 @@ namespace OMVIS
              */
             int initVisObjects();
 
+			/*! \brief Get all variable names which are needed for the visualization
+			*
+			* \return Error value.
+			*/
+			std::vector<std::string> getVisualizationVariables();
+
             /*! \brief Returns name of the model. */
             const std::string getModelName() const;
 
