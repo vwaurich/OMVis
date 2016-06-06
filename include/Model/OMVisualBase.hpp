@@ -89,6 +89,7 @@ namespace OMVIS
             std::vector<ShapeObject> _shapes;
 
          private:
+            /// Name (incl. path) of the XML file which holds necessary information for visualization.
             std::string _xmlFileName;
         };
 
