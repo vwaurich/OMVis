@@ -127,6 +127,14 @@ namespace OMVIS
              */
             int updateVisAttributes(const double time);
 
+			/*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable references in the visattributes
+			*/
+			int setVarReferencesInVisAttributes();
+
+			/*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
+			*/
+			fmi1_value_reference_t getVarReferencesForObjectAttribute(ObjectAttribute* attr);
+
             /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
              *
              * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).

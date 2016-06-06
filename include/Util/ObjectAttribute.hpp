@@ -21,6 +21,8 @@
 #define INCLUDE_OBJECTATTRIBUTE_HPP_
 
 #include <string>
+#include "Model/FMU.hpp"
+
 
 class ObjectAttribute
 {
@@ -39,6 +41,7 @@ public:
 	bool isConst;
 	float exp;
 	std::string cref;
+	fmi1_value_reference_t fmuValueRef;
 };
 
 

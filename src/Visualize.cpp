@@ -279,10 +279,8 @@ namespace OMVIS
 	{
 		if (!attr->isConst)
 		{
-			fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(fmu, attr->cref.c_str());
-			const fmi1_value_reference_t vr = fmi1_import_get_variable_vr(var);
 			fmi1_real_t a = attr->exp;
-			fmi1_import_get_real(fmu, &vr, 1, &a);
+			fmi1_import_get_real(fmu, &attr->fmuValueRef, 1, &a);
 			attr->exp = (float)a;
 		}
 	}
