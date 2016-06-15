@@ -45,11 +45,29 @@ namespace OMVIS
         class OMVisualBase
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             OMVisualBase() = delete;
-            OMVisualBase(const std::string& model, const std::string& dir);
+
+            /*! \brief Constructs OMVisualBase object from arguments.
+             *
+             * \remark The path needs to be absolute.
+             * \remark The model file and its corresponding visual XML file need to be in the same directory.
+             *
+             * @param[in] modelFile Name of the model file.
+             * @param[in] path Absolute path to the FMU or result file and corresponding XML-file.
+             */
+            OMVisualBase(const std::string& modelFile, const std::string& path);
+
             ~OMVisualBase() = default;
             OMVisualBase(const OMVisualBase& omvb) = delete;
             OMVisualBase& operator=(const OMVisualBase& omvb) = delete;
+
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
 
             /*! \brief Reads XML file and sets up osg::viewer.
              *
@@ -60,17 +78,21 @@ namespace OMVIS
 
             void clearXMLDoc();
 
-            /*! \brief Get all Visual objects from the XML
+            /*! \brief Get all visual objects from the XML file.
              *
              * \return Error value.
              */
             int initVisObjects();
 
+            /*-----------------------------------------
+             * GETTERS and SETTERS
+             *---------------------------------------*/
+
             /*! \brief Returns name of the model. */
             const std::string getModelName() const;
 
-            /*! \brief Returns directory path of XML document. */
-            const std::string getDirName() const;
+            /*! \brief Returns directory path of the model file and the visual XML file. */
+            const std::string getPath() const;
 
             /*! \brief Returns pointer to first node of the XML document. */
             rapidxml::xml_node<>* getFirstXMLNode();
@@ -79,9 +101,15 @@ namespace OMVIS
             const std::string getXMLFileName() const;
 
          private:
-            std::string _modelName;
-            std::string _dirName;
-            /// The XML file containing the information about the visualization.
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            /*! Name of the model file without path but with prefix, e.g., modelFoo.fmu . */
+            std::string _modelFile;
+            /*! Absolute path to the model file, e.g., /home/user/models/ . */
+            std::string _path;
+            /*! The XML file containing the information about the visualization. */
             rapidxml::xml_document<> _xmlDoc;
 
          public:

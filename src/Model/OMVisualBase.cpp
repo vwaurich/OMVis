@@ -29,22 +29,30 @@ namespace OMVIS
     namespace Model
     {
 
-        OMVisualBase::OMVisualBase(const std::string& model, const std::string& dir)
-                : _modelName(model),
-                  _dirName(dir),
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
+        OMVisualBase::OMVisualBase(const std::string& modelFile, const std::string& path)
+                : _modelFile(modelFile),
+                  _path(path),
                   _xmlDoc(),
-                  _shapes(),
-                  _xmlFileName(dir + model + "_visual.xml")
+                  _shapes()
         {
+                _xmlFileName = Util::getXMLFileName(modelFile, path);
         }
+
+        /*-----------------------------------------
+         * INITIALIZATION METHODS
+         *---------------------------------------*/
 
         int OMVisualBase::initXMLDoc()
         {
             int isOk(0);
-            // check if xml file is available
+            // Check if the XML file is available.
             if (!Util::fileExists(_xmlFileName))
             {
-                LOGGER_WRITE(std::string("There is no xml file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
+                LOGGER_WRITE(std::string("There is no XML file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
                 isOk = 1;
             }
             else
@@ -161,6 +169,10 @@ namespace OMVIS
             _xmlDoc.clear();
         }
 
+        /*-----------------------------------------
+         * GETTERS and SETTERS
+         *---------------------------------------*/
+
         rapidxml::xml_node<>* OMVisualBase::getFirstXMLNode()
         {
             return _xmlDoc.first_node();
@@ -168,12 +180,12 @@ namespace OMVIS
 
         const std::string OMVisualBase::getModelName() const
         {
-            return _modelName;
+            return _modelFile;
         }
 
-        const std::string OMVisualBase::getDirName() const
+        const std::string OMVisualBase::getPath() const
         {
-            return _dirName;
+            return _path;
         }
 
         const std::string OMVisualBase::getXMLFileName() const
