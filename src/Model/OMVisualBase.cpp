@@ -195,9 +195,6 @@ namespace OMVIS
             return _xmlFileName;
         }
 
-        return isOk;
-    }
-
 
 	std::vector<std::string> appendVisVariable(rapidxml::xml_node<>* node, std::vector<std::string> visVariables)
 	{
