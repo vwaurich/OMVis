@@ -20,6 +20,7 @@
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Control/OMVisManager.hpp"
 #include "Util/Logger.hpp"
+
 #include <boost/filesystem.hpp>
 
 #include <string>
@@ -30,6 +31,10 @@ namespace OMVIS
     namespace Model
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         OMVisualizerAbstract::OMVisualizerAbstract()
                 : _baseData(nullptr),
                   _viewerStuff(nullptr),
@@ -38,8 +43,8 @@ namespace OMVIS
         {
         }
 
-        OMVisualizerAbstract::OMVisualizerAbstract(const std::string& modelName, const std::string& dir)
-                : _baseData(new OMVisualBase(modelName, dir)),
+        OMVisualizerAbstract::OMVisualizerAbstract(const std::string& modelFile, const std::string& path)
+                : //Siehe unten _baseData(new OMVisualBase(modelFile, path)),
                   _viewerStuff(new View::OMVisScene),
                   _nodeUpdater(new Model::UpdateVisitor),
                   _omvManager(new Control::OMVisManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
@@ -47,14 +52,30 @@ namespace OMVIS
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
             //char fullPathTmp[PATH_MAX];
             //realpath(path.c_str(), fullPathTmp);
-            boost::filesystem::path bPath = boost::filesystem::path(dir.c_str());
+            boost::filesystem::path bPath = boost::filesystem::path(path.c_str());
             bPath = boost::filesystem::absolute(bPath);
-
             std::string fullPath = bPath.string();
 
             // Now we can use the full path.
-            _baseData = std::shared_ptr<OMVisualBase>(new OMVisualBase(modelName, fullPath));
+            _baseData = std::shared_ptr<OMVisualBase>(new OMVisualBase(modelFile, fullPath));
             _viewerStuff->getScene().setPath(fullPath);
+        }
+
+        /*-----------------------------------------
+         * INITIALIZATION METHODS
+         *---------------------------------------*/
+
+        int OMVisualizerAbstract::initData()
+        {
+            int isOk(0);
+            // In case of reloading, we need to make sure, that we have empty members.
+            _baseData->clearXMLDoc();
+
+            // Initialize XML file and get visAttributes.
+            isOk = _baseData->initXMLDoc();
+
+            isOk = _baseData->initVisObjects();
+            return isOk;
         }
 
         int OMVisualizerAbstract::setUpScene()
@@ -65,6 +86,34 @@ namespace OMVIS
             int isOk = _viewerStuff->getScene().setUpScene(_baseData->_shapes);
             return isOk;
         }
+
+        /*-----------------------------------------
+         * GETTERS and SETTERS
+         *---------------------------------------*/
+
+        std::string OMVisualizerAbstract::getType() const
+        {
+            return "abstract";
+        }
+
+        std::shared_ptr<OMVisualBase> OMVisualizerAbstract::getBaseData() const
+        {
+            return _baseData;
+        }
+
+        std::shared_ptr<Control::OMVisManager> OMVisualizerAbstract::getOMVisManager() const
+        {
+            return _omvManager;
+        }
+
+        std::shared_ptr<View::OMVisScene> OMVisualizerAbstract::getOMVisScene() const
+        {
+            return _viewerStuff;
+        }
+
+        /*-----------------------------------------
+         * SIMULATION METHODS
+         *---------------------------------------*/
 
         void OMVisualizerAbstract::startVisualization()
         {
@@ -113,40 +162,6 @@ namespace OMVIS
                 }
             }
         }
-
-        std::string OMVisualizerAbstract::getType() const
-        {
-            return "abstract";
-        }
-
-        int OMVisualizerAbstract::initData()
-        {
-            int isOk(0);
-            // In case of reloading, we need to make sure, that we have empty members
-            _baseData->clearXMLDoc();
-
-            // Initialize xml file and get visAttributes
-            isOk = _baseData->initXMLDoc();
-
-            isOk = _baseData->initVisObjects();
-            return isOk;
-        }
-
-        std::shared_ptr<OMVisualBase> OMVisualizerAbstract::getBaseData() const
-        {
-            return _baseData;
-        }
-
-        std::shared_ptr<Control::OMVisManager> OMVisualizerAbstract::getOMVisManager() const
-        {
-            return _omvManager;
-        }
-
-        std::shared_ptr<View::OMVisScene> OMVisualizerAbstract::getOMVisScene() const
-        {
-            return _viewerStuff;
-        }
-
 
     }  // End namespace Model
 }  // End namespace OMVIS

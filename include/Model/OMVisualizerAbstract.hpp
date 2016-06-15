@@ -64,12 +64,14 @@ namespace OMVIS
             /// The default constructor.
             OMVisualizerAbstract();
 
-            /*! \brief Constructs OMVisualizer object from arguments.
+            /*! \brief Constructs OMVisualizerAbstract object from arguments.
              *
-             * @param model Name of the model.
-             * @param dir Path to the FMU or result file and corresponding XML-file.
+             * \remark The model file and its corresponding visual XML file need to be in the same directory.
+             *
+             * @param[in] modelFile Name of the model file.
+             * @param[in] path Path to the FMU or result file and corresponding XML file.
              */
-            OMVisualizerAbstract(const std::string& modelName, const std::string& dir);
+            OMVisualizerAbstract(const std::string& modelFile, const std::string& path);
 
             /// Destructs OMVisualizer object.
             virtual ~OMVisualizerAbstract() = default;
@@ -101,7 +103,7 @@ namespace OMVIS
              *
              * XML-file is parsed and the values of the attributes are set.
              * The viewer is initialized and the scene is set up.
-             * FMU is loaded if used, or the Matfile is read.
+             * FMU is loaded if used, or the MAT file is read.
              * @return 1
              *
              * \todo Quick and dirty hack by passing OMVmanager, \see OMVisualizerFMU.
@@ -115,6 +117,29 @@ namespace OMVIS
              */
             int setUpScene();
 
+            /*! \brief Virtual method to initialize the scene. Is implemented either by using FMU or MAT file.
+             *
+             * \remark All classes that derive from OMVisualizerAbstract
+             */
+            virtual void initializeVisAttributes(const double time) = 0;
+
+            /*-----------------------------------------
+             * GETTERS and SETTERS
+             *---------------------------------------*/
+
+            /*! \brief Returns "abstract". */
+            virtual std::string getType() const;
+
+            std::shared_ptr<OMVisualBase> getBaseData() const;
+
+            std::shared_ptr<Control::OMVisManager> getOMVisManager() const;
+
+            std::shared_ptr<View::OMVisScene> getOMVisScene() const;
+
+            /*-----------------------------------------
+             * SIMULATION METHODS
+             *---------------------------------------*/
+
             /*! \brief In case of FMU visualization, this methods performs a simulation step.
              *
              * \remark All classes that derive from OMVisualizerAbstract
@@ -122,7 +147,7 @@ namespace OMVIS
              */
             virtual void simulate(Control::OMVisManager& omvm) = 0;
 
-            /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or mat-file.
+            /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or MAT file.
              *
              * \remark All classes that derive from OMVisualizerAbstract
              * @param omvm
@@ -130,29 +155,25 @@ namespace OMVIS
              */
             virtual int updateVisAttributes(const double time) = 0;
 
-            /*! \brief Virtual Method to initialize the scene. Is implemented either by using FMU or mat-file.
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             */
-            virtual void initializeVisAttributes(const double time) = 0;
-
             /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
              *
              * \remark All classes that derive from OMVisualizerAbstract
              */
             virtual void updateScene(const double time) = 0;
 
-            /*! \brief Returns "abstract"
-             */
-            virtual std::string getType() const;
-
             /*! \brief Starts the visualization.
+             *
+             * If the simulation end time is not yet reached, the OMVisManager object is set  to "unpause". Thus,
+             * the simulation is continued.
              */
-            void startVisualization();
+            virtual void startVisualization();
 
             /*! \brief Pauses the visualization.
+             *
+             * The OMVisManager is set to "pause" and the simulation stops.
              */
             void pauseVisualization();
+
             /*! \brief Sets the scene to start position.
              */
             void initVisualization();
@@ -165,13 +186,11 @@ namespace OMVIS
              */
             void sceneUpdate();
 
-            std::shared_ptr<OMVisualBase> getBaseData() const;
-
-            std::shared_ptr<Control::OMVisManager> getOMVisManager() const;
-
-            std::shared_ptr<View::OMVisScene> getOMVisScene() const;
-
          protected:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             std::shared_ptr<OMVisualBase> _baseData;
             std::shared_ptr<View::OMVisScene> _viewerStuff;
             std::shared_ptr<UpdateVisitor> _nodeUpdater;
