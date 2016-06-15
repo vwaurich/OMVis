@@ -22,6 +22,7 @@
 
 #include "Dialogs/BackgroundColorSettingDialog.hpp"
 #include "Dialogs/PerspectiveSettingDialog.hpp"
+#include "Dialogs/OpenFileDialog.hpp"
 #include "Dialogs/OpenRemoteConnectionDialog.hpp"
 
 
