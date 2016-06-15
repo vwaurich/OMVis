@@ -37,9 +37,12 @@ namespace OMVIS
     namespace Initialization
     {
 
-        /*! \brief This factory class can create OMVisualization objects that are required for an FMU or
-         *         result file (,i.e., MAT file) based visualization.
+        /*! \brief This factory class can create OMVisualization objects that are required for an
+         *         FMU or result file (,i.e., MAT file) based visualization.
          *
+         * In order to let the factory create a OMVisualizer object for the visualization of a FMU
+         * or MAT file, just call the method \ref createVisualizationObject with a proper
+         * construction plan.
          */
         class Factory
         {
@@ -59,10 +62,12 @@ namespace OMVIS
 
             /*! \brief Creates a new visualization object according to the given construction plan.
              *
-             * According to the construction plan a OMVisualizerFMU or OMVisualizerMAT object is created and a pointer to this
-             * object is returned. If the construction fails, a nullptr is returned.
+             * A OMVisualizerFMU, OMVisualizerMAT, OMVisualizerFMUClient or OMVisualizerMATClient
+             * object is created and a pointer to this object is returned. If the construction
+             * fails, a nullptr is returned.
              *
-             * \remark This method checks for the presence of the visual XML file.
+             * \remark This method checks for the presence of the visual XML file. If the XML file
+             *         is not present, a exception is thrown.
              *
              * @param[in] cP Construction plan for local visualization.
              * @return Pointer to allocated OMVisualizer object.
