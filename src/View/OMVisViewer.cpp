@@ -24,6 +24,7 @@
 #include "View/OMVisViewer.hpp"
 #include "Util/Algebra.hpp"
 #include "View/Dialogs.hpp"
+#include "Initialization/VisualizationConstructionPlan.hpp"
 
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
@@ -66,7 +67,7 @@ namespace OMVIS
                   osgViewer::CompositeViewer(),
                   _sceneView(new osgViewer::View()),
                   _timeDisplay(new QLabel()),
-			      _RTFactorDisplay(new QLabel()),
+                  _RTFactorDisplay(new QLabel()),
                   _guiController(new Control::GUIController())
         {
             // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
@@ -297,10 +298,10 @@ namespace OMVIS
             _timeDisplay->setFixedWidth(60);
             _timeDisplay->setFixedHeight(20);
 
-			// Time value of -1.0 indicates, that no model is loaded into OMVis.
-			_RTFactorDisplay->setText(QString("RT-Factor ").append(QString::fromStdString("-1.0")));
-			_RTFactorDisplay->setFixedWidth(60);
-			_RTFactorDisplay->setFixedHeight(20);
+            // Time value of -1.0 indicates, that no model is loaded into OMVis.
+            _RTFactorDisplay->setText(QString("RT-Factor ").append(QString::fromStdString("-1.0")));
+            _RTFactorDisplay->setFixedWidth(60);
+            _RTFactorDisplay->setFixedHeight(20);
 
             //the button row
             QHBoxLayout* buttonRowLayOut = new QHBoxLayout();
@@ -309,7 +310,7 @@ namespace OMVIS
             buttonRowLayOut->addWidget(playButton);
             buttonRowLayOut->addWidget(pauseButton);
             buttonRowLayOut->addWidget(coffeeButton);
-			buttonRowLayOut->addWidget(_RTFactorDisplay);
+            buttonRowLayOut->addWidget(_RTFactorDisplay);
             buttonRowLayOut->addWidget(_timeDisplay);
             buttonRowBox->setLayout(buttonRowLayOut);
             buttonRowBox->setFixedHeight(60);
@@ -363,13 +364,22 @@ namespace OMVIS
         {
             try
             {
-                // User has to select model from file. _modelName, _pathName and _visFMU are set.
-                QString modelName = modelSelectionDialog();
+                //X12 Use a extra dialog which creates a VisualizationConstructionPlan.
+                //X12 // User has to select model from file. _modelName, _pathName and _visFMU are set.
+                //X12 QString modelName = modelSelectionDialog();
 
-                // Let create a OMVisualizer object by the GUIController.
-                _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
+                //X12 // Let the GUIController load the model.
+                //X12 _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
 
-                LOGGER_WRITE(std::string("The model has been successfully been loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
+                // Get model file name and path from dialog.
+                OpenFileDialog dialog(this);
+                dialog.exec();
+                Initialization::VisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
+
+                // Let the GUIController load the model.
+                _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
+
+                LOGGER_WRITE(std::string("The model has been successfully loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
 
                 // Set up the osg viewer widget
                 osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
@@ -399,10 +409,28 @@ namespace OMVIS
             }
         }
 
+        //MF: Compute on a server, visualize on localhost
         void OMVisViewer::openRemoteConnection()
         {
-            OpenRemoteConnectionDialog dialog(this);
-            dialog.exec();
+            try
+            {
+                // Get server name or IP address, port as well as file name and path from dialog.
+                OpenRemoteConnectionDialog dialog(this);
+                dialog.exec();
+                Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
+
+                // Now, let the factory create the OMVisualizerFMUClient object, establish the connection
+                // and initialize the simulation.
+                //
+                //_guiController->loadModel(dialog.server, port, modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
+                _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
+
+            }
+            catch (std::exception& ex)
+            {
+                QMessageBox::critical(0, QString("Error"), QString(ex.what()));
+                std::cout << ex.what();
+            }
         }
 
         void OMVisViewer::loadModelCessna()
@@ -734,8 +762,7 @@ namespace OMVIS
                                 "What shall be visualized is described in a XML-file and the result files "
                                 "provide the corresponding data."
                                 "Besides the animation of result files, there is a possibility to animate "
-                                "multibody-systems with a FMU interactively.</p>"
-                                );
+                                "multibody-systems with a FMU interactively.</p>");
 
             QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information, QMessageBox::NoButton);
             QPushButton* coffeeButton = msgBox.addButton(QMessageBox::tr("Support: Buy us a coffee."), QMessageBox::ActionRole);
@@ -776,9 +803,9 @@ namespace OMVIS
         void OMVisViewer::updateTimeDisplays()
         {
             double visTime = _guiController->getVisTime();
-			double rtf = _guiController->getRealTimeFactor();
+            double rtf = _guiController->getRealTimeFactor();
             _timeDisplay->setText(QString("time ").append(QString::number(visTime)).append(QString(" sec")));
-			_RTFactorDisplay->setText(QString("RT ").append(QString::number(rtf)));
+            _RTFactorDisplay->setText(QString("RT ").append(QString::number(rtf)));
         }
 
         void OMVisViewer::updateTimeSliderPosition()
