@@ -19,9 +19,8 @@
 
 #include "View/Dialogs/OpenRemoteConnectionDialog.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Util.hpp"
 
-//#include <QComboBox>
-//#include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDebug>
@@ -31,112 +30,68 @@
 
 #ifndef _WIN32
 #include <arpa/inet.h>
-#endif;
+#endif
 
 namespace OMVIS
 {
     namespace View
     {
-        /*! \brief Functions that tests the given string to be a valid IPv4 address.
-         *
-         * @param ipAddress The address to be tested.
-         * @return Boolean.
-         */
-        bool isValidIpAddressV4(const std::string& ipAddress)
-        {
-#ifndef _WIN32
-            struct sockaddr_in sa;
-            int result = inet_pton(AF_INET, ipAddress.c_str(), &(sa.sin_addr));
 
-            if (result != 0)
-            {
-                LOGGER_WRITE(ipAddress + std::string(" is a valid IPv4 address."), Util::LC_GUI, Util::LL_WARNING);
-                return true;
-            }
-            else
-            {
-                LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv4 address."), Util::LC_GUI, Util::LL_WARNING);
-                return false;
-            }
-#elif _WIN32
-            LOGGER_WRITE("isValidIpAddressV4 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
-            return false;
-#endif;
-
-            // Short way without logger usage.
-            //return result != 0;
-        }
-
-        /*! \brief Functions that tests the given string to be a valid IPv6 address.
-         *
-         * @param ipAddress The address to be tested.
-         * @return Boolean.
-         */
-        bool isValidIpAddressV6(const std::string& ipAddress)
-        {
-#ifndef _WIN32
-
-            struct sockaddr_in6 sa;
-            int result = inet_pton(AF_INET6, ipAddress.c_str(), &(sa.sin6_addr));
-
-            if (result != 0)
-            {
-                LOGGER_WRITE(ipAddress + std::string(" is a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
-                return true;
-            }
-            else
-            {
-                LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
-                return false;
-            }
-            LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
-            // Short way without logger usage.
-            //return result != 0;
-#elif _WIN32
-            LOGGER_WRITE("isValidIpAddressV6 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
-            return false;
-#endif;
-        }
-
-        /// \todo Implement me!
-        bool isValidServerName(const std::string& serverName)
-        {
-            LOGGER_WRITE(serverName + std::string(" is assumed to be a valid Server Name. TODO: Implement a proper check!"), Util::LC_GUI, Util::LL_WARNING);
-            return true;
-        }
-
-        bool OpenRemoteConnectionDialog::checkServerName(const QString& serverName) const
-        {
-            std::string tmp(serverName.toStdString());
-            return (isValidIpAddressV4(tmp) || isValidIpAddressV6(tmp) || isValidServerName(tmp));
-        }
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
 
         OpenRemoteConnectionDialog::OpenRemoteConnectionDialog(QWidget* parent)
                 : QDialog(parent),
-                  _serverName(""),
-                  _portNumber(4444)
+                  _cP()
+//                  _ipAddress(""),
+//                  _portNumber(4444),
+//                  _modelFile(""),
+//                  _workingDirectory("")
         {
             setWindowTitle(tr("Open Remote Connection"));
 
-            QLabel* serverLabel = new QLabel(tr("&Server Name or IP:"));
-            _ServerNameLineEdit = new QLineEdit();
-            _ServerNameLineEdit->setPlaceholderText("taurus.hrsk.tu-dresden.de or 203.0.113.195 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
-            _ServerNameLineEdit->setMaximumWidth(400);
-            _ServerNameLineEdit->setFixedWidth(320);
-            serverLabel->setBuddy(_ServerNameLineEdit);
+            // Server
+            QLabel* serverLabel = new QLabel(tr("&IP Address:"));
+            _ipAddressLineEdit = new QLineEdit();
+            _ipAddressLineEdit->setPlaceholderText("taurus.hrsk.tu-dresden.de or 203.0.113.195 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
+            _ipAddressLineEdit->setMaximumWidth(400);
+            _ipAddressLineEdit->setFixedWidth(320);
+            serverLabel->setBuddy(_ipAddressLineEdit);
 
+            // Port
             QLabel* portLabel = new QLabel(tr("&Port:"));
-            _PortNumberLineEdit = new QLineEdit();
-            _PortNumberLineEdit->setPlaceholderText("4444");
-            _PortNumberLineEdit->setMaximumWidth(400);
-            _PortNumberLineEdit->setFixedWidth(320);
-            portLabel->setBuddy(_PortNumberLineEdit);
+            _portNumberLineEdit = new QLineEdit();
+            _portNumberLineEdit->setPlaceholderText("4444");
+            _portNumberLineEdit->setMaximumWidth(400);
+            _portNumberLineEdit->setFixedWidth(320);
+            portLabel->setBuddy(_portNumberLineEdit);
+
+            // Local Working Directory
+            QLabel* modelFileLabel = new QLabel(tr("&Where to find the model file on server:"));
+            _modelFileLineEdit = new QLineEdit();
+            _modelFileLineEdit->setPlaceholderText("/PATH/TO/MODEL.fmu");
+            _modelFileLineEdit->setMaximumWidth(400);
+            _modelFileLineEdit->setFixedWidth(320);
+            modelFileLabel->setBuddy(_modelFileLineEdit);
+
+            // Local Working Directory
+            QLabel* wDirLabel = new QLabel(tr("&Local Working Directory:"));
+            _workingDirectoryLineEdit = new QLineEdit();
+            _workingDirectoryLineEdit->setPlaceholderText("./");
+            _workingDirectoryLineEdit->setMaximumWidth(400);
+            _workingDirectoryLineEdit->setFixedWidth(320);
+            wDirLabel->setBuddy(_workingDirectoryLineEdit);
 
             QVBoxLayout* perspectiveLayout = new QVBoxLayout();
             perspectiveLayout->addWidget(serverLabel);
-            perspectiveLayout->addWidget(_ServerNameLineEdit);
+            perspectiveLayout->addWidget(_ipAddressLineEdit);
             perspectiveLayout->addWidget(portLabel);
-            perspectiveLayout->addWidget(_PortNumberLineEdit);
+            perspectiveLayout->addWidget(_portNumberLineEdit);
+            perspectiveLayout->addWidget(modelFileLabel);
+            perspectiveLayout->addWidget(_modelFileLineEdit);
+            perspectiveLayout->addWidget(wDirLabel);
+            perspectiveLayout->addWidget(_workingDirectoryLineEdit);
 
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -151,28 +106,75 @@ namespace OMVIS
             setLayout(mainLayout);
         }
 
+        /*-----------------------------------------
+         * SLOTS
+         *---------------------------------------*/
+
         void OpenRemoteConnectionDialog::accept()
         {
-            if (_ServerNameLineEdit->isModified())
+            if (_ipAddressLineEdit->isModified())
             {
-                if (checkServerName(_ServerNameLineEdit->text()))
-                    _serverName = _ServerNameLineEdit->text();
+                if (Util::isValidIpAddressV6(_ipAddressLineEdit->text().toStdString()) || Util::isValidIpAddressV6(_ipAddressLineEdit->text().toStdString()))
+                    _cP.ipAddress = _ipAddressLineEdit->text().toStdString();
+//                    _ipAddress = _ipAddressLineEdit->text();
                 else
-                    QMessageBox::warning(0, QString("Information"), QString("Invalid Server Name or IP "));
+                    QMessageBox::warning(0, QString("Information"), QString("Invalid IP Address!"));
             }
-            if (_PortNumberLineEdit->isModified())
-            {
-                if (checkServerName(_PortNumberLineEdit->text()))
-                    _portNumber = _PortNumberLineEdit->text();
-                // else: Use default port number which is set in the constructor of this class.
-            }
+            if (_portNumberLineEdit->isModified())
+                _cP.portNumber = _portNumberLineEdit->text().toInt();
+//                _portNumber = _portNumberLineEdit->text().toInt();
+            else
+                QMessageBox::warning(0, QString("Information"), QString("Specify a port! (e.g., 4444)"));
+            /// \todo Todo: Use default port number which is set in the constructor of this class.
+
+            if (_workingDirectoryLineEdit->isModified())
+                _cP.workingDirectory = _workingDirectoryLineEdit->text().toStdString();
+//                _workingDirectory = _workingDirectoryLineEdit->text();
+            else
+                QMessageBox::warning(0, QString("Information"), QString("Specify a Working Directory!"));
+
+            if (_modelFileLineEdit->isModified())
+                _cP.modelFile = _modelFileLineEdit->text().toStdString();
+//                _modelFile = _modelFileLineEdit->text();
+            else
+                QMessageBox::warning(0, QString("Information"), QString("Specify a model file!"));
             QDialog::accept();
         }
 
-        QString OpenRemoteConnectionDialog::getResult() const
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
+
+//        /*! \brief Returns the IP address of the computing server. */
+//        std::string OpenRemoteConnectionDialog::getIPAddress() const
+//        {
+//            return _ipAddress.toStdString();
+//        }
+//
+//        /*! \brief Returns the port number to use for the connection. */
+//        int OpenRemoteConnectionDialog::getPortNumer() const
+//        {
+//            return _portNumber;
+//        }
+//
+//        /*! \brief Returns the path to the (local) working directory. */
+//        std::string OpenRemoteConnectionDialog::getWorkingDirectory() const
+//        {
+//            return _workingDirectory.toStdString();
+//        }
+//
+//        /*! \brief Returns the file name (incl. path) of the selected model. */
+//        std::string OpenRemoteConnectionDialog::getModelName() const
+//        {
+//            return _modelFile.toStdString();
+//        }
+
+        Initialization::RemoteVisualizationConstructionPlan OpenRemoteConnectionDialog::getConstructionPlan() const
         {
-            return _serverName;
+            return _cP;
+                    //Initialization::RemoteVisualizationConstructionPlan constructionPlan(_ipAddress, _portNumber, _modelFile, _workingDirectory);
         }
+
 
     }  // End namespace View
 }  // End namespace OMVIS
