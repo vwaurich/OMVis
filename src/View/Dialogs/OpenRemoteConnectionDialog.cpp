@@ -44,17 +44,13 @@ namespace OMVIS
         OpenRemoteConnectionDialog::OpenRemoteConnectionDialog(QWidget* parent)
                 : QDialog(parent),
                   _cP()
-//                  _ipAddress(""),
-//                  _portNumber(4444),
-//                  _modelFile(""),
-//                  _workingDirectory("")
         {
             setWindowTitle(tr("Open Remote Connection"));
 
             // Server
-            QLabel* serverLabel = new QLabel(tr("&IP Address:"));
+            QLabel* serverLabel = new QLabel(tr("&IP address:"));
             _ipAddressLineEdit = new QLineEdit();
-            _ipAddressLineEdit->setPlaceholderText("taurus.hrsk.tu-dresden.de or 203.0.113.195 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
+            _ipAddressLineEdit->setPlaceholderText("141.30.73.103 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
             _ipAddressLineEdit->setMaximumWidth(400);
             _ipAddressLineEdit->setFixedWidth(320);
             serverLabel->setBuddy(_ipAddressLineEdit);
@@ -68,7 +64,7 @@ namespace OMVIS
             portLabel->setBuddy(_portNumberLineEdit);
 
             // Local Working Directory
-            QLabel* modelFileLabel = new QLabel(tr("&Where to find the model file on server:"));
+            QLabel* modelFileLabel = new QLabel(tr("&Location of the model file on server:"));
             _modelFileLineEdit = new QLineEdit();
             _modelFileLineEdit->setPlaceholderText("/PATH/TO/MODEL.fmu");
             _modelFileLineEdit->setMaximumWidth(400);
@@ -76,7 +72,7 @@ namespace OMVIS
             modelFileLabel->setBuddy(_modelFileLineEdit);
 
             // Local Working Directory
-            QLabel* wDirLabel = new QLabel(tr("&Local Working Directory:"));
+            QLabel* wDirLabel = new QLabel(tr("&Local working directory:"));
             _workingDirectoryLineEdit = new QLineEdit();
             _workingDirectoryLineEdit->setPlaceholderText("./");
             _workingDirectoryLineEdit->setMaximumWidth(400);
@@ -112,32 +108,35 @@ namespace OMVIS
 
         void OpenRemoteConnectionDialog::accept()
         {
-            if (_ipAddressLineEdit->isModified())
-            {
-                if (Util::isValidIpAddressV6(_ipAddressLineEdit->text().toStdString()) || Util::isValidIpAddressV6(_ipAddressLineEdit->text().toStdString()))
-                    _cP.ipAddress = _ipAddressLineEdit->text().toStdString();
-//                    _ipAddress = _ipAddressLineEdit->text();
-                else
-                    QMessageBox::warning(0, QString("Information"), QString("Invalid IP Address!"));
-            }
-            if (_portNumberLineEdit->isModified())
-                _cP.portNumber = _portNumberLineEdit->text().toInt();
-//                _portNumber = _portNumberLineEdit->text().toInt();
-            else
-                QMessageBox::warning(0, QString("Information"), QString("Specify a port! (e.g., 4444)"));
-            /// \todo Todo: Use default port number which is set in the constructor of this class.
+//X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+//X123            if (_ipAddressLineEdit->isModified())
+//X123            {
+//X123                if (Util::isValidIPv4(_ipAddressLineEdit->text().toStdString()) || Util::isValidIPv6(_ipAddressLineEdit->text().toStdString()))
+//                    _cP.ipAddress = _ipAddressLineEdit->text().toStdString();
+//                else
+//                    QMessageBox::warning(0, QString("Information"), QString("Invalid IP Address!"));
+//            }
+//            if (_portNumberLineEdit->isModified())
+//                _cP.portNumber = _portNumberLineEdit->text().toInt();
+//            else
+//                QMessageBox::warning(0, QString("Information"), QString("Specify a port! (e.g., 4444)"));
+//            /// \todo Todo: Use default port number which is set in the constructor of this class.
+//
+//            if (_workingDirectoryLineEdit->isModified())
+//                _cP.workingDirectory = _workingDirectoryLineEdit->text().toStdString();
+//            else
+//                QMessageBox::warning(0, QString("Information"), QString("Specify a Working Directory!"));
+//
+//            if (_modelFileLineEdit->isModified())
+//                _cP.modelFile = _modelFileLineEdit->text().toStdString();
+//            else
+//X123                QMessageBox::warning(0, QString("Information"), QString("Specify a model file!"));
 
-            if (_workingDirectoryLineEdit->isModified())
-                _cP.workingDirectory = _workingDirectoryLineEdit->text().toStdString();
-//                _workingDirectory = _workingDirectoryLineEdit->text();
-            else
-                QMessageBox::warning(0, QString("Information"), QString("Specify a Working Directory!"));
-
-            if (_modelFileLineEdit->isModified())
-                _cP.modelFile = _modelFileLineEdit->text().toStdString();
-//                _modelFile = _modelFileLineEdit->text();
-            else
-                QMessageBox::warning(0, QString("Information"), QString("Specify a model file!"));
+            //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+            _cP.ipAddress = "141.30.73.103"; //"127.0.0.1";
+            _cP.portNumber = 4444;
+            _cP.workingDirectory = "./rVis/";
+            _cP.modelFile = "/scratch/p_hpcom/remoteVisualization/cranes_crane_input5.fmu";
             QDialog::accept();
         }
 
@@ -145,36 +144,11 @@ namespace OMVIS
          * GETTERS AND SETTERS
          *---------------------------------------*/
 
-//        /*! \brief Returns the IP address of the computing server. */
-//        std::string OpenRemoteConnectionDialog::getIPAddress() const
-//        {
-//            return _ipAddress.toStdString();
-//        }
-//
-//        /*! \brief Returns the port number to use for the connection. */
-//        int OpenRemoteConnectionDialog::getPortNumer() const
-//        {
-//            return _portNumber;
-//        }
-//
-//        /*! \brief Returns the path to the (local) working directory. */
-//        std::string OpenRemoteConnectionDialog::getWorkingDirectory() const
-//        {
-//            return _workingDirectory.toStdString();
-//        }
-//
-//        /*! \brief Returns the file name (incl. path) of the selected model. */
-//        std::string OpenRemoteConnectionDialog::getModelName() const
-//        {
-//            return _modelFile.toStdString();
-//        }
 
         Initialization::RemoteVisualizationConstructionPlan OpenRemoteConnectionDialog::getConstructionPlan() const
         {
             return _cP;
-                    //Initialization::RemoteVisualizationConstructionPlan constructionPlan(_ipAddress, _portNumber, _modelFile, _workingDirectory);
         }
-
 
     }  // End namespace View
 }  // End namespace OMVIS

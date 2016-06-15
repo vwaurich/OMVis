@@ -55,18 +55,6 @@ namespace OMVIS
              */
             OpenRemoteConnectionDialog(QWidget* parent = Q_NULLPTR);
 
-//            /*! \brief Return result from this dialog.
-//             *
-//             * \remark If the user input was not a valid IP or server name, the result will be an empty QString.
-//             */
-//Obsolet    QString getResult() const;
-
-//? Diese funktionalitaet hat nichts in der GUI zu tun, oder?
-//            /*! \brief Checks if the specified serverName is a valid IPV4 or IPV6 address or server name.
-//             *
-//             */
-//            bool checkServerName(const QString& serverName) const;
-
             /*-----------------------------------------
              * SLOTS
              *---------------------------------------*/
@@ -78,18 +66,6 @@ namespace OMVIS
             /*-----------------------------------------
              * GETTERS AND SETTERS
              *---------------------------------------*/
-
-//            /*! \brief Returns the IP address of the computing server. */
-//            std::string getIPAddress() const;
-//
-//            /*! \brief Returns the port number to use for the connection. */
-//            int getPortNumer() const;
-//
-//            /*! \brief Returns the file name (incl. path) of the selected model. */
-//            std::string getModelName() const;
-//
-//            /*! \brief Returns the path to the (local) working directory. */
-//            std::string getWorkingDirectory() const;
 
          public:
             Initialization::RemoteVisualizationConstructionPlan getConstructionPlan() const;
@@ -105,10 +81,6 @@ namespace OMVIS
             QLineEdit* _workingDirectoryLineEdit;
 
             Initialization::RemoteVisualizationConstructionPlan _cP;
-//            QString _ipAddress;
-//            int _portNumber;
-//            QString _modelFile;
-//            QString _workingDirectory;
         };
 
     }  // End namespace View
