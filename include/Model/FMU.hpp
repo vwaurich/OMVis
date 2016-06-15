@@ -105,13 +105,13 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-            /*! \brief Returns const pointer to FMUData in order to allow (read) access to it. */
+            /*! \brief Returns constant pointer to FMUData in order to allow (read) access to it. */
             const FMUData* getFMUData() const;
 
-            /*! \brief Returns const pointer to FMU in order to allow (read) access to it. */
+            /*! \brief Returns constant pointer to FMU in order to allow (read) access to it. */
             fmi1_import_t* getFMU() const;
 
-            /*! \brief Return _tCur, the current simulation time. */
+            /*! \brief Returns the current simulation time. */
             double getTcur();
 
             /*-----------------------------------------
