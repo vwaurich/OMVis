@@ -28,26 +28,9 @@
 #define INCLUDE_FACTORY_HPP_
 
 #include "Initialization/VisualizationConstructionPlan.hpp"
+#include "Model/OMVisualizerAbstract.hpp"
 
-#include <string>
 #include <memory>
-
-// Forward declarations
-namespace OMVIS
-{
-    namespace Model
-    {
-        class OMVisualizerAbstract;
-    }
-    namespace Util
-    {
-        class CommandLineArgs;
-    }
-    namespace Control
-    {
-        class OMVisManager;
-    }
-}
 
 namespace OMVIS
 {

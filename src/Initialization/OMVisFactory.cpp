@@ -18,16 +18,12 @@
  */
 
 #include "Initialization/OMVisFactory.hpp"
-#include "Initialization/VisualizationConstructionPlan.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerFMUClient.hpp"
 #include "Model/OMVisualizerMAT.hpp"
 #include "Model/OMVisualizerMATClient.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
-#include "Util/CommandLineArgs.hpp"
-#include "Control/OMVisManager.hpp"
 
 namespace OMVIS
 {
