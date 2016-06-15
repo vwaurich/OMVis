@@ -27,6 +27,8 @@
 #ifndef INCLUDE_FACTORY_HPP_
 #define INCLUDE_FACTORY_HPP_
 
+#include "Initialization/VisualizationConstructionPlan.hpp"
+
 #include <string>
 #include <memory>
 
@@ -51,55 +53,38 @@ namespace OMVIS
 {
     namespace Initialization
     {
-        /*! \brief Struct that holds information to create a OMVisualizer object by the factory. */
-        struct VisualizationConstructionPlan
-        {
-            /* Essential information. */
-            /*! Name of the model file. */
-            std::string fileName;
-            /*! Path of the model file. */
-            std::string dirPath;
-            bool isFMU;
 
-            /* Additional information. */
-            /*! Server that handles the remote computation. */
-            std::string serverName = "";
-            /*! Port that is used for remote computation. */
-            int port = -1;
-        };
-
-
-        /*! \brief This factory class can create OMVisualization objects that are required for an FMU or result file based visualization.
+        /*! \brief This factory class can create OMVisualization objects that are required for an FMU or
+         *         result file (,i.e., MAT file) based visualization.
          *
          */
         class Factory
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             Factory() = default;
             ~Factory() = default;
             Factory(const Factory& f) = delete;
             Factory& operator=(const Factory& f) = delete;
 
-            /*! \brief Creates concrete Visualization object according to the command line arguments.
-             *
-             * @param cLArgs The parsed command line arguments.
-             * @return Visualization object of type OMVisualizationMAT or OMVisualizationFMU.
-             */
-            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationFromCLargs(const Util::CommandLineArgs& cLArgs);
+            /*-----------------------------------------
+             * CREATE METHODS
+             *---------------------------------------*/
 
-            /*! \brief Creates new visualization object according to the given command line parameters.
+            /*! \brief Creates a new visualization object according to the given construction plan.
              *
-             * According to the command line parameters a OMVisualizerFMU or OMVisualizerMAT object is created and a pointer to this
-             * object is returned. If the command line is empty, than nullptr is returned.
+             * According to the construction plan a OMVisualizerFMU or OMVisualizerMAT object is created and a pointer to this
+             * object is returned. If the construction fails, a nullptr is returned.
              *
-             * @param modelName
-             * @param pathName
-             * @param useFMU
-             * @return
+             * \remark This method checks for the presence of the visual XML file.
+             *
+             * @param[in] cP Construction plan for local visualization.
+             * @return Pointer to allocated OMVisualizer object.
              */
-            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const std::string modelName = "", const std::string pathName = "", const bool useFMU = false);
-
-            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const VisualizationConstructionPlan& in);
+            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const VisualizationConstructionPlan& cP);
         };
 
     }  // End namespace Initialization
