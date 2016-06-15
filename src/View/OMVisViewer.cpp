@@ -407,15 +407,13 @@ namespace OMVIS
         {
             try
             {
-                // Get server name or IP address, port as well as file name and path from dialog.
+                // Get IP address, port as well as model file and path from dialog.
                 OpenRemoteConnectionDialog dialog(this);
                 dialog.exec();
                 Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
 
                 // Now, let the factory create the OMVisualizerFMUClient object, establish the connection
                 // and initialize the simulation.
-                //
-                //_guiController->loadModel(dialog.server, port, modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
 
             }
