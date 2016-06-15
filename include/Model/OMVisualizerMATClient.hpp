@@ -1,0 +1,15 @@
+/*
+ * OMVisualizerMATClient.hpp
+ *
+ *  Created on: 13.05.2016
+ *      Author: mf
+ */
+
+#ifndef INCLUDE_MODEL_OMVISUALIZERMATCLIENT_HPP_
+#define INCLUDE_MODEL_OMVISUALIZERMATCLIENT_HPP_
+
+
+
+
+
+#endif /* INCLUDE_MODEL_OMVISUALIZERMATCLIENT_HPP_ */
