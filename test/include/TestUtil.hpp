@@ -66,4 +66,18 @@ TEST_F (TestUtil, TestIsMAT)
     ASSERT_FALSE(OMVIS::Util::isMAT(_modelFile));
 }
 
+/*! \brief Test the method OMVIS::Util::isValidIpAddressV6 which checks a string to be a valid IPV6 address. */
+TEST_F (TestUtil, TestIsValidIpAddressV4)
+{
+    ASSERT_TRUE(OMVIS::Util::isValidIpAddressV4("141.30.73.103"));
+    ASSERT_FALSE(OMVIS::Util::isValidIpAddressV4("haferdrink"));
+}
+
+/*! \brief Test the method OMVIS::Util::isValidIpAddressV6 which checks a string to be a valid IPV6 address. */
+TEST_F (TestUtil, TestIsValidIpAddressV6)
+{
+    ASSERT_TRUE(OMVIS::Util::isValidIpAddressV6("2001:0db8:85a3:08d3:1319:8a2e:0370:7344"));
+    ASSERT_FALSE(OMVIS::Util::isValidIpAddressV6("haferdrink"));
+}
+
 #endif /* TEST_INCLUDE_TESTUTIL_HPP_ */
