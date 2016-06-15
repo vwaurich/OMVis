@@ -364,13 +364,6 @@ namespace OMVIS
         {
             try
             {
-                //X12 Use a extra dialog which creates a VisualizationConstructionPlan.
-                //X12 // User has to select model from file. _modelName, _pathName and _visFMU are set.
-                //X12 QString modelName = modelSelectionDialog();
-
-                //X12 // Let the GUIController load the model.
-                //X12 _guiController->loadModel(modelName.toStdString(), _timeSlider->minimum(), _timeSlider->maximum());
-
                 // Get model file name and path from dialog.
                 OpenFileDialog dialog(this);
                 dialog.exec();
