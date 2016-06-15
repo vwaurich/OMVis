@@ -43,6 +43,7 @@ namespace OMVIS
         /*-----------------------------------------
          * CONSTRUCTORS
          *---------------------------------------*/
+
         FMU::FMU()
                 : _fmu(nullptr),
                   _context(nullptr),
@@ -116,9 +117,9 @@ namespace OMVIS
             LOGGER_WRITE(std::string("FMU::initialize(). Finished."), Util::LC_LOADER, Util::LL_INFO);
         }
 
-        void FMU::load(const std::string& fileName, const std::string& dirPath)
+        void FMU::load(const std::string& modelFile, const std::string& path)
         {
-            // First we need to define the callbacks and set up the context
+            // First we need to define the callbacks and set up the context.
             _callbacks.malloc = malloc;
             _callbacks.calloc = calloc;
             _callbacks.realloc = realloc;
@@ -138,7 +139,7 @@ namespace OMVIS
             _context = std::shared_ptr<fmi_import_context_t>(fmi_import_allocate_context(&_callbacks), fmi_import_free_context);
 
             // If the FMU is already extracted, we remove the shared object file.
-            std::string sharedObjectFile(fmi_import_get_dll_path(dirPath.c_str(), fileName.c_str(), &_callbacks));
+            std::string sharedObjectFile(fmi_import_get_dll_path(path.c_str(), modelFile.c_str(), &_callbacks));
             if (Util::fileExists(sharedObjectFile))
             {
                 if (remove(sharedObjectFile.c_str()) != 0)
@@ -147,19 +148,21 @@ namespace OMVIS
                     LOGGER_WRITE(std::string("Shared object file " + sharedObjectFile + std::string(" deleted.")), Util::LC_LOADER, Util::LL_DEBUG);
             }
             else
-                LOGGER_WRITE(std::string("Shared object file " + sharedObjectFile + std::string(" does not exists.")), Util::LC_LOADER, Util::LL_DEBUG);
+                LOGGER_WRITE(std::string("Shared object file " + sharedObjectFile + std::string(" does not exist.")), Util::LC_LOADER, Util::LL_DEBUG);
 
             // Unzip the FMU and pars it.
             // Unzip the FMU only once. Overwriting the dll/so file may cause a segmentation fault.
-            std::string fmuFileName = dirPath + fileName + ".fmu";
-            fmi_version_enu_t version = fmi_import_get_fmi_version(_context.get(), fmuFileName.c_str(), dirPath.c_str());
+            // std::string fmuFileName = dirPath + fileName + ".fmu";
+            // fileName now has .fmu prefix. So do not add it again.
+            std::string fmuFileName = path + modelFile;
+            fmi_version_enu_t version = fmi_import_get_fmi_version(_context.get(), fmuFileName.c_str(), path.c_str());
             if (version != fmi_version_1_enu)
             {
                 LOGGER_WRITE(std::string("Only version 1.0 is supported so far. Exiting."), Util::LC_LOADER, Util::LL_ERROR);
                 doExit();
             }
 
-            _fmu = std::shared_ptr<fmi1_import_t>(fmi1_import_parse_xml(_context.get(), dirPath.c_str()), fmi1_import_free);
+            _fmu = std::shared_ptr<fmi1_import_t>(fmi1_import_parse_xml(_context.get(), path.c_str()), fmi1_import_free);
             if (!_fmu)
             {
                 LOGGER_WRITE(std::string("Error parsing XML. Exiting."), Util::LC_LOADER, Util::LL_ERROR);

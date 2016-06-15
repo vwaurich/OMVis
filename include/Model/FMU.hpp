@@ -99,7 +99,7 @@ namespace OMVIS
             void initialize(std::shared_ptr<Model::SimSettings> settings);
 
             /*! \brief Loads the FMU given by name and path into memory. */
-            void load(const std::string& fileName, const std::string& dirPath);
+            void load(const std::string& modelFile, const std::string& path);
 
             /*-----------------------------------------
              * GETTERS and SETTERS
