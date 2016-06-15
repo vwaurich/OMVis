@@ -128,6 +128,24 @@ Add the Qt5 includes here, e.g., /usr/include/qt5/, /usr/include/qt5/QtGui/ and 
 It might be necessary to add these paths to C as well as to C++. After that, you need to rebuild the index by Right 
 click on project -> Index -> Rebuild.
 
-        
+
+\section Usage
+
+\subsection Visualization
+It is quite easy to use OMVIS to visualize a simulation present in a FMU or 
+MAT-file.
+
+1. Step: Run OMVIS by starting the executable.
+2. Step: Open a model file by using the "File Open" dialog.
+3. Step: Initialize the simulation.
+4. Step: (If possible) Specify the input mapping to keyboard or joystick.
+5. Step: Visualize the simulation by pressing "Start".  
+
+
+\subsection remoteVisualization Remote Visualization
+In this case, the computation is done on a server while the visualization and 
+steering of the simulation is handled on the local machine.
+
+This functionality is under development.
  
 */
