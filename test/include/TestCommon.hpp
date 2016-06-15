@@ -57,8 +57,8 @@ class TestCommon : public ::testing::Test
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
         std::string modelPath = std::string(fullPath) + "/";
-        plan.fileName = modelName;
-        plan.dirPath = modelPath;
+        plan.modelFile = modelName;
+        plan.path = modelPath;
         plan.isFMU = useFMU;
     }
 
@@ -84,8 +84,8 @@ class TestCommon : public ::testing::Test
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
         std::string modelPath = std::string(fullPath) + "/";
-        plan.fileName = modelName;
-        plan.dirPath = modelPath;
+        plan.modelFile = modelName;
+        plan.path = modelPath;
         plan.isFMU = useFMU;
     }
 
