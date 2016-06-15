@@ -29,6 +29,7 @@
 
 #include "View/OMVisScene.hpp"
 #include "Model/InputData.hpp"
+#include "Initialization/VisualizationConstructionPlan.hpp"
 
 #include <osg/Vec4>
 
@@ -88,6 +89,8 @@ namespace OMVIS
              * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
              */
             void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
+            void loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
+            void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
             /*! \brief Unloads the currently loaded model and frees associated memory. */
             void unloadModel();
@@ -142,7 +145,7 @@ namespace OMVIS
              */
             double getVisStepsize();
 
-            /*! \brief Gets the InputData from the omVisualizer.
+            /*! \brief Gets the InputData from the OMVisualizer.
              *
              * If we visualize a MAT file, we return a proper nullptr.
              * @return The input data object pointer
