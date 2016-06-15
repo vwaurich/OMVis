@@ -37,8 +37,8 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisualizerFMU::OMVisualizerFMU(const std::string& fileName, const std::string& dirPath)
-                : OMVisualizerAbstract(fileName, dirPath),
+        OMVisualizerFMU::OMVisualizerFMU(const std::string& modelFile, const std::string& path)
+                : OMVisualizerAbstract(modelFile, path),
                   _fmu(new FMU()),
                   _simSettings(new SimSettings()),
                   _inputData(new InputData()),
@@ -53,7 +53,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         /// \todo: Set the error variable isOk.
-        int OMVisualizerFMU::loadFMU(const std::string& modelFile, const std::string& dirPath)
+        int OMVisualizerFMU::loadFMU(const std::string& modelFile, const std::string& path)
         {
             int isOk(0);
             //setup fmu-simulation stuff
@@ -61,7 +61,7 @@ namespace OMVIS
             //std::string fmuFileName = dir + model + ".fmu";
 
             //load and initialize fmu
-            _fmu->load(modelFile, dirPath);
+            _fmu->load(modelFile, path);
             LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
 
             _fmu->initialize(_simSettings);
@@ -84,7 +84,7 @@ namespace OMVIS
         {
             int isOk(0);
             isOk = OMVisualizerAbstract::initData();
-            isOk += loadFMU(_baseData->getModelName(), _baseData->getDirName());
+            isOk += loadFMU(_baseData->getModelName(), _baseData->getPath());
             _simSettings->setTend(_omvManager->getEndTime());
             _simSettings->setHdef(0.001);
 

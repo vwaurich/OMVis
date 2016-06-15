@@ -67,7 +67,14 @@ namespace OMVIS
 
             OMVisualizerFMU() = delete;
 
-            OMVisualizerFMU(const std::string& fileName, const std::string& dirPath);
+            /*! \brief Constructs a OMVisualizerFMU object from the given arguments.
+             *
+             * Essentially, a FMU file and its path need to be specified.
+             *
+             * @param[in] fileName Model file name without path.
+             * @param[in] path Path to the model file.
+             */
+            OMVisualizerFMU(const std::string& modelFile, const std::string& path);
 
             virtual ~OMVisualizerFMU() = default;
             OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
@@ -77,13 +84,13 @@ namespace OMVIS
              * INITIALIZATION METHODS
              *---------------------------------------*/
 
-            /*! \brief Loads and initializes FMU file.
+            /*! \brief Loads and initializes the FMU file.
              *
-             * @param model Name of the FMU.
-             * @param dir Path to the FMU file.
+             * @param[in] modelFile Name of the FMU file.
+             * @param[in] path Path to the model file.
              * @return Error value.
              */
-            int loadFMU(const std::string& model, const std::string& dir);
+            int loadFMU(const std::string& modelFile, const std::string& path);
 
             /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
              * @return Error value.
