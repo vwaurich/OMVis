@@ -121,7 +121,7 @@ namespace OMVIS
          * @param ipAddress The address to be tested.
          * @return Boolean.
          */
-        inline bool isValidIpAddressV4(const std::string& ipAddress)
+        inline bool isValidIPv4(const std::string& ipAddress)
         {
 #ifndef _WIN32
             struct sockaddr_in sa;
@@ -151,7 +151,7 @@ namespace OMVIS
          * @param ipAddress The address to be tested.
          * @return Boolean.
          */
-        inline bool isValidIpAddressV6(const std::string& ipAddress)
+        inline bool isValidIPv6(const std::string& ipAddress)
         {
 #ifndef _WIN32
 
