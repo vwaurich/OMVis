@@ -63,8 +63,11 @@ namespace OMVIS
             int portNumber;
             /*! Name of the model file (without path). */
             std::string modelFile;
+            /*! Path to the model file on server, e.g., /scratch/project/models/ . */
+            std::string path;
             /*! The local working directory. */
             std::string workingDirectory;
+            bool isFMU;
         };
 
     }  // End namespace Initialization
