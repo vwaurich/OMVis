@@ -90,6 +90,13 @@ namespace OMVIS
              */
             void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
             void loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
+
+            /*! \brief
+             *
+             * \remark Checks for XML description file. For remote visualization this file needs to be on the
+             *         localhost. At the moment, the user is responsible for that. I.e., it might be necessary to copy
+             *         this file explicitly from the remote server to the localhost.
+             */
             void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
             /*! \brief Unloads the currently loaded model and frees associated memory. */
