@@ -88,9 +88,9 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-			/*! \brief Get all variable names which are needed for the visualization
+			/*! \brief Get all variable names which are needed for the visualization.
 			*
-			* \return Error value.
+			* \return Vector of strings containing the variable names.
 			*/
 			std::vector<std::string> getVisualizationVariables();
 
