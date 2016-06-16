@@ -249,11 +249,11 @@ namespace OMVIS
             return xmlFileName;
         }
 
-        /*! Checks if the visual xml file for the given model and path is present.
+        /*! Checks if the visual XML file for the given model and path is present.
          *
          * @param[in] modelFile Name of the file containing the model, e.g., modelFoo.fmu
          * @param[in] path Path where the model file is stored, e.g., /home/usr/models/
-         * @return True, if the visual xml file exists in the path.
+         * @return True, if the visual XML file exists in the path.
          */
         inline bool checkForXMLFile(const std::string& modelFile, const std::string& path)
         {
