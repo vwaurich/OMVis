@@ -410,7 +410,7 @@ namespace OMVIS
         {
             try
             {
-                // Get IP address, port as well as model file and path from dialog.
+                // Get IP address and port as well as model file and path from dialog.
                 OpenRemoteConnectionDialog dialog(this);
                 dialog.exec();
                 Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
@@ -418,14 +418,12 @@ namespace OMVIS
                 // Now, let the factory create the OMVisualizerFMUClient object, establish the connection
                 // and initialize the simulation.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
-
             }
             catch (std::exception& ex)
             {
                 QMessageBox::critical(0, QString("Error"), QString(ex.what()));
                 std::cout << ex.what();
             }
-
         }
 
         void OMVisViewer::loadModelCessna()
