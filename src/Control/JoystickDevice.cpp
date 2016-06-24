@@ -62,10 +62,9 @@ namespace OMVIS
             return _yDir;
         }
 
-        void JoystickDevice::detectContinuousInputEvents(std::shared_ptr<Model::InputData> inputInfo)
+        void JoystickDevice::detectContinuousInputEvents(std::shared_ptr<Model::InputData>& inputInfo)
         {
-
-            SDL_PollEvent (&_inputEvent);
+            SDL_PollEvent(&_inputEvent);
 
             if (_inputEvent.type == SDL_JOYAXISMOTION)
             {

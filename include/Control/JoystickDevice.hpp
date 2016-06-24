@@ -69,7 +69,7 @@ namespace OMVIS
             /// The assignment operator is forbidden.
             JoystickDevice& operator=(const JoystickDevice& jd) = delete;
 
-            void detectContinuousInputEvents(std::shared_ptr<Model::InputData> inputInfo);
+            void detectContinuousInputEvents(std::shared_ptr<Model::InputData>& inputInfo);
 
             int getXDir();
 
