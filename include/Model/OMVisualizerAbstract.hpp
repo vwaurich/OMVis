@@ -27,10 +27,10 @@
 #ifndef INCLUDE_OMVISUALIZERABSTRACT_HPP_
 #define INCLUDE_OMVISUALIZERABSTRACT_HPP_
 
+#include "ShapeObjectAttribute.hpp"
 #include "View/OMVisScene.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
-#include "Util/ObjectAttribute.hpp"
 #include "Visualize.hpp"
 
 #include <memory>

@@ -19,13 +19,14 @@
 
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
-#include "Util/ObjectAttribute.hpp"
 #include "Model/OMVisualizerFMU.hpp"
+#include "Model/ShapeObjectAttribute.hpp"
 #include "View/OMVisScene.hpp"
 #include "Control/OMVisManager.hpp"
 #include "Control/JoystickDevice.hpp"
 
 #include <SDL.h>
+
 
 #include <iostream>
 
@@ -181,10 +182,10 @@ namespace OMVIS
             /* last step */
             _fmu->updateTimes(_simSettings->getTend());
 
-            //set inputs
-            for (size_t i = 0; i < _numJoysticks; ++i)
+            // Set inputs.
+            for (auto& joystick : _joysticks)
             {
-                _joysticks[i]->detectContinuousInputEvents(_inputData);
+                joystick->detectContinuousInputEvents(_inputData);
                 _inputData->setInputsInFMU(_fmu->getFMU());
                 //std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
             }
@@ -231,7 +232,7 @@ namespace OMVIS
         }
 
 		
-		fmi1_value_reference_t OMVisualizerFMU::getVarReferencesForObjectAttribute(ObjectAttribute* attr)
+		fmi1_value_reference_t OMVisualizerFMU::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
 		{
 			fmi1_value_reference_t vr = 0;
 			if (!attr->isConst) {
@@ -248,7 +249,7 @@ namespace OMVIS
 
 			try
 			{
-				fmi1_import_t* fmu = _fmu->getFMU();
+				fmi1_import_t* fmu = _fmu->getFMU(); /// \todo Todo unused variable
 				ShapeObject shape;
 				for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
 				{

@@ -120,7 +120,7 @@ namespace OMVIS
             if (_omvManager->getVisTime() < _omvManager->getEndTime() - 1.e-6)
             {
                 _omvManager->setPause(false);
-                LOGGER_WRITE(std::string("Start visualization."), Util::LC_CTR, Util::LL_INFO);
+                LOGGER_WRITE(std::string("Start visualization ..."), Util::LC_CTR, Util::LL_INFO);
             }
             else
                 LOGGER_WRITE(std::string("There is nothing left to visualize. Initialize the model first."), Util::LC_CTR, Util::LL_INFO);

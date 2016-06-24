@@ -30,6 +30,8 @@
 #include "WrapperFMILib.hpp"
 #include "InputValues.hpp"
 
+#include <VariableList.hpp>
+
 #include <map>
 
 enum inputKey
@@ -83,8 +85,14 @@ namespace OMVIS
 
             /*! \brief Initializes all input data including the keymap. */
             void initializeInputs(fmi1_import_t* fmu);
+            /*! \brief Initializes all input data including the keymap in case of remote visualization. */
+            void initializeInputs(const NetOff::VariableList& inputVars);
 
             void resetInputValues();
+
+            /*-----------------------------------------
+             * GETTERS and SETTERS
+             *---------------------------------------*/
 
             /*! \brief Sets the input variables in the fmu. */
             void setInputsInFMU(fmi1_import_t* fmu);
@@ -92,14 +100,25 @@ namespace OMVIS
             /*! \brief Resets the discrete input values to zero (no reals and integers). */
             void resetDiscreteInputValues();
 
-            /*! \brief Prints the current input values. */
-            void printValues();
-
             /*! \brief Gets the names of the variables*/
             void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames);
 
+            /*! Returns pointer to real values. */
+            fmi1_real_t* getRealValues() const;
+            /*! Returns pointer to integer values. */
+            fmi1_integer_t* getIntValues() const;
+            /*! Returns pointer to boolean values. */
+            fmi1_boolean_t* getBoolValues() const;
+
+            /*-----------------------------------------
+             * PRINTERS
+             *---------------------------------------*/
+
+            /*! \brief Prints the current input values. */
+            void printValues() const;
+
             /*! \brief Prints the keyToInputMap*/
-            void printKeyToInputMap();
+            void printKeyToInputMap() const;
 
          public:
             /// \todo Can this attribute be private?
@@ -113,7 +132,8 @@ namespace OMVIS
         /*-----------------------------------------
          * Free Functions
          *---------------------------------------*/
-        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data);
+
+        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data);
 
         /*! \brief Converts the given std::string to inputKey enum. */
         inputKey getInputDataKeyForString(std::string keyString);

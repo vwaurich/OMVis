@@ -140,6 +140,8 @@ namespace OMVIS
             bool modelIsMATFile();
             /*! \brief Returns true, if the currently loaded model is a FMU simulation. */
             bool modelIsFMU();
+            /*! \brief Returns true, if the currently loaded model is a FMU in remote visualization mode. */
+            bool modelIsFMUClient();
 
             /*! \brief Returns true, if a model is loaded into OMVis, i.e., the OMVisualizer object is not nullptr. */
             bool modelIsLoaded();

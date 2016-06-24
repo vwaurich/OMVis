@@ -171,9 +171,9 @@ namespace OMVIS
             QObject::connect(_perspectiveAct, SIGNAL(triggered()), this, SLOT(perspectiveDialog()));
             _bgcAct = new QAction(tr("Background Color..."), this);
             QObject::connect(_bgcAct, SIGNAL(triggered()), this, SLOT(backgroundColorDialog()));
-			_simSettingscAct = new QAction(tr("Simulation Settings..."), this);
-			QObject::connect(_simSettingscAct, SIGNAL(triggered()), this, SLOT(simSettingsDialog()));
-			
+            _simSettingscAct = new QAction(tr("Simulation Settings..."), this);
+            QObject::connect(_simSettingscAct, SIGNAL(triggered()), this, SLOT(simSettingsDialog()));
+
             // Menu caption "Inputs".
             _mapInputAct = new QAction(tr("Map Inputs..."), this);
             QObject::connect(_mapInputAct, SIGNAL(triggered()), this, SLOT(openDialogInputMapper()));
@@ -205,7 +205,7 @@ namespace OMVIS
             _settingsMenu = new QMenu(tr("Settings"), this);
             _settingsMenu->addAction(_perspectiveAct);
             _settingsMenu->addAction(_bgcAct);
-			_settingsMenu->addAction(_simSettingscAct);
+            _settingsMenu->addAction(_simSettingscAct);
 
             // Menu caption "Inputs".
             _inputMenu = new QMenu(tr("Inputs"), this);
@@ -418,6 +418,30 @@ namespace OMVIS
                 // Now, let the factory create the OMVisualizerFMUClient object, establish the connection
                 // and initialize the simulation.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
+
+                LOGGER_WRITE(std::string("The model has been successfully loaded and initialized for remote visualization."), Util::LC_GUI, Util::LL_INFO);
+
+                // Set up the osg viewer widget
+                osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
+                if (rootNode == nullptr)
+                    LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
+                _sceneView->setSceneData(rootNode);
+
+                //start the timer to trigger model and scene update
+                _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
+
+                //set the inputData to handle Keyboard-events as inputs
+                if (_guiController->modelIsFMUClient())
+                {
+                    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+                    _sceneView->addEventHandler(kbEventHandler);
+                }
+
+                // Update the slider and the time displays.
+                updateTimingElements();
+
+                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
+
             }
             catch (std::exception& ex)
             {
@@ -664,15 +688,14 @@ namespace OMVIS
             }
         }
 
-		
-		void OMVisViewer::simSettingsDialog()
-		{
-			SimSettingDialog dialog(this);
-			if (dialog.exec())
-			{
-				std::cout << "implement me" << std::endl;
-			}
-		}
+        void OMVisViewer::simSettingsDialog()
+        {
+            SimSettingDialog dialog(this);
+            if (dialog.exec())
+            {
+                std::cout << "implement me" << std::endl;
+            }
+        }
 
         void OMVisViewer::backgroundColorDialog()
         {

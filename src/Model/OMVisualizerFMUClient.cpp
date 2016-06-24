@@ -7,74 +7,348 @@
 
 #include "Model/OMVisualizerFMUClient.hpp"
 #include "Control/OMVisManager.hpp"
+#include "Visualize.hpp"
 
 namespace OMVIS
 {
     namespace Model
     {
 
-        /*-----------------------------------------
-         * CONSTRUCTORS
-         *---------------------------------------*/
-
         OMVisualizerFMUClient::OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan& cP)
-//                : OMVisualizerAbstract(cP.modelFile, cP.workingDirectory),
-//                  _noFC(cP.ipAddress, cP.portNumber),
-//                  _workingDir(cP.workingDirectory),
-//                  _simID(-9)
+                : OMVisualizerAbstract(cP.modelFile, cP.workingDirectory),
+                  _noFC(cP.ipAddress, cP.portNumber),
+                  _outputVars(),
+                  _simSettings(new SimSettings()),
+                  _inputData(new InputData()),
+                  _joysticks(),
+                  _remotePathToModelFile(cP.path)
         {
+            LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
+            initJoySticks();
         }
 
         /*-----------------------------------------
          * INITIALIZATION METHODS
          *---------------------------------------*/
+        void OMVisualizerFMUClient::initializeConnectionToServer()
+        {
+            // test if server can be reached
+            if (!_noFC.initializeConnection())
+                throw std::runtime_error("Couldn't reach server.");
+        }
+
+        /// \todo: Set the error variable isOk.
+        int OMVisualizerFMUClient::loadFMU()
+        {
+            int isOk(0);
+            auto a = _baseData->getModelName();
+            auto p = _baseData->getPath();
+
+            // Send server data about the simulation you want to calculate and get the ID of the simulation.
+            //_simID = _noFC.addSimulation(_baseData->getModelName());
+            auto c = _remotePathToModelFile + _baseData->getModelName();
+            _simID = _noFC.addSimulation(a);
+
+            // Set visualization relevant output variables.
+            NetOff::VariableList outputVars = getOutputVariables();
+
+            // Set input variables. Todo: Open GUI window.
+            NetOff::VariableList inputVars = getInputVariables();
+            _inputData->initializeInputs(inputVars);
+            _inputData->printValues();
+
+            _outputVars = getOutputVariables();
+
+            // Communicate input and output variables with server.
+            _noFC.initializeSimulation(_simID, inputVars, outputVars, nullptr, nullptr, nullptr);
+
+            return isOk;
+        }
 
         int OMVisualizerFMUClient::initData()
         {
             int isOk(0);
             isOk = OMVisualizerAbstract::initData();
-//                {
-//                int isOk(0);
-//                // In case of reloading, we need to make sure, that we have empty members
-//                _baseData->clearXMLDoc();
-//
-//                // Initialize xml file and get visAttributes
-//                isOk = _baseData->initXMLDoc();
-//
-//                isOk = _baseData->initVisObjects();
-//                return isOk;
-//                }
-
-            // Todo: Catch exception if necessary.
-            initializeConnectionToServer();
-
-            setOutputVariables();
-
+            isOk += loadFMU();
             _simSettings->setTend(_omvManager->getEndTime());
             _simSettings->setHdef(0.001);
+            setVarReferencesInVisAttributes();
 
+            //OMVisualizerFMU::initializeVisAttributes(_omvManager->getStartTime());
             return isOk;
         }
 
-        void OMVisualizerFMUClient::initializeConnectionToServer()
+        void OMVisualizerFMUClient::resetInputs()
         {
-            // Test if server can be reached.
-            if (!_noFC.initializeConnection())
-                throw std::runtime_error("Could not initialize connection with host server.");
-
-            // Send server data about the simulation you want to calculate and get the ID of the simulation.
-            _simID = _noFC.addSimulation(_baseData->getModelName());
+            _inputData->resetInputValues();
         }
 
-        void OMVisualizerFMUClient::setOutputVariables()
+        void OMVisualizerFMUClient::initJoySticks()
         {
-            NetOff::VariableList allOutputs = _noFC.getPossibleOuputVariableNames(_simID);
-            // Copy MODEL_visual.xml file from server to localhost.
-            /// \todo Todo: Define a proper target location of the file.
-            _noFC.getSimulationFile(_simID, _baseData->getXMLFileName(), "/home/mf/opt/HPCOM/OMVis.git_eclipse/test_visual.xml");
-            // OutputVariablen in XML:
-            // Welche Variablen brauchen wir fuer die Darstellung?
-            // Auswahl der Variablen
+            //Initialize SDL
+            if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
+                LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
+
+            //Check for joysticks
+            _numJoysticks = SDL_NumJoysticks();
+            if (SDL_NumJoysticks() < 1)
+                LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+            else
+            {
+                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+                //Load joystick
+                std::cout << "START LOADING JOYSTICKS!!!!!!!!!" << _numJoysticks << std::endl;
+
+                Control::JoystickDevice* newJoyStick;
+                for (size_t i = 0; i < _numJoysticks; ++i)
+                {
+                    std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i << std::endl;
+
+                    newJoyStick = new Control::JoystickDevice(i);
+                    _joysticks.push_back(newJoyStick);
+
+                    if (newJoyStick == nullptr)
+                        LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+                }
+            }
+        }
+
+        /*-----------------------------------------
+         * GETTERS and SETTERS
+         *---------------------------------------*/
+
+        NetOff::VariableList OMVisualizerFMUClient::getOutputVariables()
+        {
+            NetOff::VariableList varList;
+            varList.addReals(_baseData->getVisualizationVariables());
+            // std::vector<std::string> OMVisualBase::getVisualizationVariables()
+            return varList;
+        }
+
+        // Todo! Implement me. Use a GUI to set input values.
+        NetOff::VariableList OMVisualizerFMUClient::getInputVariables()
+        {
+            NetOff::VariableList varList;
+            varList.addReals(_noFC.getPossibleInputVariableNames(_simID).getReals());
+            return varList;
+        }
+
+        std::string OMVisualizerFMUClient::getType() const
+        {
+            return "fmuclient";
+        }
+
+        std::shared_ptr<InputData> OMVisualizerFMUClient::getInputData()
+        {
+            return _inputData;
+        }
+
+        /*-----------------------------------------
+         * SIMULATION METHODS
+         *---------------------------------------*/
+
+        void OMVisualizerFMUClient::simulate(Control::OMVisManager& omvm)
+        {
+            while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
+            {
+                double newSimTime = simulateStep(omvm.getSimTime());
+                omvm.setSimTime(newSimTime);
+            }
+        }
+
+        double OMVisualizerFMUClient::simulateStep(const double time)
+        {
+            double newTime = time + _simSettings->getHdef();
+
+            NetOff::ValueContainer & inputCont = _noFC.getInputValueContainer(_simID);
+            // Set inputs in inputData
+            for (auto& joystick : _joysticks)
+            {
+                joystick->detectContinuousInputEvents(_inputData);
+
+                //_inputData->setInputsInFMU(_fmu->getFMU()); //todo aus der schleife raus???
+                //std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
+            }
+
+            // Set inputs for network communication.
+            inputCont.setRealValues(_inputData->getRealValues());
+            inputCont.setIntValues(_inputData->getIntValues());
+            inputCont.setBoolValues(_inputData->getBoolValues());
+
+            // Send input values to server
+            _noFC.sendInputValues(_simID, newTime, inputCont);
+            // Receive output values from server for visualisation
+            _noFC.recvOutputValues(_simID, newTime);  // implicit check if its really [time]
+            return newTime;
+        }
+
+        void OMVisualizerFMUClient::initializeVisAttributes(const double time)
+        {
+            _omvManager->setVisTime(_omvManager->getStartTime());
+            _omvManager->setSimTime(_omvManager->getStartTime());
+            setVarReferencesInVisAttributes();
+            updateVisAttributes(_omvManager->getVisTime());
+        }
+
+        fmi1_value_reference_t OMVisualizerFMUClient::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
+        {
+            fmi1_value_reference_t vr = 0;
+            if (!attr->isConst)
+                vr = _outputVars.findRealVariableNameIndex(attr->cref);
+            return vr;
+        }
+
+        int OMVisualizerFMUClient::setVarReferencesInVisAttributes()
+        {
+            int isOk(0);
+
+            try
+            {
+                //  for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
+                for (auto& shape : _baseData->_shapes)
+                {
+                    // ShapeObject& shape = _baseData->_shapes[i];
+
+                    shape._length.fmuValueRef = getVarReferencesForObjectAttribute(&shape._length);
+                    shape._width.fmuValueRef = getVarReferencesForObjectAttribute(&shape._width);
+                    shape._height.fmuValueRef = getVarReferencesForObjectAttribute(&shape._height);
+
+                    shape._lDir[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[0]);
+                    shape._lDir[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[1]);
+                    shape._lDir[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[2]);
+
+                    shape._wDir[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[0]);
+                    shape._wDir[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[1]);
+                    shape._wDir[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[2]);
+
+                    shape._r[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[0]);
+                    shape._r[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[1]);
+                    shape._r[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[2]);
+
+                    shape._rShape[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[0]);
+                    shape._rShape[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[1]);
+                    shape._rShape[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[2]);
+
+                    shape._T[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[0]);
+                    shape._T[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[1]);
+                    shape._T[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[2]);
+                    shape._T[3].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[3]);
+                    shape._T[4].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[4]);
+                    shape._T[5].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[5]);
+                    shape._T[6].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[6]);
+                    shape._T[7].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[7]);
+                    shape._T[8].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[8]);
+                }  //end for
+            }  // end try
+
+            catch (std::exception& e)
+            {
+                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
+                isOk = 1;
+            }
+            return isOk;
+        }
+
+        int OMVisualizerFMUClient::updateVisAttributes(const double time)
+        {
+            int isOk(0);
+
+            // Update all shapes
+            OMVIS::Util::rAndT rT;
+            NetOff::ValueContainer & outputCont = _noFC.getOutputValueContainer(_simID);
+            osg::ref_ptr<osg::Node> child = nullptr;
+            try
+            {
+                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
+                {
+                    ShapeObject & shape = _baseData->_shapes[i];
+
+                    // get the values for the scene graph objects
+                    Util::updateObjectAttributeFMUClient(shape._length, outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._width, outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._height, outputCont);
+
+                    Util::updateObjectAttributeFMUClient(shape._lDir[0], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._lDir[1], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._lDir[2], outputCont);
+
+                    Util::updateObjectAttributeFMUClient(shape._wDir[0], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._wDir[1], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._wDir[2], outputCont);
+
+                    Util::updateObjectAttributeFMUClient(shape._r[0], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._r[1], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._r[2], outputCont);
+
+                    Util::updateObjectAttributeFMUClient(shape._rShape[0], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._rShape[1], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._rShape[2], outputCont);
+
+                    Util::updateObjectAttributeFMUClient(shape._T[0], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[1], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[2], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[3], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[4], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[5], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[6], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[7], outputCont);
+                    Util::updateObjectAttributeFMUClient(shape._T[8], outputCont);
+                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
+                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
+
+                    shape._mat = Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
+
+                    //update the shapes
+                    _nodeUpdater->_shape = shape;
+
+                    //get the scene graph nodes and stuff
+                    //_viewerStuff->dumpOSGTreeDebug();
+                    child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
+                    child->accept(*_nodeUpdater);
+
+                }  //end for
+            }  // end try
+
+            catch (std::exception& e)
+            {
+                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
+                isOk = 1;
+            }
+            return isOk;
+        }
+
+        void OMVisualizerFMUClient::startVisualization()
+        {
+            if (!_noFC.isStarted())
+                _noFC.start();
+            else
+                _noFC.unpause();
+            OMVisualizerAbstract::startVisualization();
+        }
+
+        void OMVisualizerFMUClient::pauseVisualization()
+        {
+            _noFC.pause();
+            OMVisualizerAbstract::pauseVisualization();
+        }
+
+        void OMVisualizerFMUClient::updateScene(const double time)
+        {
+            _omvManager->updateTick();            //for real-time measurement
+
+            _omvManager->setSimTime(_omvManager->getVisTime());
+            double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
+
+            double vis1 = _omvManager->getRealTime();
+            while (_omvManager->getSimTime() < nextStep)
+            {
+                //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
+                //_inputData.printValues();
+                _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
+            }
+            _omvManager->updateTick();                     //for real-time measurement
+            _omvManager->setRealTimeFactor(_omvManager->getHVisual() / (_omvManager->getRealTime() - vis1));
+            updateVisAttributes(_omvManager->getVisTime());
         }
 
     }  // End namespace Model

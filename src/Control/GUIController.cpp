@@ -22,6 +22,7 @@
 #include "Control/OMVisManager.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Model/OMVisualizerFMU.hpp"
+#include "Model/OMVisualizerFMUClient.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -217,6 +218,11 @@ namespace OMVIS
             return (_omVisualizer->getType() == "fmu") ? true : false;
         }
 
+        bool GUIController::modelIsFMUClient()
+        {
+            return (_omVisualizer->getType() == "fmuclient") ? true : false;
+        }
+
         double GUIController::getSimulationStartTime() const
         {
             return _omVisualizer->getOMVisManager()->getStartTime();
@@ -231,7 +237,12 @@ namespace OMVIS
         {
             if (modelIsFMU())
             {
-                std::shared_ptr<Model::OMVisualizerFMU> omVisFMU = std::dynamic_pointer_cast < Model::OMVisualizerFMU > (_omVisualizer);
+                std::shared_ptr<Model::OMVisualizerFMU> omVisFMU = std::dynamic_pointer_cast<Model::OMVisualizerFMU>(_omVisualizer);
+                return omVisFMU->getInputData();
+            }
+            else if (modelIsFMUClient())
+            {
+                std::shared_ptr<Model::OMVisualizerFMUClient> omVisFMU = std::dynamic_pointer_cast<Model::OMVisualizerFMUClient>(_omVisualizer);
                 return omVisFMU->getInputData();
             }
             else

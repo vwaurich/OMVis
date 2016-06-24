@@ -149,6 +149,83 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ") + std::to_string(iter->second._baseType) + std::string(" ") + std::to_string(iter->second._valueIdx), Util::LC_LOADER, Util::LL_INFO);
         }
 
+        void InputData::initializeInputs(const NetOff::VariableList& inputVars)
+        {
+            //the number of inputs per type
+            _data.setNumReal(inputVars.sizeReals());
+            _data.setNumInteger(inputVars.sizeInts());
+            _data.setNumBoolean(inputVars.sizeBools());
+            _data.setNumString(0);
+
+            // Set variable names in InputValues container.
+            _data._namesReal = inputVars.getReals();
+            _data._namesInteger = inputVars.getInts();
+            _data._namesBool = inputVars.getBools();
+            _data._namesString = std::vector<std::string>(0);
+
+            LOGGER_WRITE(std::string("Number of Reals: ") + std::to_string(_data._namesReal.size()), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Number of Integers: ") + std::to_string(_data._namesInteger.size()), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Number of Booleans: ") + std::to_string(_data._namesBool.size()), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Number of Strings: ") + std::to_string(_data._namesString.size()), Util::LC_LOADER, Util::LL_INFO);
+
+//            _inputData->setInputsInFMU(_fmu->getFMU());
+            LOGGER_WRITE(std::string("There are ") + std::to_string(_data.getNumBoolean()) + std::string(" boolean inputs, ") + std::to_string(_data.getNumReal()) + std::string(" real inputs, ") + std::to_string(_data.getNumInteger()) + std::string(" integer inputs and ") + std::to_string(_data.getNumString()) + std::string(" string inputs."), Util::LC_LOADER, Util::LL_INFO);
+
+            // the values for the inputs per type
+            _data._valuesReal = (fmi1_real_t*) calloc(_data.getNumReal(), sizeof(fmi1_real_t));
+            _data._valuesInteger = (fmi1_integer_t*) calloc(_data.getNumInteger(), sizeof(fmi1_integer_t));
+            _data._valuesBoolean = (fmi1_boolean_t*) calloc(_data.getNumBoolean(), sizeof(fmi1_boolean_t));
+            _data._valuesString = (fmi1_string_t*) calloc(_data.getNumString(), sizeof(fmi1_string_t));
+            // malloc attributes
+            _data._attrReal = (AttributesReal*) calloc(_data.getNumReal(), sizeof(AttributesReal));
+
+            // init keymap and attributes
+            // ------------------
+            _keyboardToKeyMap[119] = KEY_W;
+            _keyboardToKeyMap[97] = KEY_A;
+            _keyboardToKeyMap[115] = KEY_S;
+            _keyboardToKeyMap[100] = KEY_D;
+
+            int k = 0;
+            //make map from keys to input values
+            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
+            {
+                KeyMapValue mapValue = { fmi1_base_type_real, r };
+                _keyToInputMap[keys_real[k]] = mapValue;
+                LOGGER_WRITE(std::string("Assign real input ") + std::to_string(r) + std::string(" to key ") + std::to_string(keys_real[r]), Util::LC_LOADER, Util::LL_INFO);
+                //std::cout << "assign realinput " << r << " to key " << keys_real[r] << std::endl;
+//                fmi1_import_real_variable_t* var = fmi1_import_get_variable_as_real(fmi1_import_get_variable(realInputs, r));
+//                _data._attrReal[r]._max = fmi1_import_get_real_variable_max(var);
+//                _data._attrReal[r]._min = fmi1_import_get_real_variable_min(var);
+//                _data._attrReal[r]._start = fmi1_import_get_real_variable_start(var);
+//                _data._attrReal[r]._nominal = fmi1_import_get_real_variable_nominal(var);
+                LOGGER_WRITE(std::string("min ") + std::to_string(_data._attrReal[r]._min) + std::string(" max ") + std::to_string(_data._attrReal[r]._max), Util::LC_LOADER, Util::LL_INFO);
+                ++k;
+            }
+            for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
+            {
+                KeyMapValue mapValue = { fmi1_base_type_int, i };
+                _keyToInputMap[keys_real[k]] = mapValue;
+                ++k;
+            }
+            for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
+            {
+                KeyMapValue mapValue = { fmi1_base_type_bool, b };
+                _keyToInputMap[keys_bool[b]] = mapValue;
+                LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(b) + std::string(" to key ") + std::to_string(keys_bool[b]), Util::LC_LOADER, Util::LL_INFO);
+                ++k;
+            }
+//            for (unsigned int s = 0; s < _data.getNumString(); ++s)
+//            {
+//                KeyMapValue mapValue = { fmi1_base_type_str, s };
+//                _keyToInputMap[keys_real[k]] = mapValue;
+//                ++k;
+//            }
+
+            for (keyMapIter iter = _keyToInputMap.begin(); iter != _keyToInputMap.end(); ++iter)
+                LOGGER_WRITE(std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ") + std::to_string(iter->second._baseType) + std::string(" ") + std::to_string(iter->second._valueIdx), Util::LC_LOADER, Util::LL_INFO);
+        }
+
         void InputData::resetInputValues()
         {
             //reset real input values to 0
@@ -173,18 +250,6 @@ namespace OMVIS
             status = fmi1_import_set_string(fmu, _data._vrBoolean, _data.getNumString(), _data._valuesString);
         }
 
-        void InputData::printValues()
-        {
-            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
-                std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
-            for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
-                std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
-            for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
-                std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
-            for (unsigned int s = 0; s < _data.getNumString(); ++s)
-                std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
-        }
-
         void InputData::resetDiscreteInputValues()
         {
             //reset boolean input values to 0
@@ -195,10 +260,7 @@ namespace OMVIS
                 _data._valuesString[s] = "";
         }
 
-        /// \todo: The attributes of the object 'data' are changed in line 206, but we pass not by reference. Thus,
-        /// this update has no effect on the original object.
-        /// \todo Todo pass INputData by reference or pointer with respect to performance!
-        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData data)
+        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data)
         {
             keyMapIter iter = data._keyToInputMap.find(key);
 
@@ -239,7 +301,38 @@ namespace OMVIS
             }
         }
 
-        void InputData::printKeyToInputMap()
+        fmi1_real_t* InputData::getRealValues() const
+        {
+            return _data._valuesReal;
+        }
+
+        fmi1_integer_t* InputData::getIntValues() const
+        {
+            return _data._valuesInteger;
+        }
+
+        fmi1_boolean_t* InputData::getBoolValues() const
+        {
+            return _data._valuesBoolean;
+        }
+
+        /*-----------------------------------------
+         * PRINTERS
+         *---------------------------------------*/
+
+        void InputData::printValues() const
+        {
+            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
+                std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
+            for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
+                std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
+            for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
+                std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
+            for (unsigned int s = 0; s < _data.getNumString(); ++s)
+                std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
+        }
+
+        void InputData::printKeyToInputMap() const
         {
             std::cout << "KEY TO INPUT MAP" << std::endl;
             for (std::map<inputKey, KeyMapValue>::const_iterator it = _keyToInputMap.begin(); it != _keyToInputMap.end(); ++it)

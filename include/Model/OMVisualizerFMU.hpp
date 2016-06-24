@@ -120,6 +120,10 @@ namespace OMVIS
             // const InputData* getInputData() const;
             std::shared_ptr<InputData> getInputData();
 
+            /*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
+            */
+            fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
+
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/
@@ -137,10 +141,6 @@ namespace OMVIS
 			/*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable references in the visattributes
 			*/
 			int setVarReferencesInVisAttributes();
-
-			/*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
-			*/
-			fmi1_value_reference_t getVarReferencesForObjectAttribute(ObjectAttribute* attr);
 
             /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
              *
