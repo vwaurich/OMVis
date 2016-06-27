@@ -100,7 +100,7 @@ namespace OMVIS
             void updateScene(const double time);
 
             /*! \brief Update the attribute of the Object using a mat-file result. */
-            void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader);
+            void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader);
 
             /*! \brief Fetches the value of a variable at a certain time.
              *

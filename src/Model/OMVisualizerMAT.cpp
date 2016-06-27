@@ -103,46 +103,47 @@ namespace OMVIS
             unsigned int shapeIdx = 0;
             OMVIS::Util::rAndT rT;
             osg::ref_ptr<osg::Node> child = nullptr;
+            ModelicaMatReader* tmpReaderPtr = &_matReader;
             try
             {
                 for (auto& shape : _baseData->_shapes)
                 {
                     // Get the values for the scene graph objects
-                    updateObjectAttributeMAT(&shape._length, time, _matReader);
-                    updateObjectAttributeMAT(&shape._width, time, _matReader);
-                    updateObjectAttributeMAT(&shape._height, time, _matReader);
+                    updateObjectAttributeMAT(&shape._length, time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._width, time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._height, time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._lDir[0], time, _matReader);
-                    updateObjectAttributeMAT(&shape._lDir[1], time, _matReader);
-                    updateObjectAttributeMAT(&shape._lDir[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._lDir[0], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._lDir[1], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._lDir[2], time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._wDir[0], time, _matReader);
-                    updateObjectAttributeMAT(&shape._wDir[1], time, _matReader);
-                    updateObjectAttributeMAT(&shape._wDir[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._wDir[0], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._wDir[1], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._wDir[2], time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._r[0], time, _matReader);
-                    updateObjectAttributeMAT(&shape._r[1], time, _matReader);
-                    updateObjectAttributeMAT(&shape._r[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._r[0], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._r[1], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._r[2], time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._rShape[0], time, _matReader);
-                    updateObjectAttributeMAT(&shape._rShape[1], time, _matReader);
-                    updateObjectAttributeMAT(&shape._rShape[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._rShape[0], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._rShape[1], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._rShape[2], time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._T[0], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[1], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[2], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[3], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[4], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[5], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[6], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[7], time, _matReader);
-                    updateObjectAttributeMAT(&shape._T[8], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[0], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[1], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[2], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[3], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[4], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[5], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[6], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[7], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._T[8], time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._color[0], time, _matReader);
-                    updateObjectAttributeMAT(&shape._color[1], time, _matReader);
-                    updateObjectAttributeMAT(&shape._color[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._color[0], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._color[1], time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._color[2], time, tmpReaderPtr);
 
-                    updateObjectAttributeMAT(&shape._specCoeff, time, _matReader);
+                    updateObjectAttributeMAT(&shape._specCoeff, time, tmpReaderPtr);
 
                     osg::Vec3f v = Util::normalize(osg::Vec3f(0.0, 0.0, 0.0));
 
@@ -185,10 +186,10 @@ namespace OMVIS
         }
 
         // Todo pass by const ref
-        void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader)
+        void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
         {
             if (!attr->isConst)
-                attr->exp = omcGetVarValue(&reader, attr->cref.c_str(), time);
+                attr->exp = omcGetVarValue(reader, attr->cref.c_str(), time);
         }
 
         double OMVisualizerMAT::omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time)
