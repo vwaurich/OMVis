@@ -201,7 +201,7 @@ namespace OMVIS
             var = omc_matlab4_find_var(reader, varName);
             if (var == NULL)
                 std::cout << "Error: Did not get variable from result file! " << varName << std::endl;
-            elser
+            else
                 omc_matlab4_val(res, reader, var, time);
 
             return res;
