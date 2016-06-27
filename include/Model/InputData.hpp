@@ -154,3 +154,6 @@ namespace OMVIS
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_INPUTDATA_HPP_ */
+/**
+ * @}
+ */
