@@ -153,9 +153,12 @@ namespace OMVIS
 
             /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
              *
-             *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
+             *  \remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
              */
             void updateScene(const double time = 0.0) override;
+
+            /*! \brief Update the attribute of the Object using a mat-file result. */
+            void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu);
 
          private:
             /*-----------------------------------------

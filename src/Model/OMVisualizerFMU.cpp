@@ -27,7 +27,6 @@
 
 #include <SDL.h>
 
-
 #include <iostream>
 
 namespace OMVIS
@@ -88,9 +87,9 @@ namespace OMVIS
             isOk += loadFMU(_baseData->getModelName(), _baseData->getPath());
             _simSettings->setTend(_omvManager->getEndTime());
             _simSettings->setHdef(0.001);
-			setVarReferencesInVisAttributes();
+            setVarReferencesInVisAttributes();
 
-			//OMVisualizerFMU::initializeVisAttributes(_omvManager->getStartTime());
+            //OMVisualizerFMU::initializeVisAttributes(_omvManager->getStartTime());
             return isOk;
         }
 
@@ -147,6 +146,73 @@ namespace OMVIS
             return _inputData;
         }
 
+        fmi1_value_reference_t OMVisualizerFMU::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
+        {
+            fmi1_value_reference_t vr = 0;
+            if (!attr->isConst)
+            {
+                fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmu->getFMU(), attr->cref.c_str());
+                vr = fmi1_import_get_variable_vr(var);
+            }
+            return vr;
+        }
+
+        int OMVisualizerFMU::setVarReferencesInVisAttributes()
+        {
+            int isOk(0);
+
+            try
+            {
+                fmi1_import_t* fmu = _fmu->getFMU();  /// \todo Todo unused variable
+                ShapeObject shape;
+                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
+                {
+                    shape = _baseData->_shapes[i];
+
+                    shape._length.fmuValueRef = getVarReferencesForObjectAttribute(&shape._length);
+                    shape._width.fmuValueRef = getVarReferencesForObjectAttribute(&shape._width);
+                    shape._height.fmuValueRef = getVarReferencesForObjectAttribute(&shape._height);
+
+                    shape._lDir[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[0]);
+                    shape._lDir[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[1]);
+                    shape._lDir[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[2]);
+
+                    shape._wDir[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[0]);
+                    shape._wDir[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[1]);
+                    shape._wDir[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[2]);
+
+                    shape._r[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[0]);
+                    shape._r[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[1]);
+                    shape._r[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[2]);
+
+                    shape._rShape[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[0]);
+                    shape._rShape[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[1]);
+                    shape._rShape[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[2]);
+
+                    shape._T[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[0]);
+                    shape._T[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[1]);
+                    shape._T[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[2]);
+                    shape._T[3].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[3]);
+                    shape._T[4].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[4]);
+                    shape._T[5].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[5]);
+                    shape._T[6].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[6]);
+                    shape._T[7].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[7]);
+                    shape._T[8].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[8]);
+
+                    //shape.dumpVisAttributes();
+                    _baseData->_shapes.at(i) = shape;
+
+                }  //end for
+            }  // end try
+
+            catch (std::exception& e)
+            {
+                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
+                isOk = 1;
+            }
+            return isOk;
+        }
+
         /*-----------------------------------------
          * SIMULATION METHODS
          *---------------------------------------*/
@@ -154,16 +220,14 @@ namespace OMVIS
         void OMVisualizerFMU::simulate(Control::OMVisManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
-            {
                 omvm.setSimTime(simulateStep(omvm.getSimTime()));
-            }
         }
 
         double OMVisualizerFMU::simulateStep(const double time)
         {
             //tcur = settings.tstart;
             //hcur = settings.hdef;
-			//std::cout << "start" << std::endl;
+            //std::cout << "start" << std::endl;
             int zero_crossning_event = 0;
             _fmu->prepareSimulationStep(time);
 
@@ -194,8 +258,7 @@ namespace OMVIS
             //X2 MF: On my system, this line is needed in order to get the keyboard input working
             _inputData->setInputsInFMU(_fmu->getFMU());
 
-
-			//std::cout << "inputs" << std::endl;
+            //std::cout << "inputs" << std::endl;
             /* Solve system */
             _fmu->solveSystem();
 
@@ -227,77 +290,9 @@ namespace OMVIS
             _fmu->initialize(_simSettings);
             _omvManager->setVisTime(_omvManager->getStartTime());
             _omvManager->setSimTime(_omvManager->getStartTime());
-			setVarReferencesInVisAttributes();
+            setVarReferencesInVisAttributes();
             updateVisAttributes(_omvManager->getVisTime());
         }
-
-		
-		fmi1_value_reference_t OMVisualizerFMU::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
-		{
-			fmi1_value_reference_t vr = 0;
-			if (!attr->isConst) {
-				fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmu->getFMU(), attr->cref.c_str());
-				vr = fmi1_import_get_variable_vr(var);
-			}
-			return vr;
-		}
-
-
-		int OMVisualizerFMU::setVarReferencesInVisAttributes()
-		{
-			int isOk(0);
-
-			try
-			{
-				fmi1_import_t* fmu = _fmu->getFMU(); /// \todo Todo unused variable
-				ShapeObject shape;
-				for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
-				{
-					shape = _baseData->_shapes[i];
-
-					shape._length.fmuValueRef = getVarReferencesForObjectAttribute(&shape._length);
-					shape._width.fmuValueRef = getVarReferencesForObjectAttribute(&shape._width);
-					shape._height.fmuValueRef = getVarReferencesForObjectAttribute(&shape._height);
-
-					shape._lDir[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[0]);
-					shape._lDir[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[1]);
-					shape._lDir[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._lDir[2]);
-
-					shape._wDir[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[0]);
-					shape._wDir[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[1]);
-					shape._wDir[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._wDir[2]);
-
-					shape._r[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[0]);
-					shape._r[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[1]);
-					shape._r[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._r[2]);
-
-					shape._rShape[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[0]);
-					shape._rShape[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[1]);
-					shape._rShape[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._rShape[2]);
-
-					shape._T[0].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[0]);
-					shape._T[1].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[1]);
-					shape._T[2].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[2]);
-					shape._T[3].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[3]);
-					shape._T[4].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[4]);
-					shape._T[5].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[5]);
-					shape._T[6].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[6]);
-					shape._T[7].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[7]);
-					shape._T[8].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[8]);
-					
-					//shape.dumpVisAttributes();
-					_baseData->_shapes.at(i) = shape;
-
-				}  //end for
-			}  // end try
-
-			catch (std::exception& e)
-			{
-				LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
-				isOk = 1;
-			}
-			return isOk;
-		}
 
         int OMVisualizerFMU::updateVisAttributes(const double time)
         {
@@ -315,35 +310,35 @@ namespace OMVIS
                     shape = _baseData->_shapes[i];
 
                     // get the values for the scene graph objects
-                    Util::updateObjectAttributeFMU(&shape._length, time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._width, time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._height, time, fmu);
+                    updateObjectAttributeFMU(&shape._length, time, fmu);
+                    updateObjectAttributeFMU(&shape._width, time, fmu);
+                    updateObjectAttributeFMU(&shape._height, time, fmu);
 
-                    Util::updateObjectAttributeFMU(&shape._lDir[0], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._lDir[1], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._lDir[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._lDir[0], time, fmu);
+                    updateObjectAttributeFMU(&shape._lDir[1], time, fmu);
+                    updateObjectAttributeFMU(&shape._lDir[2], time, fmu);
 
-                    Util::updateObjectAttributeFMU(&shape._wDir[0], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._wDir[1], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._wDir[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._wDir[0], time, fmu);
+                    updateObjectAttributeFMU(&shape._wDir[1], time, fmu);
+                    updateObjectAttributeFMU(&shape._wDir[2], time, fmu);
 
-                    Util::updateObjectAttributeFMU(&shape._r[0], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._r[1], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._r[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._r[0], time, fmu);
+                    updateObjectAttributeFMU(&shape._r[1], time, fmu);
+                    updateObjectAttributeFMU(&shape._r[2], time, fmu);
 
-                    Util::updateObjectAttributeFMU(&shape._rShape[0], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._rShape[1], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._rShape[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._rShape[0], time, fmu);
+                    updateObjectAttributeFMU(&shape._rShape[1], time, fmu);
+                    updateObjectAttributeFMU(&shape._rShape[2], time, fmu);
 
-                    Util::updateObjectAttributeFMU(&shape._T[0], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[1], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[2], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[3], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[4], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[5], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[6], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[7], time, fmu);
-                    Util::updateObjectAttributeFMU(&shape._T[8], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[0], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[1], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[3], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[4], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[5], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[6], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[7], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[8], time, fmu);
                     rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
                                         osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
@@ -351,9 +346,9 @@ namespace OMVIS
 
                     //update the shapes
                     _nodeUpdater->_shape = shape;
-					
+
                     //get the scene graph nodes and stuff
-					//_viewerStuff->dumpOSGTreeDebug();
+                    //_viewerStuff->dumpOSGTreeDebug();
                     child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
                     child->accept(*_nodeUpdater);
 
@@ -385,6 +380,17 @@ namespace OMVIS
             _omvManager->updateTick();                     //for real-time measurement
             _omvManager->setRealTimeFactor(_omvManager->getHVisual() / (_omvManager->getRealTime() - vis1));
             updateVisAttributes(_omvManager->getVisTime());
+        }
+
+        // Todo pass by const ref
+        void OMVisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu)
+        {
+            if (!attr->isConst)
+            {
+                fmi1_real_t a = attr->exp;
+                fmi1_import_get_real(fmu, &attr->fmuValueRef, 1, &a);
+                attr->exp = (float) a;
+            }
         }
 
     }  // End namespace Model

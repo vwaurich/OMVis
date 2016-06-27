@@ -106,7 +106,8 @@ namespace OMVIS
          *
          * \todo Currently unused.
          */
-        osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+//X13 unused?
+//        osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
         /*! \brief Gets the vector of the indicated node exp of the shape.
          *
@@ -119,7 +120,8 @@ namespace OMVIS
          *
          * \todo Currently unused.
          */
-        osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
+//X13 unused?
+//        osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
         /*! \brief Gets the value of the indicated node exp.
          *
