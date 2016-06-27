@@ -72,7 +72,7 @@ namespace OMVIS
              *
              * @return Error value.
              */
-            virtual int initData();
+            int initData();
 
             /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
              */
@@ -84,9 +84,7 @@ namespace OMVIS
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            virtual void simulate(Control::OMVisManager& omvm)
-            {
-            }
+            void simulate(Control::OMVisManager& omvm);
 
             /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
