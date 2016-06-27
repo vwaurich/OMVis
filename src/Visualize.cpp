@@ -200,28 +200,29 @@ namespace OMVIS
          * Extract Shape information
          *****************************/
 
-        osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
-        {
-            rapidxml::xml_node<>* x1Node = node->first_node(attr)->first_node();
-            rapidxml::xml_node<>* x2Node = x1Node->next_sibling();
-            rapidxml::xml_node<>* x3Node = x2Node->next_sibling();
-            rapidxml::xml_node<>* y1Node = x3Node->next_sibling();
-            rapidxml::xml_node<>* y2Node = y1Node->next_sibling();
-            rapidxml::xml_node<>* y3Node = y2Node->next_sibling();
-            rapidxml::xml_node<>* z1Node = y3Node->next_sibling();
-            rapidxml::xml_node<>* z2Node = z1Node->next_sibling();
-            rapidxml::xml_node<>* z3Node = z2Node->next_sibling();
-            double x1 = evaluateExpressionMAT(x1Node, time, reader);
-            double x2 = evaluateExpressionMAT(x2Node, time, reader);
-            double x3 = evaluateExpressionMAT(x3Node, time, reader);
-            double y1 = evaluateExpressionMAT(y1Node, time, reader);
-            double y2 = evaluateExpressionMAT(y2Node, time, reader);
-            double y3 = evaluateExpressionMAT(y3Node, time, reader);
-            double z1 = evaluateExpressionMAT(z1Node, time, reader);
-            double z2 = evaluateExpressionMAT(z2Node, time, reader);
-            double z3 = evaluateExpressionMAT(z3Node, time, reader);
-            return osg::Matrix3(x1, x2, x3, y1, y2, y3, z1, z2, z3);
-        }
+//X13 unused?
+//        osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+//        {
+//            rapidxml::xml_node<>* x1Node = node->first_node(attr)->first_node();
+//            rapidxml::xml_node<>* x2Node = x1Node->next_sibling();
+//            rapidxml::xml_node<>* x3Node = x2Node->next_sibling();
+//            rapidxml::xml_node<>* y1Node = x3Node->next_sibling();
+//            rapidxml::xml_node<>* y2Node = y1Node->next_sibling();
+//            rapidxml::xml_node<>* y3Node = y2Node->next_sibling();
+//            rapidxml::xml_node<>* z1Node = y3Node->next_sibling();
+//            rapidxml::xml_node<>* z2Node = z1Node->next_sibling();
+//            rapidxml::xml_node<>* z3Node = z2Node->next_sibling();
+//            double x1 = evaluateExpressionMAT(x1Node, time, reader);
+//            double x2 = evaluateExpressionMAT(x2Node, time, reader);
+//            double x3 = evaluateExpressionMAT(x3Node, time, reader);
+//            double y1 = evaluateExpressionMAT(y1Node, time, reader);
+//            double y2 = evaluateExpressionMAT(y2Node, time, reader);
+//            double y3 = evaluateExpressionMAT(y3Node, time, reader);
+//            double z1 = evaluateExpressionMAT(z1Node, time, reader);
+//            double z2 = evaluateExpressionMAT(z2Node, time, reader);
+//            double z3 = evaluateExpressionMAT(z3Node, time, reader);
+//            return osg::Matrix3(x1, x2, x3, y1, y2, y3, z1, z2, z3);
+//        }
 
         osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
         {
@@ -246,16 +247,17 @@ namespace OMVIS
             return osg::Matrix3(x1, x2, x3, y1, y2, y3, z1, z2, z3);
         }
 
-        osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
-        {
-            rapidxml::xml_node<>* xNode = node->first_node(attr)->first_node();
-            rapidxml::xml_node<>* yNode = xNode->next_sibling();
-            rapidxml::xml_node<>* zNode = yNode->next_sibling();
-            double x = evaluateExpressionMAT(xNode, time, reader);
-            double y = evaluateExpressionMAT(yNode, time, reader);
-            double z = evaluateExpressionMAT(zNode, time, reader);
-            return osg::Vec3f(x, y, z);
-        }
+//X13 unused?
+//        osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+//        {
+//            rapidxml::xml_node<>* xNode = node->first_node(attr)->first_node();
+//            rapidxml::xml_node<>* yNode = xNode->next_sibling();
+//            rapidxml::xml_node<>* zNode = yNode->next_sibling();
+//            double x = evaluateExpressionMAT(xNode, time, reader);
+//            double y = evaluateExpressionMAT(yNode, time, reader);
+//            double z = evaluateExpressionMAT(zNode, time, reader);
+//            return osg::Vec3f(x, y, z);
+//        }
 
         osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
         {
@@ -268,14 +270,14 @@ namespace OMVIS
             return osg::Vec3f(x, y, z);
         }
 
-        // Todo pass by const ref
-        void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader)
-        {
-            if (!attr->isConst)
-            {
-                attr->exp = *omc_get_varValue(&reader, attr->cref.c_str(), time);
-            }
-        }
+//        // Todo pass by const ref
+//        void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader)
+//        {
+//            if (!attr->isConst)
+//            {
+//                attr->exp = *omc_get_varValue(&reader, attr->cref.c_str(), time);
+//            }
+//        }
 
         // Todo pass by const ref
         void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu)
@@ -295,12 +297,13 @@ namespace OMVIS
                 //attr.exp = reinterpret_cast<float>(_outputCont.getRealValues()[attr.fmuValueRef]);
         }
 
-        double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
-        {
-            rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
-            double val = evaluateExpressionMAT(expNode, time, reader);
-            return val;
-        }
+//X13 unused?
+//        double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader)
+//        {
+//            rapidxml::xml_node<>* expNode = node->first_node(attr)->first_node();
+//            double val = evaluateExpressionMAT(expNode, time, reader);
+//            return val;
+//        }
 
         double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu)
         {

@@ -99,27 +99,38 @@ namespace OMVIS
 
         /*! \brief Gets the vector of the indicated node exp of the shape.
          */
-        osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+        //X13 unused?
+        //osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
         /*! \brief Gets the vector of the indicated node exp of the shape.
+         *
+         * \todo Currently unused.
          */
         osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
         /*! \brief Gets the vector of the indicated node exp of the shape.
+         *
+         * \todo Currently unused.
          */
-        osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+        //X13 unused?
+        //osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
         /*! \brief Gets the vector of the indicated node exp of the shape.
+         *
+         * \todo Currently unused.
          */
         osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
         /*! \brief Gets the value of the indicated node exp.
+         *
+         * \todo Currently unused.
          */
-        double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+        //X13 unused
+        //X13 double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
-        /*! \brief Update the attribute of the Object using a mat-file result
-         */
-        void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader);
+//        /*! \brief Update the attribute of the Object using a mat-file result
+//         */
+//        void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader);
 
         /*! \brief Update the attribute of the Object using a mat-file result
          */

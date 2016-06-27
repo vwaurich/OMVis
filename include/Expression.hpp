@@ -33,19 +33,19 @@
 #include <read_matlab4.h>
 #include <rapidxml.hpp>
 
-/*! \brief Gets the value of a variable at a certain time.
- *
- * @param the root node "visualization"
- * @return the number of shape-nodes
- */
-double* omc_get_varValue(ModelicaMatReader* reader, const char* varName, double time);
+///*! \brief Gets the value of a variable at a certain time.
+// *
+// * @param the root node "visualization"
+// * @return the number of shape-nodes
+// */
+//double* omc_get_varValue(ModelicaMatReader* reader, const char* varName, double time);
 
 /*! \brief Evaluates the Binary Exp using a mat-file
 *
 * @param
 * @return the evaluated value
 */
-double evaluateBinaryExpMAT(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2, rapidxml::xml_node<>* exp1, double time, ModelicaMatReader reader);
+//X13 double evaluateBinaryExpMAT(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2, rapidxml::xml_node<>* exp1, double time, ModelicaMatReader reader);
 
 /*! \brief Evaluates the Binary Exp using an fmu.
 *
@@ -59,7 +59,7 @@ double evaluateBinaryExpFMU(rapidxml::xml_node<>* op, rapidxml::xml_node<>* exp2
  * @param the root node "visualization"
  * @return the value
  */
-double evaluateCallExpMAT(rapidxml::xml_node<>* call, rapidxml::xml_node<>* exp1, double time, ModelicaMatReader reader);
+//X13 unused double evaluateCallExpMAT(rapidxml::xml_node<>* call, rapidxml::xml_node<>* exp1, double time, ModelicaMatReader reader);
 
 /*! \brief Evaluates the call-expression. Uses a FMU.
 *
@@ -73,7 +73,7 @@ double evaluateCallExpFMU(rapidxml::xml_node<>* call, rapidxml::xml_node<>* exp1
 * @param the root node "visualization"
 * @return the value
 */
-double evaluateExpressionMAT(rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
+//X13 double evaluateExpressionMAT(rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
 
 /*! \brief Gets the numerical value for the given node usign a callback function. Therefore, the AST is traversed.Uses a FMU.
 *
