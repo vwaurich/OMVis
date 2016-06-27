@@ -31,6 +31,7 @@
 #include "Model/ShapeObject.hpp"
 
 #include <rapidxml.hpp>
+
 #include <string>
 
 namespace OMVIS
@@ -131,3 +132,6 @@ namespace OMVIS
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_OMVISUALBASE_HPP_ */
+/**
+ * @}
+ */
