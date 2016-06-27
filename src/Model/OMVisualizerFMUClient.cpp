@@ -1,8 +1,20 @@
 /*
- * OMVisualizerFMUClient.cpp
+ * Copyright (C) 2016, Volker Waurich
  *
- *  Created on: 13.05.2016
- *      Author: mf
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Model/OMVisualizerFMUClient.hpp"
@@ -112,6 +124,29 @@ namespace OMVIS
                 }
             }
         }
+
+        int OMVisualizerFMUClient::initialize()
+          {
+              // If visual XML file is not present, we need to copy it from server to localhost
+              // (before calling OMVisualizerAbstract::initialize().
+
+              int isOk(0);
+              try
+              {
+                  initializeConnectionToServer();
+              }
+              catch (std::exception& ex)
+              {
+                  LOGGER_WRITE(std::string("OMVisualizerFMUClient exception: ") + ex.what(), Util::LC_LOADER, Util::LL_ERROR);
+                  isOk += 1;
+              }
+
+              OMVisualizerAbstract::initialize();
+
+              //initializeSimulation();
+
+              return isOk;
+          }
 
         /*-----------------------------------------
          * GETTERS and SETTERS

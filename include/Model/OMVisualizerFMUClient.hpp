@@ -1,24 +1,42 @@
 /*
- * OMVisualizerFMUClient.hpp
+ * Copyright (C) 2016, Volker Waurich
  *
- *  Created on: 13.05.2016
- *      Author: mf
+ * This file is part of OMVis.
+ *
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/** @addtogroup Model
+ *  @{
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
  */
 
 #ifndef INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 
+#include "Initialization/VisualizationConstructionPlans.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
-
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
 #include "Initialization/OMVisFactory.hpp"
-#include "Initialization/VisualizationConstructionPlan.hpp"
 
 // NetworkOffloader
 #include <SimulationClient.hpp>
@@ -77,7 +95,7 @@ namespace OMVIS
             /*! \brief Initializes OMVisualizerFMUClient object.
              *
              */
-            int initData();
+            int initData() override;
 
             /*! \brief This methods resets the input values of a FMU to default ("zero") values.
              *
@@ -95,28 +113,7 @@ namespace OMVIS
              *
              * @return
              */
-            virtual int initialize()
-            {
-                // If visual XML file is not present, we need to copy it from server to localhost
-                // (before calling OMVisualizerAbstract::initialize().
-
-                int isOk(0);
-                try
-                {
-                    initializeConnectionToServer();
-                }
-                catch (std::exception& ex)
-                {
-                    LOGGER_WRITE(std::string("OMVisualizerFMUClient exception: ") + ex.what(), Util::LC_LOADER, Util::LL_ERROR);
-                    isOk += 1;
-                }
-
-                OMVisualizerAbstract::initialize();
-
-                //initializeSimulation();
-
-                return isOk;
-            }
+            int initialize() override;
 
             /*! \brief Initializes the connection to the server. */
             void initializeConnectionToServer();
@@ -128,6 +125,14 @@ namespace OMVIS
              * Input and output variables are defined and communicated to the server.
              */
             void initializeSimulation();
+
+            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the
+             *         scene to initial position.
+             *
+             * @remark: Parameter time is not used, just inherited from
+             *          \ref OMVisualizerAbstract::initializeVisAttributes(const double).
+             */
+            void initializeVisAttributes(const double time = 0.0) override;
 
             /*-----------------------------------------
              * GETTERS and SETTERS
@@ -161,7 +166,7 @@ namespace OMVIS
 
             /*! \brief Returns "fmuclient".
              */
-            std::string getType() const;
+            std::string getType() const override;
 
             std::shared_ptr<InputData> getInputData();
 
@@ -180,7 +185,7 @@ namespace OMVIS
              *
              * @param omvm
              */
-            virtual void simulate(Control::OMVisManager& omvm);
+            virtual void simulate(Control::OMVisManager& omvm) override;
 
             /*! \brief Performs a simulation step to obtain data for next visualization frame.
              *
@@ -191,20 +196,14 @@ namespace OMVIS
              */
             double simulateStep(const double time);
 
-            /*! \brief This method updates the actual data for the visualization bodies by using
-             *         variables from the FMU.
+            /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
-             * @return Error value.
-             */
-            int updateVisAttributes(const double time);
-
-            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the
-             *         scene to initial position.
+             * The method updates the actual data for the visualization bodies by using variables from the FMU.
              *
-             * @remark: Parameter time is not used, just inherited from
-             *          \ref OMVisualizerAbstract::initializeVisAttributes(const double).
+             * \param time The visualization time.
+             * \return Error value.
              */
-            void initializeVisAttributes(const double time = 0.0);
+            int updateVisAttributes(const double time) override;
 
             /*! \brief For FMU-based visualization, we have to simulate until the next
              *         visualization time step.
@@ -212,10 +211,10 @@ namespace OMVIS
              *  @remark: Parameter time is not used, just inherited from
              *           \ref OMVisualizerAbstract::updateScene(const double).
              */
-            void updateScene(const double time = 0.0);
+            void updateScene(const double time = 0.0) override;
 
-            void startVisualization();
-            void pauseVisualization();
+            void startVisualization() override;
+            void pauseVisualization() override;
 
          private:
             /*-----------------------------------------
@@ -251,3 +250,6 @@ namespace OMVIS
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_ */
+/**
+ * @}
+ */
