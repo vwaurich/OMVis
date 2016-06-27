@@ -130,6 +130,10 @@ namespace OMVIS
             */
             fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
 
+            /*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable references in the visattributes
+            */
+            int setVarReferencesInVisAttributes();
+
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/
@@ -147,17 +151,13 @@ namespace OMVIS
              */
             int updateVisAttributes(const double time) override;
 
-			/*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable references in the visattributes
-			*/
-			int setVarReferencesInVisAttributes();
-
             /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
              *
              *  \remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
              */
             void updateScene(const double time = 0.0) override;
 
-            /*! \brief Update the attribute of the Object using a mat-file result. */
+            /*! \brief Update the attribute of the Object using a MAT result file. */
             void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu);
 
          private:
