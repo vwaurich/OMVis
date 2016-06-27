@@ -49,10 +49,14 @@ namespace OMVIS
     namespace Model
     {
 
-        /*! \brief This class serves as abstract class for visualization.
+        /*! \brief This class serves as abstract basis for data encapsulation of the visualization model.
          *
          * It provides basic methods for visualization.
-         * Concrete implementations are \ref OMVisualizerMat and \ref OMVisualizerFMU.
+         *
+         * Currently, there are three concrete implementations:
+         *      - \ref OMVisualizerFMU for visualization of models encapsulated as FMU
+         *      - \ref OMVisualizerMAT for visualization of simulation result files in MAT format
+         *      - \ref OMVisualizerFMUClient for remote visualization of models encapsulated as FMU
          */
         class OMVisualizerAbstract
         {
@@ -68,8 +72,8 @@ namespace OMVIS
              *
              * \remark The model file and its corresponding visual XML file need to be in the same directory.
              *
-             * @param[in] modelFile Name of the model file.
-             * @param[in] path Path to the FMU or result file and corresponding XML file.
+             * \param[in] modelFile Name of the model file.
+             * \param[in] path Path to the FMU or result file and corresponding XML file.
              */
             OMVisualizerAbstract(const std::string& modelFile, const std::string& path);
 
@@ -123,6 +127,10 @@ namespace OMVIS
              */
             virtual void initializeVisAttributes(const double time) = 0;
 
+            /*! \brief Sets the scene to start position.
+             */
+            void initVisualization();
+
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
@@ -143,14 +151,16 @@ namespace OMVIS
             /*! \brief In case of FMU visualization, this methods performs a simulation step.
              *
              * \remark All classes that derive from OMVisualizerAbstract
-             * @param omvm
+             * \param omvm
              */
             virtual void simulate(Control::OMVisManager& omvm) = 0;
 
-            /*! \brief Virtual Method to update the scene. Is implemented either by using FMU or MAT file.
+            /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
-             * \remark All classes that derive from OMVisualizerAbstract
-             * @param omvm
+             * This method is pure virtual and needs to be implemented by derived classes, e.g., \ref OMVsiualizerFMU
+             * and \ref OMVisualizerMAT.
+             *
+             * \param time The visualization time.
              * \return Error value.
              */
             virtual int updateVisAttributes(const double time) = 0;
@@ -172,11 +182,7 @@ namespace OMVIS
              *
              * The OMVisManager is set to "pause" and the simulation stops.
              */
-            void pauseVisualization();
-
-            /*! \brief Sets the scene to start position.
-             */
-            void initVisualization();
+            virtual void pauseVisualization();
 
             /*! \brief Prints a message which tells you to buy us a coffee.
              */
