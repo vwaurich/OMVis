@@ -27,9 +27,9 @@
 #ifndef INCLUDE_GUICONTROLLER_HPP_
 #define INCLUDE_GUICONTROLLER_HPP_
 
+#include "Initialization/VisualizationConstructionPlans.hpp"
 #include "View/OMVisScene.hpp"
 #include "Model/InputData.hpp"
-#include "Initialization/VisualizationConstructionPlan.hpp"
 
 #include <osg/Vec4>
 
@@ -175,10 +175,6 @@ namespace OMVIS
              *
              */
             std::shared_ptr<Model::OMVisualizerAbstract> _omVisualizer;
-
-            /** This member is true, if a model is currently loaded and initialized. Otherwise it is false.
-             * It can be used to determine, what user actions are allowed in the GUI. */
-//X1            bool _modelLoaded;
         };
 
     }  // End namespace Control
