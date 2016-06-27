@@ -27,7 +27,7 @@
 #ifndef INCLUDE_FACTORY_HPP_
 #define INCLUDE_FACTORY_HPP_
 
-#include "Initialization/VisualizationConstructionPlan.hpp"
+#include <Initialization/VisualizationConstructionPlans.hpp>
 #include "Model/OMVisualizerAbstract.hpp"
 
 #include <memory>
