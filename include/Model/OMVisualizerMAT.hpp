@@ -84,7 +84,7 @@ namespace OMVIS
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            void simulate(Control::OMVisManager& omvm);
+            void simulate(Control::OMVisManager& omvm){ };
 
             /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
