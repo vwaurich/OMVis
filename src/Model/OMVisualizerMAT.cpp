@@ -76,12 +76,13 @@ namespace OMVIS
 
         void OMVisualizerMAT::readMat(const std::string& modelFile, const std::string& path)
         {
-            std::string resFileName = path + modelFile;// + "_res.mat";
+            std::string resFileName = path + modelFile;        // + "_res.mat";
 
             // Check if the MAT file exists.
             if (!Util::fileExists(resFileName))
                 LOGGER_WRITE(std::string("MAT file ") + resFileName + std::string(" could not be found. Is it in the same directory as the model file?"), Util::LC_LOADER, Util::LL_ERROR);
-            else // Read mat file
+            else
+                // Read mat file
                 omc_new_matlab4_reader(resFileName.c_str(), &_matReader);
             /*
              FILE * fileA = fopen("allVArs.txt", "w+");
@@ -109,41 +110,41 @@ namespace OMVIS
                     ShapeObject shape = _baseData->_shapes[i];
 
                     // get the values for the scene graph objects
-                    Util::updateObjectAttributeMAT(&shape._length, time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._width, time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._height, time, _matReader);
+                    updateObjectAttributeMAT(&shape._length, time, _matReader);
+                    updateObjectAttributeMAT(&shape._width, time, _matReader);
+                    updateObjectAttributeMAT(&shape._height, time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._lDir[0], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._lDir[1], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._lDir[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._lDir[0], time, _matReader);
+                    updateObjectAttributeMAT(&shape._lDir[1], time, _matReader);
+                    updateObjectAttributeMAT(&shape._lDir[2], time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._wDir[0], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._wDir[1], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._wDir[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._wDir[0], time, _matReader);
+                    updateObjectAttributeMAT(&shape._wDir[1], time, _matReader);
+                    updateObjectAttributeMAT(&shape._wDir[2], time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._r[0], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._r[1], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._r[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._r[0], time, _matReader);
+                    updateObjectAttributeMAT(&shape._r[1], time, _matReader);
+                    updateObjectAttributeMAT(&shape._r[2], time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._rShape[0], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._rShape[1], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._rShape[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._rShape[0], time, _matReader);
+                    updateObjectAttributeMAT(&shape._rShape[1], time, _matReader);
+                    updateObjectAttributeMAT(&shape._rShape[2], time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._T[0], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[1], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[2], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[3], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[4], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[5], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[6], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[7], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._T[8], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[0], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[1], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[3], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[4], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[5], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[6], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[7], time, _matReader);
+                    updateObjectAttributeMAT(&shape._T[8], time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._color[0], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._color[1], time, _matReader);
-                    Util::updateObjectAttributeMAT(&shape._color[2], time, _matReader);
+                    updateObjectAttributeMAT(&shape._color[0], time, _matReader);
+                    updateObjectAttributeMAT(&shape._color[1], time, _matReader);
+                    updateObjectAttributeMAT(&shape._color[2], time, _matReader);
 
-                    Util::updateObjectAttributeMAT(&shape._specCoeff, time, _matReader);
+                    updateObjectAttributeMAT(&shape._specCoeff, time, _matReader);
 
                     osg::Vec3f v = Util::normalize(osg::Vec3f(0.0, 0.0, 0.0));
 
@@ -184,6 +185,31 @@ namespace OMVIS
             visTime = _omvManager->getRealTime() - visTime;
             _omvManager->setRealTimeFactor(_omvManager->getHVisual() / visTime);
         }
+
+        // Todo pass by const ref
+        void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader)
+        {
+            if (!attr->isConst)
+                attr->exp = *omc_get_varValue(&reader, attr->cref.c_str(), time);
+        }
+
+        double* OMVisualizerMAT::omc_get_varValue(ModelicaMatReader* reader, const char* varName, double time)
+        {
+            double val = 0.0;
+            double* res = &val;
+            ModelicaMatVariable_t* var = NULL;
+            var = omc_matlab4_find_var(reader, varName);
+            if (var == NULL)
+                std::cout << "Error: Did not get variable from result file! " << varName << std::endl;
+            elser
+                omc_matlab4_val(res, reader, var, time);
+
+            return res;
+        }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
 
         std::string OMVisualizerMAT::getType() const
         {

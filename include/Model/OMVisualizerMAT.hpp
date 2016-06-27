@@ -88,16 +88,37 @@ namespace OMVIS
             {
             }
 
-            /*! \brief Implementation for OMVisualizerAbstract::updateVisAttributes to update all visualization attributes based on a MAT file.
+            /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
-             * @param time The point of time
+             * The method updates the actual data for the visualization bodies by using variables from the MAT file.
+             *
+             * \param time The visualization time.
              * \return Error value.
              */
-            int updateVisAttributes(const double time);
+            int updateVisAttributes(const double time) override;
 
             /*! \brief For MAT file based visualization, nothing has to be done. Just get the visualizationAttributes.
              */
             void updateScene(const double time);
+
+            /*! \brief Update the attribute of the Object using a mat-file result. */
+            void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader);
+
+            /*! \brief Fetches the value of a variable at a certain time.
+             *
+             * \todo: The method omc_matlab4_val which is called inside this method returns 0 on success. Thus, we
+             *        should test the return value.
+             *
+             * \param reader The ModelicaMatReader object to use for reading the MAT file.
+             * \param varName The name of the variable to fetch the value for.
+             * \param time The time to get the value for.
+             * \return
+             */
+            double* omc_get_varValue(ModelicaMatReader* reader, const char* varName, double time);
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
 
             /*! \brief Returns "mat".
              */
