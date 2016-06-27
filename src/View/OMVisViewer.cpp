@@ -24,8 +24,6 @@
 #include "View/OMVisViewer.hpp"
 #include "Util/Algebra.hpp"
 #include "View/Dialogs.hpp"
-#include "Initialization/VisualizationConstructionPlan.hpp"
-
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
 #include <osgViewer/ViewerEventHandlers>
@@ -51,6 +49,8 @@
 #include <QMenuBar>
 
 #include <assert.h>
+#include <Initialization/VisualizationConstructionPlans.hpp>
+
 #include <stdexcept>
 
 namespace OMVIS

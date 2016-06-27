@@ -20,7 +20,7 @@
 #ifndef INCLUDE_VIEW_DIALOGS_OPENFILEDIALOG_HPP_
 #define INCLUDE_VIEW_DIALOGS_OPENFILEDIALOG_HPP_
 
-#include "Initialization/VisualizationConstructionPlan.hpp"
+#include <Initialization/VisualizationConstructionPlans.hpp>
 
 #include <QString>
 #include <QFileDialog>
