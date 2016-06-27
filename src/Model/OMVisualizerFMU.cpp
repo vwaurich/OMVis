@@ -307,35 +307,35 @@ namespace OMVIS
                 for (auto& shape : _baseData->_shapes)
                 {
                     // Get the values for the scene graph objects
-                    updateObjectAttributeFMU(&shape._length, time, fmu);
-                    updateObjectAttributeFMU(&shape._width, time, fmu);
-                    updateObjectAttributeFMU(&shape._height, time, fmu);
+                    updateObjectAttributeFMU(&shape._length, fmu);
+                    updateObjectAttributeFMU(&shape._width, fmu);
+                    updateObjectAttributeFMU(&shape._height, fmu);
 
-                    updateObjectAttributeFMU(&shape._lDir[0], time, fmu);
-                    updateObjectAttributeFMU(&shape._lDir[1], time, fmu);
-                    updateObjectAttributeFMU(&shape._lDir[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._lDir[0], fmu);
+                    updateObjectAttributeFMU(&shape._lDir[1], fmu);
+                    updateObjectAttributeFMU(&shape._lDir[2], fmu);
 
-                    updateObjectAttributeFMU(&shape._wDir[0], time, fmu);
-                    updateObjectAttributeFMU(&shape._wDir[1], time, fmu);
-                    updateObjectAttributeFMU(&shape._wDir[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._wDir[0], fmu);
+                    updateObjectAttributeFMU(&shape._wDir[1], fmu);
+                    updateObjectAttributeFMU(&shape._wDir[2], fmu);
 
-                    updateObjectAttributeFMU(&shape._r[0], time, fmu);
-                    updateObjectAttributeFMU(&shape._r[1], time, fmu);
-                    updateObjectAttributeFMU(&shape._r[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._r[0], fmu);
+                    updateObjectAttributeFMU(&shape._r[1], fmu);
+                    updateObjectAttributeFMU(&shape._r[2], fmu);
 
-                    updateObjectAttributeFMU(&shape._rShape[0], time, fmu);
-                    updateObjectAttributeFMU(&shape._rShape[1], time, fmu);
-                    updateObjectAttributeFMU(&shape._rShape[2], time, fmu);
+                    updateObjectAttributeFMU(&shape._rShape[0], fmu);
+                    updateObjectAttributeFMU(&shape._rShape[1], fmu);
+                    updateObjectAttributeFMU(&shape._rShape[2], fmu);
 
-                    updateObjectAttributeFMU(&shape._T[0], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[1], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[2], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[3], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[4], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[5], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[6], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[7], time, fmu);
-                    updateObjectAttributeFMU(&shape._T[8], time, fmu);
+                    updateObjectAttributeFMU(&shape._T[0], fmu);
+                    updateObjectAttributeFMU(&shape._T[1], fmu);
+                    updateObjectAttributeFMU(&shape._T[2], fmu);
+                    updateObjectAttributeFMU(&shape._T[3], fmu);
+                    updateObjectAttributeFMU(&shape._T[4], fmu);
+                    updateObjectAttributeFMU(&shape._T[5], fmu);
+                    updateObjectAttributeFMU(&shape._T[6], fmu);
+                    updateObjectAttributeFMU(&shape._T[7], fmu);
+                    updateObjectAttributeFMU(&shape._T[8], fmu);
                     rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
                                         osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
@@ -362,7 +362,7 @@ namespace OMVIS
 
         void OMVisualizerFMU::updateScene(const double time)
         {
-            _omvManager->updateTick();            //for real-time measurement
+            _omvManager->updateTick(); //for real-time measurement
 
             _omvManager->setSimTime(_omvManager->getVisTime());
             double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
@@ -380,7 +380,7 @@ namespace OMVIS
         }
 
         // Todo pass by const ref
-        void OMVisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu)
+        void OMVisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, fmi1_import_t* fmu)
         {
             if (!attr->isConst)
             {

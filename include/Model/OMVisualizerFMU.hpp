@@ -157,8 +157,8 @@ namespace OMVIS
              */
             void updateScene(const double time = 0.0) override;
 
-            /*! \brief Update the attribute of the Object using a MAT result file. */
-            void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu);
+            /*! \brief Update the attributes of a shape. */
+            void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, fmi1_import_t* fmu);
 
          private:
             /*-----------------------------------------
