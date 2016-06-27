@@ -20,7 +20,7 @@
 #ifndef INCLUDE_VIEW_DIALOGS_OPENREMOTECONNECTIONDIALOG_HPP_
 #define INCLUDE_VIEW_DIALOGS_OPENREMOTECONNECTIONDIALOG_HPP_
 
-#include "Initialization/VisualizationConstructionPlan.hpp"
+#include <Initialization/VisualizationConstructionPlans.hpp>
 
 #include <QDialog>
 #include <QLineEdit>
