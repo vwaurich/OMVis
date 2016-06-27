@@ -95,7 +95,7 @@ namespace OMVIS
             /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
              * @return Error value.
              */
-            int initData();
+            int initData() override;
 
             /*! \brief This methods resets the input values of a FMU to default ("zero") values.
              *
@@ -106,13 +106,19 @@ namespace OMVIS
              */
             void initJoySticks();
 
+            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+             *
+             * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
+             */
+            void initializeVisAttributes(const double time = 0.0) override;
+
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
 
             /*! \brief Returns "fmu".
              */
-            std::string getType() const;
+            std::string getType() const override;
 
             /*! Returns const pointer to \ref FMU member. */
             const FMU* getFMU() const;
@@ -128,31 +134,28 @@ namespace OMVIS
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            virtual void simulate(Control::OMVisManager& omvm);
+            void simulate(Control::OMVisManager& omvm) override;
 
             double simulateStep(const double time);
 
-            /*! \brief This method updates the actual data for the visualization bodies by using variables from the FMU.
+            /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
+             * The method updates the actual data for the visualization bodies by using variables from the FMU.
+             *
+             * \param time The visualization time.
              * \return Error value.
              */
-            int updateVisAttributes(const double time);
+            int updateVisAttributes(const double time) override;
 
 			/*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable references in the visattributes
 			*/
 			int setVarReferencesInVisAttributes();
 
-            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
-             *
-             * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
-             */
-            void initializeVisAttributes(const double time = 0.0);
-
             /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
              *
              *  \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
              */
-            void updateScene(const double time = 0.0);
+            void updateScene(const double time = 0.0) override;
 
          private:
             /*-----------------------------------------
