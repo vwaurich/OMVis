@@ -163,9 +163,8 @@ namespace OMVIS
 
             try
             {
-                fmi1_import_t* fmu = _fmu->getFMU();  /// \todo Todo unused variable
-                ShapeObject shape;
-                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
+                size_t i = 0;
+                for (auto& shape : _baseData->_shapes)
                 {
                     shape = _baseData->_shapes[i];
 
@@ -201,7 +200,7 @@ namespace OMVIS
 
                     //shape.dumpVisAttributes();
                     _baseData->_shapes.at(i) = shape;
-
+                    ++i;
                 }  //end for
             }  // end try
 
@@ -304,12 +303,10 @@ namespace OMVIS
             try
             {
                 fmi1_import_t* fmu = _fmu->getFMU();
-                ShapeObject shape;
-                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
+                size_t i = 0;
+                for (auto& shape : _baseData->_shapes)
                 {
-                    shape = _baseData->_shapes[i];
-
-                    // get the values for the scene graph objects
+                    // Get the values for the scene graph objects
                     updateObjectAttributeFMU(&shape._length, time, fmu);
                     updateObjectAttributeFMU(&shape._width, time, fmu);
                     updateObjectAttributeFMU(&shape._height, time, fmu);
@@ -351,7 +348,7 @@ namespace OMVIS
                     //_viewerStuff->dumpOSGTreeDebug();
                     child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
                     child->accept(*_nodeUpdater);
-
+                    ++i;
                 }  //end for
             }  // end try
 
