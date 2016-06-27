@@ -185,7 +185,6 @@ namespace OMVIS
             _omvManager->setRealTimeFactor(_omvManager->getHVisual() / visTime);
         }
 
-        // Todo pass by const ref
         void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
         {
             if (!attr->isConst)
