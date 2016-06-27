@@ -111,7 +111,8 @@ namespace OMVIS
             return dirs;
         }
 
-        osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r)
+        //osg::Matrix assemblePokeMatrix(osg::Matrix M, const osg::Matrix3& T, const osg::Vec3f& r)
+        void assemblePokeMatrix(osg::Matrix& M, const osg::Matrix3& T, const osg::Vec3f& r)
         {
             M(3, 3) = 1.0;
             for (int row = 0; row < 3; ++row)
@@ -121,7 +122,7 @@ namespace OMVIS
                 for (int col = 0; col < 3; ++col)
                     M(row, col) = T[row * 3 + col];
             }
-            return M;
+            //return M;
         }
 
         rAndT rotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, float length, float width, float height, std::string type)

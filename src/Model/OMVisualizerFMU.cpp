@@ -339,7 +339,7 @@ namespace OMVIS
                     rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
                                         osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
-                    shape._mat = Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
+                    Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
                     //update the shapes
                     _nodeUpdater->_shape = shape;

@@ -150,7 +150,8 @@ namespace OMVIS
          */
         Model::ShapeObjectAttribute getObjectAttributeForNode(rapidxml::xml_node<>*);
 
-        osg::Matrix assemblePokeMatrix(osg::Matrix M, osg::Matrix3 T, osg::Vec3f r);
+        //osg::Matrix
+        void assemblePokeMatrix(osg::Matrix& M, const osg::Matrix3& T, const osg::Vec3f& r);
 
         /*! \brief Updates r and T to cope with the directions.
          *

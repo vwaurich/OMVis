@@ -239,11 +239,8 @@ namespace OMVIS
 
             try
             {
-                //  for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
                 for (auto& shape : _baseData->_shapes)
                 {
-                    // ShapeObject& shape = _baseData->_shapes[i];
-
                     shape._length.fmuValueRef = getVarReferencesForObjectAttribute(&shape._length);
                     shape._width.fmuValueRef = getVarReferencesForObjectAttribute(&shape._width);
                     shape._height.fmuValueRef = getVarReferencesForObjectAttribute(&shape._height);
@@ -294,10 +291,9 @@ namespace OMVIS
             osg::ref_ptr<osg::Node> child = nullptr;
             try
             {
-                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); ++i)
+                size_t i =0;
+                for (auto& shape : _baseData->_shapes)
                 {
-                    ShapeObject & shape = _baseData->_shapes[i];
-
                     // get the values for the scene graph objects
                     Util::updateObjectAttributeFMUClient(shape._length, outputCont);
                     Util::updateObjectAttributeFMUClient(shape._width, outputCont);
@@ -331,7 +327,7 @@ namespace OMVIS
                     rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
                                         osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
-                    shape._mat = Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
+                    Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
                     //update the shapes
                     _nodeUpdater->_shape = shape;
@@ -340,7 +336,7 @@ namespace OMVIS
                     //_viewerStuff->dumpOSGTreeDebug();
                     child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
                     child->accept(*_nodeUpdater);
-
+                    ++i;
                 }  //end for
             }  // end try
 
