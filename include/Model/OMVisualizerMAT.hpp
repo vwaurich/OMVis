@@ -110,9 +110,9 @@ namespace OMVIS
              * \param reader The ModelicaMatReader object to use for reading the MAT file.
              * \param varName The name of the variable to fetch the value for.
              * \param time The time to get the value for.
-             * \return
+             * \return Value of the variable at the specified time.
              */
-            double* omc_get_varValue(ModelicaMatReader* reader, const char* varName, double time);
+            double omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time);
 
             /*-----------------------------------------
              * GETTERS AND SETTERS

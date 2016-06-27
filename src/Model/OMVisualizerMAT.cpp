@@ -105,11 +105,9 @@ namespace OMVIS
             osg::ref_ptr<osg::Node> child = nullptr;
             try
             {
-                for (std::vector<Model::ShapeObject>::size_type i = 0; i != _baseData->_shapes.size(); i++)
+                for (auto& shape : _baseData->_shapes)
                 {
-                    ShapeObject shape = _baseData->_shapes[i];
-
-                    // get the values for the scene graph objects
+                    // Get the values for the scene graph objects
                     updateObjectAttributeMAT(&shape._length, time, _matReader);
                     updateObjectAttributeMAT(&shape._width, time, _matReader);
                     updateObjectAttributeMAT(&shape._height, time, _matReader);
@@ -190,21 +188,20 @@ namespace OMVIS
         void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader)
         {
             if (!attr->isConst)
-                attr->exp = *omc_get_varValue(&reader, attr->cref.c_str(), time);
+                attr->exp = omcGetVarValue(&reader, attr->cref.c_str(), time);
         }
 
-        double* OMVisualizerMAT::omc_get_varValue(ModelicaMatReader* reader, const char* varName, double time)
+        double OMVisualizerMAT::omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time)
         {
             double val = 0.0;
-            double* res = &val;
-            ModelicaMatVariable_t* var = NULL;
+            ModelicaMatVariable_t* var = nullptr;
             var = omc_matlab4_find_var(reader, varName);
-            if (var == NULL)
-                std::cout << "Error: Did not get variable from result file! " << varName << std::endl;
+            if (var == nullptr)
+                LOGGER_WRITE(std::string("Did not get variable from result file. Variable name is " + std::string(varName) + "."), Util::LC_SOLVER, Util::LL_ERROR);
             else
-                omc_matlab4_val(res, reader, var, time);
+                omc_matlab4_val(&val, reader, var, time);
 
-            return res;
+            return val;
         }
 
         /*-----------------------------------------
