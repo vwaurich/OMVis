@@ -17,17 +17,14 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Initialization/OMVisFactory.hpp"
+#include <Initialization/Factory.hpp>
 #include "Control/GUIController.hpp"
 #include "Control/OMVisManager.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerFMUClient.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
-#include <string>
-#include <exception>
 #include <sys/stat.h>
 #include <stdexcept>
 
@@ -55,6 +52,12 @@ namespace OMVIS
 
             // Check for XML description file.
             bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.path);
+            if (!xmlExists)
+            {
+                std::string msg = "Visual XML file does not exist in the same model file directory.";
+                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                throw std::runtime_error(msg);
+            }
 
             // Some useful output for the user and developer.
             LOGGER_WRITE(std::string("Path to model: ") + cP.path, Util::LC_CTR, Util::LL_DEBUG);

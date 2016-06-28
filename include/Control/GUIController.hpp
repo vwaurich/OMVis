@@ -28,38 +28,30 @@
 #define INCLUDE_GUICONTROLLER_HPP_
 
 #include "Initialization/VisualizationConstructionPlans.hpp"
-#include "View/OMVisScene.hpp"
 #include "Model/InputData.hpp"
+#include "Model/OMVisualizerAbstract.hpp"
 
-#include <osg/Vec4>
+#include <osg/Node>
 
 #include <memory>
 
-// Forward declarations
-namespace OMVIS
-{
-    namespace Model
-    {
-        class OMVisualizerAbstract;
-    }
-}
 
 namespace OMVIS
 {
     namespace Control
     {
 
-        /*! \brief This class is a controller class which handles the user interaction with OMVis via GUI.
+        /*! \brief This is a controller class that handles the user interaction with OMVis via GUI.
          *
          * Thus, this class serves as the(!) interface between the user and OMVis. A GUIcontroller object receives the
          * user input (,e.g., clicking a menu point), processes it and induces the appropriate action. Therefore, the
-         * GuiController class implements most of the slot functions of \ref OMVisVisViewer.
+         * GuiController class implements most of the slot functions of \ref Model::OMVisVisViewer.
          *
          * The GuiController class encapsulates the model data structures from the GUI elements and classes. It holds
          * the pointer to the concrete model visualization object.
          *
          * \remark: If we want to visualize multiple models in the future, _omVisualizer will have to be a vector of
-         *          pointers of type \ref OMVisualizerAbstract to these models.
+         *          pointers of type \ref Model::OMVisualizerAbstract to these models.
          *
          */
         class GUIController
@@ -82,9 +74,9 @@ namespace OMVIS
 
             /*! \brief This method loads a model (FMU or MAT file) for visualization.
              *
-             * This method gets a construction plan and asks the \ref OMVisFactory to create an appropriate
-             * OMVisualizer object. If this OMVisualizer object can be initialized without errors, it is taken as new
-             * visualization model.
+             * This method gets a construction plan and asks the \ref Initialization::Factory to create an
+             * appropriate OMVisualizer object. If this OMVisualizer object can be initialized without errors, it is
+             * taken as new visualization model.
              * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
              * compatibility issue, than the old model is kept. If the already load and the new model are the very
              * same, no information/message is thrown. We just load it and destroy the current settings.
@@ -101,9 +93,9 @@ namespace OMVIS
 
             /*! \brief This method loads a FMU model for remote visualization.
              *
-             * This method gets a construction plan for remote visualization and asks the \ref OMVisFactory to create
-             * an appropriate OMVisualizerClient object. If this OMVisualizerClient object can be initialized without
-             * errors, it is taken as new visualization model.
+             * This method gets a construction plan for remote visualization and asks the \ref Initialization::Factory
+             * to create an appropriate OMVisualizerClient object. If this OMVisualizerClient object can be initialized
+             * without errors, it is taken as new visualization model.
              * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
              * compatibility issue, than the old model is kept. If the already load and the new model are the very
              * same, no information/message is thrown. We just load it and destroy the current settings.
@@ -141,7 +133,7 @@ namespace OMVIS
 
             /*! \brief Asks the OMVisualizer object to update the scene.
              *
-             * This method is triggered by \ref OMVisViewer::sceneUpdate which is frequently called from Qt.
+             * This method is triggered by \ref View::OMVisViewer::sceneUpdate which is frequently called from Qt.
              */
             void sceneUpdate();
 
@@ -163,7 +155,7 @@ namespace OMVIS
 
             /*! \brief Sets the visualization time handled by the OMVisManager object.
              *
-             * This method is called by \ref OMVisViewer if the user moves the time slider.
+             * This method is called by \ref View::OMVisViewer if the user moves the time slider.
              *
              * \param val   The new value of the time slider.
              */
@@ -187,11 +179,11 @@ namespace OMVIS
             /*! \brief Returns true, if a model is loaded into OMVis, i.e., the OMVisualizer object is not nullptr. */
             bool modelIsLoaded();
 
-            /*! \brief Gets the InputData from the OMVisualizer.
+            /*! \brief Gets the InputData from the OMVisualizer object in case of FMU or remote FMU visualization.
              *
              * \remark If we visualize a MAT file, we return a proper nullptr and the caller method has to handle it!
              *
-             * \return A pointer to the \ref InputData object.
+             * \return A pointer to the \ref Model::InputData object.
              */
             std::shared_ptr<Model::InputData> getInputData();
 
