@@ -30,8 +30,9 @@ namespace OMVIS
         /*-----------------------------------------
          * CONSTRUCTORS
          *---------------------------------------*/
-        OMVisManager::OMVisManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime, const double hVisual,
-                                   const double startTime, const double endTime)
+
+        OMVisManager::OMVisManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
+                                   const double hVisual, const double startTime, const double endTime)
                 : _simTime(simTime),
                   _realTime(realTime),
                   _realTimeFactor(realTimeFactor),
@@ -39,8 +40,8 @@ namespace OMVIS
                   _hVisual(hVisual),
                   _startTime(startTime),
                   _endTime(endTime),
-                  _visualTimer(),
                   _pause(true),
+                  _visualTimer(),
                   _sliderRange(0)
         {
         }
@@ -69,14 +70,14 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
+        int OMVisManager::getSliderPosition() const
+        {
+            return std::round(_visTime * _sliderRange / (_endTime - _startTime));
+        }
+
         void OMVisManager::setSliderRange(const int min, const int max)
         {
             _sliderRange = max - min;
-        }
-
-        int OMVisManager::getTimeProgress() const
-        {
-            return std::round(_visTime * _sliderRange / (_endTime - _startTime));
         }
 
         double OMVisManager::getEndTime() const
@@ -119,6 +120,11 @@ namespace OMVIS
             _visTime = visTime;
         }
 
+        double OMVisManager::getHVisual() const
+        {
+            return _hVisual;
+        }
+
         double OMVisManager::getRealTime() const
         {
             return _realTime;
@@ -129,14 +135,9 @@ namespace OMVIS
             return _realTimeFactor;
         }
 
-        void OMVisManager::setRealTimeFactor(double rtf)
+        void OMVisManager::setRealTimeFactor(const double rtf)
         {
             _realTimeFactor = rtf;
-        }
-
-        double OMVisManager::getHVisual() const
-        {
-            return _hVisual;
         }
 
         bool OMVisManager::isPaused() const

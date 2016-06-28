@@ -34,12 +34,14 @@ namespace OMVIS
     namespace Control
     {
 
-        /*! Class that manages timing for OMVis.
+        /*! The class manages the timing for OMVis.
          *
          * Since we have at least three different time levels, namely simulation time, visualization time and real time,
          * we need a manager to properly handle them.
          *
-         * \todo More documentation.
+         * The OMVisManager object also stores the time slider range of the GUI and computes its position during
+         * the simulation run. On the other hand, if the user moves the time slider, the OMVisManager computes the
+         * simulation time from the new position.
          */
         class OMVisManager
         {
@@ -52,12 +54,12 @@ namespace OMVIS
 
             /*! \brief Constructs a OMVisManager from the given arguments.
              *
-             * @param simTime Current simulation time. In general, this is equal to the simulation start time.
-             * @param realTime
-             * @param visTime Time of current scene update.
-             * @param hVisual Step size for the scene updates.
-             * @param startTime Simulation start time.
-             * @param endTime Simulation end time.
+             * \param simTime       Current simulation time. In general, this is equal to the simulation start time.
+             * \param realTime      Current real time.
+             * \param visTime       Time of current scene update.
+             * \param hVisual       Step size for the scene updates.
+             * \param startTime     Simulation start time.
+             * \param endTime       Simulation end time.
              *
              * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
              */
@@ -83,33 +85,49 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! \brief Calculates from the current visualization time (_visTime) the position of the time slider. */
-            int getTimeProgress() const;
+            int getSliderPosition() const;
 
-            /*! Set the slider range. */
+            /*! \brief Sets the time slider range.
+             *
+             * \param min   The minimum value of the time slider. In most cases this is 0.
+             * \param max   The maximum value of the time slider.
+             * */
             void setSliderRange(const int min, const int max);
 
+            /*! \brief Returns the end time of the simulation. */
             double getEndTime() const;
+            /*! \brief Sets the end time of the simulation to the given value. */
             void setEndTime(const double endTime);
 
+            /*! \brief Returns the start time of the simulation. */
             double getStartTime() const;
+            /*! \brief Sets the start time of the simulation to the given value. */
             void setStartTime(const double startTime);
 
+            /*! \brief Returns the current simulation time. */
             double getSimTime() const;
+            /*! Stes the simulation time to the given value. */
             void setSimTime(const double simTime);
 
+            /*! \brief Returns the current visualization time. */
             double getVisTime() const;
+            /*! \brief Sets the visualization time to the given value. */
             void setVisTime(const double visTime);
 
+            /*! \brief Returns the current step size of the simulation. */
             double getHVisual() const;
 
+            /*! \brief Returns real time. */
             double getRealTime() const;
 
+            /*! \brief Returns the real time factor. */
             double getRealTimeFactor() const;
-            void setRealTimeFactor(double rtf);
+            /*! \brief Sets the real time factor to the given value. */
+            void setRealTimeFactor(const double rtf);
 
-            /*! Returns true, if the Visualization is currently paused and false otherwise. */
+            /*! \brief Returns true, if the visualization is currently paused and false otherwise. */
             bool isPaused() const;
-            /*! Set pause status to new value. */
+            /*! \brief Sets pause status to new value. */
             void setPause(const bool status);
 
          private:
@@ -121,14 +139,14 @@ namespace OMVIS
             double _simTime;
             //! Current real time.
             double _realTime;
-            //! Realtime factor.
+            //! Real time factor.
             double _realTimeFactor;
             //! Time of current scene update.
             double _visTime;
             //! Step size for the scene updates in milliseconds.
             double _hVisual;
-            double _endTime;
             double _startTime;
+            double _endTime;
             bool _pause;
 
             osg::Timer _visualTimer;
