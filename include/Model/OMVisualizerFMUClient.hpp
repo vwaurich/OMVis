@@ -27,6 +27,7 @@
 #ifndef INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 
+#include <Initialization/Factory.hpp>
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
@@ -36,9 +37,6 @@
 #include "Util/Logger.hpp"
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
-#include "Initialization/OMVisFactory.hpp"
-
-// NetworkOffloader
 #include <SimulationClient.hpp>
 #include <VariableList.hpp>
 
@@ -172,6 +170,7 @@ namespace OMVIS
 
             int setVarReferencesInVisAttributes();
 
+            // Todo pass by const ref
             fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
 
             /*-----------------------------------------
@@ -215,6 +214,8 @@ namespace OMVIS
 
             void startVisualization() override;
             void pauseVisualization() override;
+
+            void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu);
 
          private:
             /*-----------------------------------------
