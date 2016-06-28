@@ -171,7 +171,7 @@ namespace OMVIS
         void OMVisualizerMAT::updateScene(const double time)
         {
             if (0.0 > time)
-                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER, Util::LL_ERROR);
+                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER, Util::LL_ERROR);
 
             _omvManager->updateTick();  //for real-time measurement
             double visTime = _omvManager->getRealTime();
