@@ -20,11 +20,11 @@
 #ifndef TEST_INCLUDE_TESTOMVISFACTORY_HPP_
 #define TEST_INCLUDE_TESTOMVISFACTORY_HPP_
 
-#include "Initialization/OMVisFactory.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 
 #include <gtest/gtest.h>
+#include <Initialization/Factory.hpp>
 
 /*! \brief Class to test the class \ref Control::OMVisFactory.
  *

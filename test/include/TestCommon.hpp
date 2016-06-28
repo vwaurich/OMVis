@@ -20,9 +20,8 @@
 #ifndef TEST_INCLUDE_TESTCOMMON_HPP_
 #define TEST_INCLUDE_TESTCOMMON_HPP_
 
-#include "Initialization/OMVisFactory.hpp"
-
 #include <gtest/gtest.h>
+#include <Initialization/Factory.hpp>
 
 #include <string>
 #include <cstdlib>
