@@ -49,10 +49,18 @@ namespace OMVIS
     namespace Control
     {
 
-        /*! \brief This class is a controller class which handles user interaction with OMVis via GUI.
+        /*! \brief This class is a controller class which handles the user interaction with OMVis via GUI.
          *
-         * The GUIcontroller receives the user input (,e.g., clicking a menu point), process it and induces
-         * the appropriate action.
+         * Thus, this class serves as the(!) interface between the user and OMVis. A GUIcontroller object receives the
+         * user input (,e.g., clicking a menu point), processes it and induces the appropriate action. Therefore, the
+         * GuiController class implements most of the slot functions of \ref OMVisVisViewer.
+         *
+         * The GuiController class encapsulates the model data structures from the GUI elements and classes. It holds
+         * the pointer to the concrete model visualization object.
+         *
+         * \remark: If we want to visualize multiple models in the future, _omVisualizer will have to be a vector of
+         *          pointers of type \ref OMVisualizerAbstract to these models.
+         *
          */
         class GUIController
         {
@@ -61,6 +69,7 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
+            /*! \brief Default constructor with save initialization of members. */
             GUIController();
             ~GUIController() = default;
 
@@ -73,68 +82,100 @@ namespace OMVIS
 
             /*! \brief This method loads a model (FMU or MAT file) for visualization.
              *
-             * This method parses the given string for model name, path to the model file and whether it is a FMU or a
-             * MAT file and asks the factory for creation of an appropriate OMVisualizer object. Furthermore, the
-             * OMVisualizer object is initialized.
-             * The method checks, if the corresponding XML file is accessible.
+             * This method gets a construction plan and asks the \ref OMVisFactory to create an appropriate
+             * OMVisualizer object. If this OMVisualizer object can be initialized without errors, it is taken as new
+             * visualization model.
              * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
-             * compatibility issue, than the old model is kept. If the already load and the new model are the very same,
-             * no information/message is "thrown". We just load it and destroy the current settings.
+             * compatibility issue, than the old model is kept. If the already load and the new model are the very
+             * same, no information/message is thrown. We just load it and destroy the current settings.
              *
-             * \param modelName Path and name of the model to load.
-             * \param timeSliderStart Minimum value of the time slider object.
-             * \param timeSliderEnd Maximum value of the time slider object.
-             * \return Pointer to OMVisualizer object which is created by the factory.
+             * \remark We assume that the visual XML file is located in the very same directory as the FMU or MAT file.
+             *         Otherwise, the user is responsible to copy the visual XML file to this directory.
              *
-             * \remark We assume that the XML file is located in the very same directory as the FMU or MAT file.
+             * \param cP                Construction plan for visualization.
+             * \param timeSliderStart   Minimum value of the time slider object.
+             * \param timeSliderEnd     Maximum value of the time slider object.
+             * \return Pointer to the OMVisualizer object which is created by the factory or to the old one.
              */
-            void loadModel(const std::string& modelName, const int timeSliderStart, const int timeSliderEnd);
             void loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
-            /*! \brief
+            /*! \brief This method loads a FMU model for remote visualization.
+             *
+             * This method gets a construction plan for remote visualization and asks the \ref OMVisFactory to create
+             * an appropriate OMVisualizerClient object. If this OMVisualizerClient object can be initialized without
+             * errors, it is taken as new visualization model.
+             * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
+             * compatibility issue, than the old model is kept. If the already load and the new model are the very
+             * same, no information/message is thrown. We just load it and destroy the current settings.
              *
              * \remark Checks for XML description file. For remote visualization this file needs to be on the
              *         localhost. At the moment, the user is responsible for that. I.e., it might be necessary to copy
              *         this file explicitly from the remote server to the localhost.
+             *
+             * \param cP                Construction plan for remote visualization.
+             * \param timeSliderStart   Minimum value of the time slider object.
+             * \param timeSliderEnd     Maximum value of the time slider object.
+             * \return Pointer to the OMVisualizer object which is created by the factory or to the old one.
              */
             void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
             /*! \brief Unloads the currently loaded model and frees associated memory. */
             void unloadModel();
 
-            /*! \brief Check if the XML file for a given path and model name can be accessed.
-             *
-             * The XML file name is created by "path + modelName + "_visual.xml"". Thus, the XML file has to be renamed
-             * if it does not fit this convention.
-             *
-             * @param path Path to the XML file.
-             * @param modelName Name of the model.
-             * @return True, if the XML file is accessible. False, otherwise.
-             */
-            bool checkForXMLFile(const std::string& modelName, const std::string& path) const;
-
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/
 
+            /*! \brief Asks the OMVisualizer object to start the simulation. */
             void startVisualization();
-            void pauseVisualization();
-            void initVisualization();
-            void donationVisualization();
 
+            /*! \brief Asks the OMVisualizer object to pause the simulation. */
+            void pauseVisualization();
+
+            /*! \brief Asks the OMVisualizer object to (re-)initialize the simulation.
+             *
+             * \todo: Check if input variables need to be specified in order to interact with the FMU. If so,
+             *        open a GUI.
+             */
+            void initVisualization();
+
+            /*! \brief Asks the OMVisualizer object to update the scene.
+             *
+             * This method is triggered by \ref OMVisViewer::sceneUpdate which is frequently called from Qt.
+             */
             void sceneUpdate();
+
+            void donationVisualization();
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
              *---------------------------------------*/
 
             int getTimeProgress();
+
+            /*! \brief Returns the root node of the scene.
+             *
+             * The visualization needs the root node of the scene to display the model.
+             *
+             * \return Pointer to scene root node.
+             */
             osg::ref_ptr<osg::Node> getSceneRootNode();
 
+            /*! \brief Sets the visualization time handled by the OMVisManager object.
+             *
+             * This method is called by \ref OMVisViewer if the user moves the time slider.
+             *
+             * \param val   The new value of the time slider.
+             */
             void setVisTime(const int val);
+            /*! \brief Returns the current visualization time. */
             double getVisTime();
-
+            /*! \brief Returns the real time factor for the current visualization. */
             double getRealTimeFactor();
+            /*! \brief Returns the simulation start time of the loaded model. */
+            double getSimulationStartTime() const;
+            /*! \brief Returns the visualization step size in milliseconds. */
+            double getVisStepsize();
 
             /*! \brief Returns true, if the currently loaded model is a MAT result file simulation. */
             bool modelIsMATFile();
@@ -146,18 +187,11 @@ namespace OMVIS
             /*! \brief Returns true, if a model is loaded into OMVis, i.e., the OMVisualizer object is not nullptr. */
             bool modelIsLoaded();
 
-            /*! \brief Returns simulation start time of the loaded model. */
-            double getSimulationStartTime() const;
-
-            /*! \brief Gets the visualization step size in milliseconds from the omvManager
-             * @return The visualization step size in milliseconds
-             */
-            double getVisStepsize();
-
             /*! \brief Gets the InputData from the OMVisualizer.
              *
-             * If we visualize a MAT file, we return a proper nullptr.
-             * @return The input data object pointer
+             * \remark If we visualize a MAT file, we return a proper nullptr and the caller method has to handle it!
+             *
+             * \return A pointer to the \ref InputData object.
              */
             std::shared_ptr<Model::InputData> getInputData();
 

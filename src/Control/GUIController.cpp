@@ -49,13 +49,6 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        void GUIController::unloadModel()
-        {
-            // Implicitly calls destructors and thus frees memory handled by shared pointers.
-            _omVisualizer = nullptr;
-            /// \todo: What else has to be done in order to clean up data structures and free memory?
-        }
-
         void GUIController::loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd)
         {
             LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
@@ -152,6 +145,17 @@ namespace OMVIS
             }
         }
 
+        void GUIController::unloadModel()
+        {
+            // Implicitly calls destructors and thus frees memory handled by shared pointers.
+            _omVisualizer = nullptr;
+            /// \todo: What else has to be done in order to clean up data structures and free memory?
+        }
+
+        /*-----------------------------------------
+         * SIMULATION METHODS
+         *---------------------------------------*/
+
         void GUIController::startVisualization()
         {
             _omVisualizer->startVisualization();
@@ -169,14 +173,14 @@ namespace OMVIS
             _omVisualizer->initVisualization();
         }
 
-        void GUIController::donationVisualization()
-        {
-            std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
-        }
-
         void GUIController::sceneUpdate()
         {
             _omVisualizer->sceneUpdate();
+        }
+
+        void GUIController::donationVisualization()
+        {
+            std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
         }
 
         /*-----------------------------------------
@@ -208,6 +212,16 @@ namespace OMVIS
             return _omVisualizer->getOMVisManager()->getRealTimeFactor();
         }
 
+        double GUIController::getSimulationStartTime() const
+        {
+            return _omVisualizer->getOMVisManager()->getStartTime();
+        }
+
+        double GUIController::getVisStepsize()
+        {
+            return _omVisualizer->getOMVisManager()->getHVisual() * 1000.0;
+        }
+
         bool GUIController::modelIsMATFile()
         {
             return (_omVisualizer->getType() == "mat") ? true : false;
@@ -223,14 +237,9 @@ namespace OMVIS
             return (_omVisualizer->getType() == "fmuclient") ? true : false;
         }
 
-        double GUIController::getSimulationStartTime() const
+        bool GUIController::modelIsLoaded()
         {
-            return _omVisualizer->getOMVisManager()->getStartTime();
-        }
-
-        double GUIController::getVisStepsize()
-        {
-            return _omVisualizer->getOMVisManager()->getHVisual() * 1000.0;
+            return (nullptr != _omVisualizer);
         }
 
         std::shared_ptr<Model::InputData> GUIController::getInputData()
@@ -247,11 +256,6 @@ namespace OMVIS
             }
             else
                 return nullptr;
-        }
-
-        bool GUIController::modelIsLoaded()
-        {
-            return (nullptr != _omVisualizer);
         }
 
     }  // End namespace Control
