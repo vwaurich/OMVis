@@ -192,7 +192,7 @@ namespace OMVIS
 
         int GUIController::getTimeProgress()
         {
-            return _omVisualizer->getOMVisManager()->getTimeProgress();
+            return _omVisualizer->getOMVisManager()->getSliderPosition();
         }
 
         osg::ref_ptr<osg::Node> GUIController::getSceneRootNode()
