@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Initialization/OMVisFactory.hpp"
+#include <Initialization/Factory.hpp>
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerFMUClient.hpp"
 #include "Model/OMVisualizerMAT.hpp"
