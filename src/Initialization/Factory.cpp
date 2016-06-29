@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Initialization/Factory.hpp>
+#include "Initialization/Factory.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerFMUClient.hpp"
 #include "Model/OMVisualizerMAT.hpp"
@@ -34,7 +34,7 @@ namespace OMVIS
          * CREATE METHODS
          *---------------------------------------*/
 
-        std::shared_ptr<Model::OMVisualizerAbstract> Factory::createVisualizationObject(const VisualizationConstructionPlan& cP)
+        std::shared_ptr<Model::OMVisualizerAbstract> Factory::createOMVisualizerObject(const VisualizationConstructionPlan* cP)
         {
             std::shared_ptr<Model::OMVisualizerAbstract> result(nullptr);
 
@@ -42,64 +42,50 @@ namespace OMVIS
             // Construction plan is valid?
             // if (!constructionPlanIsValid())
 
-            if (cP.modelFile.empty() && cP.path.empty())
-                LOGGER_WRITE("Initialize OMVisalizerAbstract because path and model name are empty.", Util::LC_LOADER, Util::LL_DEBUG);
-            else if (Util::checkForXMLFile(cP.modelFile, cP.path))
+            // Todo: This check can be moved to constructionPlanIsValid method
+            if (cP->modelFile.empty() && cP->path.empty())
             {
-                //FMU based visualization
-                if (cP.isFMU)
-                {
-                    result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerFMU(cP.modelFile, cP.path));
-                    LOGGER_WRITE("Initialize OMVisalizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
-                }
-                //MAT file based visualization
-                else
-                {
-                    result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMAT(cP.modelFile, cP.path));
-                    LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
-                }
-            }
-            else
-            {
-                std::string msg = "Visual XML file could not be found for the chosen model in the path.";
+                std::string msg = "Initialize OMVisalizerAbstract because path and model name are empty.";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
-            return result;
-        }
 
-        std::shared_ptr<Model::OMVisualizerAbstract> Factory::createVisualizationObject(const RemoteVisualizationConstructionPlan& cP)
-        {
-            std::shared_ptr<Model::OMVisualizerAbstract> result(nullptr);
+            // Is the visual XML file present?
+//            if (!Util::checkForXMLFile(cP.modelFile, cP.path))
+//            {
+//                std::string msg = "Visual XML file could not be found for the chosen model in the path.";
+//                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+//                throw std::runtime_error(msg);
+//            }
 
-            // Todo: Implement me!
-            // Construction plan is valid?
-            // if (!constructionPlanIsValid())
-
-            if (cP.modelFile.empty() && cP.workingDirectory.empty())
-                LOGGER_WRITE("Initialize OMVisalizerAbstract because working directory and model name are empty.", Util::LC_LOADER, Util::LL_DEBUG);
-            else if (Util::checkForXMLFile(cP.modelFile, cP.workingDirectory))
+            //FMU based visualization
+            if (cP->visType == VisualizationType::FMU)
             {
-                //FMU based visualization
-                if (cP.isFMU)
-                {
-                    result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerFMUClient(cP));
-                    LOGGER_WRITE("Initialize OMVisalizerFMUClient.", Util::LC_LOADER, Util::LL_DEBUG);
-                }
-                //MAT file based visualization
-                else
-                {
-                    /// \todo Todo Implement OMVisualizerMATClient!
-//                    result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
-                    LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
-                }
+                result = std::shared_ptr<Model::OMVisualizerAbstract>(new Model::OMVisualizerFMU(cP->modelFile, cP->path));
+                LOGGER_WRITE("Initialize OMVisalizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
             }
+            //MAT file based visualization
+            else if (cP->visType == VisualizationType::MAT)
+            {
+                result = std::shared_ptr<Model::OMVisualizerAbstract>(new Model::OMVisualizerMAT(cP->modelFile, cP->path));
+                LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
+            }
+            else if (cP->visType == VisualizationType::FMU_REMOTE)
+            {
+                result = std::shared_ptr<Model::OMVisualizerAbstract>(new Model::OMVisualizerFMUClient(dynamic_cast<const RemoteVisualizationConstructionPlan*>(cP)));
+                LOGGER_WRITE("Initialize OMVisalizerFMUClient.", Util::LC_LOADER, Util::LL_DEBUG);
+            }
+            //MAT file based visualization
+            else if (cP->visType == VisualizationType::MAT_REMOTE)
+            {
+                /// \todo Todo Implement OMVisualizerMATClient!
+                // result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
+                LOGGER_WRITE("Initialize OMVisalizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER, Util::LL_ERROR);
+            }
+
             else
-            {
-                std::string msg = "Visual XML file could not be found for the chosen model in the path.";
-                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
-                throw std::runtime_error(msg);
-            }
+                LOGGER_WRITE("The construction plan does not have a valid visualization type. A OMVisualizerAbstract(nullptr) is returned.", Util::LC_LOADER, Util::LL_DEBUG);
+
             return result;
         }
 

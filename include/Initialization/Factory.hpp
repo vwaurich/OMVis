@@ -27,7 +27,7 @@
 #ifndef INCLUDE_FACTORY_HPP_
 #define INCLUDE_FACTORY_HPP_
 
-#include <Initialization/VisualizationConstructionPlans.hpp>
+#include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 
 #include <memory>
@@ -37,11 +37,12 @@ namespace OMVIS
     namespace Initialization
     {
 
-        /*! \brief This factory class can create OMVisualization objects that are required for an FMU or result file
-         *         (,i.e., MAT file) based visualization.
+        /*! \brief The factory creates concrete OMVisualizer objects for model visualization from a given construction plan.
          *
-         * In order to let the factory create a OMVisualizer object for the visualization of a FMU or MAT file, just
-         * call the method \ref createVisualizationObject with a proper construction plan.
+         * In order to let the factory create a OMVisualizer object for the visualization of a FMU or MAT file or for
+         * remote FMU visualization, just call the method \ref createVisualizationObject with an appropriate
+         * construction plan. See \ref VisualizationConstructionPlan and \ref RemoteVisualizationConstructionPlan for
+         * more information about construction plans.
          */
         class Factory
         {
@@ -50,7 +51,12 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
+            /*! \brief Default constructor to create a Factory object.
+             *
+             * Since this class has no members, we can delegate the implementation to the compiler.
+             */
             Factory() = default;
+
             ~Factory() = default;
             Factory(const Factory& f) = delete;
             Factory& operator=(const Factory& f) = delete;
@@ -61,30 +67,19 @@ namespace OMVIS
 
             /*! \brief Creates a new visualization object according to the given construction plan.
              *
-             * A OMVisualizerFMU or OMVisualizerMAT object is created and a pointer to this object is returned. If the
-             * construction fails, a nullptr is returned.
+             * According to the given construction plan, a OMVisualizerFMU, OMVisualizerMAT or OMVisualizerFMUClient
+             * object is created and a pointer to this object is returned. If the construction fails, a nullptr is
+             * returned. The caller method is responsible to handle this.
+             * The construction plan can be of type \ref VisualizationConstructionPlan or
+             * \ref RemoteVisualizationConstructionPlan for remote visualization.
              *
              * \remark This method checks for the presence of the visual XML file. If the XML file is not present, an
-             *         exception is thrown.
+             *         exception of type std::runtime_error is thrown.
              *
-             * @param[in] cP Construction plan for local visualization.
-             * @return Pointer to allocated OMVisualizer object.
+             * \param   cP Construction plan for visualization.
+             * \return  Pointer to allocated OMVisualizer object or nullptr if OMVisualizer object cannot be created.
              */
-            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const VisualizationConstructionPlan& cP);
-
-            /*! \brief Creates a new visualization object according to the given construction plan for remote
-             *         visualization.
-             *
-             * A OMVisualizerFMUClient or OMVisualizerMATClient object is created and a pointer to this object is
-             * returned. If the construction fails, a nullptr is returned.
-             *
-             * \remark This method checks for the presence of the visual XML file in the local working directory
-             * (\see RemoteVisualizationConstructionPlan). If the XML file is not present, an exception is thrown.
-             *
-             * @param[in] cP Construction plan for remote visualization.
-             * @return Pointer to allocated OMVisualizer object.
-             */
-            std::shared_ptr<Model::OMVisualizerAbstract> createVisualizationObject(const RemoteVisualizationConstructionPlan& cP);
+            std::shared_ptr<Model::OMVisualizerAbstract> createOMVisualizerObject(const VisualizationConstructionPlan* cP);
         };
 
     }  // End namespace Initialization

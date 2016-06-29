@@ -142,7 +142,15 @@ namespace OMVIS
             _cP.workingDirectory = "./rVis/";
             _cP.modelFile = "BouncingBall.fmu";    //cranes_crane_input5.fmu";
             _cP.path = "/home/mf/opt/HPCOM/parallel_fmu_eclipse/test/data/"; //"/scratch/p_hpcom/remoteVisualization/";
-            _cP.isFMU = Util::isFMU(_cP.modelFile);            // true
+
+            // Get visualization type.
+            if (Util::isFMU(_cP.modelFile))
+                _cP.visType = VisualizationType::FMU_REMOTE;
+            else if (Util::isMAT(_cP.modelFile))
+                _cP.visType = VisualizationType::MAT_REMOTE;
+            else
+                _cP.visType = VisualizationType::NONE;
+
             QDialog::accept();
         }
 

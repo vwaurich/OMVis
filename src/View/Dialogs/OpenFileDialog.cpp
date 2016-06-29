@@ -66,7 +66,15 @@ namespace OMVIS
                                                                          // modelFile = /home/user/models/modelX.fmu
             _cP.path = Util::getPath(modelFile.toStdString());           // /home/user/models/
             _cP.modelFile = Util::getFileName(modelFile.toStdString());  // modelX.fmu
-            _cP.isFMU = Util::isFMU(modelFile.toStdString());            // true
+
+            // Get visualization type.
+            if (Util::isFMU(modelFile.toStdString()))
+                _cP.visType = VisualizationType::FMU;
+            else if (Util::isMAT(modelFile.toStdString()))
+                _cP.visType = VisualizationType::MAT;
+            else
+                _cP.visType = VisualizationType::NONE;
+
             QDialog::accept();
         }
 

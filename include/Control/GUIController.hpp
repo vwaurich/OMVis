@@ -111,6 +111,8 @@ namespace OMVIS
              */
             void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
+            void loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart, const int timeSliderEnd);
+
             /*! \brief Unloads the currently loaded model and frees associated memory. */
             void unloadModel();
 

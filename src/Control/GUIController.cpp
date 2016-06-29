@@ -72,27 +72,7 @@ namespace OMVIS
                 initVisualization();
             }
             else
-            {
-                // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model cannot be loaded.
-                int isOk(0);
-
-                // Ask the factory to create an appropriate OMVisualizer object.
-                Initialization::Factory* factory = new Initialization::Factory();
-                std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createVisualizationObject(cP);
-                if (tmpOmVisualizer != nullptr)
-                {
-                    tmpOmVisualizer->getOMVisManager()->setSliderRange(timeSliderStart, timeSliderEnd);
-
-                    // Initialize the OMVisualizer object.
-                    isOk += tmpOmVisualizer->initialize();
-
-                    // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
-                    if (0 == isOk)
-                        _omVisualizer = tmpOmVisualizer;
-                }
-                else
-                    LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
-            }
+                loadModelHelper(&cP, timeSliderStart, timeSliderEnd);
         }
 
         void GUIController::loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd)
@@ -121,31 +101,35 @@ namespace OMVIS
             if (modelIsLoaded() && cP.workingDirectory == _omVisualizer->getBaseData()->getPath() && cP.modelFile == _omVisualizer->getBaseData()->getModelName())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
-                                         "The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
+                                         "The model will be initialized again."),
+                             Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else
+                loadModelHelper(dynamic_cast<const Initialization::VisualizationConstructionPlan*>(&cP), timeSliderStart, timeSliderEnd);
+        }
+
+        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart, const int timeSliderEnd)
+        {
+            // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model cannot be loaded.
+            int isOk(0);
+
+            // Ask the factory to create an appropriate OMVisualizer object.
+            Initialization::Factory* factory = new Initialization::Factory();
+            std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createOMVisualizerObject(cP);
+            if (tmpOmVisualizer != nullptr)
             {
-                // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model cannot be loaded.
-                int isOk(0);
+                tmpOmVisualizer->getOMVisManager()->setSliderRange(timeSliderStart, timeSliderEnd);
 
-                // Ask the factory to create an appropriate OMVisualizer object.
-                Initialization::Factory* factory = new Initialization::Factory();
-                std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createVisualizationObject(cP);
-                if (tmpOmVisualizer != nullptr)
-                {
-                    tmpOmVisualizer->getOMVisManager()->setSliderRange(timeSliderStart, timeSliderEnd);
+                // Initialize the OMVisualizer object.
+                isOk += tmpOmVisualizer->initialize();
 
-                    // Initialize the OMVisualizer object.
-                    isOk += tmpOmVisualizer->initialize();
-
-                    // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
-                    if (0 == isOk)
-                        _omVisualizer = tmpOmVisualizer;
-                }
-                else
-                    LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
+                // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
+                if (0 == isOk)
+                    _omVisualizer = tmpOmVisualizer;
             }
+            else
+                LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
         }
 
         void GUIController::unloadModel()

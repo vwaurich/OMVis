@@ -20,7 +20,7 @@
 #ifndef INCLUDE_VIEW_DIALOGS_OPENFILEDIALOG_HPP_
 #define INCLUDE_VIEW_DIALOGS_OPENFILEDIALOG_HPP_
 
-#include <Initialization/VisualizationConstructionPlans.hpp>
+#include "Initialization/VisualizationConstructionPlans.hpp"
 
 #include <QString>
 #include <QFileDialog>
@@ -31,7 +31,7 @@ namespace OMVIS
 {
     namespace View
     {
-        /*! \brief This class provides a dialog to select a simulation model file from local file system.
+        /*! \brief This class provides a dialog to select a simulation model file from the local file system.
          *
          */
         class OpenFileDialog : public QFileDialog
@@ -60,12 +60,6 @@ namespace OMVIS
             /*-----------------------------------------
              * GETTERS AND SETTERS
              *---------------------------------------*/
-
-//            /*! \brief Returns the file name (incl. path) of the selected model.
-//             *
-//             * @return The model file name
-//             */
-//            std::string getModelFileName() const;
 
          public:
             /*! \brief Returns the construction plan for the visualization of the chosen model. */

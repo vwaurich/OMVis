@@ -31,6 +31,15 @@
 
 namespace OMVIS
 {
+    enum VisualizationType
+    {
+        NONE = 0,
+        FMU = 1,
+        FMU_REMOTE = 2,
+        MAT = 3,
+        MAT_REMOTE = 4
+    };
+
     namespace Initialization
     {
 
@@ -42,20 +51,26 @@ namespace OMVIS
          * A construction plan is fully specified by the name of the FMU or MAT file. The name includes the path to the
          * file and the prefix (.fmu or .mat).
          */
-        struct VisualizationConstructionPlan
+        class VisualizationConstructionPlan
         {
-//            /*! \brief This method checks, if the construction plan is valid.
-//             *
-//             * A construction plan is valid, if all attributes are
-//             * @return True, if the plan is valid.
-//             */
-//            bool isValid() const;
+         public:
 
+            virtual ~VisualizationConstructionPlan() = default;
+
+            /*! \brief This method checks, if the construction plan is valid.
+             *
+             * A construction plan is valid, if all attributes are set, path and file name are not empty.
+             * \return True, if the plan is valid.
+             */
+            virtual bool isValid() const
+            {
+                return (visType != VisualizationType::NONE);
+            }
+            VisualizationType visType;
             /*! Name of the model file without path but with prefix, e.g., modelFoo.fmu . */
             std::string modelFile;
             /*! Path to the model file, e.g., /home/user/models/ . */
             std::string path;
-            bool isFMU;
         };
 
         /*! \brief This class represents a construction plan for a remote visualization of a simulation.
@@ -70,26 +85,29 @@ namespace OMVIS
          *      - Path to the model file on server
          *      - Local working directory (e.g., ./tmp)
          */
-        struct RemoteVisualizationConstructionPlan
+        class RemoteVisualizationConstructionPlan : public VisualizationConstructionPlan
         {
+         public:
+
+            virtual ~RemoteVisualizationConstructionPlan() = default;
 //            /*! \brief This method checks, if the construction plan is valid.
 //             *
 //             * A construction plan is valid, if all attributes are
 //             * @return True, if the plan is valid.
 //             */
-//            bool isValid() const;
+//            bool isValid() const override
+//            {
+//                return VisualizationConstructionPlan::isValid();
+//            }
 
             /*! The IP address of the server. */
             std::string ipAddress;
             /*! The port to use for the connection. */
             int portNumber;
-            /*! Name of the model file (without path). */
-            std::string modelFile;
-            /*! Path to the model file on server, e.g., /scratch/project/models/ . */
-            std::string path;
+            ///*! Name of the model file (without path). */
+            ///*! Path to the model file on server, e.g., /scratch/project/models/ . */
             /*! The local working directory. */
             std::string workingDirectory;
-            bool isFMU;
         };
 
     }  // End namespace Initialization

@@ -26,14 +26,14 @@ namespace OMVIS
     namespace Model
     {
 
-        OMVisualizerFMUClient::OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan& cP)
-                : OMVisualizerAbstract(cP.modelFile, cP.workingDirectory),
-                  _noFC(cP.ipAddress, cP.portNumber),
+        OMVisualizerFMUClient::OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
+                : OMVisualizerAbstract(cP->modelFile, cP->workingDirectory),
+                  _noFC(cP->ipAddress, cP->portNumber),
                   _outputVars(),
                   _simSettings(new SimSettings()),
                   _inputData(new InputData()),
                   _joysticks(),
-                  _remotePathToModelFile(cP.path)
+                  _remotePathToModelFile(cP->path)
         {
             LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
             initJoySticks();

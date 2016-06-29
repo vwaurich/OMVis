@@ -76,9 +76,9 @@ namespace OMVIS
              * The construction plan holds information about the server and the port to use, the path to the model
              * file and declaration of a local working directory (\ref RemoteVisualizationConstructionPlan).
              *
-             * @param[in] cP The construction plan which holds all necessary information.
+             * \param cP The construction plan which holds all necessary information.
              */
-            OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan& cP);
+            OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP);
 
             virtual ~OMVisualizerFMUClient() = default;
             OMVisualizerFMUClient(const OMVisualizerFMUClient& omvf) = delete;
