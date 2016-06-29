@@ -34,7 +34,7 @@ namespace OMVIS
     namespace Control
     {
 
-        /*! The class manages the timing for OMVis.
+        /*! \brief The class manages the timing for OMVis.
          *
          * Since we have at least three different time levels, namely simulation time, visualization time and real time,
          * we need a manager to properly handle them.

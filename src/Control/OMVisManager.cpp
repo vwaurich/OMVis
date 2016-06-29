@@ -20,7 +20,6 @@
 #include "Control/OMVisManager.hpp"
 
 #include <cmath>
-#include <iostream>
 
 namespace OMVIS
 {
