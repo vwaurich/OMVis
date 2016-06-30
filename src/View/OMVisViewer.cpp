@@ -644,9 +644,6 @@ namespace OMVIS
 
         void OMVisViewer::updateKeyMapValue(QString varToKey)
         {
-//X1    const int lengthOfTypeStr = 4;
-//X1    Model::OMVisualizerFMU* fmuVisualizer = (Model::OMVisualizerFMU*) _omVisualizer;
-//X1
 //    std::string varToKeyString = varToKey.toStdString();
 //    int posKey = varToKeyString.find(" -> ");
 //    std::string typeString = varToKeyString.substr(0, lengthOfTypeStr);
