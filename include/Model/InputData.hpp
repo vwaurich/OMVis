@@ -71,6 +71,10 @@ namespace OMVIS
         class InputData
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /*! \brief Default constructor. Attributes are initialized with default values. */
             InputData();
 
@@ -83,25 +87,47 @@ namespace OMVIS
             /*! The assignment operator is forbidden. */
             InputData& operator=(const InputData& ipd) = delete;
 
-            /*! \brief Initializes all input data including the keymap. */
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
+
+            /*! \brief Initializes all input data including the keymap for the given FMU.
+             *
+             * This method is used in case of FMU visualization by the class \ref OMVIsualizerFMU.
+             *
+             * \input fmu The FMU to initialize the data for.
+             */
             void initializeInputs(fmi1_import_t* fmu);
-            /*! \brief Initializes all input data including the keymap in case of remote visualization. */
+
+            /*! \brief Initializes all input data including the keymap in case of remote visualization.
+             *
+             * This method is used in case of remote FMU visualization by the class \ref OMVIsualizerFMUClient.
+             *
+             * \input inputVars The input variables to initialize the data for.
+             */
             void initializeInputs(const NetOff::VariableList& inputVars);
 
+            /*! \brief This is a helper function for the two initialize functions.
+             *
+             * This helper holds code, that both functions share. Thus, it reduces code and improves the
+             * maintainability.
+             */
+            void initializeHelper();
+
             void resetInputValues();
+
+            /*! \brief Resets the discrete input values to zero (no reals and integers). */
+            void resetDiscreteInputValues();
 
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-            /*! \brief Sets the input variables in the fmu. */
+            /*! \brief Sets the input variables in the FMU. */
             void setInputsInFMU(fmi1_import_t* fmu);
 
-            /*! \brief Resets the discrete input values to zero (no reals and integers). */
-            void resetDiscreteInputValues();
-
             /*! \brief Gets the names of the variables*/
-            void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>* varNames);
+            void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>& varNames);
 
             /*! Returns pointer to real values. */
             fmi1_real_t* getRealValues() const;
