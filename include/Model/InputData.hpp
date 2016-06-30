@@ -146,6 +146,16 @@ namespace OMVIS
             /*! Returns pointer to boolean values. */
             fmi1_boolean_t* getBoolValues() const;
 
+            /*! \brief Returns a constant pointer to the keyboard map. */
+            const keyboardMap* getKeyboardMap();
+            /*! \brief Returns a constant pointer to the key map. */
+            const keyMap* getKeyMap();
+
+            /*! \brief Returns a constant pointer to the InputValues container . */
+            const InputValues* getInputValues();
+
+            bool setRealInputValueForInputKey(const inputKey key, const double value);
+
             /*-----------------------------------------
              * PRINTERS
              *---------------------------------------*/
@@ -156,12 +166,9 @@ namespace OMVIS
             /*! \brief Prints the keyToInputMap*/
             void printKeyToInputMap() const;
 
-         public:
-            /// \todo Can this attribute be private?
+         private:
             InputValues _data;
-            /// \todo Can this attribute be private?
             keyMap _keyToInputMap;
-            /// \todo Can this attribute be private?
             keyboardMap _keyboardToKeyMap;
         };
 
@@ -169,7 +176,7 @@ namespace OMVIS
          * Free Functions
          *---------------------------------------*/
 
-        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data);
+//        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data);
 
         /*! \brief Converts the given std::string to inputKey enum. */
         inputKey getInputDataKeyForString(std::string keyString);

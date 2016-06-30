@@ -542,11 +542,12 @@ namespace OMVIS
 
                 QVBoxLayout* mainLayout = new QVBoxLayout();
                 QGroupBox* qgroupBox;
-                //X3
+
                 std::shared_ptr<Model::InputData> inputData = _guiController->getInputData();
+                const Model::InputValues* inputValues = inputData->getInputValues();
 
                 // Boolean inputs
-                if (inputData->_data.getNumBoolean() > 0)
+                if (inputValues->getNumBoolean() > 0)
                 {
                     qgroupBox = new QGroupBox(tr("Boolean Inputs"), this);
                     QFormLayout* layout = new QFormLayout();
@@ -554,9 +555,9 @@ namespace OMVIS
                     // layout->addRow(new QLabel(tr("Line 2, long text:")), new QComboBox);
                     // layout->addRow(new QLabel(tr("Line 3:")), new QSpinBox);
 
-                    for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumBoolean(); ++inputIdx)
+                    for (size_t inputIdx = 0; inputIdx < inputValues->getNumBoolean(); ++inputIdx)
                     {
-                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesBool[inputIdx], "bool");
+                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesBool[inputIdx], "bool");
                         layout->addRow(inputRow);
                     }
                     qgroupBox->setLayout(layout);
@@ -564,13 +565,13 @@ namespace OMVIS
                 }
 
                 // Real inputs
-                if (inputData->_data.getNumReal() > 0)
+                if (inputValues->getNumReal() > 0)
                 {
                     qgroupBox = new QGroupBox(tr("Real Inputs"), this);
                     QFormLayout* layout = new QFormLayout();
-                    for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumReal(); ++inputIdx)
+                    for (size_t inputIdx = 0; inputIdx < inputValues->getNumReal(); ++inputIdx)
                     {
-                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesReal[inputIdx], "real");
+                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesReal[inputIdx], "real");
                         layout->addRow(inputRow);
                     }
                     qgroupBox->setLayout(layout);
@@ -578,13 +579,13 @@ namespace OMVIS
                 }
 
                 // Integer inputs
-                if (inputData->_data.getNumInteger() > 0)
+                if (inputValues->getNumInteger() > 0)
                 {
                     qgroupBox = new QGroupBox(tr("Integer Inputs"), this);
                     QFormLayout* layout = new QFormLayout();
-                    for (size_t inputIdx = 0; inputIdx < inputData->_data.getNumInteger(); ++inputIdx)
+                    for (size_t inputIdx = 0; inputIdx < inputValues->getNumInteger(); ++inputIdx)
                     {
-                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputData->_data._namesInteger[inputIdx], "integer");
+                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesInteger[inputIdx], "integer");
                         layout->addRow(inputRow);
                     }
                     qgroupBox->setLayout(layout);

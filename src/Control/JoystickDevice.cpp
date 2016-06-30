@@ -74,13 +74,16 @@ namespace OMVIS
                     if (_inputEvent.jaxis.axis == 0)
                     {
                         _xDir = _inputEvent.jaxis.value;
-                        Model::setRealInputValueForInputKey(inputKey(_joystickId), _xDir, *inputInfo);
+                        //Model::setRealInputValueForInputKey(inputKey(_joystickId), _xDir, *inputInfo);
+                        inputInfo->setRealInputValueForInputKey(inputKey(_joystickId), _xDir);
                     }
                     //Y axis motion
                     else if (_inputEvent.jaxis.axis == 1)
                     {
                         _yDir = _inputEvent.jaxis.value;
-                        Model::setRealInputValueForInputKey(inputKey(_joystickId + 1), _yDir, *inputInfo);
+                        //Model::setRealInputValueForInputKey(inputKey(_joystickId + 1), _yDir, *inputInfo);
+                        inputInfo->setRealInputValueForInputKey(inputKey(_joystickId), _xDir);
+
                     }
                     else
                     {

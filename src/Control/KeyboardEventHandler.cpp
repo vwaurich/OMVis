@@ -42,14 +42,16 @@ namespace OMVIS
                 {
                     std::cout << "KEYDOWN" << std::endl;
                     unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
-                    keyBoardMapIter keyboardmapValue = _inputs->_keyboardToKeyMap.find((unsigned int) keyboardValue);
-                    if (keyboardmapValue != _inputs->_keyboardToKeyMap.end())
+
+                    keyBoardMapIter keyboardmapValue = _inputs->getKeyboardMap()->find(keyboardValue);
+
+                    if (keyboardmapValue != _inputs->getKeyboardMap()->end())
                     {
                         //std::cout<<"pressed key "<<keyboardValue<<". Thats the input key: "<<keyboardmapValue->second<<std::endl;
                         //its a assigned key
-                        keyMapIter iter = _inputs->_keyToInputMap.find((inputKey) keyboardmapValue->second);
+                        keyMapIter iter = _inputs->getKeyMap()->find((inputKey) keyboardmapValue->second);
                         //this key is not assigned as input
-                        if (iter == _inputs->_keyToInputMap.end())
+                        if (iter == _inputs->getKeyMap()->end())
                             std::cout << "wrong key: " << keyboardValue << std::endl;
                         //set the input variable
                         else
@@ -60,16 +62,16 @@ namespace OMVIS
                             switch (baseTypeIdx)
                             {
                                 case (0):
-                                    _inputs->_data._valuesReal[iterValue._valueIdx] = 1.0;
+                                    _inputs->getInputValues()->_valuesReal[iterValue._valueIdx] = 1.0;
                                     break;
                                 case (1):
-                                    _inputs->_data._valuesInteger[iterValue._valueIdx] = 1;
+                                    _inputs->getInputValues()->_valuesInteger[iterValue._valueIdx] = 1;
                                     break;
                                 case (2):
-                                    _inputs->_data._valuesBoolean[iterValue._valueIdx] = true;
+                                    _inputs->getInputValues()->_valuesBoolean[iterValue._valueIdx] = true;
                                     break;
                                 case (3):
-                                    _inputs->_data._valuesString[iterValue._valueIdx] = "";
+                                    _inputs->getInputValues()->_valuesString[iterValue._valueIdx] = "";
                                     break;
                             }
                         }

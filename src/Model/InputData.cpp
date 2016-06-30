@@ -216,33 +216,6 @@ namespace OMVIS
             status = fmi1_import_set_string(fmu, _data._vrBoolean, _data.getNumString(), _data._valuesString);
         }
 
-        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data)
-        {
-            keyMapIter iter = data._keyToInputMap.find(key);
-
-            if (iter != data._keyToInputMap.end())
-            {
-                KeyMapValue iterValue = iter->second;
-                int baseTypeIdx = iterValue._baseType;
-                if (baseTypeIdx == fmi1_base_type_real)
-                {
-                    int realIdx = iterValue._valueIdx;
-                    //value
-                    double min = data._data._attrReal[realIdx]._min;
-                    double max = data._data._attrReal[realIdx]._max;
-                    double val = value / 32767.0;
-                    data._data._valuesReal[iterValue._valueIdx] = val;
-                    return true;
-                }
-                else
-                {
-                    LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_LOADER, Util::LL_INFO);
-                    return false;
-                }
-            }
-            return false;
-        }
-
         void InputData::getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>& varNames)
         {
             std::string name("");
@@ -295,9 +268,81 @@ namespace OMVIS
                 std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
         }
 
+        const keyboardMap* InputData::getKeyboardMap()
+        {
+            return &_keyboardToKeyMap;
+        }
+
+        const keyMap* InputData::getKeyMap()
+        {
+            return &_keyToInputMap;
+        }
+
+        const InputValues* InputData::getInputValues()
+        {
+            return &_data;
+        }
+
         /*-----------------------------------------
          * Free Functions
          *---------------------------------------*/
+
+        bool InputData::setRealInputValueForInputKey(const inputKey key, const double value)
+        {
+            keyMapIter iter = _keyToInputMap.find(key);
+
+            if (iter != _keyToInputMap.end())
+            {
+                KeyMapValue iterValue = iter->second;
+                int baseTypeIdx = iterValue._baseType;
+                if (baseTypeIdx == fmi1_base_type_real)
+                {
+                    int realIdx = iterValue._valueIdx;
+                    //value
+                    double min = _data._attrReal[realIdx]._min;
+                    double max = _data._attrReal[realIdx]._max;
+                    double val = value / 32767.0;
+                    _data._valuesReal[iterValue._valueIdx] = val;
+                    return true;
+                }
+                else
+                {
+                    LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_LOADER, Util::LL_WARNING);
+                    return false;
+                }
+            }
+            return false;
+        }
+
+
+
+//        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data)
+//        {
+//            keyMapIter iter = data.getKeyMap()->find(key);
+//
+//            if (iter != data.getKeyMap()->end())
+//            {
+//                KeyMapValue iterValue = iter->second;
+//                int baseTypeIdx = iterValue._baseType;
+//                if (baseTypeIdx == fmi1_base_type_real)
+//                {
+//                    int realIdx = iterValue._valueIdx;
+//                    //value
+//                    double min = data._data._attrReal[realIdx]._min;
+//                    double max = data._data._attrReal[realIdx]._max;
+//                    double val = value / 32767.0;
+//                    data._data._valuesReal[iterValue._valueIdx] = val;
+//                    return true;
+//                }
+//                else
+//                {
+//                    LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_LOADER, Util::LL_INFO);
+//                    return false;
+//                }
+//            }
+//            return false;
+//        }
+
         /// \todo: No return?!
         inputKey getInputDataKeyForString(std::string keyString)
         {
