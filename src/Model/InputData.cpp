@@ -183,26 +183,23 @@ namespace OMVIS
 
         void InputData::resetInputValues()
         {
-            //reset real input values to 0
+            // Reset real input values to 0.0.
             for (size_t r = 0; r < _data.getNumReal(); ++r)
                 _data._valuesReal[r] = 0.0;
-            //reset integer input values to 0
+            // Reset integer input values to 0.
             for (size_t i = 0; i < _data.getNumInteger(); ++i)
                 _data._valuesInteger[i] = 0;
-            //reset boolean input values to 0
-            for (size_t b = 0; b < _data.getNumBoolean(); ++b)
-                _data._valuesBoolean[b] = false;
-            //reset string input values to 0
-            for (size_t s = 0; s < _data.getNumString(); ++s)
-                _data._valuesString[s] = "";
+
+            // Reset boolean and string values.
+            resetDiscreteInputValues();
         }
 
         void InputData::resetDiscreteInputValues()
         {
-            //reset boolean input values to 0
+            // Reset boolean input values to false.
             for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
                 _data._valuesBoolean[b] = false;
-            //reset string input values to 0
+            // Reset string input values to empty string.
             for (unsigned int s = 0; s < _data.getNumString(); ++s)
                 _data._valuesString[s] = "";
         }

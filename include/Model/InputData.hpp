@@ -114,6 +114,13 @@ namespace OMVIS
              */
             void initializeHelper();
 
+            /*! \brief Resets the input values to default values.
+             * This is:
+             *      - real values to 0.0
+             *      - integer values to 0
+             *      - boolean values to false
+             *      - string values to empty string
+             */
             void resetInputValues();
 
             /*! \brief Resets the discrete input values to zero (no reals and integers). */
@@ -126,7 +133,10 @@ namespace OMVIS
             /*! \brief Sets the input variables in the FMU. */
             void setInputsInFMU(fmi1_import_t* fmu);
 
-            /*! \brief Gets the names of the variables*/
+            /*! \brief Gets the names of the variables and stores them in the given vector varNames.
+             *
+             * \remark: The variable names are added via push_back method at the end of the given vector.
+             */
             void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>& varNames);
 
             /*! Returns pointer to real values. */
