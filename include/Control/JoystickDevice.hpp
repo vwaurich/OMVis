@@ -27,19 +27,13 @@
 #ifndef INCLUDE_JOYSTICKDEVICE_HPP_
 #define INCLUDE_JOYSTICKDEVICE_HPP_
 
+#include "Model/InputData.hpp"
+
 #include <SDL_events.h>
 #include <SDL_joystick.h>
 
 #include <memory>
 
-// Forward declaration
-namespace OMVIS
-{
-    namespace Model
-    {
-        class InputData;
-    }
-}
 
 namespace OMVIS
 {
@@ -52,6 +46,10 @@ namespace OMVIS
         class JoystickDevice
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /*! \brief Constructor.
              *
              * Initializes the joystick with the corresponding ID
@@ -69,11 +67,18 @@ namespace OMVIS
             /// The assignment operator is forbidden.
             JoystickDevice& operator=(const JoystickDevice& jd) = delete;
 
+            /*-----------------------------------------
+             * SIMULATION METHODS
+             *---------------------------------------*/
+
             void detectContinuousInputEvents(std::shared_ptr<Model::InputData>& inputInfo);
 
-            int getXDir();
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
 
-            int getYDir();
+            int getXDir() const;
+            int getYDir() const;
 
          private:
             /// \todo Should be a std::unique_ptr, but at least std::shared_ptr. Memory is allocated in this class!

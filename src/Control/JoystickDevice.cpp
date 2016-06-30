@@ -29,6 +29,11 @@ namespace OMVIS
 {
     namespace Control
     {
+
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         JoystickDevice::JoystickDevice(const int joyID)
                 : _joystick(nullptr),
                   _xDir(0),
@@ -52,15 +57,9 @@ namespace OMVIS
             }
         }
 
-        int JoystickDevice::getXDir()
-        {
-            return _xDir;
-        }
-
-        int JoystickDevice::getYDir()
-        {
-            return _yDir;
-        }
+        /*-----------------------------------------
+         * SIMULATION METHODS
+         *---------------------------------------*/
 
         void JoystickDevice::detectContinuousInputEvents(std::shared_ptr<Model::InputData>& inputInfo)
         {
@@ -90,6 +89,20 @@ namespace OMVIS
                     }
                 }
             }
+        }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
+
+        int JoystickDevice::getXDir() const
+        {
+            return _xDir;
+        }
+
+        int JoystickDevice::getYDir() const
+        {
+            return _yDir;
         }
 
     }  // End namespace Control
