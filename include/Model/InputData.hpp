@@ -176,8 +176,6 @@ namespace OMVIS
          * Free Functions
          *---------------------------------------*/
 
-//        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data);
-
         /*! \brief Converts the given std::string to inputKey enum. */
         inputKey getInputDataKeyForString(std::string keyString);
 

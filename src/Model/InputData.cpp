@@ -245,48 +245,6 @@ namespace OMVIS
             return _data._valuesBoolean;
         }
 
-        /*-----------------------------------------
-         * PRINTERS
-         *---------------------------------------*/
-
-        void InputData::printValues() const
-        {
-            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
-                std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
-            for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
-                std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
-            for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
-                std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
-            for (unsigned int s = 0; s < _data.getNumString(); ++s)
-                std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
-        }
-
-        void InputData::printKeyToInputMap() const
-        {
-            std::cout << "KEY TO INPUT MAP" << std::endl;
-            for (std::map<inputKey, KeyMapValue>::const_iterator it = _keyToInputMap.begin(); it != _keyToInputMap.end(); ++it)
-                std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
-        }
-
-        const keyboardMap* InputData::getKeyboardMap()
-        {
-            return &_keyboardToKeyMap;
-        }
-
-        const keyMap* InputData::getKeyMap()
-        {
-            return &_keyToInputMap;
-        }
-
-        const InputValues* InputData::getInputValues()
-        {
-            return &_data;
-        }
-
-        /*-----------------------------------------
-         * Free Functions
-         *---------------------------------------*/
-
         bool InputData::setRealInputValueForInputKey(const inputKey key, const double value)
         {
             keyMapIter iter = _keyToInputMap.find(key);
@@ -314,34 +272,48 @@ namespace OMVIS
             return false;
         }
 
+        const keyboardMap* InputData::getKeyboardMap()
+        {
+            return &_keyboardToKeyMap;
+        }
+
+        const keyMap* InputData::getKeyMap()
+        {
+            return &_keyToInputMap;
+        }
+
+        const InputValues* InputData::getInputValues()
+        {
+            return &_data;
+        }
+
+        /*-----------------------------------------
+         * PRINTERS
+         *---------------------------------------*/
+
+        void InputData::printValues() const
+        {
+            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
+                std::cout << "realinput " << r << " (" << _data._namesReal.at(r) << ") " << " is " << _data._valuesReal[r] << std::endl;
+            for (unsigned int i = 0; i < _data.getNumInteger(); ++i)
+                std::cout << "integer input " << i << " (" << _data._namesInteger.at(i) << ") " << " is " << _data._valuesInteger[i] << std::endl;
+            for (unsigned int b = 0; b < _data.getNumBoolean(); ++b)
+                std::cout << "bool input " << b << " (" << _data._namesBool.at(b) << ") " << " is " << _data._valuesBoolean[b] << std::endl;
+            for (unsigned int s = 0; s < _data.getNumString(); ++s)
+                std::cout << "string input " << s << " (" << _data._namesString.at(s) << ") " << " is " << _data._valuesString[s] << std::endl;
+        }
+
+        void InputData::printKeyToInputMap() const
+        {
+            std::cout << "KEY TO INPUT MAP" << std::endl;
+            for (std::map<inputKey, KeyMapValue>::const_iterator it = _keyToInputMap.begin(); it != _keyToInputMap.end(); ++it)
+                std::cout << it->first << " " << keyMapValueToString(it->second) << "\n";
+        }
 
 
-//        bool setRealInputValueForInputKey(const inputKey key, const double value, InputData& data)
-//        {
-//            keyMapIter iter = data.getKeyMap()->find(key);
-//
-//            if (iter != data.getKeyMap()->end())
-//            {
-//                KeyMapValue iterValue = iter->second;
-//                int baseTypeIdx = iterValue._baseType;
-//                if (baseTypeIdx == fmi1_base_type_real)
-//                {
-//                    int realIdx = iterValue._valueIdx;
-//                    //value
-//                    double min = data._data._attrReal[realIdx]._min;
-//                    double max = data._data._attrReal[realIdx]._max;
-//                    double val = value / 32767.0;
-//                    data._data._valuesReal[iterValue._valueIdx] = val;
-//                    return true;
-//                }
-//                else
-//                {
-//                    LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_LOADER, Util::LL_INFO);
-//                    return false;
-//                }
-//            }
-//            return false;
-//        }
+        /*-----------------------------------------
+         * Free Functions
+         *---------------------------------------*/
 
         /// \todo: No return?!
         inputKey getInputDataKeyForString(std::string keyString)
