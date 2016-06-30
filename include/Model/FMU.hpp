@@ -28,20 +28,11 @@
 #define INCLUDE_FMUSIMULATE_HPP_
 
 #include "WrapperFMILib.hpp"
+#include "Model/SimSettings.hpp"
 
 #include <string>
 #include <memory>
 
-// Forward Declaration
-namespace OMVIS
-{
-    namespace Model
-    {
-        class SimSettings;
-    }
-}
-
-#define BUFFER 1000
 
 /// \todo Can we find a better place for this structs and functions?
 ///
@@ -50,9 +41,9 @@ namespace OMVIS
     namespace Model
     {
 
-        /*! \brief The encapsulated FMU data, e.g., pointer to states and state derivatives.
+        /*! \brief This struct encapsulates a FMU's data, e.g., pointer to states and state derivatives.
          *
-         * @remark: We do not use smart pointers at this point because of performance.
+         * \remark: We do not use smart pointers at this point because of performance.
          */
         typedef struct
         {
@@ -69,11 +60,11 @@ namespace OMVIS
         } FMUData;
 
         /// MF: \todo Complete this class and remove the structs and free functions.
-        /**
-         * This class represents a FMU that can be loaded into OMVis for visualization.
+        /*! \brief This class represents a FMU that can be loaded into OMVis for visualization.
          *
-         * \Remark: Currently we do not provide interfaces to access any function described in the FMI 1.0 standard.
-         * Because we do not to.
+         * This class allocates the necessary memory for the FMU and its data.
+         *
+         * \remark: Currently we do not provide interfaces to access any function described in the FMI 1.0 standard.
          */
         class FMU
         {
@@ -82,7 +73,10 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            /*! \brief Default constructor. */
+            /*! \brief Default constructor.
+             *
+             * This constructor initializes the members with save default values.
+             */
             FMU();
 
             /*! \brief The destructor frees memory allocated in FMUData. */
@@ -95,11 +89,11 @@ namespace OMVIS
              * INITIALIZATION METHODS
              *---------------------------------------*/
 
-            /*! \brief Initializes the FMU with the given simulation settings. */
-            void initialize(std::shared_ptr<Model::SimSettings> settings);
-
             /*! \brief Loads the FMU given by name and path into memory. */
             void load(const std::string& modelFile, const std::string& path);
+
+            /*! \brief Initializes the FMU with the given simulation settings. */
+            void initialize(const std::shared_ptr<Model::SimSettings> simSettings);
 
             /*-----------------------------------------
              * GETTERS and SETTERS
@@ -112,7 +106,10 @@ namespace OMVIS
             fmi1_import_t* getFMU() const;
 
             /*! \brief Returns the current simulation time. */
-            double getTcur();
+            double getTcur() const;
+
+            /*! \brief Wraps fmi1_import_set_continuous_states. */
+            void setContinuousStates();
 
             /*-----------------------------------------
              * SIMULATION METHODS
@@ -120,13 +117,13 @@ namespace OMVIS
 
             /*! \brief Checks if an event indicator has triggered.
              *
-             * @return True, if an event indicator has triggered. Otherwise, return false.
+             * \return True, if an event indicator has triggered. Otherwise, return false.
              */
             bool checkForTriggeredEvent() const;
 
             /*! \brief Checks if an event is registered for the current time.
              *
-             * @return True, if an event is registered for the current time. Otherwise, return false.
+             * \return True, if an event is registered for the current time. Otherwise, return false.
              */
             bool itsEventTime() const;
 
@@ -144,7 +141,10 @@ namespace OMVIS
              */
             void prepareSimulationStep(const double time);
 
-            /*! \brief Updates times _hcur and _tcur. */
+            /*! \brief Updates times _hcur and _tcur.
+             *
+             * \todo Remove hard coded value? Let the user specify the value.
+             */
             void updateTimes(const double simTimeEnd);
 
             /*! \brief Solves the ODE system.
@@ -155,9 +155,6 @@ namespace OMVIS
 
             /*! \brief Performs a step of the Forward Euler algorithm to determine the state values. */
             void doEulerStep();
-
-            /*! \brief Wraps fmi1_import_set_continuous_states. */
-            void setContinuousStates();
 
             /*! \brief Wraps fmi1_import_completed_integrator_step. */
             void completedIntegratorStep(fmi1_boolean_t* callEventUpdate);
@@ -181,7 +178,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         /// \todo Todo Do we need this method?
-        fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string typeString);
+        fmi1_base_type_enu_t getFMI1baseTypeFor4CharString(const std::string& typeString);
 
     }  // End namespace Model
 }  // End namespace OMVIS
