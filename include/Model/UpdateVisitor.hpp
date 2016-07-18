@@ -54,7 +54,7 @@ namespace OMVIS
 
      public:
         /// \todo Can this attr. be private
-        Model::ShapeObject _shape;
+        ShapeObject _shape;
     };
 
     }  // End namespace Model
