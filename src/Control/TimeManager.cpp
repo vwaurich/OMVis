@@ -31,7 +31,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         TimeManager::TimeManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
-                                   const double hVisual, const double startTime, const double endTime)
+                                 const double hVisual, const double startTime, const double endTime)
                 : _simTime(simTime),
                   _realTime(realTime),
                   _realTimeFactor(realTimeFactor),
