@@ -149,7 +149,7 @@ namespace OMVIS
 
             int k = 0;
             // Make map from keys to input values.
-            for (size_t r = 0; r < _data.getNumReal(); ++r)
+            for (unsigned int r = 0; r < _data.getNumReal(); ++r)
             {
                 _keyToInputMap[keys_real[r]] =
                 {   fmi1_base_type_real, r};
@@ -157,20 +157,20 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("min ") + std::to_string(_data._attrReal[r]._min) + std::string(" max ") + std::to_string(_data._attrReal[r]._max), Util::LC_LOADER, Util::LL_INFO);
                 ++k;
             }
-            for (size_t r = 0; r < _data.getNumInteger(); ++r)
+            for (unsigned int r = 0; r < _data.getNumInteger(); ++r)
             {
                 _keyToInputMap[keys_real[k]] =
                 {   fmi1_base_type_int, r};
                 ++k;
             }
-            for (size_t r = 0; r < _data.getNumBoolean(); ++r)
+            for (unsigned int r = 0; r < _data.getNumBoolean(); ++r)
             {
                 _keyToInputMap[keys_bool[r]] =
                 {   fmi1_base_type_bool, r};
                 LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(r) + std::string(" to key ") + std::to_string(keys_bool[r]), Util::LC_LOADER, Util::LL_INFO);
                 ++k;
             }
-            for (size_t r = 0; r < _data.getNumString(); ++r)
+            for (unsigned int r = 0; r < _data.getNumString(); ++r)
             {
                 _keyToInputMap[keys_real[k]] =
                 {   fmi1_base_type_str, r};
