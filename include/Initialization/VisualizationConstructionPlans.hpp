@@ -31,6 +31,8 @@
 
 namespace OMVIS
 {
+
+    /*! This enum holds the possible visualization modes of OMVis. */
     enum VisualizationType
     {
         NONE = 0,
@@ -75,8 +77,8 @@ namespace OMVIS
 
         /*! \brief This class represents a construction plan for a remote visualization of a simulation.
          *
-         * This class holds the necessary information to let the factory create a OMVisualizer[]Client object. The
-         * computation is performed on the remote server whereas the visualization is done on the localhost.
+         * This class holds the necessary information to let the factory create a OMVisualizer[FMU|MAT]Client object.
+         * The computation is performed on the remote server whereas the visualization is done on the localhost.
          *
          * A construction plan is fully specified by the following attributes:
          *      - IP address of the server
@@ -104,8 +106,6 @@ namespace OMVIS
             std::string ipAddress;
             /*! The port to use for the connection. */
             int portNumber;
-            ///*! Name of the model file (without path). */
-            ///*! Path to the model file on server, e.g., /scratch/project/models/ . */
             /*! The local working directory. */
             std::string workingDirectory;
         };
