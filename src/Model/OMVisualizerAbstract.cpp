@@ -45,7 +45,7 @@ namespace OMVIS
 
         OMVisualizerAbstract::OMVisualizerAbstract(const std::string& modelFile, const std::string& path)
                 : //Siehe unten _baseData(new OMVisualBase(modelFile, path)),
-                  _viewerStuff(new View::OMVisScene),
+                  _viewerStuff(new OMVisScene),
                   _nodeUpdater(new Model::UpdateVisitor),
                   _omvManager(new Control::OMVisManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
         {
@@ -106,7 +106,7 @@ namespace OMVIS
             return _omvManager;
         }
 
-        std::shared_ptr<View::OMVisScene> OMVisualizerAbstract::getOMVisScene() const
+        std::shared_ptr<OMVisScene> OMVisualizerAbstract::getOMVisScene() const
         {
             return _viewerStuff;
         }

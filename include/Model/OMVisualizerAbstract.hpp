@@ -27,8 +27,8 @@
 #ifndef INCLUDE_OMVISUALIZERABSTRACT_HPP_
 #define INCLUDE_OMVISUALIZERABSTRACT_HPP_
 
+#include "Model/OMVisScene.hpp"
 #include "ShapeObjectAttribute.hpp"
-#include "View/OMVisScene.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Visualize.hpp"
@@ -142,7 +142,7 @@ namespace OMVIS
 
             std::shared_ptr<Control::OMVisManager> getOMVisManager() const;
 
-            std::shared_ptr<View::OMVisScene> getOMVisScene() const;
+            std::shared_ptr<OMVisScene> getOMVisScene() const;
 
             /*-----------------------------------------
              * SIMULATION METHODS
@@ -198,7 +198,7 @@ namespace OMVIS
              *---------------------------------------*/
 
             std::shared_ptr<OMVisualBase> _baseData;
-            std::shared_ptr<View::OMVisScene> _viewerStuff;
+            std::shared_ptr<OMVisScene> _viewerStuff;
             std::shared_ptr<UpdateVisitor> _nodeUpdater;
             std::shared_ptr<Control::OMVisManager> _omvManager;
         };

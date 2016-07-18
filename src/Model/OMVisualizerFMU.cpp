@@ -17,11 +17,11 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <Model/OMVisScene.hpp>
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/ShapeObjectAttribute.hpp"
-#include "View/OMVisScene.hpp"
 #include "Control/OMVisManager.hpp"
 #include "Control/JoystickDevice.hpp"
 
