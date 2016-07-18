@@ -27,8 +27,8 @@
 #ifndef INCLUDE_OMVISVIEWER_HPP_
 #define INCLUDE_OMVISVIEWER_HPP_
 
+#include "Control/TimeManager.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
-#include "Control/OMVisManager.hpp"
 #include "View/ViewSettings.hpp"
 
 #include <QTimer>
@@ -317,7 +317,7 @@ namespace OMVIS
             QSlider* _timeSlider;
             /// This label displays the current visualization time.
             QLabel* _timeDisplay;
-			/// This labele displays the current real time factor
+			/// This labele displays the current real time factor.
 			QLabel* _RTFactorDisplay;
             /// Triggers a new frame.
             QTimer _renderTimer;
