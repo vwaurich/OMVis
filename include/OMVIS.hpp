@@ -33,15 +33,14 @@
  * Header file that encapsulates all OMVis headers in order to provide one header to the application.
  */
 
-#include <Initialization/Factory.hpp>
-#include <Model/InfoVisitor.hpp>
+#include "Control/TimeManager.hpp"
+#include "Initialization/Factory.hpp"
+#include "Model/InfoVisitor.hpp"
 #include "View/OMVisViewer.hpp"
 #include "Visualize.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Model/SimSettings.hpp"
-#include "Control/OMVisManager.hpp"
-
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 #include "Util/CommandLineArgs.hpp"

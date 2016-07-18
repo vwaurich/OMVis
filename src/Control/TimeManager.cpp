@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Control/OMVisManager.hpp"
+#include <Control/TimeManager.hpp>
 
 #include <cmath>
 

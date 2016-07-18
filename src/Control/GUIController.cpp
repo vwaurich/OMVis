@@ -17,9 +17,9 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Initialization/Factory.hpp>
+#include "Control/TimeManager.hpp"
+#include "Initialization/Factory.hpp"
 #include "Control/GUIController.hpp"
-#include "Control/OMVisManager.hpp"
 #include "Model/OMVisualizerFMU.hpp"
 #include "Model/OMVisualizerFMUClient.hpp"
 #include "Util/Logger.hpp"

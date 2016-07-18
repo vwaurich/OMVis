@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_OMVISMANAGER_HPP_
-#define INCLUDE_OMVISMANAGER_HPP_
+#ifndef INCLUDE_TIMEMANAGER_HPP_
+#define INCLUDE_TIMEMANAGER_HPP_
 
 #include <osg/Timer>
 
@@ -34,14 +34,14 @@ namespace OMVIS
     namespace Control
     {
 
-        /*! \brief The class manages the timing for OMVis.
+        /*! \brief This class manages the timing for OMVis.
          *
-         * Since we have at least three different time levels, namely simulation time, visualization time and real time,
-         * we need a manager to properly handle them.
+         * Since we have at least three different time levels, namely simulation time, visualization time and
+         * real time, we need a manager to properly handle them.
          *
          * The OMVisManager object also stores the time slider range of the GUI and computes its position during
          * the simulation run. On the other hand, if the user moves the time slider, the OMVisManager computes the
-         * simulation time from the new position.
+         * according simulation time from the new position of the slider.
          */
         class OMVisManager
         {
@@ -106,7 +106,7 @@ namespace OMVIS
 
             /*! \brief Returns the current simulation time. */
             double getSimTime() const;
-            /*! Stes the simulation time to the given value. */
+            /*! Sets the simulation time to the given value. */
             void setSimTime(const double simTime);
 
             /*! \brief Returns the current visualization time. */
@@ -158,7 +158,7 @@ namespace OMVIS
     }  // End namespace Control
 }  // End namespace OMVIS
 
-#endif /* INCLUDE_OMVISMANAGER_HPP_ */
+#endif /* INCLUDE_TIMEMANAGER_HPP_ */
 /**
  * @}
  */
