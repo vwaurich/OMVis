@@ -43,14 +43,14 @@ namespace OMVIS
          * the simulation run. On the other hand, if the user moves the time slider, the OMVisManager computes the
          * according simulation time from the new position of the slider.
          */
-        class OMVisManager
+        class TimeManager
         {
          public:
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            OMVisManager() = delete;
+            TimeManager() = delete;
 
             /*! \brief Constructs a OMVisManager from the given arguments.
              *
@@ -63,12 +63,12 @@ namespace OMVIS
              *
              * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
              */
-            OMVisManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
+            TimeManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
                          const double hVisual, const double startTime, const double endTime);
 
-            ~OMVisManager() = default;
-            OMVisManager(const OMVisManager& omvm) = delete;
-            OMVisManager& operator=(const OMVisManager& omvm) = delete;
+            ~TimeManager() = default;
+            TimeManager(const TimeManager& omvm) = delete;
+            TimeManager& operator=(const TimeManager& omvm) = delete;
 
             /*-----------------------------------------
              * SIMULATION METHODS

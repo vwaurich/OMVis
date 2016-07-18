@@ -30,7 +30,7 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisManager::OMVisManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
+        TimeManager::TimeManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
                                    const double hVisual, const double startTime, const double endTime)
                 : _simTime(simTime),
                   _realTime(realTime),
@@ -49,18 +49,18 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        void OMVisManager::updateTick()
+        void TimeManager::updateTick()
         {
             _visualTimer.tick();
             _realTime = _visualTimer.time_m() / 1000.0;
         }
 
-        bool OMVisManager::simTimeReady()
+        bool TimeManager::simTimeReady()
         {
             return _realTime > _simTime && _simTime <= _endTime;
         }
 
-        bool OMVisManager::visTimeReady()
+        bool TimeManager::visTimeReady()
         {
             return _simTime >= _visTime;
         }
@@ -69,82 +69,82 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        int OMVisManager::getSliderPosition() const
+        int TimeManager::getSliderPosition() const
         {
             return std::round(_visTime * _sliderRange / (_endTime - _startTime));
         }
 
-        void OMVisManager::setSliderRange(const int min, const int max)
+        void TimeManager::setSliderRange(const int min, const int max)
         {
             _sliderRange = max - min;
         }
 
-        double OMVisManager::getEndTime() const
+        double TimeManager::getEndTime() const
         {
             return _endTime;
         }
 
-        void OMVisManager::setEndTime(const double endTime)
+        void TimeManager::setEndTime(const double endTime)
         {
             _endTime = endTime;
         }
 
-        double OMVisManager::getStartTime() const
+        double TimeManager::getStartTime() const
         {
             return _startTime;
         }
 
-        void OMVisManager::setStartTime(const double startTime)
+        void TimeManager::setStartTime(const double startTime)
         {
             _startTime = startTime;
         }
 
-        double OMVisManager::getSimTime() const
+        double TimeManager::getSimTime() const
         {
             return _simTime;
         }
 
-        void OMVisManager::setSimTime(const double simTime)
+        void TimeManager::setSimTime(const double simTime)
         {
             _simTime = simTime;
         }
 
-        double OMVisManager::getVisTime() const
+        double TimeManager::getVisTime() const
         {
             return _visTime;
         }
 
-        void OMVisManager::setVisTime(const double visTime)
+        void TimeManager::setVisTime(const double visTime)
         {
             _visTime = visTime;
         }
 
-        double OMVisManager::getHVisual() const
+        double TimeManager::getHVisual() const
         {
             return _hVisual;
         }
 
-        double OMVisManager::getRealTime() const
+        double TimeManager::getRealTime() const
         {
             return _realTime;
         }
 
-        double OMVisManager::getRealTimeFactor() const
+        double TimeManager::getRealTimeFactor() const
         {
             return _realTimeFactor;
         }
 
-        void OMVisManager::setRealTimeFactor(const double rtf)
+        void TimeManager::setRealTimeFactor(const double rtf)
         {
             _realTimeFactor = rtf;
         }
 
-        bool OMVisManager::isPaused() const
+        bool TimeManager::isPaused() const
         {
             return _pause;
         }
 
-        void OMVisManager::setPause(const bool status)
+        void TimeManager::setPause(const bool status)
         {
             _pause = status;
         }

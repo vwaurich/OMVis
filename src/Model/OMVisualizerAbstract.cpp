@@ -18,7 +18,6 @@
  */
 
 #include "Model/OMVisualizerAbstract.hpp"
-#include "Control/OMVisManager.hpp"
 #include "Util/Logger.hpp"
 
 #include <boost/filesystem.hpp>
@@ -39,7 +38,7 @@ namespace OMVIS
                 : _baseData(nullptr),
                   _viewerStuff(nullptr),
                   _nodeUpdater(nullptr),
-                  _omvManager(nullptr)
+                  _timeManager(nullptr)
         {
         }
 
@@ -47,7 +46,7 @@ namespace OMVIS
                 : //Siehe unten _baseData(new OMVisualBase(modelFile, path)),
                   _viewerStuff(new OMVisScene),
                   _nodeUpdater(new Model::UpdateVisitor),
-                  _omvManager(new Control::OMVisManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
+                  _timeManager(new Control::TimeManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
         {
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
             //char fullPathTmp[PATH_MAX];
@@ -101,9 +100,9 @@ namespace OMVIS
             return _baseData;
         }
 
-        std::shared_ptr<Control::OMVisManager> OMVisualizerAbstract::getOMVisManager() const
+        std::shared_ptr<Control::TimeManager> OMVisualizerAbstract::getTimeManager() const
         {
-            return _omvManager;
+            return _timeManager;
         }
 
         std::shared_ptr<OMVisScene> OMVisualizerAbstract::getOMVisScene() const
@@ -117,9 +116,9 @@ namespace OMVIS
 
         void OMVisualizerAbstract::startVisualization()
         {
-            if (_omvManager->getVisTime() < _omvManager->getEndTime() - 1.e-6)
+            if (_timeManager->getVisTime() < _timeManager->getEndTime() - 1.e-6)
             {
-                _omvManager->setPause(false);
+                _timeManager->setPause(false);
                 LOGGER_WRITE(std::string("Start visualization ..."), Util::LC_CTR, Util::LL_INFO);
             }
             else
@@ -128,16 +127,16 @@ namespace OMVIS
 
         void OMVisualizerAbstract::pauseVisualization()
         {
-            LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_omvManager->getVisTime()) + std::string("."), Util::LC_CTR, Util::LL_INFO);
-            _omvManager->setPause(true);
+            LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_timeManager->getVisTime()) + std::string("."), Util::LC_CTR, Util::LL_INFO);
+            _timeManager->setPause(true);
         }
 
         void OMVisualizerAbstract::initVisualization()
         {
             LOGGER_WRITE(std::string("Initialize visualization."), Util::LC_CTR, Util::LL_INFO);
-            initializeVisAttributes(_omvManager->getStartTime());
-            _omvManager->setVisTime(_omvManager->getStartTime());
-            _omvManager->setPause(true);
+            initializeVisAttributes(_timeManager->getStartTime());
+            _timeManager->setVisTime(_timeManager->getStartTime());
+            _timeManager->setPause(true);
         }
 
         void OMVisualizerAbstract::donationVisualization()
@@ -147,18 +146,18 @@ namespace OMVIS
 
         void OMVisualizerAbstract::sceneUpdate()
         {
-            _omvManager->updateTick();
+            _timeManager->updateTick();
 
-            if (!_omvManager->isPaused())
+            if (!_timeManager->isPaused())
             {
-                updateScene(_omvManager->getVisTime());
-                _omvManager->setVisTime(_omvManager->getVisTime() + _omvManager->getHVisual());
+                updateScene(_timeManager->getVisTime());
+                _timeManager->setVisTime(_timeManager->getVisTime() + _timeManager->getHVisual());
 
-                LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_omvManager->getVisTime()) + std::string(" simTime ") + std::to_string(_omvManager->getSimTime()) + std::string(" _visStepSize ") + std::to_string(_omvManager->getHVisual()), Util::LC_CTR, Util::LL_INFO);
-                if (_omvManager->getVisTime() >= _omvManager->getEndTime() - 1.e-6)
+                LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_timeManager->getVisTime()) + std::string(" simTime ") + std::to_string(_timeManager->getSimTime()) + std::string(" _visStepSize ") + std::to_string(_timeManager->getHVisual()), Util::LC_CTR, Util::LL_INFO);
+                if (_timeManager->getVisTime() >= _timeManager->getEndTime() - 1.e-6)
                 {
                     LOGGER_WRITE(std::string("The End."), Util::LC_CTR, Util::LL_INFO);
-                    _omvManager->setPause(true);
+                    _timeManager->setPause(true);
                 }
             }
         }

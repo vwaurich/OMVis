@@ -27,22 +27,14 @@
 #ifndef INCLUDE_OMVISUALIZERABSTRACT_HPP_
 #define INCLUDE_OMVISUALIZERABSTRACT_HPP_
 
+#include "Control/TimeManager.hpp"
 #include "Model/OMVisScene.hpp"
-#include "ShapeObjectAttribute.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Visualize.hpp"
+#include "ShapeObjectAttribute.hpp"
 
 #include <memory>
-
-// Forward declaration
-namespace OMVIS
-{
-    namespace Control
-    {
-        class OMVisManager;
-    }
-}
 
 namespace OMVIS
 {
@@ -140,7 +132,7 @@ namespace OMVIS
 
             std::shared_ptr<OMVisualBase> getBaseData() const;
 
-            std::shared_ptr<Control::OMVisManager> getOMVisManager() const;
+            std::shared_ptr<Control::TimeManager> getTimeManager() const;
 
             std::shared_ptr<OMVisScene> getOMVisScene() const;
 
@@ -153,7 +145,7 @@ namespace OMVIS
              * \remark All classes that derive from OMVisualizerAbstract
              * \param omvm
              */
-            virtual void simulate(Control::OMVisManager& omvm) = 0;
+            virtual void simulate(Control::TimeManager& omvm) = 0;
 
             /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
@@ -200,7 +192,7 @@ namespace OMVIS
             std::shared_ptr<OMVisualBase> _baseData;
             std::shared_ptr<OMVisScene> _viewerStuff;
             std::shared_ptr<UpdateVisitor> _nodeUpdater;
-            std::shared_ptr<Control::OMVisManager> _omvManager;
+            std::shared_ptr<Control::TimeManager> _timeManager;
         };
 
     }  // End namespace Model
