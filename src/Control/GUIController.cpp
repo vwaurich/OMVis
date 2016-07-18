@@ -119,7 +119,7 @@ namespace OMVIS
             std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createOMVisualizerObject(cP);
             if (tmpOmVisualizer != nullptr)
             {
-                tmpOmVisualizer->getOMVisManager()->setSliderRange(timeSliderStart, timeSliderEnd);
+                tmpOmVisualizer->getTimeManager()->setSliderRange(timeSliderStart, timeSliderEnd);
 
                 // Initialize the OMVisualizer object.
                 isOk += tmpOmVisualizer->initialize();
@@ -176,7 +176,7 @@ namespace OMVIS
 
         int GUIController::getTimeProgress()
         {
-            return _omVisualizer->getOMVisManager()->getSliderPosition();
+            return _omVisualizer->getTimeManager()->getSliderPosition();
         }
 
         osg::ref_ptr<osg::Node> GUIController::getSceneRootNode()
@@ -186,27 +186,27 @@ namespace OMVIS
 
         void GUIController::setVisTime(const int val)
         {
-            _omVisualizer->getOMVisManager()->setVisTime((_omVisualizer->getOMVisManager()->getEndTime() - _omVisualizer->getOMVisManager()->getStartTime()) * (float) (val / 100.0));
+            _omVisualizer->getTimeManager()->setVisTime((_omVisualizer->getTimeManager()->getEndTime() - _omVisualizer->getTimeManager()->getStartTime()) * (float) (val / 100.0));
         }
 
         double GUIController::getVisTime()
         {
-            return _omVisualizer->getOMVisManager()->getVisTime();
+            return _omVisualizer->getTimeManager()->getVisTime();
         }
 
         double GUIController::getRealTimeFactor()
         {
-            return _omVisualizer->getOMVisManager()->getRealTimeFactor();
+            return _omVisualizer->getTimeManager()->getRealTimeFactor();
         }
 
         double GUIController::getSimulationStartTime() const
         {
-            return _omVisualizer->getOMVisManager()->getStartTime();
+            return _omVisualizer->getTimeManager()->getStartTime();
         }
 
         double GUIController::getVisStepsize()
         {
-            return _omVisualizer->getOMVisManager()->getHVisual() * 1000.0;
+            return _omVisualizer->getTimeManager()->getHVisual() * 1000.0;
         }
 
         bool GUIController::modelIsMATFile()
