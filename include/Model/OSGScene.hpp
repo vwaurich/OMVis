@@ -27,34 +27,35 @@
 #ifndef INCLUDE_OSGSCENE_HPP_
 #define INCLUDE_OSGSCENE_HPP_
 
+#include "Model/ShapeObject.hpp"
+
 #include <rapidxml.hpp>
 #include <osg/Group>
 #include <osgDB/ReadFile>
 
-#include "Model/ShapeObject.hpp"
 namespace OMVIS
 {
-    namespace View
+    namespace Model
     {
 
         /*! \brief Class that stores the pointer to the root node of the models OSG scene.
          *
          * \todo This class handles access to the root node. Encapsulate access to the pointer.
          */
-    class OSGScene
-    {
-     public:
-        OSGScene();
-        ~OSGScene() = default;
-        OSGScene(const OSGScene& osgs) = delete;
-        OSGScene& operator=(const OSGScene& osgs) = delete;
+        class OSGScene
+        {
+         public:
+            OSGScene();
+            ~OSGScene() = default;
+            OSGScene(const OSGScene& osgs) = delete;
+            OSGScene& operator=(const OSGScene& osgs) = delete;
 
-        /*! \brief Sets up all nodes initially.
-         *
-         * @param xmlRoot
-         * \return Error value.
-         */
-        int setUpScene(std::vector<Model::ShapeObject> allShapes);
+            /*! \brief Sets up all nodes initially.
+             *
+             * @param xmlRoot
+             * \return Error value.
+             */
+            int setUpScene(std::vector<Model::ShapeObject> allShapes);
 
             /*! \brief Return shared pointer to rootNode. */
             osg::ref_ptr<osg::Group> getRootNode();
@@ -73,7 +74,7 @@ namespace OMVIS
             std::string _path;
         };
 
-    }  // End namespace View
+    }  // End namespace Model
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_OSGSCENE_HPP_ */

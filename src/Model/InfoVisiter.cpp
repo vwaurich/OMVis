@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "View/InfoVisitor.hpp"
+#include <Model/InfoVisitor.hpp>
 
 #include <iostream>
 

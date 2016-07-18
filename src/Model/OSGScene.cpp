@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "View/OSGScene.hpp"
+#include "Model/OSGScene.hpp"
 #include "Visualize.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
@@ -30,7 +30,7 @@
 
 namespace OMVIS
 {
-    namespace View
+    namespace Model
     {
 
     OSGScene::OSGScene()
@@ -115,5 +115,5 @@ namespace OMVIS
         _path = path;
     }
 
-    }  // End namespace View
+    }  // End namespace Model
 }  // End namespace OMVIS

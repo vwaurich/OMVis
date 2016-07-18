@@ -27,11 +27,11 @@
 #ifndef INCLUDE_OMVISSCENE_HPP_
 #define INCLUDE_OMVISSCENE_HPP_
 
-#include "View/OSGScene.hpp"
+#include "Model/OSGScene.hpp"
 
 namespace OMVIS
 {
-    namespace View
+    namespace Model
     {
 
         /*! \brief Base class that contains xml infos and viewer.
@@ -58,7 +58,7 @@ namespace OMVIS
             OSGScene _scene;
         };
 
-    }  // End namespace View
+    }  // End namespace Model
 }  // End namespace OMVIS
 
 #endif /* INCLUDE_OMVISSCENE_HPP_ */

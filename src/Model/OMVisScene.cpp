@@ -17,15 +17,14 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "View/InfoVisitor.hpp"
-#include "View/OMVisScene.hpp"
-#include "Util/Logger.hpp"
+#include "Model/InfoVisitor.hpp"
+#include "Model/OMVisScene.hpp"
 
-#include <osgGA/TrackballManipulator>
+//#include <osgGA/TrackballManipulator>
 
 namespace OMVIS
 {
-    namespace View
+    namespace Model
     {
 
         OMVisScene::OMVisScene()
@@ -36,7 +35,7 @@ namespace OMVIS
         void OMVisScene::dumpOSGTreeDebug()
         {
             // The node traverser which dumps the tree
-            InfoVisitor infoVisitor;
+            View::InfoVisitor infoVisitor;
             _scene.getRootNode()->accept(infoVisitor);
         }
 
@@ -45,5 +44,5 @@ namespace OMVIS
             return _scene;
         }
 
-    }  // End namespace View
+    }  // End namespace Model
 }  // End namespace OMVIS
