@@ -68,6 +68,7 @@ namespace OMVIS
             ShapeObjectAttribute _T[9];
             ShapeObjectAttribute _specCoeff;
 
+            /*! 4x4 */
             osg::Matrix _mat;
         };
 
