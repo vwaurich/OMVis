@@ -18,8 +18,7 @@
  */
 
 #include "Model/OMVisualizerFMUClient.hpp"
-#include "Control/OMVisManager.hpp"
-#include "Visualize.hpp"
+#include "Util/Logger.hpp"
 
 namespace OMVIS
 {
@@ -82,7 +81,7 @@ namespace OMVIS
             int isOk(0);
             isOk = OMVisualizerAbstract::initData();
             isOk += loadFMU();
-            _simSettings->setTend(_omvManager->getEndTime());
+            _simSettings->setTend(_timeManager->getEndTime());
             _simSettings->setHdef(0.001);
             setVarReferencesInVisAttributes();
 
@@ -182,7 +181,7 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        void OMVisualizerFMUClient::simulate(Control::OMVisManager& omvm)
+        void OMVisualizerFMUClient::simulate(Control::TimeManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
             {
@@ -219,10 +218,10 @@ namespace OMVIS
 
         void OMVisualizerFMUClient::initializeVisAttributes(const double time)
         {
-            _omvManager->setVisTime(_omvManager->getStartTime());
-            _omvManager->setSimTime(_omvManager->getStartTime());
+            _timeManager->setVisTime(_timeManager->getStartTime());
+            _timeManager->setSimTime(_timeManager->getStartTime());
             setVarReferencesInVisAttributes();
-            updateVisAttributes(_omvManager->getVisTime());
+            updateVisAttributes(_timeManager->getVisTime());
         }
 
         fmi1_value_reference_t OMVisualizerFMUClient::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
@@ -365,21 +364,21 @@ namespace OMVIS
 
         void OMVisualizerFMUClient::updateScene(const double time)
         {
-            _omvManager->updateTick();            //for real-time measurement
+            _timeManager->updateTick();            //for real-time measurement
 
-            _omvManager->setSimTime(_omvManager->getVisTime());
-            double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
+            _timeManager->setSimTime(_timeManager->getVisTime());
+            double nextStep = _timeManager->getVisTime() + _timeManager->getHVisual();
 
-            double vis1 = _omvManager->getRealTime();
-            while (_omvManager->getSimTime() < nextStep)
+            double vis1 = _timeManager->getRealTime();
+            while (_timeManager->getSimTime() < nextStep)
             {
                 //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
                 //_inputData.printValues();
-                _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
+                _timeManager->setSimTime(simulateStep(_timeManager->getSimTime()));
             }
-            _omvManager->updateTick();                     //for real-time measurement
-            _omvManager->setRealTimeFactor(_omvManager->getHVisual() / (_omvManager->getRealTime() - vis1));
-            updateVisAttributes(_omvManager->getVisTime());
+            _timeManager->updateTick();                     //for real-time measurement
+            _timeManager->setRealTimeFactor(_timeManager->getHVisual() / (_timeManager->getRealTime() - vis1));
+            updateVisAttributes(_timeManager->getVisTime());
         }
 
     }  // End namespace Model

@@ -28,7 +28,6 @@
 #define INCLUDE_OMVISUALIZERMAT_HPP_
 
 #include "OMVisualizerAbstract.hpp"
-#include "Visualize.hpp"
 
 #include <read_matlab4.h>
 
@@ -84,7 +83,7 @@ namespace OMVIS
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            void simulate(Control::OMVisManager& omvm){ };
+            void simulate(Control::TimeManager& omvm){ };
 
             /*! \brief This method updates the visualization attributes after a time step has been performed.
              *

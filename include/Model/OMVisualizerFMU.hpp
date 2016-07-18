@@ -31,32 +31,21 @@
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
-#include "Visualize.hpp"
 
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
 
 #include <string>
-#include <memory>
-
-// Forward declaration
-namespace OMVIS
-{
-    namespace View
-    {
-        class OMVManager;
-    }
-}
 
 namespace OMVIS
 {
     namespace Model
     {
 
-        /*! \brief Class that handles visualization of FMUs.
+        /*! \brief This class handles the visualization of FMUs.
          *
-         *
-         * In contrast to \ref OMVisualizationMAT, this class provides user interaction via joystick devices.
+         * In contrast to \ref OMVisualizerMAT, this class provides user interaction via joystick devices to enable
+         * steering the model.
          */
         class OMVisualizerFMU : public OMVisualizerAbstract
         {
@@ -71,8 +60,8 @@ namespace OMVIS
              *
              * Essentially, a FMU file and its path need to be specified.
              *
-             * @param[in] fileName Model file name without path.
-             * @param[in] path Path to the model file.
+             * \param fileName  Model file name without path.
+             * \param path      Path to the model file.
              */
             OMVisualizerFMU(const std::string& modelFile, const std::string& path);
 
@@ -86,14 +75,15 @@ namespace OMVIS
 
             /*! \brief Loads and initializes the FMU file.
              *
-             * @param[in] modelFile Name of the FMU file.
-             * @param[in] path Path to the model file.
-             * @return Error value.
+             * \param modelFile     Name of the FMU file.
+             * \param path          Path to the model file.
+             * \return Error value.
              */
             int loadFMU(const std::string& modelFile, const std::string& path);
 
             /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
-             * @return Error value.
+             *
+             * \return Error value.
              */
             int initData() override;
 
@@ -102,13 +92,15 @@ namespace OMVIS
              */
             void resetInputs();
 
-            /*! \brief initializes the attached joysticks
+            /*! \brief Initializes the attached joysticks.
              */
             void initJoySticks();
 
-            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial
+             *         position.
              *
-             * \Remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::initializeVisAttributes(const double).
+             * \remark The parameter \a time is not used, just inherited from
+             *         \ref OMVisualizerAbstract::initializeVisAttributes(const double).
              */
             void initializeVisAttributes(const double time = 0.0) override;
 
@@ -124,7 +116,7 @@ namespace OMVIS
             const FMU* getFMU() const;
 
             // const InputData* getInputData() const;
-            std::shared_ptr<InputData> getInputData();
+            std::shared_ptr<InputData> getInputData() const;
 
             /*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
             */
@@ -138,7 +130,7 @@ namespace OMVIS
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            void simulate(Control::OMVisManager& omvm) override;
+            void simulate(Control::TimeManager& omvm) override;
 
             double simulateStep(const double time);
 

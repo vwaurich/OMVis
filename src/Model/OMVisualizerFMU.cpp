@@ -17,13 +17,9 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Model/OMVisScene.hpp>
+#include "Model/OMVisualizerFMU.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
-#include "Model/OMVisualizerFMU.hpp"
-#include "Model/ShapeObjectAttribute.hpp"
-#include "Control/OMVisManager.hpp"
-#include "Control/JoystickDevice.hpp"
 
 #include <SDL.h>
 
@@ -33,6 +29,7 @@ namespace OMVIS
 {
     namespace Model
     {
+
         /*-----------------------------------------
          * CONSTRUCTORS
          *---------------------------------------*/
@@ -85,7 +82,7 @@ namespace OMVIS
             int isOk(0);
             isOk = OMVisualizerAbstract::initData();
             isOk += loadFMU(_baseData->getModelName(), _baseData->getPath());
-            _simSettings->setTend(_omvManager->getEndTime());
+            _simSettings->setTend(_timeManager->getEndTime());
             _simSettings->setHdef(0.001);
             setVarReferencesInVisAttributes();
 
@@ -141,7 +138,7 @@ namespace OMVIS
             return _fmu.get();
         }
 
-        std::shared_ptr<InputData> OMVisualizerFMU::getInputData()
+        std::shared_ptr<InputData> OMVisualizerFMU::getInputData() const
         {
             return _inputData;
         }
@@ -216,7 +213,7 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        void OMVisualizerFMU::simulate(Control::OMVisManager& omvm)
+        void OMVisualizerFMU::simulate(Control::TimeManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
                 omvm.setSimTime(simulateStep(omvm.getSimTime()));
@@ -287,10 +284,10 @@ namespace OMVIS
         void OMVisualizerFMU::initializeVisAttributes(const double time)
         {
             _fmu->initialize(_simSettings);
-            _omvManager->setVisTime(_omvManager->getStartTime());
-            _omvManager->setSimTime(_omvManager->getStartTime());
+            _timeManager->setVisTime(_timeManager->getStartTime());
+            _timeManager->setSimTime(_timeManager->getStartTime());
             setVarReferencesInVisAttributes();
-            updateVisAttributes(_omvManager->getVisTime());
+            updateVisAttributes(_timeManager->getVisTime());
         }
 
         int OMVisualizerFMU::updateVisAttributes(const double time)
@@ -362,21 +359,21 @@ namespace OMVIS
 
         void OMVisualizerFMU::updateScene(const double time)
         {
-            _omvManager->updateTick(); //for real-time measurement
+            _timeManager->updateTick(); //for real-time measurement
 
-            _omvManager->setSimTime(_omvManager->getVisTime());
-            double nextStep = _omvManager->getVisTime() + _omvManager->getHVisual();
+            _timeManager->setSimTime(_timeManager->getVisTime());
+            double nextStep = _timeManager->getVisTime() + _timeManager->getHVisual();
 
-            double vis1 = _omvManager->getRealTime();
-            while (_omvManager->getSimTime() < nextStep)
+            double vis1 = _timeManager->getRealTime();
+            while (_timeManager->getSimTime() < nextStep)
             {
                 //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
                 //_inputData.printValues();
-                _omvManager->setSimTime(simulateStep(_omvManager->getSimTime()));
+                _timeManager->setSimTime(simulateStep(_timeManager->getSimTime()));
             }
-            _omvManager->updateTick();                     //for real-time measurement
-            _omvManager->setRealTimeFactor(_omvManager->getHVisual() / (_omvManager->getRealTime() - vis1));
-            updateVisAttributes(_omvManager->getVisTime());
+            _timeManager->updateTick();                     //for real-time measurement
+            _timeManager->setRealTimeFactor(_timeManager->getHVisual() / (_timeManager->getRealTime() - vis1));
+            updateVisAttributes(_timeManager->getVisTime());
         }
 
         // Todo pass by const ref

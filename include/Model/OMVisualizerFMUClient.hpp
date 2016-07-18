@@ -27,30 +27,20 @@
 #ifndef INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 
-#include "Initialization/Factory.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
-#include "Visualize.hpp"
-#include "Util/Logger.hpp"
+
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
-#include "SimulationClient.hpp"
-#include "VariableList.hpp"
+
+// NetOff
+#include <VariableList.hpp>
+#include <SimulationClient.hpp>
 
 #include <string>
-#include <memory>
-
-// Forward declaration
-namespace OMVIS
-{
-    namespace View
-    {
-        class OMVManager;
-    }
-}
 
 namespace OMVIS
 {
@@ -184,7 +174,7 @@ namespace OMVIS
              *
              * @param omvm
              */
-            virtual void simulate(Control::OMVisManager& omvm) override;
+            virtual void simulate(Control::TimeManager& omvm) override;
 
             /*! \brief Performs a simulation step to obtain data for next visualization frame.
              *

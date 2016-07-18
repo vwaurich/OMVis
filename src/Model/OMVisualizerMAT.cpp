@@ -20,8 +20,6 @@
 #include "Model/OMVisualizerMAT.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
-#include "Control/OMVisManager.hpp"
-#include "Visualize.hpp"
 
 namespace OMVIS
 {
@@ -62,8 +60,8 @@ namespace OMVIS
             int isOk(0);
             isOk = OMVisualizerAbstract::initData();
             readMat(_baseData->getModelName(), _baseData->getPath());
-            _omvManager->setStartTime(omc_matlab4_startTime(&_matReader));
-            _omvManager->setEndTime(omc_matlab4_stopTime(&_matReader));
+            _timeManager->setStartTime(omc_matlab4_startTime(&_matReader));
+            _timeManager->setEndTime(omc_matlab4_stopTime(&_matReader));
             return isOk;
         }
 
@@ -173,14 +171,14 @@ namespace OMVIS
             if (0.0 > time)
                 LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER, Util::LL_ERROR);
 
-            _omvManager->updateTick();  //for real-time measurement
-            double visTime = _omvManager->getRealTime();
+            _timeManager->updateTick();  //for real-time measurement
+            double visTime = _timeManager->getRealTime();
 
             updateVisAttributes(time);
 
-            _omvManager->updateTick();  //for real-time measurement
-            visTime = _omvManager->getRealTime() - visTime;
-            _omvManager->setRealTimeFactor(_omvManager->getHVisual() / visTime);
+            _timeManager->updateTick();  //for real-time measurement
+            visTime = _timeManager->getRealTime() - visTime;
+            _timeManager->setRealTimeFactor(_timeManager->getHVisual() / visTime);
         }
 
         void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
