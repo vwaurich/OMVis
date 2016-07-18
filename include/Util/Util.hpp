@@ -94,9 +94,10 @@ namespace OMVIS
         /*! \brief Converts a bool into a std::string, i.e., returning "true" or "false".
          *
          * By using this quite simple function we do not need to include any fancy third party method
-         * or library, like boost cast.
-         * @param b Bool to convert.
-         * @return "true" or "false".
+         * or library, like boost cast to get the job done.
+         *
+         * \param b Bool to convert.
+         * \return "true" or "false".
          */
         inline const char* const boolToString(bool b)
         {
@@ -107,7 +108,7 @@ namespace OMVIS
          *
          * \remark: It seems to be no other platform independent way than boost::filesystem.
          *          With the use of some ifdefs to encapsulate the platform dependent functions,
-         *          we could resolve the dependency from boost::filesystem.
+         *          we could resolve the dependency from boost::filesystem. Or we wait for C++17 :-)
          */
         inline std::string makeAbsolutePath(const std::string& path)
         {
