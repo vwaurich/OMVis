@@ -84,7 +84,7 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-            /*! \brief Calculates from the current visualization time (_visTime) the position of the time slider. */
+            /*! \brief Calculates from the current visualization time (\a _visTime) the position of the time slider. */
             int getSliderPosition() const;
 
             /*! \brief Sets the time slider range.
@@ -145,8 +145,11 @@ namespace OMVIS
             double _visTime;
             //! Step size for the scene updates in milliseconds.
             double _hVisual;
+            //! Start time of the simulation.
             double _startTime;
+            //! End time of the simulation.
             double _endTime;
+            //! This variable indicates if the simulation/visualization currently pauses.
             bool _pause;
 
             osg::Timer _visualTimer;
