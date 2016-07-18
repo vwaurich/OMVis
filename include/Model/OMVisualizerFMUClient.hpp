@@ -27,7 +27,7 @@
 #ifndef INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
 
-#include <Initialization/Factory.hpp>
+#include "Initialization/Factory.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
@@ -37,8 +37,8 @@
 #include "Util/Logger.hpp"
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
-#include <SimulationClient.hpp>
-#include <VariableList.hpp>
+#include "SimulationClient.hpp"
+#include "VariableList.hpp"
 
 #include <string>
 #include <memory>
