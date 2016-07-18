@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Model/OMVisualizerFMU.hpp"
+#include <Model/VisualizerFMU.hpp>
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -34,8 +34,8 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisualizerFMU::OMVisualizerFMU(const std::string& modelFile, const std::string& path)
-                : OMVisualizerAbstract(modelFile, path),
+        VisualizerFMU::VisualizerFMU(const std::string& modelFile, const std::string& path)
+                : VisualizerAbstract(modelFile, path),
                   _fmu(new FMU()),
                   _simSettings(new SimSettings()),
                   _inputData(new InputData()),
@@ -50,7 +50,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         /// \todo: Set the error variable isOk.
-        int OMVisualizerFMU::loadFMU(const std::string& modelFile, const std::string& path)
+        int VisualizerFMU::loadFMU(const std::string& modelFile, const std::string& path)
         {
             int isOk(0);
             //setup fmu-simulation stuff
@@ -59,10 +59,10 @@ namespace OMVIS
 
             //load and initialize fmu
             _fmu->load(modelFile, path);
-            LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
 
             _fmu->initialize(_simSettings);
-            LOGGER_WRITE(std::string("OMVisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
 
             _inputData->initializeInputs(_fmu->getFMU());
             _inputData->printValues();
@@ -77,10 +77,10 @@ namespace OMVIS
             return isOk;
         }
 
-        int OMVisualizerFMU::initData()
+        int VisualizerFMU::initData()
         {
             int isOk(0);
-            isOk = OMVisualizerAbstract::initData();
+            isOk = VisualizerAbstract::initData();
             isOk += loadFMU(_baseData->getModelName(), _baseData->getPath());
             _simSettings->setTend(_timeManager->getEndTime());
             _simSettings->setHdef(0.001);
@@ -90,12 +90,12 @@ namespace OMVIS
             return isOk;
         }
 
-        void OMVisualizerFMU::resetInputs()
+        void VisualizerFMU::resetInputs()
         {
             _inputData->resetInputValues();
         }
 
-        void OMVisualizerFMU::initJoySticks()
+        void VisualizerFMU::initJoySticks()
         {
             //Initialize SDL
             if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
@@ -128,22 +128,22 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        std::string OMVisualizerFMU::getType() const
+        std::string VisualizerFMU::getType() const
         {
             return "fmu";
         }
 
-        const FMU* OMVisualizerFMU::getFMU() const
+        const FMU* VisualizerFMU::getFMU() const
         {
             return _fmu.get();
         }
 
-        std::shared_ptr<InputData> OMVisualizerFMU::getInputData() const
+        std::shared_ptr<InputData> VisualizerFMU::getInputData() const
         {
             return _inputData;
         }
 
-        fmi1_value_reference_t OMVisualizerFMU::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
+        fmi1_value_reference_t VisualizerFMU::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
         {
             fmi1_value_reference_t vr = 0;
             if (!attr->isConst)
@@ -154,7 +154,7 @@ namespace OMVIS
             return vr;
         }
 
-        int OMVisualizerFMU::setVarReferencesInVisAttributes()
+        int VisualizerFMU::setVarReferencesInVisAttributes()
         {
             int isOk(0);
 
@@ -213,13 +213,13 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        void OMVisualizerFMU::simulate(Control::TimeManager& omvm)
+        void VisualizerFMU::simulate(Control::TimeManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
                 omvm.setSimTime(simulateStep(omvm.getSimTime()));
         }
 
-        double OMVisualizerFMU::simulateStep(const double time)
+        double VisualizerFMU::simulateStep(const double time)
         {
             //tcur = settings.tstart;
             //hcur = settings.hdef;
@@ -281,7 +281,7 @@ namespace OMVIS
             return _fmu->getFMUData()->_tcur;
         }
 
-        void OMVisualizerFMU::initializeVisAttributes(const double time)
+        void VisualizerFMU::initializeVisAttributes(const double time)
         {
             _fmu->initialize(_simSettings);
             _timeManager->setVisTime(_timeManager->getStartTime());
@@ -290,7 +290,7 @@ namespace OMVIS
             updateVisAttributes(_timeManager->getVisTime());
         }
 
-        int OMVisualizerFMU::updateVisAttributes(const double time)
+        int VisualizerFMU::updateVisAttributes(const double time)
         {
             int isOk(0);
 
@@ -357,7 +357,7 @@ namespace OMVIS
             return isOk;
         }
 
-        void OMVisualizerFMU::updateScene(const double time)
+        void VisualizerFMU::updateScene(const double time)
         {
             _timeManager->updateTick(); //for real-time measurement
 
@@ -377,7 +377,7 @@ namespace OMVIS
         }
 
         // Todo pass by const ref
-        void OMVisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, fmi1_import_t* fmu)
+        void VisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, fmi1_import_t* fmu)
         {
             if (!attr->isConst)
             {

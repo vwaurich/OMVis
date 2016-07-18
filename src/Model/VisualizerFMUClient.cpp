@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Model/OMVisualizerFMUClient.hpp"
+#include <Model/VisualizerFMUClient.hpp>
 #include "Util/Logger.hpp"
 
 namespace OMVIS
@@ -25,8 +25,8 @@ namespace OMVIS
     namespace Model
     {
 
-        OMVisualizerFMUClient::OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
-                : OMVisualizerAbstract(cP->modelFile, cP->workingDirectory),
+        VisualizerFMUClient::VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
+                : VisualizerAbstract(cP->modelFile, cP->workingDirectory),
                   _noFC(cP->ipAddress, cP->portNumber),
                   _outputVars(),
                   _simSettings(new SimSettings()),
@@ -41,7 +41,7 @@ namespace OMVIS
         /*-----------------------------------------
          * INITIALIZATION METHODS
          *---------------------------------------*/
-        void OMVisualizerFMUClient::initializeConnectionToServer()
+        void VisualizerFMUClient::initializeConnectionToServer()
         {
             // test if server can be reached
             if (!_noFC.initializeConnection())
@@ -49,7 +49,7 @@ namespace OMVIS
         }
 
         /// \todo: Set the error variable isOk.
-        int OMVisualizerFMUClient::loadFMU()
+        int VisualizerFMUClient::loadFMU()
         {
             int isOk(0);
             auto a = _baseData->getModelName();
@@ -76,10 +76,10 @@ namespace OMVIS
             return isOk;
         }
 
-        int OMVisualizerFMUClient::initData()
+        int VisualizerFMUClient::initData()
         {
             int isOk(0);
-            isOk = OMVisualizerAbstract::initData();
+            isOk = VisualizerAbstract::initData();
             isOk += loadFMU();
             _simSettings->setTend(_timeManager->getEndTime());
             _simSettings->setHdef(0.001);
@@ -89,12 +89,12 @@ namespace OMVIS
             return isOk;
         }
 
-        void OMVisualizerFMUClient::resetInputs()
+        void VisualizerFMUClient::resetInputs()
         {
             _inputData->resetInputValues();
         }
 
-        void OMVisualizerFMUClient::initJoySticks()
+        void VisualizerFMUClient::initJoySticks()
         {
             //Initialize SDL
             if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
@@ -124,7 +124,7 @@ namespace OMVIS
             }
         }
 
-        int OMVisualizerFMUClient::initialize()
+        int VisualizerFMUClient::initialize()
           {
               // If visual XML file is not present, we need to copy it from server to localhost
               // (before calling OMVisualizerAbstract::initialize().
@@ -136,11 +136,11 @@ namespace OMVIS
               }
               catch (std::exception& ex)
               {
-                  LOGGER_WRITE(std::string("OMVisualizerFMUClient exception: ") + ex.what(), Util::LC_LOADER, Util::LL_ERROR);
+                  LOGGER_WRITE(std::string("VisualizerFMUClient exception: ") + ex.what(), Util::LC_LOADER, Util::LL_ERROR);
                   isOk += 1;
               }
 
-              OMVisualizerAbstract::initialize();
+              VisualizerAbstract::initialize();
 
               //initializeSimulation();
 
@@ -151,7 +151,7 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        NetOff::VariableList OMVisualizerFMUClient::getOutputVariables()
+        NetOff::VariableList VisualizerFMUClient::getOutputVariables()
         {
             NetOff::VariableList varList;
             varList.addReals(_baseData->getVisualizationVariables());
@@ -160,19 +160,19 @@ namespace OMVIS
         }
 
         // Todo! Implement me. Use a GUI to set input values.
-        NetOff::VariableList OMVisualizerFMUClient::getInputVariables()
+        NetOff::VariableList VisualizerFMUClient::getInputVariables()
         {
             NetOff::VariableList varList;
             varList.addReals(_noFC.getPossibleInputVariableNames(_simID).getReals());
             return varList;
         }
 
-        std::string OMVisualizerFMUClient::getType() const
+        std::string VisualizerFMUClient::getType() const
         {
             return "fmuclient";
         }
 
-        std::shared_ptr<InputData> OMVisualizerFMUClient::getInputData()
+        std::shared_ptr<InputData> VisualizerFMUClient::getInputData()
         {
             return _inputData;
         }
@@ -181,7 +181,7 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        void OMVisualizerFMUClient::simulate(Control::TimeManager& omvm)
+        void VisualizerFMUClient::simulate(Control::TimeManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
             {
@@ -190,7 +190,7 @@ namespace OMVIS
             }
         }
 
-        double OMVisualizerFMUClient::simulateStep(const double time)
+        double VisualizerFMUClient::simulateStep(const double time)
         {
             double newTime = time + _simSettings->getHdef();
 
@@ -216,7 +216,7 @@ namespace OMVIS
             return newTime;
         }
 
-        void OMVisualizerFMUClient::initializeVisAttributes(const double time)
+        void VisualizerFMUClient::initializeVisAttributes(const double time)
         {
             _timeManager->setVisTime(_timeManager->getStartTime());
             _timeManager->setSimTime(_timeManager->getStartTime());
@@ -224,7 +224,7 @@ namespace OMVIS
             updateVisAttributes(_timeManager->getVisTime());
         }
 
-        fmi1_value_reference_t OMVisualizerFMUClient::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
+        fmi1_value_reference_t VisualizerFMUClient::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
         {
             fmi1_value_reference_t vr = 0;
             if (!attr->isConst)
@@ -232,7 +232,7 @@ namespace OMVIS
             return vr;
         }
 
-        int OMVisualizerFMUClient::setVarReferencesInVisAttributes()
+        int VisualizerFMUClient::setVarReferencesInVisAttributes()
         {
             int isOk(0);
 
@@ -274,13 +274,13 @@ namespace OMVIS
 
             catch (std::exception& e)
             {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("Something went wrong in Visualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
                 isOk = 1;
             }
             return isOk;
         }
 
-        int OMVisualizerFMUClient::updateVisAttributes(const double time)
+        int VisualizerFMUClient::updateVisAttributes(const double time)
         {
             int isOk(0);
 
@@ -341,28 +341,28 @@ namespace OMVIS
 
             catch (std::exception& e)
             {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("Something went wrong in Visualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
                 isOk = 1;
             }
             return isOk;
         }
 
-        void OMVisualizerFMUClient::startVisualization()
+        void VisualizerFMUClient::startVisualization()
         {
             if (!_noFC.isStarted())
                 _noFC.start();
             else
                 _noFC.unpause();
-            OMVisualizerAbstract::startVisualization();
+            VisualizerAbstract::startVisualization();
         }
 
-        void OMVisualizerFMUClient::pauseVisualization()
+        void VisualizerFMUClient::pauseVisualization()
         {
             _noFC.pause();
-            OMVisualizerAbstract::pauseVisualization();
+            VisualizerAbstract::pauseVisualization();
         }
 
-        void OMVisualizerFMUClient::updateScene(const double time)
+        void VisualizerFMUClient::updateScene(const double time)
         {
             _timeManager->updateTick();            //for real-time measurement
 

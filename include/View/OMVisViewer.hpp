@@ -27,8 +27,8 @@
 #ifndef INCLUDE_OMVISVIEWER_HPP_
 #define INCLUDE_OMVISVIEWER_HPP_
 
+#include <Model/VisualizerAbstract.hpp>
 #include "Control/TimeManager.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
 #include "View/ViewSettings.hpp"
 
 #include <QTimer>

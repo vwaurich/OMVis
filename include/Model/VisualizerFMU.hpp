@@ -27,11 +27,10 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
+#include <Model/VisualizerAbstract.hpp>
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
-
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
 
@@ -47,14 +46,14 @@ namespace OMVIS
          * In contrast to \ref OMVisualizerMAT, this class provides user interaction via joystick devices to enable
          * steering the model.
          */
-        class OMVisualizerFMU : public OMVisualizerAbstract
+        class VisualizerFMU : public VisualizerAbstract
         {
          public:
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            OMVisualizerFMU() = delete;
+            VisualizerFMU() = delete;
 
             /*! \brief Constructs a OMVisualizerFMU object from the given arguments.
              *
@@ -63,11 +62,11 @@ namespace OMVIS
              * \param fileName  Model file name without path.
              * \param path      Path to the model file.
              */
-            OMVisualizerFMU(const std::string& modelFile, const std::string& path);
+            VisualizerFMU(const std::string& modelFile, const std::string& path);
 
-            virtual ~OMVisualizerFMU() = default;
-            OMVisualizerFMU(const OMVisualizerFMU& omvf) = delete;
-            OMVisualizerFMU& operator=(const OMVisualizerFMU& omvf) = delete;
+            virtual ~VisualizerFMU() = default;
+            VisualizerFMU(const VisualizerFMU& omvf) = delete;
+            VisualizerFMU& operator=(const VisualizerFMU& omvf) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS

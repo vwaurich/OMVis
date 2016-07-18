@@ -46,11 +46,11 @@ namespace OMVIS
          * It provides basic methods for visualization.
          *
          * Currently, there are three concrete implementations:
-         *      - \ref OMVisualizerFMU for visualization of models encapsulated as FMU
-         *      - \ref OMVisualizerMAT for visualization of simulation result files in MAT format
-         *      - \ref OMVisualizerFMUClient for remote visualization of models encapsulated as FMU
+         *      - \ref VisualizerFMU for visualization of models encapsulated as FMU
+         *      - \ref VisualizerMAT for visualization of simulation result files in MAT format
+         *      - \ref VisualizerFMUClient for remote visualization of models encapsulated as FMU
          */
-        class OMVisualizerAbstract
+        class VisualizerAbstract
         {
          public:
             /*-----------------------------------------
@@ -58,7 +58,7 @@ namespace OMVIS
              *---------------------------------------*/
 
             /// The default constructor.
-            OMVisualizerAbstract();
+            VisualizerAbstract();
 
             /*! \brief Constructs OMVisualizerAbstract object from arguments.
              *
@@ -67,16 +67,16 @@ namespace OMVIS
              * \param[in] modelFile Name of the model file.
              * \param[in] path Path to the FMU or result file and corresponding XML file.
              */
-            OMVisualizerAbstract(const std::string& modelFile, const std::string& path);
+            VisualizerAbstract(const std::string& modelFile, const std::string& path);
 
             /// Destructs OMVisualizer object.
-            virtual ~OMVisualizerAbstract() = default;
+            virtual ~VisualizerAbstract() = default;
 
             /// The copy constructor is forbidden.
-            OMVisualizerAbstract(const OMVisualizerAbstract& omv) = delete;
+            VisualizerAbstract(const VisualizerAbstract& omv) = delete;
 
             /// The assignment operator is forbidden.
-            OMVisualizerAbstract& operator=(const OMVisualizerAbstract& omv) = delete;
+            VisualizerAbstract& operator=(const VisualizerAbstract& omv) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS

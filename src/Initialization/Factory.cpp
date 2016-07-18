@@ -17,10 +17,10 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <Model/VisualizerFMU.hpp>
+#include <Model/VisualizerFMUClient.hpp>
+#include <Model/VisualizerMAT.hpp>
 #include "Initialization/Factory.hpp"
-#include "Model/OMVisualizerFMU.hpp"
-#include "Model/OMVisualizerFMUClient.hpp"
-#include "Model/OMVisualizerMAT.hpp"
 #include "Model/OMVisualizerMATClient.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
@@ -34,9 +34,9 @@ namespace OMVIS
          * CREATE METHODS
          *---------------------------------------*/
 
-        std::shared_ptr<Model::OMVisualizerAbstract> Factory::createOMVisualizerObject(const VisualizationConstructionPlan* cP)
+        std::shared_ptr<Model::VisualizerAbstract> Factory::createVisualizerObject(const VisualizationConstructionPlan* cP)
         {
-            std::shared_ptr<Model::OMVisualizerAbstract> result(nullptr);
+            std::shared_ptr<Model::VisualizerAbstract> result(nullptr);
 
             // Todo: Implement me!
             // Construction plan is valid?
@@ -45,7 +45,7 @@ namespace OMVIS
             // Todo: This check can be moved to constructionPlanIsValid method
             if (cP->modelFile.empty() && cP->path.empty())
             {
-                std::string msg = "Initialize OMVisalizerAbstract because path and model name are empty.";
+                std::string msg = "Initialize VisalizerAbstract because path and model name are empty.";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
@@ -58,29 +58,29 @@ namespace OMVIS
 //                throw std::runtime_error(msg);
 //            }
 
-            //FMU based visualization
+            // FMU based visualization
             if (cP->visType == VisualizationType::FMU)
             {
-                result = std::shared_ptr<Model::OMVisualizerAbstract>(new Model::OMVisualizerFMU(cP->modelFile, cP->path));
-                LOGGER_WRITE("Initialize OMVisalizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
+                result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerFMU(cP->modelFile, cP->path));
+                LOGGER_WRITE("Initialize OMVisualizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            //MAT file based visualization
+            // MAT file based visualization
             else if (cP->visType == VisualizationType::MAT)
             {
-                result = std::shared_ptr<Model::OMVisualizerAbstract>(new Model::OMVisualizerMAT(cP->modelFile, cP->path));
-                LOGGER_WRITE("Initialize OMVisalizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
+                result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerMAT(cP->modelFile, cP->path));
+                LOGGER_WRITE("Initialize VisualizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
             }
             else if (cP->visType == VisualizationType::FMU_REMOTE)
             {
-                result = std::shared_ptr<Model::OMVisualizerAbstract>(new Model::OMVisualizerFMUClient(dynamic_cast<const RemoteVisualizationConstructionPlan*>(cP)));
-                LOGGER_WRITE("Initialize OMVisalizerFMUClient.", Util::LC_LOADER, Util::LL_DEBUG);
+                result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerFMUClient(dynamic_cast<const RemoteVisualizationConstructionPlan*>(cP)));
+                LOGGER_WRITE("Initialize VisualizerFMUClient.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            //MAT file based visualization
+            // MAT file based visualization
             else if (cP->visType == VisualizationType::MAT_REMOTE)
             {
                 /// \todo Todo Implement OMVisualizerMATClient!
                 // result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
-                LOGGER_WRITE("Initialize OMVisalizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER, Util::LL_ERROR);
+                LOGGER_WRITE("Initialize OMVisualizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER, Util::LL_ERROR);
             }
 
             else

@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Model/OMVisualizerMAT.hpp"
+#include <Model/VisualizerMAT.hpp>
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -45,8 +45,8 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisualizerMAT::OMVisualizerMAT(const std::string& modelFile, const std::string& path)
-                : OMVisualizerAbstract(modelFile, path),
+        VisualizerMAT::VisualizerMAT(const std::string& modelFile, const std::string& path)
+                : VisualizerAbstract(modelFile, path),
                   _matReader()
         {
         }
@@ -55,24 +55,24 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        int OMVisualizerMAT::initData()
+        int VisualizerMAT::initData()
         {
             int isOk(0);
-            isOk = OMVisualizerAbstract::initData();
+            isOk = VisualizerAbstract::initData();
             readMat(_baseData->getModelName(), _baseData->getPath());
             _timeManager->setStartTime(omc_matlab4_startTime(&_matReader));
             _timeManager->setEndTime(omc_matlab4_stopTime(&_matReader));
             return isOk;
         }
 
-        void OMVisualizerMAT::initializeVisAttributes(const double time)
+        void VisualizerMAT::initializeVisAttributes(const double time)
         {
             if (0.0 > time)
                 LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER, Util::LL_ERROR);
             updateVisAttributes(time);
         }
 
-        void OMVisualizerMAT::readMat(const std::string& modelFile, const std::string& path)
+        void VisualizerMAT::readMat(const std::string& modelFile, const std::string& path)
         {
             std::string resFileName = path + modelFile;        // + "_res.mat";
 
@@ -93,7 +93,7 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        int OMVisualizerMAT::updateVisAttributes(const double time)
+        int VisualizerMAT::updateVisAttributes(const double time)
         {
             int isOk(0);
             // Update all shapes
@@ -166,7 +166,7 @@ namespace OMVIS
             return isOk;
         }
 
-        void OMVisualizerMAT::updateScene(const double time)
+        void VisualizerMAT::updateScene(const double time)
         {
             if (0.0 > time)
                 LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER, Util::LL_ERROR);
@@ -181,13 +181,13 @@ namespace OMVIS
             _timeManager->setRealTimeFactor(_timeManager->getHVisual() / visTime);
         }
 
-        void OMVisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
+        void VisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
         {
             if (!attr->isConst)
                 attr->exp = omcGetVarValue(reader, attr->cref.c_str(), time);
         }
 
-        double OMVisualizerMAT::omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time)
+        double VisualizerMAT::omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time)
         {
             double val = 0.0;
             ModelicaMatVariable_t* var = nullptr;
@@ -204,7 +204,7 @@ namespace OMVIS
          * GETTERS AND SETTERS
          *---------------------------------------*/
 
-        std::string OMVisualizerMAT::getType() const
+        std::string VisualizerMAT::getType() const
         {
             return "mat";
         }

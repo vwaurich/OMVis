@@ -27,10 +27,9 @@
 #ifndef INCLUDE_GUICONTROLLER_HPP_
 #define INCLUDE_GUICONTROLLER_HPP_
 
+#include <Model/VisualizerAbstract.hpp>
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/InputData.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
-
 #include <osg/Node>
 
 #include <memory>
@@ -50,8 +49,8 @@ namespace OMVIS
          * The GuiController class encapsulates the model data structures from the GUI elements and classes. It holds
          * the pointer to the concrete model visualization object.
          *
-         * \remark: If we want to visualize multiple models in the future, _omVisualizer will have to be a vector of
-         *          pointers of type \ref Model::OMVisualizerAbstract to these models.
+         * \remark: If we want to visualize multiple models in the future, _modelVisualizer will have to be a vector of
+         *          pointers of type \ref Model::VisualizerAbstract to these models.
          *
          */
         class GUIController
@@ -75,7 +74,7 @@ namespace OMVIS
             /*! \brief This method loads a model (FMU or MAT file) for visualization.
              *
              * This method gets a construction plan and asks the \ref Initialization::Factory to create an
-             * appropriate OMVisualizer object. If this OMVisualizer object can be initialized without errors, it is
+             * appropriate Visualizer object. If this Visualizer object can be initialized without errors, it is
              * taken as new visualization model.
              * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
              * compatibility issue, than the old model is kept. If the already load and the new model are the very
@@ -87,14 +86,14 @@ namespace OMVIS
              * \param cP                Construction plan for visualization.
              * \param timeSliderStart   Minimum value of the time slider object.
              * \param timeSliderEnd     Maximum value of the time slider object.
-             * \return Pointer to the OMVisualizer object which is created by the factory or to the old one.
+             * \return Pointer to the Visualizer object which is created by the factory or to the old one.
              */
             void loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
             /*! \brief This method loads a FMU model for remote visualization.
              *
              * This method gets a construction plan for remote visualization and asks the \ref Initialization::Factory
-             * to create an appropriate OMVisualizerClient object. If this OMVisualizerClient object can be initialized
+             * to create an appropriate VisualizerClient object. If this OMVisualizerClient object can be initialized
              * without errors, it is taken as new visualization model.
              * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
              * compatibility issue, than the old model is kept. If the already load and the new model are the very
@@ -107,7 +106,7 @@ namespace OMVIS
              * \param cP                Construction plan for remote visualization.
              * \param timeSliderStart   Minimum value of the time slider object.
              * \param timeSliderEnd     Maximum value of the time slider object.
-             * \return Pointer to the OMVisualizer object which is created by the factory or to the old one.
+             * \return Pointer to the Visualizer object which is created by the factory or to the old one.
              */
             void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
 
@@ -178,10 +177,10 @@ namespace OMVIS
             /*! \brief Returns true, if the currently loaded model is a FMU in remote visualization mode. */
             bool modelIsFMUClient();
 
-            /*! \brief Returns true, if a model is loaded into OMVis, i.e., the OMVisualizer object is not nullptr. */
+            /*! \brief Returns true, if a model is loaded into OMVis, i.e., the Visualizer object is not nullptr. */
             bool modelIsLoaded();
 
-            /*! \brief Gets the InputData from the OMVisualizer object in case of FMU or remote FMU visualization.
+            /*! \brief Gets the InputData from the Visualizer object in case of FMU or remote FMU visualization.
              *
              * \remark If we visualize a MAT file, we return a proper nullptr and the caller method has to handle it!
              *
@@ -194,15 +193,15 @@ namespace OMVIS
              * MEMBERS
              *---------------------------------------*/
 
-            /*! \brief Pointer to the OMVisualizer object, which handles the model visualization.
+            /*! \brief Pointer to the Visualizer object, which handles the model visualization.
              *
-             * OMVis provides three concrete implementations of OMVisualizerAbstract class:
-             *  1. OMVisualizerMat for visualization of simulation results present in MAT file format.
-             *  2. OMVisualizerFMU for FMU simulations.
-             *  3. OMVisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system (server).
+             * OMVis provides three concrete implementations of \ref Model::VisualizerAbstract class:
+             *  1. \ref Model::VisualizerMat for visualization of simulation results present in MAT file format.
+             *  2. \ref Model::VisualizerFMU for FMU simulations.
+             *  3. \ref Model::VisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system (server).
              *
              */
-            std::shared_ptr<Model::OMVisualizerAbstract> _omVisualizer;
+            std::shared_ptr<Model::VisualizerAbstract> _modelVisualizer;
         };
 
     }  // End namespace Control

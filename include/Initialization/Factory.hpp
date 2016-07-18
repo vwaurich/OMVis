@@ -27,9 +27,8 @@
 #ifndef INCLUDE_FACTORY_HPP_
 #define INCLUDE_FACTORY_HPP_
 
+#include <Model/VisualizerAbstract.hpp>
 #include "Initialization/VisualizationConstructionPlans.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
-
 #include <memory>
 
 namespace OMVIS
@@ -79,7 +78,7 @@ namespace OMVIS
              * \param   cP Construction plan for visualization.
              * \return  Pointer to allocated OMVisualizer object or nullptr if OMVisualizer object cannot be created.
              */
-            std::shared_ptr<Model::OMVisualizerAbstract> createOMVisualizerObject(const VisualizationConstructionPlan* cP);
+            std::shared_ptr<Model::VisualizerAbstract> createVisualizerObject(const VisualizationConstructionPlan* cP);
         };
 
     }  // End namespace Initialization

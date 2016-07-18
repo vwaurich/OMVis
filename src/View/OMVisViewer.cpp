@@ -20,7 +20,6 @@
 #include "Control/GUIController.hpp"
 #include "Model/FMU.hpp"
 #include "Util/Logger.hpp"
-#include "Model/OMVisualizerFMU.hpp"
 #include "View/OMVisViewer.hpp"
 #include "Util/Algebra.hpp"
 #include "View/Dialogs.hpp"
@@ -50,6 +49,7 @@
 
 #include <assert.h>
 #include <Initialization/VisualizationConstructionPlans.hpp>
+#include <Model/VisualizerFMU.hpp>
 
 #include <stdexcept>
 
@@ -415,7 +415,7 @@ namespace OMVIS
                 dialog.exec();
                 Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
 
-                // Now, let the factory create the OMVisualizerFMUClient object, establish the connection
+                // Now, let the factory create the VisualizerFMUClient object, establish the connection
                 // and initialize the simulation.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
 

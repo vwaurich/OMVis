@@ -49,8 +49,8 @@ namespace OMVIS
             ShapeObject();
             ~ShapeObject() = default;
 
-            ShapeObject(const ShapeObject&) = delete;
-            ShapeObject& operator=(const ShapeObject&) = delete;
+            ShapeObject(const ShapeObject&) = default;
+            ShapeObject& operator=(const ShapeObject&) = default;
 
             /*-----------------------------------------
              * METHODS

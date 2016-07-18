@@ -17,11 +17,11 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <Model/VisualizerFMU.hpp>
+#include <Model/VisualizerFMUClient.hpp>
 #include "Control/TimeManager.hpp"
 #include "Initialization/Factory.hpp"
 #include "Control/GUIController.hpp"
-#include "Model/OMVisualizerFMU.hpp"
-#include "Model/OMVisualizerFMUClient.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -38,7 +38,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         GUIController::GUIController()
-                : _omVisualizer(nullptr)
+                : _modelVisualizer(nullptr)
         {
         }
 
@@ -66,7 +66,7 @@ namespace OMVIS
 
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
             // already unpacked shared object, which leads to a segmentation fault. Thats why we test for this case.
-            if (modelIsLoaded() && cP.path == _omVisualizer->getBaseData()->getPath() && cP.modelFile == _omVisualizer->getBaseData()->getModelName())
+            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
@@ -98,7 +98,7 @@ namespace OMVIS
 
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
             // already unpacked shared object, which leads to a segmentation fault. Thats why we test for this case.
-            if (modelIsLoaded() && cP.workingDirectory == _omVisualizer->getBaseData()->getPath() && cP.modelFile == _omVisualizer->getBaseData()->getModelName())
+            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
                                          "The model will be initialized again."),
@@ -114,19 +114,19 @@ namespace OMVIS
             // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model cannot be loaded.
             int isOk(0);
 
-            // Ask the factory to create an appropriate OMVisualizer object.
+            // Ask the factory to create an appropriate Visualizer object.
             Initialization::Factory* factory = new Initialization::Factory();
-            std::shared_ptr<Model::OMVisualizerAbstract> tmpOmVisualizer = factory->createOMVisualizerObject(cP);
-            if (tmpOmVisualizer != nullptr)
+            std::shared_ptr<Model::VisualizerAbstract> tmpVisualizer = factory->createVisualizerObject(cP);
+            if (tmpVisualizer != nullptr)
             {
-                tmpOmVisualizer->getTimeManager()->setSliderRange(timeSliderStart, timeSliderEnd);
+                tmpVisualizer->getTimeManager()->setSliderRange(timeSliderStart, timeSliderEnd);
 
-                // Initialize the OMVisualizer object.
-                isOk += tmpOmVisualizer->initialize();
+                // Initialize the Visualizer object.
+                isOk += tmpVisualizer->initialize();
 
-                // If everything went fine, we "copy" the created OMvisualizer object to _omVisualizer.
+                // If everything went fine, we "copy" the created Visualizer object to _omVisualizer.
                 if (0 == isOk)
-                    _omVisualizer = tmpOmVisualizer;
+                    _modelVisualizer = tmpVisualizer;
             }
             else
                 LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
@@ -135,7 +135,7 @@ namespace OMVIS
         void GUIController::unloadModel()
         {
             // Implicitly calls destructors and thus frees memory handled by shared pointers.
-            _omVisualizer = nullptr;
+            _modelVisualizer = nullptr;
             /// \todo: What else has to be done in order to clean up data structures and free memory?
         }
 
@@ -145,24 +145,24 @@ namespace OMVIS
 
         void GUIController::startVisualization()
         {
-            _omVisualizer->startVisualization();
+            _modelVisualizer->startVisualization();
         }
 
         void GUIController::pauseVisualization()
         {
-            _omVisualizer->pauseVisualization();
+            _modelVisualizer->pauseVisualization();
         }
 
         void GUIController::initVisualization()
         {
             // Todo: Check if input variables need to be specified in order to interact with the FMU. If so,
             // open a Gui.
-            _omVisualizer->initVisualization();
+            _modelVisualizer->initVisualization();
         }
 
         void GUIController::sceneUpdate()
         {
-            _omVisualizer->sceneUpdate();
+            _modelVisualizer->sceneUpdate();
         }
 
         void GUIController::donationVisualization()
@@ -176,69 +176,69 @@ namespace OMVIS
 
         int GUIController::getTimeProgress()
         {
-            return _omVisualizer->getTimeManager()->getSliderPosition();
+            return _modelVisualizer->getTimeManager()->getSliderPosition();
         }
 
         osg::ref_ptr<osg::Node> GUIController::getSceneRootNode()
         {
-            return _omVisualizer->getOMVisScene()->getScene().getRootNode();
+            return _modelVisualizer->getOMVisScene()->getScene().getRootNode();
         }
 
         void GUIController::setVisTime(const int val)
         {
-            _omVisualizer->getTimeManager()->setVisTime((_omVisualizer->getTimeManager()->getEndTime() - _omVisualizer->getTimeManager()->getStartTime()) * (float) (val / 100.0));
+            _modelVisualizer->getTimeManager()->setVisTime((_modelVisualizer->getTimeManager()->getEndTime() - _modelVisualizer->getTimeManager()->getStartTime()) * (float) (val / 100.0));
         }
 
         double GUIController::getVisTime()
         {
-            return _omVisualizer->getTimeManager()->getVisTime();
+            return _modelVisualizer->getTimeManager()->getVisTime();
         }
 
         double GUIController::getRealTimeFactor()
         {
-            return _omVisualizer->getTimeManager()->getRealTimeFactor();
+            return _modelVisualizer->getTimeManager()->getRealTimeFactor();
         }
 
         double GUIController::getSimulationStartTime() const
         {
-            return _omVisualizer->getTimeManager()->getStartTime();
+            return _modelVisualizer->getTimeManager()->getStartTime();
         }
 
         double GUIController::getVisStepsize()
         {
-            return _omVisualizer->getTimeManager()->getHVisual() * 1000.0;
+            return _modelVisualizer->getTimeManager()->getHVisual() * 1000.0;
         }
 
         bool GUIController::modelIsMATFile()
         {
-            return (_omVisualizer->getType() == "mat") ? true : false;
+            return (_modelVisualizer->getType() == "mat") ? true : false;
         }
 
         bool GUIController::modelIsFMU()
         {
-            return (_omVisualizer->getType() == "fmu") ? true : false;
+            return (_modelVisualizer->getType() == "fmu") ? true : false;
         }
 
         bool GUIController::modelIsFMUClient()
         {
-            return (_omVisualizer->getType() == "fmuclient") ? true : false;
+            return (_modelVisualizer->getType() == "fmuclient") ? true : false;
         }
 
         bool GUIController::modelIsLoaded()
         {
-            return (nullptr != _omVisualizer);
+            return (nullptr != _modelVisualizer);
         }
 
         std::shared_ptr<Model::InputData> GUIController::getInputData()
         {
             if (modelIsFMU())
             {
-                std::shared_ptr<Model::OMVisualizerFMU> omVisFMU = std::dynamic_pointer_cast<Model::OMVisualizerFMU>(_omVisualizer);
+                std::shared_ptr<Model::VisualizerFMU> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
                 return omVisFMU->getInputData();
             }
             else if (modelIsFMUClient())
             {
-                std::shared_ptr<Model::OMVisualizerFMUClient> omVisFMU = std::dynamic_pointer_cast<Model::OMVisualizerFMUClient>(_omVisualizer);
+                std::shared_ptr<Model::VisualizerFMUClient> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMUClient>(_modelVisualizer);
                 return omVisFMU->getInputData();
             }
             else

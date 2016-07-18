@@ -17,10 +17,10 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Model/OMVisualizerAbstract.hpp"
 #include "Util/Logger.hpp"
 
 #include <boost/filesystem.hpp>
+#include <Model/VisualizerAbstract.hpp>
 
 #include <string>
 #include <stdlib.h>
@@ -34,7 +34,7 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisualizerAbstract::OMVisualizerAbstract()
+        VisualizerAbstract::VisualizerAbstract()
                 : _baseData(nullptr),
                   _viewerStuff(nullptr),
                   _nodeUpdater(nullptr),
@@ -42,7 +42,7 @@ namespace OMVIS
         {
         }
 
-        OMVisualizerAbstract::OMVisualizerAbstract(const std::string& modelFile, const std::string& path)
+        VisualizerAbstract::VisualizerAbstract(const std::string& modelFile, const std::string& path)
                 : //Siehe unten _baseData(new OMVisualBase(modelFile, path)),
                   _viewerStuff(new OMVisScene),
                   _nodeUpdater(new Model::UpdateVisitor),
@@ -64,7 +64,7 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        int OMVisualizerAbstract::initData()
+        int VisualizerAbstract::initData()
         {
             int isOk(0);
             // In case of reloading, we need to make sure, that we have empty members.
@@ -77,7 +77,7 @@ namespace OMVIS
             return isOk;
         }
 
-        int OMVisualizerAbstract::setUpScene()
+        int VisualizerAbstract::setUpScene()
         {
             //build scene graph
             std::cout << "SETUPSCENE FOR " << _baseData->_shapes.size() << std::endl;
@@ -90,22 +90,22 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        std::string OMVisualizerAbstract::getType() const
+        std::string VisualizerAbstract::getType() const
         {
             return "abstract";
         }
 
-        std::shared_ptr<OMVisualBase> OMVisualizerAbstract::getBaseData() const
+        std::shared_ptr<OMVisualBase> VisualizerAbstract::getBaseData() const
         {
             return _baseData;
         }
 
-        std::shared_ptr<Control::TimeManager> OMVisualizerAbstract::getTimeManager() const
+        std::shared_ptr<Control::TimeManager> VisualizerAbstract::getTimeManager() const
         {
             return _timeManager;
         }
 
-        std::shared_ptr<OMVisScene> OMVisualizerAbstract::getOMVisScene() const
+        std::shared_ptr<OMVisScene> VisualizerAbstract::getOMVisScene() const
         {
             return _viewerStuff;
         }
@@ -114,7 +114,7 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        void OMVisualizerAbstract::startVisualization()
+        void VisualizerAbstract::startVisualization()
         {
             if (_timeManager->getVisTime() < _timeManager->getEndTime() - 1.e-6)
             {
@@ -125,13 +125,13 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("There is nothing left to visualize. Initialize the model first."), Util::LC_CTR, Util::LL_INFO);
         }
 
-        void OMVisualizerAbstract::pauseVisualization()
+        void VisualizerAbstract::pauseVisualization()
         {
             LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_timeManager->getVisTime()) + std::string("."), Util::LC_CTR, Util::LL_INFO);
             _timeManager->setPause(true);
         }
 
-        void OMVisualizerAbstract::initVisualization()
+        void VisualizerAbstract::initVisualization()
         {
             LOGGER_WRITE(std::string("Initialize visualization."), Util::LC_CTR, Util::LL_INFO);
             initializeVisAttributes(_timeManager->getStartTime());
@@ -139,12 +139,12 @@ namespace OMVIS
             _timeManager->setPause(true);
         }
 
-        void OMVisualizerAbstract::donationVisualization()
+        void VisualizerAbstract::donationVisualization()
         {
             LOGGER_WRITE(std::string("Want to support Martin and Volker? Buy us a coffee."), Util::LC_CTR, Util::LL_INFO);
         }
 
-        void OMVisualizerAbstract::sceneUpdate()
+        void VisualizerAbstract::sceneUpdate()
         {
             _timeManager->updateTick();
 

@@ -24,15 +24,14 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
-#define INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_
+#ifndef INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
+#define INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 
+#include <Model/VisualizerAbstract.hpp>
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
-#include "Model/OMVisualizerAbstract.hpp"
-
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
 
@@ -51,14 +50,14 @@ namespace OMVIS
          *
          * This class is used in case the FMU is computed on a server.
          */
-        class OMVisualizerFMUClient : public OMVisualizerAbstract
+        class VisualizerFMUClient : public VisualizerAbstract
         {
          public:
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            OMVisualizerFMUClient() = delete;
+            VisualizerFMUClient() = delete;
 
             /*! \brief Constructs a OMVisualizerFMUClient object from the given construction plan for remote FMU
              *         visualization.
@@ -68,11 +67,11 @@ namespace OMVIS
              *
              * \param cP The construction plan which holds all necessary information.
              */
-            OMVisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP);
+            VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP);
 
-            virtual ~OMVisualizerFMUClient() = default;
-            OMVisualizerFMUClient(const OMVisualizerFMUClient& omvf) = delete;
-            OMVisualizerFMUClient& operator=(const OMVisualizerFMUClient& omvf) = delete;
+            virtual ~VisualizerFMUClient() = default;
+            VisualizerFMUClient(const VisualizerFMUClient& omvf) = delete;
+            VisualizerFMUClient& operator=(const VisualizerFMUClient& omvf) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
@@ -240,7 +239,7 @@ namespace OMVIS
     }  // End namespace Model
 }  // End namespace OMVIS
 
-#endif /* INCLUDE_MODEL_OMVISUALIZERFMUCLIENT_HPP_ */
+#endif /* INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_ */
 /**
  * @}
  */

@@ -27,8 +27,7 @@
 #ifndef INCLUDE_OMVISUALIZERMAT_HPP_
 #define INCLUDE_OMVISUALIZERMAT_HPP_
 
-#include "OMVisualizerAbstract.hpp"
-
+#include <Model/VisualizerAbstract.hpp>
 #include <read_matlab4.h>
 
 namespace OMVIS
@@ -40,14 +39,14 @@ namespace OMVIS
          *
          *
          */
-        class OMVisualizerMAT : public OMVisualizerAbstract
+        class VisualizerMAT : public VisualizerAbstract
         {
          public:
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            OMVisualizerMAT() = delete;
+            VisualizerMAT() = delete;
 
             /*! \brief Constructs a OMVisualizerMAT object from the given arguments.
              *
@@ -56,12 +55,12 @@ namespace OMVIS
              * @param[in] fileName Model file name without path.
              * @param[in] path Path to the model file.
              */
-            OMVisualizerMAT(const std::string& fileName, const std::string& path);
+            VisualizerMAT(const std::string& fileName, const std::string& path);
 
-            virtual ~OMVisualizerMAT() = default;
+            virtual ~VisualizerMAT() = default;
 
-            OMVisualizerMAT(const OMVisualizerMAT& omvm) = delete;
-            OMVisualizerMAT& operator=(const OMVisualizerMAT& omvm) = delete;
+            VisualizerMAT(const VisualizerMAT& omvm) = delete;
+            VisualizerMAT& operator=(const VisualizerMAT& omvm) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
