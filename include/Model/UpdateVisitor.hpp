@@ -52,10 +52,10 @@ namespace OMVIS
             virtual void apply(osg::Geode& node);
             virtual void apply(osg::MatrixTransform& node);
 
-     public:
-        /// \todo Can this attr. be private
-        ShapeObject _shape;
-    };
+         public:
+            /// \todo Can this attr. be private
+            ShapeObject _shape;
+        };
 
     }  // End namespace Model
 }  // End namespace OMVIS
