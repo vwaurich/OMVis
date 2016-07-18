@@ -34,7 +34,7 @@
  */
 
 #include <Initialization/Factory.hpp>
-#include "View/InfoVisitor.hpp"
+#include <Model/InfoVisitor.hpp>
 #include "View/OMVisViewer.hpp"
 #include "Visualize.hpp"
 #include "Model/OMVisualizerAbstract.hpp"
