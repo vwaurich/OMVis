@@ -43,16 +43,27 @@ namespace OMVIS
         class UpdateVisitor : public osg::NodeVisitor
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
             UpdateVisitor();
             virtual ~UpdateVisitor() = default;
 
             UpdateVisitor(const UpdateVisitor& uv) = delete;
             UpdateVisitor& operator=(const UpdateVisitor& uv) = delete;
 
+            /*-----------------------------------------
+             * METHODS
+             *---------------------------------------*/
+
             virtual void apply(osg::Geode& node);
             virtual void apply(osg::MatrixTransform& node);
 
          public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             /// \todo Can this attr. be private
             ShapeObject _shape;
         };

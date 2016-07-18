@@ -20,8 +20,7 @@
 #ifndef INCLUDE_SHAPEOBJECT_HPP_
 #define INCLUDE_SHAPEOBJECT_HPP_
 
-#include "WrapperFMILib.hpp"
-#include "ShapeObjectAttribute.hpp"
+#include "Model/ShapeObjectAttribute.hpp"
 
 #include <read_matlab4.h>
 #include <rapidxml.hpp>
@@ -30,31 +29,45 @@
 #include <osg/Matrix>
 #include <osg/Uniform>
 
-#include <string>
 
 namespace OMVIS
 {
     namespace Model
     {
-        /*! \brief Contains all information to display a shape.
+
+        /*! \brief A \a ShapeObject contains all information to display a shape.
          *
          *
          */
         class ShapeObject
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             ShapeObject();
             ~ShapeObject() = default;
 
-            ShapeObject& operator=(const ShapeObject& va) = default;
+            ShapeObject(const ShapeObject&) = delete;
+            ShapeObject& operator=(const ShapeObject&) = delete;
+
+            /*-----------------------------------------
+             * METHODS
+             *---------------------------------------*/
 
             /// Dumps the attributes to std::cout.
             void dumpVisAttributes() const;
 
             /// Computes the attributes of the shape for a certain time.
-            void fetchVisAttributes(rapidxml::xml_node<>* node, ModelicaMatReader matReader, fmi1_import_t* fmu, double time, bool useFMU);
+            void fetchVisAttributes(rapidxml::xml_node<>* node, ModelicaMatReader matReader, fmi1_import_t* fmu,
+                                    double time, bool useFMU);
 
          public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             std::string _id;
             std::string _type;
             ShapeObjectAttribute _length;
