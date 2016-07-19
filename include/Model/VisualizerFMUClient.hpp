@@ -27,7 +27,7 @@
 #ifndef INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
