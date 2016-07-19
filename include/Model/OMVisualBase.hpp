@@ -85,6 +85,8 @@ namespace OMVIS
              */
             int initVisObjects();
 
+            void appendVisVariable(const rapidxml::xml_node<>* node, std::vector<std::string>& visVariables) const;
+
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
@@ -93,7 +95,9 @@ namespace OMVIS
 			*
 			* \return Vector of strings containing the variable names.
 			*/
-			std::vector<std::string> getVisualizationVariables();
+			std::vector<std::string> getVisualizationVariables() const;
+
+
 
             /*! \brief Returns name of the model. */
             const std::string getModelName() const;

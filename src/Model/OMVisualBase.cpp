@@ -77,11 +77,21 @@ namespace OMVIS
             return isOk;
         }
 
+        /// \todo Can we call std::vector<T>::reserve before pushing back all shapes?
         int OMVisualBase::initVisObjects()
         {
             rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
             Model::ShapeObject shape;
             rapidxml::xml_node<>* expNode;
+
+            //Begin std::vector<T>::reserve()
+            //int i = 0;
+            //for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+            //    ++i;
+            //LOGGER_WRITE(std::string("============Number of iterations1 ") + std::to_string(i), Util::LC_LOADER, Util::LL_DEBUG);
+            //_shapes.reserve(i);
+            // End std::vector<T>::reserve()
+
             for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
             {
                 expNode = shapeNode->first_node((const char*) "ident")->first_node();
@@ -196,30 +206,31 @@ namespace OMVIS
             return _xmlFileName;
         }
 
-        // MF: visVariables per Referenz uebergeben?
-        // inline, freie Funktion oder Memberfunktion?
-        // Weiss man vorher, wie viele VisVariablen es gibt? Dann kann man den Vektor allokieren.
-        std::vector<std::string> appendVisVariable(rapidxml::xml_node<>* node, std::vector<std::string> visVariables)
+        void OMVisualBase::appendVisVariable(const rapidxml::xml_node<>* node, std::vector<std::string>& visVariables) const
         {
             if (strcmp("cref", node->name()) == 0)
             {
                 char* cref = node->value();
                 visVariables.push_back(std::string(cref));
             }
-            return visVariables;
         }
 
-        std::vector<std::string> OMVisualBase::getVisualizationVariables()
+        std::vector<std::string> OMVisualBase::getVisualizationVariables() const
         {
             rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
+            rapidxml::xml_node<>* expNode;
+            Model::ShapeObject shape;
+
+            // Oh yes, I know how large this vector will be.
             std::vector<std::string> visVariables;
+            visVariables.reserve(_shapes.size());
+
             for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
             {
-                Model::ShapeObject shape;
-                rapidxml::xml_node<>* expNode = shapeNode->first_node((const char*) "ident")->first_node();
+                expNode = shapeNode->first_node((const char*) "ident")->first_node();
                 shape._id = std::string(expNode->value());
-                expNode = shapeNode->first_node((const char*) "type")->first_node();
 
+                expNode = shapeNode->first_node((const char*) "type")->first_node();
                 if (expNode == 0)
                 {
                     LOGGER_WRITE(std::string("The type of  ") + shape._id + " is not supported right in the visxml file.", Util::LC_LOADER, Util::LL_DEBUG);
@@ -229,39 +240,39 @@ namespace OMVIS
                 shape._type = std::string(expNode->value());
 
                 expNode = shapeNode->first_node((const char*) "length")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = shapeNode->first_node((const char*) "width")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = shapeNode->first_node((const char*) "height")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
 
                 expNode = shapeNode->first_node((const char*) "lengthDir")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
 
                 expNode = shapeNode->first_node((const char*) "widthDir")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
 
                 expNode = shapeNode->first_node((const char*) "r")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
 
                 expNode = shapeNode->first_node((const char*) "r_shape")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
 
                 expNode = shapeNode->first_node((const char*) "color")->first_node();
                 shape._color[0] = Util::getObjectAttributeForNode(expNode);
@@ -271,26 +282,26 @@ namespace OMVIS
                 shape._color[2] = Util::getObjectAttributeForNode(expNode);
 
                 expNode = shapeNode->first_node((const char*) "T")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
 
                 expNode = shapeNode->first_node((const char*) "specCoeff")->first_node();
-                visVariables = appendVisVariable(expNode, visVariables);
+                appendVisVariable(expNode, visVariables);
             }
             std::cout << "THERE ARE " << visVariables.size() << " VISUALIZATION VARIABLES" << std::endl;
             return visVariables;
