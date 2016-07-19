@@ -33,9 +33,9 @@
 #include "WrapperFMILib.hpp"
 #include "Model/ShapeObjectAttribute.hpp"
 
-#include <read_matlab4.h>
 #include <rapidxml.hpp>
 
+// NetOff
 #include <ValueContainer.hpp>
 
 #include <osg/Geode>
@@ -148,7 +148,7 @@ namespace OMVIS
 
         /*! \brief Gets the ObjectAttribute for a certain node
          */
-        Model::ShapeObjectAttribute getObjectAttributeForNode(rapidxml::xml_node<>*);
+        Model::ShapeObjectAttribute getObjectAttributeForNode(const rapidxml::xml_node<>*);
 
         //osg::Matrix
         void assemblePokeMatrix(osg::Matrix& M, const osg::Matrix3& T, const osg::Vec3f& r);
