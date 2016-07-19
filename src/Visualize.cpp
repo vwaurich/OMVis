@@ -314,7 +314,7 @@ namespace OMVIS
             return evaluateExpressionFMU(expNode, time, fmu);
         }
 
-        Model::ShapeObjectAttribute getObjectAttributeForNode(rapidxml::xml_node<>* node)
+        Model::ShapeObjectAttribute getObjectAttributeForNode(const rapidxml::xml_node<>* node)
         {
             Model::ShapeObjectAttribute oa;
             if (strcmp("exp", node->name()) == 0)
