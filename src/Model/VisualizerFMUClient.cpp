@@ -155,7 +155,6 @@ namespace OMVIS
         {
             NetOff::VariableList varList;
             varList.addReals(_baseData->getVisualizationVariables());
-            // std::vector<std::string> OMVisualBase::getVisualizationVariables()
             return varList;
         }
 
