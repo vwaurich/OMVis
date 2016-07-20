@@ -97,8 +97,6 @@ namespace OMVIS
 			*/
 			std::vector<std::string> getVisualizationVariables() const;
 
-
-
             /*! \brief Returns name of the model. */
             const std::string getModelName() const;
 
@@ -106,7 +104,7 @@ namespace OMVIS
             const std::string getPath() const;
 
             /*! \brief Returns pointer to first node of the XML document. */
-            rapidxml::xml_node<>* getFirstXMLNode();
+            rapidxml::xml_node<>* getFirstXMLNode() const;
 
             /*! \brief Returns name of the XML document. */
             const std::string getXMLFileName() const;

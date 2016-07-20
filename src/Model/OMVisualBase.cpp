@@ -24,6 +24,8 @@
 
 #include <osgDB/ReadFile>
 
+#include <exception>
+
 namespace OMVIS
 {
     namespace Model
@@ -54,6 +56,7 @@ namespace OMVIS
             {
                 LOGGER_WRITE(std::string("There is no XML file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
                 isOk = 1;
+                throw std::runtime_error("Could not find visual XML file" + _xmlFileName + ".");
             }
             else
             {
@@ -186,7 +189,7 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        rapidxml::xml_node<>* OMVisualBase::getFirstXMLNode()
+        rapidxml::xml_node<>* OMVisualBase::getFirstXMLNode() const
         {
             return _xmlDoc.first_node();
         }
