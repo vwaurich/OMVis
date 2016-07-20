@@ -27,7 +27,10 @@
 #ifndef INCLUDE_INITIALIZATION_VISUALIZATIONCONSTRUCTIONPLANS_HPP_
 #define INCLUDE_INITIALIZATION_VISUALIZATIONCONSTRUCTIONPLANS_HPP_
 
+#include "Util/Util.hpp"
+
 #include <string>
+#include <stdexcept>
 
 namespace OMVIS
 {
@@ -56,6 +59,23 @@ namespace OMVIS
         class VisualizationConstructionPlan
         {
          public:
+            VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn)
+                    : modelFile(modelFileIn),
+                      path(pathIn)
+            {
+                if (modelFileIn.empty())
+                    throw std::invalid_argument("No model file specified.");
+                if (pathIn.empty())
+                    throw std::invalid_argument("No path specified.");
+
+                // Get visualization type.
+                if (Util::isFMU(modelFile))
+                    visType = VisualizationType::FMU;
+                else if (Util::isMAT(modelFile))
+                    visType = VisualizationType::MAT;
+                else
+                    throw std::invalid_argument("VisualizationType is NONE.");
+            }
 
             virtual ~VisualizationConstructionPlan() = default;
 
@@ -90,17 +110,19 @@ namespace OMVIS
         class RemoteVisualizationConstructionPlan : public VisualizationConstructionPlan
         {
          public:
+            RemoteVisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn,
+                                                const std::string& ipAddressIn, const int portNumberIn,
+                                                const std::string& workingDirectoryIn)
+                    : VisualizationConstructionPlan(modelFileIn, pathIn),
+                      ipAddress(ipAddressIn),
+                      portNumber(portNumberIn),
+                      workingDirectory(workingDirectoryIn)
+            {
+                if (!Util::isValidIPv4(ipAddressIn) || !Util::isValidIPv6(ipAddressIn))
+                    throw std::invalid_argument(ipAddressIn + " is not a valid IP address.");
+            }
 
             virtual ~RemoteVisualizationConstructionPlan() = default;
-//            /*! \brief This method checks, if the construction plan is valid.
-//             *
-//             * A construction plan is valid, if all attributes are
-//             * @return True, if the plan is valid.
-//             */
-//            bool isValid() const override
-//            {
-//                return VisualizationConstructionPlan::isValid();
-//            }
 
             /*! The IP address of the server. */
             std::string ipAddress;

@@ -80,7 +80,13 @@ namespace OMVIS
             QLineEdit* _modelFileLineEdit;
             QLineEdit* _workingDirectoryLineEdit;
 
-            Initialization::RemoteVisualizationConstructionPlan _cP;
+            std::string _ipAddress;
+            int _portNumber;
+            std::string _workingDirectory;
+            std::string _modelFile;
+            std::string _path;
+
+            //Initialization::RemoteVisualizationConstructionPlan _cP;
         };
 
     }  // End namespace View

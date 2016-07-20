@@ -43,7 +43,11 @@ namespace OMVIS
 
         OpenRemoteConnectionDialog::OpenRemoteConnectionDialog(QWidget* parent)
                 : QDialog(parent),
-                  _cP()
+                  _ipAddress(),
+                  _portNumber(-1),
+                  _workingDirectory(),
+                  _modelFile(),
+                  _path()
         {
             setWindowTitle(tr("Open Remote Connection"));
 
@@ -137,19 +141,11 @@ namespace OMVIS
 //X123                QMessageBox::warning(0, QString("Information"), QString("Specify a model file!"));
 
             //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
-            _cP.ipAddress = "127.0.0.1"; // 141.30.73.103";
-            _cP.portNumber = 4444;
-            _cP.workingDirectory = "./rVis/";
-            _cP.modelFile = "BouncingBall.fmu";    //cranes_crane_input5.fmu";
-            _cP.path = "/home/mf/opt/HPCOM/parallel_fmu_eclipse/test/data/"; //"/scratch/p_hpcom/remoteVisualization/";
-
-            // Get visualization type.
-            if (Util::isFMU(_cP.modelFile))
-                _cP.visType = VisualizationType::FMU_REMOTE;
-            else if (Util::isMAT(_cP.modelFile))
-                _cP.visType = VisualizationType::MAT_REMOTE;
-            else
-                _cP.visType = VisualizationType::NONE;
+            _ipAddress = "127.0.0.1"; // 141.30.73.103";
+            _portNumber = 4444;
+            _workingDirectory = "./rVis/";
+            _modelFile = "BouncingBall.fmu";    //cranes_crane_input5.fmu";
+            _path = "/home/mf/opt/HPCOM/parallel_fmu_eclipse/test/data/"; //"/scratch/p_hpcom/remoteVisualization/";
 
             QDialog::accept();
         }
@@ -158,10 +154,9 @@ namespace OMVIS
          * GETTERS AND SETTERS
          *---------------------------------------*/
 
-
         Initialization::RemoteVisualizationConstructionPlan OpenRemoteConnectionDialog::getConstructionPlan() const
         {
-            return _cP;
+            return Initialization::RemoteVisualizationConstructionPlan(_modelFile, _path, _ipAddress, _portNumber, _workingDirectory);
         }
 
     }  // End namespace View

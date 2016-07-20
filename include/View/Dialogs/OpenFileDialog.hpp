@@ -70,7 +70,8 @@ namespace OMVIS
              * MEMBERS
              *---------------------------------------*/
 
-            Initialization::VisualizationConstructionPlan _cP;
+            std::string _modelFile;
+            std::string _path;
         };
 
     }  // End namespace View

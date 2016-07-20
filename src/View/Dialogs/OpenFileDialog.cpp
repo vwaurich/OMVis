@@ -41,7 +41,8 @@ namespace OMVIS
 
         OpenFileDialog::OpenFileDialog(QWidget* parent)
                 : QFileDialog(parent, tr("Open Remote Connection3"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)")),
-                  _cP()
+                  _modelFile(),
+                  _path()
         {
         }
 
@@ -60,21 +61,10 @@ namespace OMVIS
                 modelFile = fileNames.at(0);
             }
             if (modelFile.isEmpty())
-            {
                 QMessageBox::warning(0, QString("Information"), QString(" Filename is empty."));
-            }
-                                                                         // modelFile = /home/user/models/modelX.fmu
-            _cP.path = Util::getPath(modelFile.toStdString());           // /home/user/models/
-            _cP.modelFile = Util::getFileName(modelFile.toStdString());  // modelX.fmu
 
-            // Get visualization type.
-            if (Util::isFMU(modelFile.toStdString()))
-                _cP.visType = VisualizationType::FMU;
-            else if (Util::isMAT(modelFile.toStdString()))
-                _cP.visType = VisualizationType::MAT;
-            else
-                _cP.visType = VisualizationType::NONE;
-
+            _path = Util::getPath(modelFile.toStdString());           // /home/user/models/
+            _modelFile = Util::getFileName(modelFile.toStdString());  // modelX.fmu
             QDialog::accept();
         }
 
@@ -84,7 +74,7 @@ namespace OMVIS
 
         Initialization::VisualizationConstructionPlan OpenFileDialog::getConstructionPlan() const
         {
-            return _cP;
+            return Initialization::VisualizationConstructionPlan(_modelFile, _path);
         }
 
     }  // End namespace View
