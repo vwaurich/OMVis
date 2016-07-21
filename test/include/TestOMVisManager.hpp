@@ -20,8 +20,7 @@
 #ifndef TEST_INCLUDE_TESTOMVISMANAGER_HPP_
 #define TEST_INCLUDE_TESTOMVISMANAGER_HPP_
 
-#include "Control/OMVisManager.hpp"
-
+#include <Control/TimeManager.hpp>
 #include <gtest/gtest.h>
 
 /*! \brief Class to test the class \ref Control::OMVisManager.
@@ -33,7 +32,7 @@
 class TestOMVisManager : public ::testing::Test
 {
  public:
-    OMVIS::Control::OMVisManager _omvManager;
+    OMVIS::Control::TimeManager _omvManager;
 
     TestOMVisManager()
             : _omvManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0)
