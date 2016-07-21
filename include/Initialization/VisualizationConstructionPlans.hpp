@@ -59,6 +59,29 @@ namespace OMVIS
         class VisualizationConstructionPlan
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
+            /*! \brief The default constructor for VisualizationConstructionPlan is forbidden.
+             *
+             * The rationale is: If we provide a default constructor, than we need to provide setter methods for the
+             * members and a valid method, that needs to be called from the user code in order to check for validity of
+             * a construction plan. This sounds error prone. Thus, we just provide the constructor with parameters,
+             * which throws, if the parameters are not valid, to construct a fully specified and valid object of this
+             * class.
+             */
+            VisualizationConstructionPlan() = delete;
+
+            /*! \brief Constructor from arguments.
+             *
+             * This constructors throws std::invalid_argument exceptions, if the object can not be constructed. This
+             * arises, if the model file name or the path is empty or the model tpe (FMU or MAT) cannot determined
+             * (no prefix at model file name).
+             *
+             * \param modelFileIn   Name of the model file with prefix, e.g., ModelX.fmu
+             * \param pathIn        Path to the model file.
+             */
             VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn)
                     : modelFile(modelFileIn),
                       path(pathIn)
@@ -79,15 +102,13 @@ namespace OMVIS
 
             virtual ~VisualizationConstructionPlan() = default;
 
-            /*! \brief This method checks, if the construction plan is valid.
-             *
-             * A construction plan is valid, if all attributes are set, path and file name are not empty.
-             * \return True, if the plan is valid.
-             */
-            virtual bool isValid() const
-            {
-                return (visType != VisualizationType::NONE);
-            }
+            VisualizationConstructionPlan(const VisualizationConstructionPlan&) = default;
+            VisualizationConstructionPlan& operator= (const VisualizationConstructionPlan&) = default;
+
+            /*-----------------------------------------
+             * Members
+             *---------------------------------------*/
+
             VisualizationType visType;
             /*! Name of the model file without path but with prefix, e.g., modelFoo.fmu . */
             std::string modelFile;
@@ -110,19 +131,52 @@ namespace OMVIS
         class RemoteVisualizationConstructionPlan : public VisualizationConstructionPlan
         {
          public:
+            /*-----------------------------------------
+             * Constructors
+             *---------------------------------------*/
+
+            /*!
+             * The default constructor is deleted for the very same reason as the default constructor for
+             * \ref VisualizationConstructionPlan is deleted.
+             */
+            RemoteVisualizationConstructionPlan() = delete;
+
+            /*! \brief Constructor from arguments.
+             *
+             * This constructors throws std::invalid_argument exceptions, if the object can not be constructed. This
+             * arises, if
+             *      - the model file name or the path is empty
+             *      - the model tpe (FMU or MAT) cannot determined
+             *      - the IP address is not valid.
+             *
+             * \param modelFileIn   Name of the model file with prefix, e.g., ModelX.fmu
+             * \param pathIn        Path to the model file.
+             * \param ipAddressIn   IP address of the remote server.
+             * \param portNumberIn  The port number to use for the connection to the remote server.
+             * \param workingDirIn  Local working directory for the remote visualization.
+             */
             RemoteVisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn,
                                                 const std::string& ipAddressIn, const int portNumberIn,
-                                                const std::string& workingDirectoryIn)
+                                                const std::string& workingDirIn)
                     : VisualizationConstructionPlan(modelFileIn, pathIn),
                       ipAddress(ipAddressIn),
                       portNumber(portNumberIn),
-                      workingDirectory(workingDirectoryIn)
+                      workingDirectory(workingDirIn)
             {
-                if (!Util::isValidIPv4(ipAddressIn) || !Util::isValidIPv6(ipAddressIn))
-                    throw std::invalid_argument(ipAddressIn + " is not a valid IP address.");
+                if (!(Util::isValidIPv4(ipAddressIn) || Util::isValidIPv6(ipAddressIn)))
+                    throw std::invalid_argument("Invalid IP address.");
+                if (workingDirIn.empty())
+                    throw std::invalid_argument("No local working directory specified.");
             }
 
             virtual ~RemoteVisualizationConstructionPlan() = default;
+
+            RemoteVisualizationConstructionPlan(const RemoteVisualizationConstructionPlan&) = default;
+            RemoteVisualizationConstructionPlan& operator= (const RemoteVisualizationConstructionPlan&) = default;
+
+            /*-----------------------------------------
+             * Members
+             *---------------------------------------*/
 
             /*! The IP address of the server. */
             std::string ipAddress;
