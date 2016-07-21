@@ -41,7 +41,7 @@ class TestOMVisualBase : public TestCommon
 
     void SetUp()
     {
-        _omVisualBase = new OMVIS::Model::OMVisualBase(plan.fileName, plan.dirPath);
+        _omVisualBase = new OMVIS::Model::OMVisualBase(constructionPlan.modelFile, constructionPlan.path);
     }
 
     void TearDown()
@@ -58,8 +58,8 @@ TEST_F (TestOMVisualBase, TestInitialization)
     // Not nullptr
     ASSERT_TRUE(_omVisualBase);
 
-    ASSERT_EQ(plan.fileName, _omVisualBase->getModelName());
-    std::string xmlFile = plan.dirPath + plan.fileName + "_visual.xml";
+    ASSERT_EQ(constructionPlan.fileName, _omVisualBase->getModelName());
+    std::string xmlFile = constructionPlan.dirPath + constructionPlan.fileName + "_visual.xml";
     ASSERT_EQ(xmlFile, _omVisualBase->getXMLFileName());
 }
 
