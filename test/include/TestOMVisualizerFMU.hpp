@@ -20,11 +20,11 @@
 #ifndef TEST_INCLUDE_TESTOMVISUALIZERFMU_HPP_
 #define TEST_INCLUDE_TESTOMVISUALIZERFMU_HPP_
 
-#include "Model/OMVisualizerFMU.hpp"
-#include "Control/OMVisManager.hpp"
+#include <Control/TimeManager.hpp>
 #include "TestCommon.hpp"
 
 #include <gtest/gtest.h>
+#include <Model/VisualizerFMU.hpp>
 
 /*! \brief Class to test the class \ref Control::OMVisualizerFMU.
  *
@@ -33,7 +33,7 @@ class TestOMVisualizerFMU : public TestCommon
 {
  public:
 
-    std::shared_ptr<OMVIS::Model::OMVisualizerFMU> _omVisualizerFMU;
+    std::shared_ptr<OMVIS::Model::VisualizerFMU> _omVisualizerFMU;
 
     TestOMVisualizerFMU()
             : TestCommon("BouncingBall", "./examples/", true),
@@ -43,7 +43,7 @@ class TestOMVisualizerFMU : public TestCommon
 
     void SetUp()
     {
-        _omVisualizerFMU = std::shared_ptr<OMVIS::Model::OMVisualizerFMU>(new OMVIS::Model::OMVisualizerFMU(plan.fileName, plan.dirPath));
+        _omVisualizerFMU = std::shared_ptr<OMVIS::Model::VisualizerFMU>(new OMVIS::Model::VisualizerFMU(constructionPlan.fileName, constructionPlan.dirPath));
     }
 
     void TearDown()
@@ -83,7 +83,7 @@ TEST_F (TestOMVisualizerFMU, TestInitialization)
     ASSERT_EQ(2, fmuData->_nEventIndicators);
 
     // Check OMVisManager.
-    std::shared_ptr<OMVIS::Control::OMVisManager> omvManager = _omVisualizerFMU->getOMVisManager();
+    std::shared_ptr<OMVIS::Control::TimeManager> omvManager = _omVisualizerFMU->getTimeManager();
     ASSERT_EQ(0.0, omvManager->getStartTime());
     ASSERT_EQ(0.0, omvManager->getVisTime());
     ASSERT_EQ(0.0, omvManager->getSimTime());
