@@ -34,31 +34,29 @@
  * given (absolute or relative) path is transformed to be absolute. Thus, if a
  * testing class needs a model file name or path, it should inherit from
  * this class.
- *  */
+ */
 class TestCommon : public ::testing::Test
 {
  public:
     /*! Constructs a TestCommon object from the passed model file name and path.
      *
-     * The model file name has to be passed without extension, e.g., BouncingBall.
-     * The extension is implicitly specified via boolean value useFMU: If useBool
-     * is true, we look for MODEL.fmu, otherwise we assume to handle a MAT file
-     * named MODEL.mat.
+     * The model file name has to be passed with prefix, e.g., BouncingBall.fmu.
      * The path is made to be absolute.
      *
-     * @param modelName Name of the model file without extension
-     * @param path Relative or absolute path to the model file.
-     * @param useFMU True, if model is a FMU, false if the model is a MAT file.
+     * \param modelName Name of the model file without extension
+     * \param path      Relative or absolute path to the model file.
      */
-    TestCommon(std::string modelName, std::string path, bool useFMU)
+    TestCommon(const std::string& modelName, const std::string& path)
+         : constructionPlan(nullptr)
     {
         // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
         std::string modelPath = std::string(fullPath) + "/";
-        plan.modelFile = modelName;
-        plan.path = modelPath;
-        plan.isFMU = useFMU;
+
+        constructionPlan = std::make_shared<OMVIS::Initialization::VisualizationConstructionPlan>(modelName, modelPath);
+//        plan->modelFile = modelName;
+//        plan->path = modelPath;
     }
 
     ~TestCommon()
@@ -73,23 +71,20 @@ class TestCommon : public ::testing::Test
     {
     }
 
-    /*! \brief Resets the member variables to the given values.
-     *
-     * This serves as first step of a reload functionality.
+    /*! \brief Construct a new VisualizationConstructionPlan with the given parameters.
      */
-    void reset(std::string modelName, std::string path, bool useFMU)
+    void reset(const std::string& modelName, const std::string& path)
     {
         // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
         std::string modelPath = std::string(fullPath) + "/";
-        plan.modelFile = modelName;
-        plan.path = modelPath;
-        plan.isFMU = useFMU;
+
+        constructionPlan = std::make_shared<OMVIS::Initialization::VisualizationConstructionPlan>(modelName, modelPath);
     }
 
  protected:
-    OMVIS::Initialization::VisualizationConstructionPlan plan;
+    std::shared_ptr<OMVIS::Initialization::VisualizationConstructionPlan> constructionPlan;
 };
 
 #endif /* TEST_INCLUDE_TESTCOMMON_HPP_ */
