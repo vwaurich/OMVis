@@ -43,7 +43,6 @@ class TestOMVisualBase : public TestCommon
 
     void SetUp()
     {
-//        _omVisualBase = new OMVIS::Model::OMVisualBase(constructionPlan);
     }
 
     void TearDown()
@@ -58,7 +57,10 @@ class TestOMVisualBase : public TestCommon
 const std::string TestOMVisualBase::modelFile = "BouncingBall.fmu";
 const std::string TestOMVisualBase::path = "examples/";
 
-TEST_F (TestOMVisualBase, TestInitialization)
+/*!
+ * Test the constructor for the class OMVisualBase.
+ */
+TEST_F (TestOMVisualBase, Constructor)
 {
     // Not nullptr
     EXPECT_TRUE(_omVisualBase);
@@ -67,6 +69,22 @@ TEST_F (TestOMVisualBase, TestInitialization)
     std::string mpath = OMVIS::Util::makeAbsolutePath(path);
     std::string xmlFile = OMVIS::Util::getXMLFileName(modelFile, mpath);
     EXPECT_EQ(xmlFile, _omVisualBase->getXMLFileName());
+    auto a = _omVisualBase->getFirstXMLNode();
+    ASSERT_FALSE(_omVisualBase->getFirstXMLNode());
 }
+
+/*!
+ * Test the initialization of the visual XML file and of the visualization objects.
+ */
+TEST_F (TestOMVisualBase, initXMLFile)
+{
+    _omVisualBase->initXMLDoc();
+    auto a = _omVisualBase->getFirstXMLNode();
+    ASSERT_TRUE(_omVisualBase->getFirstXMLNode());
+    int ret = _omVisualBase->initVisObjects();
+    EXPECT_EQ(ret, 0);
+    EXPECT_EQ(_omVisualBase->_shapes.size(), 1);
+}
+
 
 #endif /* TEST_INCLUDE_TESTOMVISUALBASE_HPP_ */
