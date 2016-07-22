@@ -21,7 +21,8 @@
 #define TEST_INCLUDE_TESTCOMMON_HPP_
 
 #include <gtest/gtest.h>
-#include <Initialization/Factory.hpp>
+
+#include "Initialization/Factory.hpp"
 
 #include <string>
 #include <cstdlib>
@@ -53,10 +54,7 @@ class TestCommon : public ::testing::Test
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
         std::string modelPath = std::string(fullPath) + "/";
-
         constructionPlan = std::make_shared<OMVIS::Initialization::VisualizationConstructionPlan>(modelName, modelPath);
-//        plan->modelFile = modelName;
-//        plan->path = modelPath;
     }
 
     ~TestCommon()
@@ -79,7 +77,6 @@ class TestCommon : public ::testing::Test
         char fullPath[PATH_MAX];
         realpath(path.c_str(), fullPath);
         std::string modelPath = std::string(fullPath) + "/";
-
         constructionPlan = std::make_shared<OMVIS::Initialization::VisualizationConstructionPlan>(modelName, modelPath);
     }
 
