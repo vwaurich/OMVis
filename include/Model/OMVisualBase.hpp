@@ -57,8 +57,8 @@ namespace OMVIS
              * \remark The path needs to be absolute.
              * \remark The model file and its corresponding visual XML file need to be in the same directory.
              *
-             * @param[in] modelFile Name of the model file.
-             * @param[in] path Absolute path to the FMU or result file and corresponding XML-file.
+             * \param modelFile     Name of the model file.
+             * \param path          Absolute path to the FMU or result file and corresponding XML file.
              */
             OMVisualBase(const std::string& modelFile, const std::string& path);
 
