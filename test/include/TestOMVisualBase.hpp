@@ -22,8 +22,7 @@
 
 #include "Model/OMVisualBase.hpp"
 #include "TestCommon.hpp"
-
-#include <gtest/gtest.h>
+#include "Util/Util.hpp"
 
 #include <iostream>
 #include <stdlib.h>
@@ -32,16 +31,19 @@ class TestOMVisualBase : public TestCommon
 {
  public:
     OMVIS::Model::OMVisualBase* _omVisualBase;
+    static const std::string modelFile;
+    static const std::string path;
 
     TestOMVisualBase()
-            : TestCommon("BouncingBall", "./examples/", false),
+            : TestCommon(modelFile, path),
               _omVisualBase(nullptr)
     {
+        _omVisualBase = new OMVIS::Model::OMVisualBase(constructionPlan->modelFile, constructionPlan->path);
     }
 
     void SetUp()
     {
-        _omVisualBase = new OMVIS::Model::OMVisualBase(constructionPlan.modelFile, constructionPlan.path);
+//        _omVisualBase = new OMVIS::Model::OMVisualBase(constructionPlan);
     }
 
     void TearDown()
@@ -53,14 +55,18 @@ class TestOMVisualBase : public TestCommon
     }
 };
 
+const std::string TestOMVisualBase::modelFile = "BouncingBall.fmu";
+const std::string TestOMVisualBase::path = "examples/";
+
 TEST_F (TestOMVisualBase, TestInitialization)
 {
     // Not nullptr
-    ASSERT_TRUE(_omVisualBase);
+    EXPECT_TRUE(_omVisualBase);
 
-    ASSERT_EQ(constructionPlan.fileName, _omVisualBase->getModelName());
-    std::string xmlFile = constructionPlan.dirPath + constructionPlan.fileName + "_visual.xml";
-    ASSERT_EQ(xmlFile, _omVisualBase->getXMLFileName());
+    EXPECT_EQ(constructionPlan->modelFile, _omVisualBase->getModelName());
+    std::string mpath = OMVIS::Util::makeAbsolutePath(path);
+    std::string xmlFile = OMVIS::Util::getXMLFileName(modelFile, mpath);
+    EXPECT_EQ(xmlFile, _omVisualBase->getXMLFileName());
 }
 
 #endif /* TEST_INCLUDE_TESTOMVISUALBASE_HPP_ */
