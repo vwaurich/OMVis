@@ -154,7 +154,7 @@ namespace OMVIS
              *
              * \return Pointer to scene root node.
              */
-            osg::ref_ptr<osg::Node> getSceneRootNode();
+            osg::ref_ptr<osg::Node> getSceneRootNode() const;
 
             /*! \brief Sets the visualization time handled by the OMVisManager object.
              *

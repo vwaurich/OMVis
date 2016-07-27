@@ -174,7 +174,7 @@ namespace OMVIS
             return _modelVisualizer->getTimeManager()->getSliderPosition();
         }
 
-        osg::ref_ptr<osg::Node> GUIController::getSceneRootNode()
+        osg::ref_ptr<osg::Node> GUIController::getSceneRootNode() const
         {
             return _modelVisualizer->getOMVisScene()->getScene().getRootNode();
         }
