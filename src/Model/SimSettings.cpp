@@ -56,12 +56,12 @@ namespace OMVIS
             _relativeTolerance = t;
         }
 
-        fmi1_real_t SimSettings::getTend()
+        fmi1_real_t SimSettings::getTend() const
         {
             return _tend;
         }
 
-        fmi1_real_t SimSettings::getTstart()
+        fmi1_real_t SimSettings::getTstart() const
         {
             return _tstart;
         }
@@ -76,14 +76,14 @@ namespace OMVIS
             return _relativeTolerance;
         }
 
-        fmi1_boolean_t SimSettings::getToleranceControlled()
+        fmi1_boolean_t SimSettings::getToleranceControlled() const
         {
             return _toleranceControlled;
         }
 
-        fmi1_boolean_t SimSettings::getCallEventUpdate()
+        fmi1_boolean_t* SimSettings::getCallEventUpdate()
         {
-            return _callEventUpdate;
+            return &_callEventUpdate;
         }
 
         fmi1_boolean_t SimSettings::getIntermediateResults()
