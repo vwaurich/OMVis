@@ -142,8 +142,6 @@ namespace OMVIS
              */
             void sceneUpdate();
 
-            void donationVisualization();
-
             /*-----------------------------------------
              * GETTERS AND SETTERS
              *---------------------------------------*/

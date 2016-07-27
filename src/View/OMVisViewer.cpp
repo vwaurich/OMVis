@@ -294,7 +294,6 @@ namespace OMVIS
             QPushButton* playButton = new QPushButton("Play", this);
             QPushButton* pauseButton = new QPushButton("Pause", this);
             QPushButton* initButton = new QPushButton("Initialize", this);
-            QPushButton* coffeeButton = new QPushButton("Support: Buy us a coffee.", this);
 
             // Time value of -1.0 indicates, that no model is loaded into OMVis.
             _timeDisplay->setText(QString("Time ").append(QString::fromStdString("-1.0")));
@@ -312,7 +311,6 @@ namespace OMVIS
             buttonRowLayOut->addWidget(initButton);
             buttonRowLayOut->addWidget(playButton);
             buttonRowLayOut->addWidget(pauseButton);
-            buttonRowLayOut->addWidget(coffeeButton);
             buttonRowLayOut->addWidget(_RTFactorDisplay);
             buttonRowLayOut->addWidget(_timeDisplay);
             buttonRowBox->setLayout(buttonRowLayOut);
@@ -322,7 +320,6 @@ namespace OMVIS
             QObject::connect(playButton, SIGNAL(clicked()), this, SLOT(playSlotFunction()));
             QObject::connect(pauseButton, SIGNAL(clicked()), this, SLOT(pauseSlotFunction()));
             QObject::connect(initButton, SIGNAL(clicked()), this, SLOT(initSlotFunction()));
-            QObject::connect(coffeeButton, SIGNAL(clicked()), this, SLOT(coffeeSlotFunction()));
 
             return buttonRowBox;
         }
@@ -344,11 +341,6 @@ namespace OMVIS
         void OMVisViewer::initSlotFunction()
         {
             _guiController->initVisualization();
-        }
-
-        void OMVisViewer::coffeeSlotFunction()
-        {
-            _guiController->donationVisualization();
         }
 
         void OMVisViewer::updateScene()
@@ -789,9 +781,7 @@ namespace OMVIS
                                 "multibody-systems with a FMU interactively.</p>");
 
             QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information, QMessageBox::NoButton);
-            QPushButton* coffeeButton = msgBox.addButton(QMessageBox::tr("Support: Buy us a coffee."), QMessageBox::ActionRole);
             msgBox.setStandardButtons(QMessageBox::Close);
-            QObject::connect(coffeeButton, SIGNAL(clicked()), this, SLOT(coffeeSlotFunction()));
             int ret = msgBox.exec();
         }
 

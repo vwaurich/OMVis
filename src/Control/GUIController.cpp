@@ -165,11 +165,6 @@ namespace OMVIS
             _modelVisualizer->sceneUpdate();
         }
 
-        void GUIController::donationVisualization()
-        {
-            std::cout << "Want to support Martin and Volker? Buy us a coffee." << std::endl;
-        }
-
         /*-----------------------------------------
          * GETTERS AND SETTERS
          *---------------------------------------*/

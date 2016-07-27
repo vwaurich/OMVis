@@ -199,10 +199,6 @@ namespace OMVIS
              */
             void initSlotFunction();
 
-            /*! \brief Function that is triggered by the coffee-button.
-             */
-            void coffeeSlotFunction();
-
             /*! \brief Function that is triggered the scene-update timer.
              */
             void updateScene();
@@ -317,7 +313,7 @@ namespace OMVIS
             QSlider* _timeSlider;
             /// This label displays the current visualization time.
             QLabel* _timeDisplay;
-			/// This labele displays the current real time factor.
+			/// This label displays the current real time factor.
 			QLabel* _RTFactorDisplay;
             /// Triggers a new frame.
             QTimer _renderTimer;
