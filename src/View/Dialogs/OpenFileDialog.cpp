@@ -58,7 +58,7 @@ namespace OMVIS
             {
                 fileNames = selectedFiles();
                 if (fileNames.size() > 0)
-                modelFile = fileNames.at(0);
+                    modelFile = fileNames.at(0);
             }
             if (modelFile.isEmpty())
                 QMessageBox::warning(0, QString("Information"), QString(" Filename is empty."));
