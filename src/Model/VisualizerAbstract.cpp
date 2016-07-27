@@ -18,9 +18,9 @@
  */
 
 #include "Util/Logger.hpp"
+#include "Model/VisualizerAbstract.hpp"
 
 #include <boost/filesystem.hpp>
-#include <Model/VisualizerAbstract.hpp>
 
 #include <string>
 #include <stdlib.h>
