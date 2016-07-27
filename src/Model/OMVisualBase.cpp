@@ -39,9 +39,9 @@ namespace OMVIS
                 : _modelFile(modelFile),
                   _path(path),
                   _xmlDoc(),
-                  _shapes()
+                  _shapes(),
+                  _xmlFileName(Util::getXMLFileName(modelFile, path))
         {
-            _xmlFileName = Util::getXMLFileName(modelFile, path);
         }
 
         /*-----------------------------------------
