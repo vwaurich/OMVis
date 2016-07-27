@@ -89,7 +89,8 @@ namespace OMVIS
              * \param timeSliderEnd     Maximum value of the time slider object.
              * \return Pointer to the Visualizer object which is created by the factory or to the old one.
              */
-            void loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
+            void loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart,
+                           const int timeSliderEnd);
 
             /*! \brief This method loads a FMU model for remote visualization.
              *
@@ -109,9 +110,11 @@ namespace OMVIS
              * \param timeSliderEnd     Maximum value of the time slider object.
              * \return Pointer to the Visualizer object which is created by the factory or to the old one.
              */
-            void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd);
+            void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart,
+                           const int timeSliderEnd);
 
-            void loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart, const int timeSliderEnd);
+            void loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart,
+                                 const int timeSliderEnd);
 
             /*! \brief Unloads the currently loaded model and frees associated memory. */
             void unloadModel();
@@ -199,7 +202,7 @@ namespace OMVIS
              * OMVis provides three concrete implementations of \ref Model::VisualizerAbstract class:
              *  1. \ref Model::VisualizerMat for visualization of simulation results present in MAT file format.
              *  2. \ref Model::VisualizerFMU for FMU simulations.
-             *  3. \ref Model::VisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system (server).
+             *  3. \ref Model::VisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system.
              *
              */
             std::shared_ptr<Model::VisualizerAbstract> _modelVisualizer;
