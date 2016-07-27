@@ -208,6 +208,7 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
+        /// \todo: What do we do with the variable status?
         void InputData::setInputsInFMU(fmi1_import_t* fmu)
         {
             fmi1_status_t status = fmi1_import_set_real(fmu, _data._vrReal, _data.getNumReal(), _data._valuesReal);
