@@ -85,8 +85,6 @@ namespace OMVIS
              */
             int initVisObjects();
 
-            void appendVisVariable(const rapidxml::xml_node<>* node, std::vector<std::string>& visVariables) const;
-
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
@@ -110,6 +108,8 @@ namespace OMVIS
             const std::string getXMLFileName() const;
 
          private:
+            void appendVisVariable(const rapidxml::xml_node<>* node, std::vector<std::string>& visVariables) const;
+
             /*-----------------------------------------
              * MEMBERS
              *---------------------------------------*/
