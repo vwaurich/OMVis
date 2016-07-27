@@ -273,7 +273,7 @@ namespace OMVIS
             _fmu->setContinuousStates();
 
             /* Step is complete */
-            _fmu->completedIntegratorStep(&_simSettings->_callEventUpdate);
+            _fmu->completedIntegratorStep(_simSettings->getCallEventUpdate());
 
             //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
             //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
