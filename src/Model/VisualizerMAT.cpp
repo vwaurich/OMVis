@@ -97,7 +97,6 @@ namespace OMVIS
         {
             int isOk(0);
             // Update all shapes
-            rapidxml::xml_node<>* rootNode = _baseData->getFirstXMLNode();
             unsigned int shapeIdx = 0;
             OMVIS::Util::rAndT rT;
             osg::ref_ptr<osg::Node> child = nullptr;
