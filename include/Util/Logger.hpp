@@ -77,8 +77,9 @@ namespace OMVIS
              * \todo The number of logger categories is explicitly used in this function. Make it more generic.
              */
             LogSettings()
+                    : modes(std::vector<LogLevel>(6, LL_DEBUG))
             {
-                modes = std::vector<LogLevel>(6, LL_DEBUG);
+
             }
             /**
              * Set all categories at once to the given level.
