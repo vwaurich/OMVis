@@ -27,9 +27,10 @@
 #ifndef INCLUDE_GUICONTROLLER_HPP_
 #define INCLUDE_GUICONTROLLER_HPP_
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/InputData.hpp"
+
 #include <osg/Node>
 
 #include <memory>
