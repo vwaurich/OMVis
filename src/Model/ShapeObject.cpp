@@ -32,7 +32,9 @@ namespace OMVIS
                   _type("box"),
                   _length(ShapeObjectAttribute(0.1)),
                   _width(ShapeObjectAttribute(0.1)),
-                  _height(ShapeObjectAttribute(0.1))
+                  _height(ShapeObjectAttribute(0.1)),
+                  _specCoeff(ShapeObjectAttribute(0.7)),
+                  _mat(osg::Matrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0))
         {
             _r[0] = ShapeObjectAttribute(0.1);
             _r[1] = ShapeObjectAttribute(0.1);
@@ -58,9 +60,6 @@ namespace OMVIS
             _T[6] = ShapeObjectAttribute(0.0);
             _T[7] = ShapeObjectAttribute(1.0);
             _T[8] = ShapeObjectAttribute(0.0);
-            _specCoeff = ShapeObjectAttribute(0.7);
-
-            _mat = osg::Matrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         }
 
         void ShapeObject::dumpVisAttributes() const
