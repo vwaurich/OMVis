@@ -33,46 +33,72 @@ namespace OMVIS
 {
     namespace Model
     {
-        /*! \brief Class that holds the simulation settings.
-         *
+
+        /*! \brief Class that holds the settings for a simulation.
          *
          */
         class SimSettings
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /*! \brief Constructs SimSettings object.
              *
              * The attributes are initialized with default values.
              */
             SimSettings();
 
-            /// Destructs SimSettings object.
             ~SimSettings() = default;
 
             SimSettings(const SimSettings& ss) = delete;
             SimSettings& operator=(const SimSettings& ss) = delete;
 
-            /// \todo Refactor method to setTend
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
+            /*!
+             * Set end time for the simulation
+             * \param t
+             */
             void setTend(const fmi1_real_t t);
+            fmi1_real_t getTend() const;
+
             void setTstart(const fmi1_real_t t);
+            fmi1_real_t getTstart() const;
+
             void setHdef(const fmi1_real_t h);
-            void setRelativeTolerance(const fmi1_real_t t);
-            fmi1_real_t getTend();
-            fmi1_real_t getTstart();
             fmi1_real_t getHdef();
+
+            void setRelativeTolerance(const fmi1_real_t t);
             fmi1_real_t getRelativeTolerance();
-            fmi1_boolean_t getToleranceControlled();
-            fmi1_boolean_t getCallEventUpdate();
+
+            fmi1_boolean_t getToleranceControlled() const;
+
+            /*!
+             * Returns a pointer to the member _callEventUpdate. It is perfectly fine to return just a pointer and not
+             * a copy of the member, because the FMI Library takes pointers.
+             *
+             * \return Pointer to member _callEventUpdate.
+             */
+            fmi1_boolean_t* getCallEventUpdate();
+
+            /*!
+             * \return Member _intermediateResults.
+             */
             fmi1_boolean_t getIntermediateResults();
 
-            static int iunused;
+         private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
 
-         public:
             fmi1_boolean_t _callEventUpdate;
             fmi1_boolean_t _toleranceControlled;
             fmi1_boolean_t _intermediateResults;
 
-         private:
             fmi1_real_t _tstart;
             fmi1_real_t _hdef;
             fmi1_real_t _tend;
