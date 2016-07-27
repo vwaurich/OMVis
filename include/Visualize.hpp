@@ -33,7 +33,8 @@
 #include "WrapperFMILib.hpp"
 #include "Model/ShapeObjectAttribute.hpp"
 
-#include <rapidxml.hpp>
+#include "WrapperRapidXML.hpp"
+//#include <rapidxml.hpp>
 
 // NetOff
 #include <ValueContainer.hpp>
@@ -56,6 +57,11 @@ namespace OMVIS
          */
         struct rAndT
         {
+            rAndT()
+                    : _r(osg::Vec3f()),
+                      _T(osg::Matrix3())
+            {
+            }
             osg::Vec3f _r;
             osg::Matrix3 _T;
         };
@@ -65,6 +71,11 @@ namespace OMVIS
          */
         struct Directions
         {
+            Directions()
+                    : _lDir(osg::Vec3f()),
+                      _wDir(osg::Vec3f())
+            {
+            }
             osg::Vec3f _lDir;
             osg::Vec3f _wDir;
         };
@@ -101,39 +112,33 @@ namespace OMVIS
          */
         //X13 unused?
         //osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
         /*! \brief Gets the vector of the indicated node exp of the shape.
          *
          * \todo Currently unused.
          */
 //X13 unused?
 //        osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-
         /*! \brief Gets the vector of the indicated node exp of the shape.
          *
          * \todo Currently unused.
          */
         //X13 unused?
         //osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
         /*! \brief Gets the vector of the indicated node exp of the shape.
          *
          * \todo Currently unused.
          */
 //X13 unused?
 //        osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-
         /*! \brief Gets the value of the indicated node exp.
          *
          * \todo Currently unused.
          */
         //X13 unused
         //X13 double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-
 //        /*! \brief Update the attribute of the Object using a mat-file result
 //         */
 //        void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader);
-
         /*! \brief Update the attribute of the Object using a mat-file result
          */
         void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu);
