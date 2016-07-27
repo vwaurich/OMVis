@@ -17,8 +17,9 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include "Util/CommandLineArgs.hpp"
+
+#include <iostream>
 
 namespace OMVIS
 {
@@ -27,7 +28,6 @@ namespace OMVIS
 
         CommandLineArgs getCommandLineArguments(int argc, char *argv[])
         {
-
             std::map<std::string, Util::LogCategory> logcatmap;
             logcatmap["loader"] = Util::LC_LOADER;
             logcatmap["controller"] = Util::LC_CTR;
@@ -43,13 +43,15 @@ namespace OMVIS
 
             namespace po = boost::program_options;
             po::options_description desc("Options");
-            desc.add_options()("help", "Prints help message.")("path", boost::program_options::value<std::string>(), "Path where the model file is stored in.")("model,M", boost::program_options::value<std::string>(), "Name of the model file which should be visualized.")("useFMU,U", boost::program_options::bool_switch()->default_value(false), "OMVIS uses a FMU if specified for visualization.")(
-                    "loggerSettings,l", po::value<std::vector<std::string> >(), "Specification of the logging information.\n"
-                    "Available categories: loader, controller, viewer, solver, other.\n"
-                    "Available levels: error, warning, info, debug.\n"
-                    "Hint: Different settings of logger category and level can be specified "
-                    "separately to allow fine grained control, e.g., -l=\"loader=error\" -l=\"viewer=info\".\n"
-                    "All categories can be set to the very same level via -l=\"all=LEVEL\"");
+            desc.add_options()("help", "Prints help message.")
+                    ("path", boost::program_options::value<std::string>(), "Path where the model file is stored in.")
+                    ("model,M", boost::program_options::value<std::string>(), "Name of the model file which should be visualized.")
+                    ("loggerSettings,l", po::value<std::vector<std::string> >(), "Specification of the logging information.\n"
+                     "Available categories: loader, controller, viewer, solver, other.\n"
+                     "Available levels: error, warning, info, debug.\n"
+                     "Hint: Different settings of logger category and level can be specified "
+                     "separately to allow fine grained control, e.g., -l=\"loader=error\" -l=\"viewer=info\".\n"
+                     "All categories can be set to the very same level via -l=\"all=LEVEL\"");
 
             po::variables_map vm;
             CommandLineArgs result;
@@ -75,42 +77,46 @@ namespace OMVIS
                 // X7	else
                 // X7	    throw std::runtime_error("Model file required, but missing.");
 
-                //Set value of useFMU
-                result._useFMU = vm["useFMU"].as<bool>();
-
                 Util::LogSettings logSet;
                 if (vm.count("loggerSettings"))
                 {
-                    std::vector<std::string> logVec = vm["loggerSettings"].as<std::vector<std::string> >();
+                    std::vector<std::string> logVec = vm["loggerSettings"].as<std::vector<std::string>>();
                     std::vector<std::string> tmpvec;
-                    for (unsigned i = 0; i < logVec.size(); ++i)
+                    //for (unsigned i = 0; i < logVec.size(); ++i)
+                    int i =0;
+                    for (auto& logElem : logVec)
                     {
                         tmpvec.clear();
-                        boost::split(tmpvec, logVec[i], boost::is_any_of("="));
-                        //std::cout << i << ". " << tmpvec[0] << "\t" << tmpvec[1] << std::endl;
-                        if (tmpvec.size() > 1 && loglvlmap.find(tmpvec[1]) != loglvlmap.end() && (tmpvec[0] == "all" || logcatmap.find(tmpvec[0]) != logcatmap.end()))
+                        //boost::split(tmpvec, logVec[i], boost::is_any_of("="));
+                        boost::split(tmpvec, logElem, boost::is_any_of("="));
+                        std::cout << i << ". " << tmpvec[0] << "\t" << tmpvec[1] << std::endl;
+                        if (tmpvec.size() > 1 && loglvlmap.find(tmpvec[1]) != loglvlmap.end() && (tmpvec[0] == "all"
+                            || logcatmap.find(tmpvec[0]) != logcatmap.end()))
                         {
                             if (tmpvec[0] == "all")
                             {
-                                // std::cout << "All Logger Categories are set to level " << tmpvec[1] << std::endl;
+                                std::cout << "All Logger Categories are set to level " << tmpvec[1] << std::endl;
                                 logSet.setAll(loglvlmap[tmpvec[1]]);
                                 break;
                             }
                             else
                             {
-                                //std::cout << "Logger Category " << tmpvec[0] << " is set to level " << tmpvec[1] << std::endl;
+                                std::cout << "Logger Category " << tmpvec[0] << " is set to level " << tmpvec[1] << std::endl;
                                 logSet.modes[logcatmap[tmpvec[0]]] = loglvlmap[tmpvec[1]];
                             }
                         }
                         else
-                            throw std::runtime_error("loggerSettings flags not supported: " + logVec[i] + "\n");
+                            throw std::runtime_error("loggerSettings flags not supported: " + logElem + "\n");
+                            //throw std::runtime_error("loggerSettings flags not supported: " + logVec[i] + "\n");
+                        ++i;
                     }
                     result._logSettings = logSet;
                 }
             }
             catch (po::error& e)
             {
-                throw std::runtime_error((std::string("Cannot parse command line arguments. ") + std::string(e.what())).c_str());
+                throw std::runtime_error((std::string("Cannot parse command line arguments. ")
+                                          + std::string(e.what())).c_str());
             }
 
             return result;
