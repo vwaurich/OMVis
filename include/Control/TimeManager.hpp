@@ -64,7 +64,7 @@ namespace OMVIS
              * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
              */
             TimeManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
-                         const double hVisual, const double startTime, const double endTime);
+                        const double hVisual, const double startTime, const double endTime);
 
             ~TimeManager() = default;
             TimeManager(const TimeManager& omvm) = delete;
