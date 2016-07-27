@@ -142,9 +142,12 @@ namespace OMVIS
              */
             int updateVisAttributes(const double time) override;
 
-            /*! \brief For FMU-based visualization, we have to simulate until the next visualization time step.
+            /*! \brief This method does a scene update, i.e., the FMU is integrated/simulated up to the given time.
              *
-             *  \remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
+             * For FMU-based visualization, we have to simulate until the next visualization time step. This method is called
+             * by the method \ref VisualizerAbstract::sceneUpdate, which does the time handling (visTime, simTime) around.
+             *
+             * \remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
              */
             void updateScene(const double time = 0.0) override;
 
