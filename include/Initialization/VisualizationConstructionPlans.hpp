@@ -83,7 +83,8 @@ namespace OMVIS
              * \param pathIn        Path to the model file.
              */
             VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn)
-                    : modelFile(modelFileIn),
+                    : visType(VisualizationType::NONE),
+                      modelFile(modelFileIn),
                       path(pathIn)
             {
                 if (modelFileIn.empty())
