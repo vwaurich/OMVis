@@ -242,11 +242,10 @@ namespace OMVIS
             std::string getPrefix(LogCategory category, LogLevel level) const;
             /**
              * Get a suffix text decoration for a message of the given category and level.
-             * @param category The category of the message.
              * @param level The level of the message.
              * @return The suffix that contains color and category information.
              */
-            std::string getSuffix(LogCategory category, LogLevel level) const;
+            std::string getSuffix(LogLevel level) const;
             /**
              * Convert the given log category to string.
              * @param category The category that should be converted.
