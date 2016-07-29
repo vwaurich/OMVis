@@ -23,13 +23,15 @@
 #include "View/ViewSettings.hpp"
 
 #include <QDialog>
+#include <QComboBox>
 
-QT_FORWARD_DECLARE_CLASS(QComboBox)
+#include <memory>
 
 namespace OMVIS
 {
     namespace View
     {
+
         /*! \brief Class that encapsulates the dialog to specify the perspective settings.
          *
          * There are four predefined perspective settings which can be chosen from this dialog window, see \ref Perspective.
@@ -58,7 +60,7 @@ namespace OMVIS
 
          private:
             /*! Qt combo box which provides the predefined perspectives. */
-            QComboBox* _perspectiveCombo;
+            std::unique_ptr<QComboBox> _perspectiveCombo;
             Perspective _perspective;
         };
 

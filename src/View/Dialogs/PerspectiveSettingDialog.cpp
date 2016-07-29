@@ -20,7 +20,6 @@
 
 #include "View/Dialogs/PerspectiveSettingDialog.hpp"
 
-#include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
@@ -45,7 +44,7 @@ namespace OMVIS
             QLabel* perspectiveLabel = new QLabel(tr("Set view "));
             QHBoxLayout* perspectiveLayout = new QHBoxLayout();
             perspectiveLayout->addWidget(perspectiveLabel);
-            perspectiveLayout->addWidget(_perspectiveCombo);
+            perspectiveLayout->addWidget(_perspectiveCombo.get());
             //X11 perspectiveGroup->setLayout(perspectiveLayout);
 
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
