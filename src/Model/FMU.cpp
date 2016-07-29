@@ -298,8 +298,11 @@ namespace OMVIS
             else if (!typeString.compare("stri"))
                 return fmi1_base_type_str;
             else
+            {
                 std::cout << "getFMI1baseTypeFor4CharString failed" << std::endl;
+                return fmi1_base_type_enum;
+            }
         }
 
-    } // End namespace Model
-}// End namespace OMVIS
+    }  // End namespace Model
+}  // End namespace OMVIS
