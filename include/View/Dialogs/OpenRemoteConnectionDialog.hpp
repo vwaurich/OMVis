@@ -27,12 +27,12 @@
 
 #include <memory>
 
-QT_FORWARD_DECLARE_CLASS(QComboBox)
 
 namespace OMVIS
 {
     namespace View
     {
+
         /*! \brief This class provides a dialog to specify the settings for a remote visualization.
          *
          * The user has to specify the following settings:
