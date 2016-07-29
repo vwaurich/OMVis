@@ -27,7 +27,7 @@
 #ifndef INCLUDE_OMVISUALIZERMAT_HPP_
 #define INCLUDE_OMVISUALIZERMAT_HPP_
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Model/VisualizerAbstract.hpp"
 #include <read_matlab4.h>
 
 namespace OMVIS
