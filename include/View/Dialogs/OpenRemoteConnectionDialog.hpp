@@ -20,10 +20,12 @@
 #ifndef INCLUDE_VIEW_DIALOGS_OPENREMOTECONNECTIONDIALOG_HPP_
 #define INCLUDE_VIEW_DIALOGS_OPENREMOTECONNECTIONDIALOG_HPP_
 
-#include <Initialization/VisualizationConstructionPlans.hpp>
+#include "Initialization/VisualizationConstructionPlans.hpp"
 
 #include <QDialog>
 #include <QLineEdit>
+
+#include <memory>
 
 QT_FORWARD_DECLARE_CLASS(QComboBox)
 
@@ -55,6 +57,10 @@ namespace OMVIS
              */
             OpenRemoteConnectionDialog(QWidget* parent = Q_NULLPTR);
 
+            OpenRemoteConnectionDialog(const OpenRemoteConnectionDialog&) = delete;
+            OpenRemoteConnectionDialog& operator=(const OpenRemoteConnectionDialog&) = delete;
+            ~OpenRemoteConnectionDialog() = default;
+
             /*-----------------------------------------
              * SLOTS
              *---------------------------------------*/
@@ -75,18 +81,16 @@ namespace OMVIS
              * MEMBERS
              *---------------------------------------*/
 
-            QLineEdit* _ipAddressLineEdit;
-            QLineEdit* _portNumberLineEdit;
-            QLineEdit* _modelFileLineEdit;
-            QLineEdit* _workingDirectoryLineEdit;
+            std::unique_ptr<QLineEdit> _ipAddressLineEdit;
+            std::unique_ptr<QLineEdit> _portNumberLineEdit;
+            std::unique_ptr<QLineEdit> _modelFileLineEdit;
+            std::unique_ptr<QLineEdit> _workingDirectoryLineEdit;
 
             std::string _ipAddress;
             int _portNumber;
             std::string _workingDirectory;
             std::string _modelFile;
             std::string _path;
-
-            //Initialization::RemoteVisualizationConstructionPlan _cP;
         };
 
     }  // End namespace View

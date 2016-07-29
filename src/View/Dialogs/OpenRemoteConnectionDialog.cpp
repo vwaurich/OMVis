@@ -43,6 +43,10 @@ namespace OMVIS
 
         OpenRemoteConnectionDialog::OpenRemoteConnectionDialog(QWidget* parent)
                 : QDialog(parent),
+                  _ipAddressLineEdit(new QLineEdit()),
+                  _portNumberLineEdit(new QLineEdit()),
+                  _modelFileLineEdit(new QLineEdit()),
+                  _workingDirectoryLineEdit(new QLineEdit()),
                   _ipAddress(),
                   _portNumber(-1),
                   _workingDirectory(),
@@ -53,45 +57,41 @@ namespace OMVIS
 
             // Server
             QLabel* serverLabel = new QLabel(tr("&IP address:"));
-            _ipAddressLineEdit = new QLineEdit();
             _ipAddressLineEdit->setPlaceholderText("141.30.73.103 or 2001:0db8:85a3:08d3:1319:8a2e:0370:7344");
             _ipAddressLineEdit->setMaximumWidth(400);
             _ipAddressLineEdit->setFixedWidth(320);
-            serverLabel->setBuddy(_ipAddressLineEdit);
+            serverLabel->setBuddy(_ipAddressLineEdit.get());
 
             // Port
             QLabel* portLabel = new QLabel(tr("&Port:"));
-            _portNumberLineEdit = new QLineEdit();
             _portNumberLineEdit->setPlaceholderText("4444");
             _portNumberLineEdit->setMaximumWidth(400);
             _portNumberLineEdit->setFixedWidth(320);
-            portLabel->setBuddy(_portNumberLineEdit);
+            portLabel->setBuddy(_portNumberLineEdit.get());
 
             // Local Working Directory
             QLabel* modelFileLabel = new QLabel(tr("&Location of the model file on server:"));
-            _modelFileLineEdit = new QLineEdit();
             _modelFileLineEdit->setPlaceholderText("/scratch/p_hpcom/remoteVisualization/cranes_crane_input5.fmu"); //("/PATH/TO/MODEL.fmu");
             _modelFileLineEdit->setMaximumWidth(400);
             _modelFileLineEdit->setFixedWidth(320);
-            modelFileLabel->setBuddy(_modelFileLineEdit);
+            modelFileLabel->setBuddy(_modelFileLineEdit.get());
 
             // Local Working Directory
             QLabel* wDirLabel = new QLabel(tr("&Local working directory:"));
-            _workingDirectoryLineEdit = new QLineEdit();
             _workingDirectoryLineEdit->setPlaceholderText("./rVis/"); //("./");
             _workingDirectoryLineEdit->setMaximumWidth(400);
             _workingDirectoryLineEdit->setFixedWidth(320);
-            wDirLabel->setBuddy(_workingDirectoryLineEdit);
+            wDirLabel->setBuddy(_workingDirectoryLineEdit.get());
 
             QVBoxLayout* perspectiveLayout = new QVBoxLayout();
             perspectiveLayout->addWidget(serverLabel);
-            perspectiveLayout->addWidget(_ipAddressLineEdit);
+            perspectiveLayout->addWidget(_ipAddressLineEdit.get());
             perspectiveLayout->addWidget(portLabel);
-            perspectiveLayout->addWidget(_portNumberLineEdit);
+            perspectiveLayout->addWidget(_portNumberLineEdit.get());
             perspectiveLayout->addWidget(modelFileLabel);
-            perspectiveLayout->addWidget(_modelFileLineEdit);
+            perspectiveLayout->addWidget(_modelFileLineEdit.get());
             perspectiveLayout->addWidget(wDirLabel);
-            perspectiveLayout->addWidget(_workingDirectoryLineEdit);
+            perspectiveLayout->addWidget(_workingDirectoryLineEdit.get());
 
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
