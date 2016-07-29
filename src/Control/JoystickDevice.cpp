@@ -36,6 +36,7 @@ namespace OMVIS
 
         JoystickDevice::JoystickDevice(const int joyID)
                 : _joystick(nullptr),
+                  _inputEvent(),
                   _xDir(0),
                   _yDir(0),
                   _joystickId(joyID)
