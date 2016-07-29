@@ -176,10 +176,6 @@ namespace OMVIS
              */
             virtual void pauseVisualization();
 
-            /*! \brief Prints a message which tells you to buy us a coffee.
-             */
-            void donationVisualization();
-
             /*! \brief Calls for a scene update.
              */
             void sceneUpdate();

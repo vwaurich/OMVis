@@ -43,7 +43,7 @@ namespace OMVIS
         }
 
         VisualizerAbstract::VisualizerAbstract(const std::string& modelFile, const std::string& path)
-                : //Siehe unten _baseData(new OMVisualBase(modelFile, path)),
+                : _baseData(new OMVisualBase()),
                   _viewerStuff(new OMVisScene),
                   _nodeUpdater(new Model::UpdateVisitor),
                   _timeManager(new Control::TimeManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
@@ -137,11 +137,6 @@ namespace OMVIS
             initializeVisAttributes(_timeManager->getStartTime());
             _timeManager->setVisTime(_timeManager->getStartTime());
             _timeManager->setPause(true);
-        }
-
-        void VisualizerAbstract::donationVisualization()
-        {
-            LOGGER_WRITE(std::string("Want to support Martin and Volker? Buy us a coffee."), Util::LC_CTR, Util::LL_INFO);
         }
 
         void VisualizerAbstract::sceneUpdate()
