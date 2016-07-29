@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Model/VisualizerFMUClient.hpp>
+#include "Model/VisualizerFMUClient.hpp"
 #include "Util/Logger.hpp"
 
 namespace OMVIS
@@ -28,8 +28,9 @@ namespace OMVIS
         VisualizerFMUClient::VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
                 : VisualizerAbstract(cP->modelFile, cP->workingDirectory),
                   _noFC(cP->ipAddress, cP->portNumber),
-                  _outputVars(),
+                  _simID(-1),
                   _simSettings(new SimSettings()),
+                  _outputVars(),
                   _inputData(new InputData()),
                   _joysticks(),
                   _remotePathToModelFile(cP->path)
@@ -101,20 +102,18 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
 
             //Check for joysticks
-            _numJoysticks = SDL_NumJoysticks();
             if (SDL_NumJoysticks() < 1)
                 LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
             else
             {
                 LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+
                 //Load joystick
-                std::cout << "START LOADING JOYSTICKS!!!!!!!!!" << _numJoysticks << std::endl;
-
+                LOGGER_WRITE(std::string("START LOADING JOYSTICKS!!!!!!!!!"), Util::LC_LOADER, Util::LL_INFO);
                 Control::JoystickDevice* newJoyStick;
-                for (size_t i = 0; i < _numJoysticks; ++i)
+                for (int i = 0; i < SDL_NumJoysticks(); ++i)
                 {
-                    std::cout << "LOAD JOYSTICKS!!!!!!!!!" << i << std::endl;
-
+                    LOGGER_WRITE(std::string("LOAD JOYSTICK # ") + std::to_string(i), Util::LC_LOADER, Util::LL_INFO);
                     newJoyStick = new Control::JoystickDevice(i);
                     _joysticks.push_back(newJoyStick);
 

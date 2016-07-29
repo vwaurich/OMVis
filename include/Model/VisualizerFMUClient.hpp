@@ -225,9 +225,6 @@ namespace OMVIS
 
             std::shared_ptr<InputData> _inputData;
 
-            /*! Number of attached joysticks. */
-            int _numJoysticks;
-
          public:
             /// \todo Remove, we do not need it because we have inputData.
             std::vector<Control::JoystickDevice*> _joysticks;

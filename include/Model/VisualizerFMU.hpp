@@ -27,7 +27,7 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Model/VisualizerAbstract.hpp"
 #include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
@@ -163,9 +163,6 @@ namespace OMVIS
             std::shared_ptr<FMU> _fmu;
             /*! Simulation settings, e.g., start and end time. */
             std::shared_ptr<SimSettings> _simSettings;
-
-            /*! Number of attached joysticks. */
-            int _numJoysticks;
 
             std::shared_ptr<InputData> _inputData;
 
