@@ -53,7 +53,7 @@ namespace OMVIS
         {
             if (isOutput(category, level))
             {
-                std::cerr << getPrefix(category, level) << "  " << message << getSuffix(category, level) << std::endl;
+                std::cerr << getPrefix(category, level) << "  " << message << getSuffix(level) << std::endl;
             }
         }
 
@@ -84,7 +84,7 @@ namespace OMVIS
             return prefix;
         }
 
-        std::string Logger::getSuffix(LogCategory category, LogLevel level) const
+        std::string Logger::getSuffix(LogLevel level) const
         {
             std::string suffix = std::get < 1 > (_textDecorator[level]);
             return suffix;
