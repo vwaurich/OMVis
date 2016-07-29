@@ -216,9 +216,6 @@ namespace OMVIS
              */
             void loadModel();
 
-            //X9 This slots are for testing purposes (load, reload functionality) and can be removed in the future.
-            void loadModelCow();
-            void loadModelCessna();
             void unloadModel();
 
             /*! \brief Open remote connection. */
@@ -289,10 +286,6 @@ namespace OMVIS
             QAction* _perspectiveAct;
             QAction* _bgcAct;
 			QAction* _simSettingscAct;
-
-            //X9 This members are for testing purposes (load, reload functionality) and can be removed in the future.
-            QAction* _loadCessnaAct;
-            QAction* _loadCowAct;
             QAction* _unloadAct;
 
             /*! \brief The view which holds the osg scene.

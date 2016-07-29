@@ -172,11 +172,6 @@ namespace OMVIS
             _openRCAct->setShortcut(tr("Ctrl+R"));
             QObject::connect(_openRCAct, SIGNAL(triggered()), this, SLOT(openRemoteConnection()));
 
-            //X9
-            _loadCowAct = new QAction(tr("Load Cow"), this);
-            QObject::connect(_loadCowAct, SIGNAL(triggered()), this, SLOT(loadModelCow()));
-            _loadCessnaAct = new QAction(tr("Load Cessna"), this);
-            QObject::connect(_loadCessnaAct, SIGNAL(triggered()), this, SLOT(loadModelCessna()));
             _unloadAct = new QAction(tr("Remove Current Model"), this);
             QObject::connect(_unloadAct, SIGNAL(triggered()), this, SLOT(unloadModel()));
 
@@ -211,10 +206,6 @@ namespace OMVIS
             _fileMenu = new QMenu(tr("&File"), this);
             _fileMenu->addAction(_openAct);
             _fileMenu->addAction(_openRCAct);
-
-            //X9
-            _fileMenu->addAction(_loadCowAct);
-            _fileMenu->addAction(_loadCessnaAct);
             _fileMenu->addAction(_unloadAct);
 
             _fileMenu->addAction(_exportAct);
@@ -460,28 +451,6 @@ namespace OMVIS
                 QMessageBox::critical(0, QString("Error"), QString(ex.what()));
                 std::cout << ex.what();
             }
-        }
-
-        void OMVisViewer::loadModelCessna()
-        {
-            LOGGER_WRITE(std::string("Hier, lade die Cessna!"), Util::LC_LOADER, Util::LL_INFO);
-            osg::ref_ptr<osg::Node> scene = osgDB::readNodeFile("cessna.osg");
-            if (scene == nullptr)
-                LOGGER_WRITE(std::string("Uiuiui, das Model cessna.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cessna.osg im aktuellen Verzeichnis? "), Util::LC_LOADER, Util::LL_ERROR);
-            _sceneView->setSceneData(scene);
-
-            LOGGER_WRITE(std::string("Dort, Cessna geladen!"), Util::LC_LOADER, Util::LL_INFO);
-        }
-
-        void OMVisViewer::loadModelCow()
-        {
-            LOGGER_WRITE(std::string("Hier, lade die Kuh!"), Util::LC_LOADER, Util::LL_INFO);
-            osg::ref_ptr<osg::Node> scene = osgDB::readNodeFile("cow.osg");
-            if (scene == nullptr)
-                LOGGER_WRITE(std::string("Uiuiui, das Model cow.osg konnte nicht geladen werden. Die Szene ist leer. Liegt die Datei cow.osg im aktuellen Verzeichnis?"), Util::LC_LOADER, Util::LL_ERROR);
-            _sceneView->setSceneData(scene);
-
-            LOGGER_WRITE(std::string("Dort, Kuh geladen!"), Util::LC_LOADER, Util::LL_INFO);
         }
 
         void OMVisViewer::unloadModel()
