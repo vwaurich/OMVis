@@ -104,7 +104,7 @@ namespace OMVIS
             virtual ~VisualizationConstructionPlan() = default;
 
             VisualizationConstructionPlan(const VisualizationConstructionPlan&) = default;
-            VisualizationConstructionPlan& operator= (const VisualizationConstructionPlan&) = default;
+            VisualizationConstructionPlan& operator=(const VisualizationConstructionPlan&) = default;
 
             /*-----------------------------------------
              * Members
@@ -168,12 +168,20 @@ namespace OMVIS
                     throw std::invalid_argument("Invalid IP address.");
                 if (workingDirIn.empty())
                     throw std::invalid_argument("No local working directory specified.");
+
+                // Get visualization type.
+                if (Util::isFMU(modelFile))
+                    visType = VisualizationType::FMU_REMOTE;
+                else if (Util::isMAT(modelFile))
+                    visType = VisualizationType::MAT_REMOTE;
+                else
+                    throw std::invalid_argument("VisualizationType is NONE.");
             }
 
             virtual ~RemoteVisualizationConstructionPlan() = default;
 
             RemoteVisualizationConstructionPlan(const RemoteVisualizationConstructionPlan&) = default;
-            RemoteVisualizationConstructionPlan& operator= (const RemoteVisualizationConstructionPlan&) = default;
+            RemoteVisualizationConstructionPlan& operator=(const RemoteVisualizationConstructionPlan&) = default;
 
             /*-----------------------------------------
              * Members
