@@ -23,8 +23,7 @@
 #include "View/ViewSettings.hpp"
 
 #include <QDialog>
-
-QT_FORWARD_DECLARE_CLASS(QComboBox)
+#include <QComboBox>
 
 namespace OMVIS
 {
@@ -45,6 +44,11 @@ namespace OMVIS
              */
             BackgroundColorSettingDialog(QWidget* parent = Q_NULLPTR);
 
+            BackgroundColorSettingDialog(const BackgroundColorSettingDialog&) = delete;
+            BackgroundColorSettingDialog& operator=(const BackgroundColorSettingDialog&) = delete;
+
+            //~BackgroundColorSettingDialog() = default;
+
             /*! \brief
              *
              * @return BackgroundColor which was selected.
@@ -59,7 +63,7 @@ namespace OMVIS
 
          private:
             /*! Qt combo box which provides the predefined perspectives. */
-            QComboBox* _bgcCombo;
+            QComboBox _bgcCombo;
             BackgroundColor _bgc;
         };
 

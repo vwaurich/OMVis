@@ -32,19 +32,20 @@ namespace OMVIS
     {
         BackgroundColorSettingDialog::BackgroundColorSettingDialog(QWidget* parent)
                 : QDialog(parent),
-                  _bgcCombo(new QComboBox())
+                  _bgcCombo(),
+                  _bgc(blue)
         {
             // Perspective
-            _bgcCombo->addItem(QString("midnight blue"));
-            _bgcCombo->addItem(QString("lovely lila"));
-            _bgcCombo->addItem(QString("ivory white"));
-            _bgcCombo->addItem(QString("froggy green"));
+            _bgcCombo.addItem(QString("midnight blue"));
+            _bgcCombo.addItem(QString("lovely lila"));
+            _bgcCombo.addItem(QString("ivory white"));
+            _bgcCombo.addItem(QString("froggy green"));
 
             //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
             QLabel* bgcLabel = new QLabel(tr("Set background color of scene view to "));
             QHBoxLayout* bgcLayout = new QHBoxLayout();
             bgcLayout->addWidget(bgcLabel);
-            bgcLayout->addWidget(_bgcCombo);
+            bgcLayout->addWidget(&_bgcCombo);
             //X11 perspectiveGroup->setLayout(bgcLayout);
 
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -67,7 +68,7 @@ namespace OMVIS
         void BackgroundColorSettingDialog::accept()
         {
             // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
-            _bgc = static_cast<BackgroundColor>(_bgcCombo->currentIndex());
+            _bgc = static_cast<BackgroundColor>(_bgcCombo.currentIndex());
             QDialog::accept();
         }
 
