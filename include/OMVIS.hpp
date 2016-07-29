@@ -33,7 +33,7 @@
  * Header file that encapsulates all OMVis headers in order to provide one header to the application.
  */
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Model/VisualizerAbstract.hpp"
 #include "Control/TimeManager.hpp"
 #include "Initialization/Factory.hpp"
 #include "Model/InfoVisitor.hpp"
