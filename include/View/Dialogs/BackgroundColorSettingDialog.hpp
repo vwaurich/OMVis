@@ -25,6 +25,8 @@
 #include <QDialog>
 #include <QComboBox>
 
+#include <memory>
+
 namespace OMVIS
 {
     namespace View
@@ -63,7 +65,7 @@ namespace OMVIS
 
          private:
             /*! Qt combo box which provides the predefined perspectives. */
-            QComboBox _bgcCombo;
+            std::unique_ptr<QComboBox> _bgcCombo;
             BackgroundColor _bgc;
         };
 
