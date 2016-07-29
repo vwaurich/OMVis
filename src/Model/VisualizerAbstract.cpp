@@ -43,7 +43,7 @@ namespace OMVIS
         }
 
         VisualizerAbstract::VisualizerAbstract(const std::string& modelFile, const std::string& path)
-                : _baseData(new OMVisualBase()),
+                : _baseData(nullptr),
                   _viewerStuff(new OMVisScene),
                   _nodeUpdater(new Model::UpdateVisitor),
                   _timeManager(new Control::TimeManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
