@@ -20,24 +20,22 @@
 
 #include "View/Dialogs/SimSettingDialog.hpp"
 
-#include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDebug>
 #include <QDialogButtonBox>
-#include <QLineEdit>
 
 namespace OMVIS
 {
     namespace View
     {
+
 		SimSettingDialog::SimSettingDialog(QWidget* parent)
 			: QDialog(parent),
-			_solverMethodBox(new QComboBox()),
-			_simStepSize(new QLineEdit("0.0001")),
-			_visStepSize(new QLineEdit("0.1"))
-
+			  _solverMethodBox(new QComboBox()),
+ 			  _simStepSize(new QLineEdit("0.0001")),
+ 			  _visStepSize(new QLineEdit("0.1"))
         {
             // Perspective
 			_solverMethodBox->addItem(QString("forward euler"));
@@ -45,16 +43,16 @@ namespace OMVIS
             QLabel* solverMethodLabel = new QLabel(tr("Solver Method: "));
             QHBoxLayout* solverLayout = new QHBoxLayout();
 			solverLayout->addWidget(solverMethodLabel);
-			solverLayout->addWidget(_solverMethodBox);
+			solverLayout->addWidget(_solverMethodBox.get());
 
             QHBoxLayout* simStepLayout = new QHBoxLayout();
 			QLabel* simStepLabel = new QLabel(tr("Simulation Step Size: "));
 			simStepLayout->addWidget(simStepLabel);
-			simStepLayout->addWidget(_simStepSize);
+			simStepLayout->addWidget(_simStepSize.get());
 			QHBoxLayout* visStepLayout = new QHBoxLayout();
 			QLabel* visStepLabel = new QLabel(tr("Visualization Step Size: "));
 			visStepLayout->addWidget(visStepLabel);
-			visStepLayout->addWidget(_visStepSize);
+			visStepLayout->addWidget(_visStepSize.get());
 
             // Main layout
             QVBoxLayout* mainLayout = new QVBoxLayout();

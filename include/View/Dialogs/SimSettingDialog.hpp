@@ -22,13 +22,15 @@
 
 #include <QDialog>
 #include <QLineEdit>
+#include <QComboBox>
 
-QT_FORWARD_DECLARE_CLASS(QComboBox)
+#include <memory>
 
 namespace OMVIS
 {
     namespace View
     {
+
         /*! \brief Class that encapsulates the dialog to specify the simulation settings.
          *
          */
@@ -42,11 +44,16 @@ namespace OMVIS
              */
 			 SimSettingDialog(QWidget* parent = Q_NULLPTR);
 
+			 ~SimSettingDialog() = default;
+
+			 SimSettingDialog(const SimSettingDialog&) = delete;
+			 SimSettingDialog& operator=(const SimSettingDialog&) = delete;
+
          private:
             /*! Qt combo box which provides the simsettings to set. */
-            QComboBox* _solverMethodBox;
-			QLineEdit* _simStepSize;
-			QLineEdit* _visStepSize;
+            std::unique_ptr<QComboBox> _solverMethodBox;
+            std::unique_ptr<QLineEdit> _simStepSize;
+            std::unique_ptr<QLineEdit> _visStepSize;
         };
 
     }  // End namespace View
