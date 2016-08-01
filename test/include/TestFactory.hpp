@@ -26,7 +26,6 @@
 #include "Model/VisualizerAbstract.hpp"
 #include "Model/VisualizerFMU.hpp"
 
-#include <iostream>
 #include <gtest/gtest.h>
 
 /*! \brief Class to test the factory of OMVis \ref OMVIS::Initialization::Factory.
@@ -62,7 +61,7 @@ class TestOMVisFactory : public TestCommon
 };
 
 /*! Test the creation of an OMVisualizerFMU object by the factory. */
-TEST_F (TestOMVisFactory, TestCreateOMVisualizerFMU)
+TEST_F (TestOMVisFactory, CreateOMVisualizerFMU)
 {
     // FMU.
     _omvisualizerAbstract = _factory->createVisualizerObject(constructionPlan.get());
@@ -70,7 +69,7 @@ TEST_F (TestOMVisFactory, TestCreateOMVisualizerFMU)
 }
 
 /*! Test the creation of an OMVisualizerMAT object by the factory. */
-TEST_F (TestOMVisFactory, TestCreateOMVisualizerMAT)
+TEST_F (TestOMVisFactory, CreateOMVisualizerMAT)
 {
     // MAT.
     reset("pendulum_res.mat", "./examples/");
