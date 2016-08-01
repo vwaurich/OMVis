@@ -62,7 +62,7 @@ namespace OMVIS
             }
 
             /// The copy constructor is forbidden.
-            //JoystickDevice(const JoystickDevice& jd) = delete;
+            JoystickDevice(const JoystickDevice& jd) = delete;
 
             /// The assignment operator is forbidden.
             JoystickDevice& operator=(const JoystickDevice& jd) = delete;
