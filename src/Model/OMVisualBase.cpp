@@ -48,18 +48,15 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        int OMVisualBase::initXMLDoc()
+        void OMVisualBase::initXMLDoc()
         {
-            int isOk(0);
             // Check if the XML file is available.
             if (!Util::fileExists(_xmlFileName))
             {
-                LOGGER_WRITE(std::string("There is no XML file named ") + _xmlFileName + ".", Util::LC_LOADER, Util::LL_ERROR);
-                isOk = 1;
-                throw std::runtime_error("Could not find visual XML file" + _xmlFileName + ".");
+                std::string msg = "Could not find the visual XML file" + _xmlFileName + ".";
+                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                throw std::runtime_error(msg);
             }
-            else
-            {
                 // read xml
                 osgDB::ifstream t;
                 // unused const char * titel = _xmlFileName.c_str();
@@ -75,13 +72,12 @@ namespace OMVIS
                 buff2.append("</visualization>");
                 char* buff3 = strdup(buff2.c_str());  // cast to char*
                 _xmlDoc.parse<0>(buff3);
-                LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.", Util::LC_LOADER, Util::LL_DEBUG);
-            }
-            return isOk;
+                LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.",
+                             Util::LC_LOADER, Util::LL_DEBUG);
         }
 
         /// \todo Can we call std::vector<T>::reserve before pushing back all shapes?
-        int OMVisualBase::initVisObjects()
+        void OMVisualBase::initVisObjects()
         {
             rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
             Model::ShapeObject shape;
@@ -103,7 +99,8 @@ namespace OMVIS
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
                 if (expNode == 0)
                 {
-                    LOGGER_WRITE(std::string("The type of  ") + shape._id + " is not supported right in the visxml file.", Util::LC_LOADER, Util::LL_DEBUG);
+                    LOGGER_WRITE(std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
+                                 Util::LC_LOADER, Util::LL_DEBUG);
                     break;
                 }
 
@@ -177,7 +174,6 @@ namespace OMVIS
             }
 
             //std::vector<std::string> vs = getVisualizationVariables();
-            return 0;
         }
 
         void OMVisualBase::clearXMLDoc()

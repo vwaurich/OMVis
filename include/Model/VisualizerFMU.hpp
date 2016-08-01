@@ -65,6 +65,7 @@ namespace OMVIS
             VisualizerFMU(const std::string& modelFile, const std::string& path);
 
             virtual ~VisualizerFMU() = default;
+
             VisualizerFMU(const VisualizerFMU& omvf) = delete;
             VisualizerFMU& operator=(const VisualizerFMU& omvf) = delete;
 
@@ -76,15 +77,12 @@ namespace OMVIS
              *
              * \param modelFile     Name of the FMU file.
              * \param path          Path to the model file.
-             * \return Error value.
              */
-            int loadFMU(const std::string& modelFile, const std::string& path);
+            void loadFMU(const std::string& modelFile, const std::string& path);
 
             /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
-             *
-             * \return Error value.
              */
-            int initData() override;
+            void initData() override;
 
             /*! \brief This methods resets the input values of a FMU to default ("zero") values.
              *
@@ -137,10 +135,9 @@ namespace OMVIS
              *
              * The method updates the actual data for the visualization bodies by using variables from the FMU.
              *
-             * \param time The visualization time.
-             * \return Error value.
+             * \param time  The visualization time.
              */
-            int updateVisAttributes(const double time) override;
+            void updateVisAttributes(const double time) override;
 
             /*! \brief This method does a scene update, i.e., the FMU is integrated/simulated up to the given time.
              *

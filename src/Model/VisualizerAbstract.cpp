@@ -64,26 +64,23 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        int VisualizerAbstract::initData()
+        void VisualizerAbstract::initData()
         {
-            int isOk(0);
             // In case of reloading, we need to make sure, that we have empty members.
             _baseData->clearXMLDoc();
 
             // Initialize XML file and get visAttributes.
-            isOk = _baseData->initXMLDoc();
+            _baseData->initXMLDoc();
 
-            isOk = _baseData->initVisObjects();
-            return isOk;
+            _baseData->initVisObjects();
         }
 
-        int VisualizerAbstract::setUpScene()
+        void VisualizerAbstract::setUpScene()
         {
-            //build scene graph
-            std::cout << "SETUPSCENE FOR " << _baseData->_shapes.size() << std::endl;
-
-            int isOk = _viewerStuff->getScene().setUpScene(_baseData->_shapes);
-            return isOk;
+            // Build scene graph.
+            LOGGER_WRITE(std::string("Setup scene for ") + std::to_string(_baseData->_shapes.size()) + " shapes.",
+                                                                                     Util::LC_LOADER, Util::LL_DEBUG);
+            _viewerStuff->getScene().setUpScene(_baseData->_shapes);
         }
 
         /*-----------------------------------------

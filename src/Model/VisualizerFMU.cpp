@@ -49,10 +49,19 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        /// \todo: Set the error variable isOk.
-        int VisualizerFMU::loadFMU(const std::string& modelFile, const std::string& path)
+        void VisualizerFMU::initData()
         {
-            int isOk(0);
+            VisualizerAbstract::initData();
+            loadFMU(_baseData->getModelName(), _baseData->getPath());
+            _simSettings->setTend(_timeManager->getEndTime());
+            _simSettings->setHdef(0.001);
+            setVarReferencesInVisAttributes();
+
+            //OMVisualizerFMU::initializeVisAttributes(_omvManager->getStartTime());
+        }
+
+        void VisualizerFMU::loadFMU(const std::string& modelFile, const std::string& path)
+        {
             //setup fmu-simulation stuff
             //_simSettings = new SimSettings;
             //std::string fmuFileName = dir + model + ".fmu";
@@ -74,20 +83,6 @@ namespace OMVIS
             //int keyInt = getchar();
             //std::cout<<"the key is "<<keyInt<<" !"<<std::endl;
             //}
-            return isOk;
-        }
-
-        int VisualizerFMU::initData()
-        {
-            int isOk(0);
-            isOk = VisualizerAbstract::initData();
-            isOk += loadFMU(_baseData->getModelName(), _baseData->getPath());
-            _simSettings->setTend(_timeManager->getEndTime());
-            _simSettings->setHdef(0.001);
-            setVarReferencesInVisAttributes();
-
-            //OMVisualizerFMU::initializeVisAttributes(_omvManager->getStartTime());
-            return isOk;
         }
 
         void VisualizerFMU::resetInputs()
@@ -289,11 +284,9 @@ namespace OMVIS
             updateVisAttributes(_timeManager->getVisTime());
         }
 
-        int VisualizerFMU::updateVisAttributes(const double time)
+        void VisualizerFMU::updateVisAttributes(const double time)
         {
-            int isOk(0);
-
-            // Update all shapes
+            // Update all shapes.
             OMVIS::Util::rAndT rT;
             osg::ref_ptr<osg::Node> child = nullptr;
             try
@@ -332,28 +325,34 @@ namespace OMVIS
                     updateObjectAttributeFMU(&shape._T[6], fmu);
                     updateObjectAttributeFMU(&shape._T[7], fmu);
                     updateObjectAttributeFMU(&shape._T[8], fmu);
-                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
-                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
+                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+                                        osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+                                        osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
+                                                     shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
+                                                     shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
+                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+                                        osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
+                                        shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
-                    //update the shapes
+                    // Update the shapes.
                     _nodeUpdater->_shape = shape;
 
-                    //get the scene graph nodes and stuff
+                    // Get the scene graph nodes and stuff.
                     //_viewerStuff->dumpOSGTreeDebug();
                     child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
                     child->accept(*_nodeUpdater);
                     ++i;
                 }  //end for
             }  // end try
-
-            catch (std::exception& e)
+            catch (std::exception& ex)
             {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
-                isOk = 1;
+                std::string msg = "Error in VisualizerFMU::updateVisAttributes at time point " + std::to_string(time)
+                                                                                      + "\n" + std::string(ex.what());
+                LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
+                throw(msg);
             }
-            return isOk;
         }
 
         void VisualizerFMU::updateScene(const double time)

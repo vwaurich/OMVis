@@ -72,24 +72,21 @@ namespace OMVIS
 
             /*! \brief Reads XML file and sets up osg::viewer.
              *
-             * Returns 0 if every thing went fine.
-             * \return Error value.
+             * If the XML file is not present, this method throws a std::runtime_error exception.
              */
-            int initXMLDoc();
+            void initXMLDoc();
 
+            /*! \brief Clears the visual XML file. */
             void clearXMLDoc();
 
-            /*! \brief Get all visual objects from the XML file.
-             *
-             * \return Error value.
-             */
-            int initVisObjects();
+            /*! \brief Gets all visual objects from the visual XML file and fills the vector of ShapeObject. */
+            void initVisObjects();
 
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-			/*! \brief Get all variable names which are needed for the visualization.
+			/*! \brief Gets all variable names which are needed for the visualization.
 			*
 			* \return Vector of strings containing the variable names.
 			*/

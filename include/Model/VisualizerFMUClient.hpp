@@ -77,12 +77,12 @@ namespace OMVIS
              * INITIALIZATION METHODS
              *---------------------------------------*/
 
-            int loadFMU();
+            void loadFMU();
 
             /*! \brief Initializes OMVisualizerFMUClient object.
              *
              */
-            int initData() override;
+            void initData() override;
 
             /*! \brief This methods resets the input values of a FMU to default ("zero") values.
              *
@@ -97,21 +97,15 @@ namespace OMVIS
              *
              * This methods overload the initialize method of the base class \ref OMVisualizerAbstract.
              * The connection to the remote visualization server is established and the simulation is initialized.
-             *
-             * @return
              */
-            int initialize() override;
+            void initialize() override;
 
-            /*! \brief Initializes the connection to the server. */
+            /*! \brief Initializes the connection to the server.
+             *
+             * This methods throws a std::runtime_error exception, if the connection to the server cannot be
+             * established.
+             */
             void initializeConnectionToServer();
-
-            //! This is done in loadFMU().
-            /*! \brief Initializes remote simulation.
-             *
-             * The simulation is added to the NetworkOffloader client and the simulation ID is set.
-             * Input and output variables are defined and communicated to the server.
-             */
-            void initializeSimulation();
 
             /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the
              *         scene to initial position.
@@ -188,10 +182,9 @@ namespace OMVIS
              *
              * The method updates the actual data for the visualization bodies by using variables from the FMU.
              *
-             * \param time The visualization time.
-             * \return Error value.
+             * \param time  The visualization time.
              */
-            int updateVisAttributes(const double time) override;
+            void updateVisAttributes(const double time) override;
 
             /*! \brief For FMU-based visualization, we have to simulate until the next
              *         visualization time step.

@@ -86,32 +86,26 @@ namespace OMVIS
              *
              * Encapsulates the three stages/methods of initialization process into one single method.
              */
-            virtual int initialize()
+            virtual void initialize()
             {
-                int isOk(0);
-                isOk += initData();
-                isOk += setUpScene();
-                isOk += updateVisAttributes(0.0);
-                return isOk;
+                initData();
+                setUpScene();
+                updateVisAttributes(0.0);
             }
 
             /*! \brief Initializes OMVisualizer object.
              *
-             * XML-file is parsed and the values of the attributes are set.
+             * The visual XML file is parsed and the values of the attributes are set.
              * The viewer is initialized and the scene is set up.
-             * FMU is loaded if used, or the MAT file is read.
-             * @return 1
+             * The FMU is loaded if used, or the MAT file is read.
              *
-             * \todo Quick and dirty hack by passing OMVmanager, \see OMVisualizerFMU.
-             *
+             * This method calls \ref clearXMLDoc, \ref initXMLDoc and \ref initVisObjects, which all throw
+             * a std::runtime_error in case of failure.
              */
-            virtual int initData();
+            virtual void initData();
 
-            /*! \brief Set up the scene.
-             *
-             * @return Error value.
-             */
-            int setUpScene();
+            /*! \brief Sets up the scene. */
+            void setUpScene();
 
             /*! \brief Virtual method to initialize the scene. Is implemented either by using FMU or MAT file.
              *
@@ -152,10 +146,9 @@ namespace OMVIS
              * This method is pure virtual and needs to be implemented by derived classes, e.g., \ref OMVsiualizerFMU
              * and \ref OMVisualizerMAT.
              *
-             * \param time The visualization time.
-             * \return Error value.
+             * \param time  The visualization time.
              */
-            virtual int updateVisAttributes(const double time) = 0;
+            virtual void updateVisAttributes(const double time) = 0;
 
             /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
              *

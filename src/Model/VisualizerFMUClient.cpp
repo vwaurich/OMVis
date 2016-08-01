@@ -42,17 +42,33 @@ namespace OMVIS
         /*-----------------------------------------
          * INITIALIZATION METHODS
          *---------------------------------------*/
-        void VisualizerFMUClient::initializeConnectionToServer()
+
+        void VisualizerFMUClient::initialize()
         {
-            // test if server can be reached
-            if (!_noFC.initializeConnection())
-                throw std::runtime_error("Couldn't reach server.");
+            // If visual XML file is not present, we need to copy it from server to localhost
+            // (before calling OMVisualizerAbstract::initialize().
+
+            initializeConnectionToServer();
+//            catch (std::exception& ex)
+//            {
+//                std::string msg = "VisualizerFMUClient exception: " + std::string(ex.what());
+//                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+//                isOk += 1;
+//                throw std::runtime_error(msg);
+//            }
+
+            VisualizerAbstract::initialize();
         }
 
-        /// \todo: Set the error variable isOk.
-        int VisualizerFMUClient::loadFMU()
+        void VisualizerFMUClient::initializeConnectionToServer()
         {
-            int isOk(0);
+            // Test if server can be reached
+            if (!_noFC.initializeConnection())
+                throw std::runtime_error("Timeout: Cannot connect to server.");
+        }
+
+        void VisualizerFMUClient::loadFMU()
+        {
             auto a = _baseData->getModelName();
             auto p = _baseData->getPath();
 
@@ -73,21 +89,17 @@ namespace OMVIS
 
             // Communicate input and output variables with server.
             _noFC.initializeSimulation(_simID, inputVars, outputVars, nullptr, nullptr, nullptr);
-
-            return isOk;
         }
 
-        int VisualizerFMUClient::initData()
+        void VisualizerFMUClient::initData()
         {
-            int isOk(0);
-            isOk = VisualizerAbstract::initData();
-            isOk += loadFMU();
+            VisualizerAbstract::initData();
+            loadFMU();
             _simSettings->setTend(_timeManager->getEndTime());
             _simSettings->setHdef(0.001);
             setVarReferencesInVisAttributes();
 
             //OMVisualizerFMU::initializeVisAttributes(_omvManager->getStartTime());
-            return isOk;
         }
 
         void VisualizerFMUClient::resetInputs()
@@ -123,28 +135,7 @@ namespace OMVIS
             }
         }
 
-        int VisualizerFMUClient::initialize()
-          {
-              // If visual XML file is not present, we need to copy it from server to localhost
-              // (before calling OMVisualizerAbstract::initialize().
 
-              int isOk(0);
-              try
-              {
-                  initializeConnectionToServer();
-              }
-              catch (std::exception& ex)
-              {
-                  LOGGER_WRITE(std::string("VisualizerFMUClient exception: ") + ex.what(), Util::LC_LOADER, Util::LL_ERROR);
-                  isOk += 1;
-              }
-
-              VisualizerAbstract::initialize();
-
-              //initializeSimulation();
-
-              return isOk;
-          }
 
         /*-----------------------------------------
          * GETTERS and SETTERS
@@ -278,17 +269,15 @@ namespace OMVIS
             return isOk;
         }
 
-        int VisualizerFMUClient::updateVisAttributes(const double time)
+        void VisualizerFMUClient::updateVisAttributes(const double time)
         {
-            int isOk(0);
-
-            // Update all shapes
+            // Update all shapes.
             OMVIS::Util::rAndT rT;
             NetOff::ValueContainer & outputCont = _noFC.getOutputValueContainer(_simID);
             osg::ref_ptr<osg::Node> child = nullptr;
             try
             {
-                size_t i =0;
+                size_t i = 0;
                 for (auto& shape : _baseData->_shapes)
                 {
                     // get the values for the scene graph objects
@@ -326,10 +315,10 @@ namespace OMVIS
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
-                    //update the shapes
+                    // Update the shapes.
                     _nodeUpdater->_shape = shape;
 
-                    //get the scene graph nodes and stuff
+                    // Get the scene graph nodes and stuff.
                     //_viewerStuff->dumpOSGTreeDebug();
                     child = _viewerStuff->getScene().getRootNode()->getChild(i);  // the transformation
                     child->accept(*_nodeUpdater);
@@ -337,12 +326,12 @@ namespace OMVIS
                 }  //end for
             }  // end try
 
-            catch (std::exception& e)
+            catch (std::exception& ex)
             {
-                LOGGER_WRITE(std::string("Something went wrong in Visualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
-                isOk = 1;
+                std::string msg = "Error in VisualizerFMUClient::updateVisAttributes at time point "
+                                                + std::to_string(time) + "\n" + std::string(ex.what());
+                LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
             }
-            return isOk;
         }
 
         void VisualizerFMUClient::startVisualization()

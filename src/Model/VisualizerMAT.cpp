@@ -55,33 +55,46 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        int VisualizerMAT::initData()
+        void VisualizerMAT::initData()
         {
-            int isOk(0);
-            isOk = VisualizerAbstract::initData();
+            VisualizerAbstract::initData();
             readMat(_baseData->getModelName(), _baseData->getPath());
             _timeManager->setStartTime(omc_matlab4_startTime(&_matReader));
             _timeManager->setEndTime(omc_matlab4_stopTime(&_matReader));
-            return isOk;
         }
 
         void VisualizerMAT::initializeVisAttributes(const double time)
         {
             if (0.0 > time)
-                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER, Util::LL_ERROR);
+                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."),
+                                                                         Util::LC_LOADER, Util::LL_ERROR);
             updateVisAttributes(time);
         }
 
         void VisualizerMAT::readMat(const std::string& modelFile, const std::string& path)
         {
-            std::string resFileName = path + modelFile;        // + "_res.mat";
+            std::string resFileName = path + modelFile;     // + "_res.mat";
 
             // Check if the MAT file exists.
             if (!Util::fileExists(resFileName))
-                LOGGER_WRITE(std::string("MAT file ") + resFileName + std::string(" could not be found. Is it in the same directory as the model file?"), Util::LC_LOADER, Util::LL_ERROR);
+            {
+                std::string msg = "Could not find MAT file" + resFileName + ".";
+                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                throw std::runtime_error(msg);
+            }
             else
-                // Read mat file
-                omc_new_matlab4_reader(resFileName.c_str(), &_matReader);
+            {
+                // Read mat file.
+                auto ret = omc_new_matlab4_reader(resFileName.c_str(), &_matReader);
+                // Check return value.
+                if (0 != ret)
+                {
+                    std::string msg(ret);
+                    LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                    throw std::runtime_error(msg);
+                }
+            }
+
             /*
              FILE * fileA = fopen("allVArs.txt", "w+");
              omc_matlab4_print_all_vars(fileA, &matReader);
@@ -93,10 +106,9 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
-        int VisualizerMAT::updateVisAttributes(const double time)
+        void VisualizerMAT::updateVisAttributes(const double time)
         {
-            int isOk(0);
-            // Update all shapes
+            // Update all shapes.
             unsigned int shapeIdx = 0;
             OMVIS::Util::rAndT rT;
             osg::ref_ptr<osg::Node> child = nullptr;
@@ -142,27 +154,34 @@ namespace OMVIS
 
                     updateObjectAttributeMAT(&shape._specCoeff, time, tmpReaderPtr);
 
-                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
-                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
+                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+                                        osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+                                        osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
+                                                     shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
+                                                     shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
+                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+                                        osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
+                                        shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
-                    //update the shapes
+                    // Update the shapes.
                     _nodeUpdater->_shape = shape;
                     ///shape.dumpVisAttributes();
 
-                    //get the scene graph nodes and stuff
+                    // Get the scene graph nodes and stuff.
                     child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
                     child->accept(*_nodeUpdater);
                     ++shapeIdx;
                 }
             }
-            catch (std::exception& e)
+            catch (std::exception& ex)
             {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::updateVisAttributes at time point ") + std::to_string(time) + std::string(" ."), Util::LC_SOLVER, Util::LL_WARNING);
-                isOk = 1;
+                std::string msg = "Error in VisualizerMAT::updateVisAttributes at time point " + std::to_string(time)
+                                                                                         + "\n" + std::string(ex.what());
+                   LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
+                   throw(msg);
             }
-            return isOk;
         }
 
         void VisualizerMAT::updateScene(const double time)
