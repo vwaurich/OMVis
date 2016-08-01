@@ -99,7 +99,7 @@ namespace OMVIS
          * \param b Bool to convert.
          * \return "true" or "false".
          */
-        inline const char* const boolToString(bool b)
+        inline const char* boolToString(bool b)
         {
             return b ? "true" : "false";
         }
