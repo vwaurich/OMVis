@@ -24,7 +24,6 @@
 #include "TestCommon.hpp"
 #include "Util/Util.hpp"
 
-#include <iostream>
 #include <stdlib.h>
 
 class TestOMVisualBase : public TestCommon
@@ -58,7 +57,7 @@ const std::string TestOMVisualBase::modelFile = "BouncingBall.fmu";
 const std::string TestOMVisualBase::path = "examples/";
 
 /*!
- * Test the constructor for the class OMVisualBase.
+ * Test the non default constructor for the class OMVisualBase and check that the members are set accordingly.
  */
 TEST_F (TestOMVisualBase, Constructor)
 {
@@ -81,9 +80,23 @@ TEST_F (TestOMVisualBase, initXMLFile)
     _omVisualBase->initXMLDoc();
     auto a = _omVisualBase->getFirstXMLNode();
     ASSERT_TRUE(_omVisualBase->getFirstXMLNode());
-    int ret = _omVisualBase->initVisObjects();
-    EXPECT_EQ(ret, 0);
+    _omVisualBase->initVisObjects();
     EXPECT_EQ(_omVisualBase->_shapes.size(), 1);
+
+    std::vector<std::string> viVars = _omVisualBase->getVisualizationVariables();
+    EXPECT_EQ(1, viVars.size());
+    EXPECT_EQ("shape.r[2]", viVars.at(0));
+}
+
+/*!
+ * Test the method to reset/clear the visual XML file.
+ */
+TEST_F (TestOMVisualBase, clearXMLDoc)
+{
+    _omVisualBase->clearXMLDoc();
+    auto a = _omVisualBase->getFirstXMLNode();
+    ASSERT_EQ(0, _omVisualBase->getFirstXMLNode());
+    EXPECT_EQ(_omVisualBase->_shapes.size(), 0);
 }
 
 
