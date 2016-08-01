@@ -74,6 +74,10 @@ IF(SDL2_FOUND)
 ELSEIF(SDL2_FOUND)
   MESSAGE(FATAL_ERROR "SDL2 not found but required. Set SDL2DIR to the location containing lib and include folder of SDL2 library.")
 ENDIF(SDL2_FOUND)
+FIND_PACKAGE(SDL2_net)
+IF(NOT(SDL2_NET_FOUND))
+  MESSAGE(FATAL_ERROR "SDL2_net required")
+ENDIF(NOT(SDL2_NET_FOUND))
 
 # Find Boost
 FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem program_options system)
@@ -96,7 +100,6 @@ IF(DEFINED ENV{OPENMODELICAHOME})
   SET(OMC_MATLAB_READER_C $ENV{OPENMODELICAHOME}/include/omc/c/util/read_matlab4.c)
   SET(MATLABREADER_FOUND YES)
   MESSAGE(STATUS "Found read_matlab4.h via OPENMODELICAHOME")
-
 ELSEIF(MATLABREADER)
   IF(EXISTS ${MATLABREADER}/read_matlab4.h)
     MESSAGE(STATUS "Found read_matlab4.h.")
@@ -110,8 +113,9 @@ ELSEIF(MATLABREADER)
     ENDIF()
   ENDIF()
 ELSE(DEFINED ENV{OPENMODELICAHOME})
-  MESSAGE(WARNING "OpenModelica not found. You can specify the environment variable OPENMODELICA_HOME pointing to your OpenModelica installation \
-                   or pass the path to read_matlab4.h and read_matlab4.c via MATLABREADER to cmake file.")
+  MESSAGE(WARNING "OpenModelica not found. You can specify the environment variable OPENMODELICA_HOME pointing to your \
+                   OpenModelica installation or pass the path to read_matlab4.h and read_matlab4.c via MATLABREADER to \
+                   this CMakefile.")
   SET(MATLABREADER_FOUND NO)
 ENDIF(DEFINED ENV{OPENMODELICAHOME})
 
@@ -139,8 +143,9 @@ ENDIF(COMPILER_SUPPORTS_CXX11)
 
 # Compiler Flags Used In Debug Mode
 IF(CMAKE_BUILD_TYPE MATCHES Debug)
-  ADD_COMPILE_OPTIONS(-O0)
-  #-fno-elide-constructors -pedantic-errors -ansi -Winit-self -Wold-style-cast -Woverloaded-virtual -Wuninitialized -Wmissing-declarations -Winit-self)
+  ADD_COMPILE_OPTIONS(-O0 -Weffc++)
+  #-fno-elide-constructors -pedantic-errors -ansi -Winit-self -Wold-style-cast -Woverloaded-virtual -Wuninitialized 
+  #-Wmissing-declarations -Winit-self)
 
   # Check for Compiler Warnings
   CHECK_CXX_COMPILER_FLAG("-Wextra -Wunused" COMPILER_SUPPORTS_WEXTRA)
@@ -240,16 +245,29 @@ QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenRemoteConnectionDialog
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenFileDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/SimSettingDialog.hpp)
 
+FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/Factory.cpp" "src/Util/Logger.cpp" 
+                             "src/Visualize.cpp" "src/Expression.cpp" "src/Util/Algebra.cpp")
 
 ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")
-ADD_EXECUTABLE(OMVisTests EXCLUDE_FROM_ALL ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "test/Main.cpp")
+ADD_EXECUTABLE(OMVisTests EXCLUDE_FROM_ALL ${SRCS_TESTS} ${OMC_MATLAB_READER_C} "test/Main.cpp")
 
-SET(INCLUDEDIRS "include" "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/NetworkOffloader/include" ${FMILIB_INCLUDE_DIR} ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR} ${OMC_MATLAB_READER_INC})
+SET(INCLUDEDIRS "include")
+
+# SET(INCLUDEDIRS "include" "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include" ${FMILIB_INCLUDE_DIR} 
+#                 ${OPENSCENEGRAPH_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR} 
+#                 ${OMC_MATLAB_READER_INC})
+
+# Handle this includes as system libraries. This suppresses compiler warnings.
+INCLUDE_DIRECTORIES(SYSTEM ${FMILIB_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include"
+                           "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/NetworkOffloader/include"
+                           ${OPENSCENEGRAPH_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${RAPIDXML_DIR}
+                           ${OMC_MATLAB_READER_INC}
+                           ${SDL2_INCLUDE_DIR} ${SDL2_NET_INCLUDE_DIRS})
+
 TARGET_INCLUDE_DIRECTORIES(OMVis PRIVATE ${INCLUDEDIRS})
-TARGET_INCLUDE_DIRECTORIES(OMVisTests PRIVATE ${INCLUDEDIRS} "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include" "test/include")
+TARGET_INCLUDE_DIRECTORIES(OMVisTests PRIVATE ${INCLUDEDIRS} "test/include")
 
-SET(LINKLIBRARIES ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARY} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
+SET(LINKLIBRARIES ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_NET_LIBRARIES} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
 TARGET_LINK_LIBRARIES(OMVis ${LINKLIBRARIES} "netoff")
 TARGET_LINK_LIBRARIES(OMVisTests ${LINKLIBRARIES} "gtest" "netoff")
 
-#ADD_DEPENDENCIES(OMVisTests buildExamples)
