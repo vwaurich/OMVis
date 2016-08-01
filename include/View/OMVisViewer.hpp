@@ -207,19 +207,19 @@ namespace OMVIS
              */
             void setVisTimeSlotFunction(int val);
 
-            /*! \brief Function that loads a new model from file for visualization.
+            /*! \brief Function that opens a new model from file for visualization.
              *
              * The model which should be loaded is chosen via a file open dialog. The user can specify whether
              * to load a FMU or a MAT file for visualization.
              *
              * @param visFMU
              */
-            void loadModel();
-
-            void unloadModel();
+            void open();
 
             /*! \brief Open remote connection. */
             void openRemoteConnection();
+
+            void unloadModel();
 
             /*! \todo Implement me. */
             void exportVideo();

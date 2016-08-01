@@ -166,13 +166,14 @@ namespace OMVIS
             // Menu caption "File".
             _openAct = new QAction(tr("&Open..."), this);
             _openAct->setShortcut(tr("Ctrl+O"));
-            QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(loadModel()));
+            QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(open()));
 
             _openRCAct = new QAction(tr("Open Remote Connection..."), this);
             _openRCAct->setShortcut(tr("Ctrl+R"));
             QObject::connect(_openRCAct, SIGNAL(triggered()), this, SLOT(openRemoteConnection()));
 
             _unloadAct = new QAction(tr("Remove Current Model"), this);
+            _unloadAct->setShortcut(tr("Ctrl+D"));
             QObject::connect(_unloadAct, SIGNAL(triggered()), this, SLOT(unloadModel()));
 
             _exportAct = new QAction(tr("Export Video"), this);
@@ -366,7 +367,7 @@ namespace OMVIS
         }
 
         /// \todo FIXME We the user clicks "Cancel" the error message is shown.
-        void OMVisViewer::loadModel()
+        void OMVisViewer::open()
         {
             try
             {
@@ -418,6 +419,9 @@ namespace OMVIS
                 dialog.exec();
                 Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
 
+                assert(constructionPlan.visType != VisualizationType::FMU);
+                assert(constructionPlan.visType != VisualizationType::MAT);
+
                 // Now, let the factory create the VisualizerFMUClient object, establish the connection
                 // and initialize the simulation.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
@@ -443,8 +447,7 @@ namespace OMVIS
                 // Update the slider and the time displays.
                 updateTimingElements();
 
-                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
-
+                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_INFO);
             }
             catch (std::exception& ex)
             {
