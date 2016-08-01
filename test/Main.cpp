@@ -18,14 +18,15 @@
  */
 
 #include <gtest/gtest.h>
+#include <TestFactory.hpp>
+#include <TestVisualizerFMU.hpp>
 
 #include "Util/Logger.hpp"
 #include "TestUtil.hpp"
+#include "TestVisualizationConstructionPlans.hpp"
 #include "TestCommon.hpp"
-#include "TestOMVisFactory.hpp"
-//#include "TestOMVisualBase.hpp"
-//#include "TestOMVisualizerFMU.hpp"
-//#include "TestOMVisManager.hpp"
+#include "TestOMVisualBase.hpp"
+#include "TestTimeManager.hpp"
 
 
 int main(int argc, char **argv)
