@@ -82,9 +82,12 @@ namespace OMVIS
                 // result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
                 LOGGER_WRITE("Initialize OMVisualizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER, Util::LL_ERROR);
             }
-
             else
-                LOGGER_WRITE("The construction plan does not have a valid visualization type. A OMVisualizerAbstract(nullptr) is returned.", Util::LC_LOADER, Util::LL_DEBUG);
+            {
+                std::string msg = "The construction plan does not have a valid visualization type. A OMVisualizerAbstract(nullptr) is returned.";
+                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                throw std::runtime_error(msg);
+            }
 
             return result;
         }
