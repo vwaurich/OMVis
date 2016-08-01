@@ -17,64 +17,67 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEST_INCLUDE_TESTOMVISUALIZERFMU_HPP_
-#define TEST_INCLUDE_TESTOMVISUALIZERFMU_HPP_
+#ifndef TEST_INCLUDE_TESTVISUALIZERFMU_HPP_
+#define TEST_INCLUDE_TESTVISUALIZERFMU_HPP_
 
-#include <Control/TimeManager.hpp>
+#include "Control/TimeManager.hpp"
 #include "TestCommon.hpp"
+#include "Model/VisualizerFMU.hpp"
 
-#include <gtest/gtest.h>
-#include <Model/VisualizerFMU.hpp>
 
 /*! \brief Class to test the class \ref Control::OMVisualizerFMU.
  *
  */
-class TestOMVisualizerFMU : public TestCommon
+class TestVisualizerFMU : public TestCommon
 {
  public:
+    std::shared_ptr<OMVIS::Model::VisualizerFMU> _visualizerFMU;
 
-    std::shared_ptr<OMVIS::Model::VisualizerFMU> _omVisualizerFMU;
-
-    TestOMVisualizerFMU()
-            : TestCommon("BouncingBall", "./examples/", true),
-              _omVisualizerFMU(nullptr)
+    TestVisualizerFMU()
+            : TestCommon("BouncingBall.fmu", "./examples/"),
+              _visualizerFMU(nullptr)
     {
     }
 
+    /*!
+     * This method is called before every test.
+     */
     void SetUp()
     {
-        _omVisualizerFMU = std::shared_ptr<OMVIS::Model::VisualizerFMU>(new OMVIS::Model::VisualizerFMU(constructionPlan.fileName, constructionPlan.dirPath));
+        _visualizerFMU = std::shared_ptr<OMVIS::Model::VisualizerFMU>(
+                                 new OMVIS::Model::VisualizerFMU(constructionPlan->modelFile, constructionPlan->path));
     }
 
     void TearDown()
     {
     }
 
-    ~TestOMVisualizerFMU()
+    ~TestVisualizerFMU()
     {
     }
 };
 
-TEST_F (TestOMVisualizerFMU, TestLoad)
+/*!
+ * Fixture to test the constructor of the class \ref OMVIS::Model::VisualizerFMU which is called in the SetUp method.
+ */
+TEST_F (TestVisualizerFMU, Constructor)
 {
     // Not nullptr.
-    ASSERT_TRUE(_omVisualizerFMU.get());
-    //ASSERT_EQ(true,_omVisualizerFMU->_baseData);
-    //ASSERT_EQ(true,_omVisualizerFMU->_viewerStuff);
-    //ASSERT_EQ(true,_omVisualizerFMU->_nodeUpdater);
-    //ASSERT_EQ(true,_omVisualizerFMU->_omvManager);
-
+    ASSERT_TRUE(_visualizerFMU.get());
     // Knows its type.
-    ASSERT_EQ("fmu", _omVisualizerFMU->getType());
+    ASSERT_EQ("fmu", _visualizerFMU->getType());
 }
 
-TEST_F (TestOMVisualizerFMU, TestInitialization)
+/*!
+ * This fixture tests the initialization methods of class \ref OMVIS::Model::VisualizerFMU.
+ */
+TEST_F (TestVisualizerFMU, Initialization)
 {    // Initialize.
-    int isOK = _omVisualizerFMU->initialize();
-    ASSERT_EQ(0, isOK);
+    ASSERT_TRUE(_visualizerFMU.get());
+    _visualizerFMU->initialize();
 
     // Check FMU.
-    const OMVIS::Model::FMU* fmu = _omVisualizerFMU->getFMU();
+    const OMVIS::Model::FMU* fmu = _visualizerFMU->getFMU();
     ASSERT_TRUE(fmu);
 
     // Check FMUData.
@@ -83,7 +86,7 @@ TEST_F (TestOMVisualizerFMU, TestInitialization)
     ASSERT_EQ(2, fmuData->_nEventIndicators);
 
     // Check OMVisManager.
-    std::shared_ptr<OMVIS::Control::TimeManager> omvManager = _omVisualizerFMU->getTimeManager();
+    std::shared_ptr<OMVIS::Control::TimeManager> omvManager = _visualizerFMU->getTimeManager();
     ASSERT_EQ(0.0, omvManager->getStartTime());
     ASSERT_EQ(0.0, omvManager->getVisTime());
     ASSERT_EQ(0.0, omvManager->getSimTime());
@@ -93,4 +96,4 @@ TEST_F (TestOMVisualizerFMU, TestInitialization)
     ASSERT_TRUE(omvManager->isPaused());
 }
 
-#endif /* TEST_INCLUDE_TESTOMVISUALIZERFMU_HPP_ */
+#endif /* TEST_INCLUDE_TESTVISUALIZERFMU_HPP_ */
