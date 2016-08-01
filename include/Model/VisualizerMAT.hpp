@@ -52,8 +52,8 @@ namespace OMVIS
              *
              * Essentially, a MAT file and its path need to be specified.
              *
-             * @param[in] fileName Model file name without path.
-             * @param[in] path Path to the model file.
+             * \param fileName  Model file name without path.
+             * \param path      Path to the model file.
              */
             VisualizerMAT(const std::string& fileName, const std::string& path);
 
@@ -68,9 +68,8 @@ namespace OMVIS
 
             /*! \brief
              *
-             * @return Error value.
              */
-            int initData();
+            void initData();
 
             /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
              */
@@ -89,9 +88,8 @@ namespace OMVIS
              * The method updates the actual data for the visualization bodies by using variables from the MAT file.
              *
              * \param time The visualization time.
-             * \return Error value.
              */
-            int updateVisAttributes(const double time) override;
+            void updateVisAttributes(const double time) override;
 
             /*! \brief For MAT file based visualization, nothing has to be done. Just get the visualizationAttributes.
              */
