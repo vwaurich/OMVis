@@ -54,7 +54,7 @@ namespace OMVIS
             bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.path);
             if (!xmlExists)
             {
-                std::string msg = "Visual XML file does not exist in the same model file directory.";
+                std::string msg = "Could not find the visual XML file in the model file directory.";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
@@ -64,11 +64,14 @@ namespace OMVIS
             LOGGER_WRITE(std::string("Model file: ") + cP.modelFile, Util::LC_CTR, Util::LL_DEBUG);
             LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
-            // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
-            // already unpacked shared object, which leads to a segmentation fault. Thats why we test for this case.
-            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
+            // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
+            // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
+            // this case. If the model is already loaded, we initialize it again.
+            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath()
+                                && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
             {
-                LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
+                                         "The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else
@@ -96,40 +99,46 @@ namespace OMVIS
             LOGGER_WRITE(std::string("Local working directory: ") + cP.workingDirectory, Util::LC_CTR, Util::LL_DEBUG);
             LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
-            // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means unpacking an
-            // already unpacked shared object, which leads to a segmentation fault. Thats why we test for this case.
-            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
+            // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
+            // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
+            // this case. If the model is already loaded, we initialize it again.
+            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath()
+                                && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
-                                         "The model will be initialized again."),
-                             Util::LC_LOADER, Util::LL_WARNING);
+                                         "The model will be initialized again."),Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else
                 loadModelHelper(dynamic_cast<const Initialization::VisualizationConstructionPlan*>(&cP), timeSliderStart, timeSliderEnd);
         }
 
-        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart, const int timeSliderEnd)
+        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP,
+                                            const int timeSliderStart, const int timeSliderEnd)
         {
-            // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model cannot be loaded.
-            int isOk(0);
+            // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model
+            // cannot be loaded.
 
             // Ask the factory to create an appropriate Visualizer object.
             Initialization::Factory* factory = new Initialization::Factory();
             std::shared_ptr<Model::VisualizerAbstract> tmpVisualizer = factory->createVisualizerObject(cP);
+
             if (tmpVisualizer != nullptr)
             {
                 tmpVisualizer->getTimeManager()->setSliderRange(timeSliderStart, timeSliderEnd);
 
-                // Initialize the Visualizer object.
-                isOk += tmpVisualizer->initialize();
-
-                // If everything went fine, we "copy" the created Visualizer object to _omVisualizer.
-                if (0 == isOk)
-                    _modelVisualizer = tmpVisualizer;
+                // Initialize the visualizer object.
+                tmpVisualizer->initialize();
             }
             else
-                LOGGER_WRITE(std::string("Something went wrong in loading the model."), Util::LC_LOADER, Util::LL_ERROR);
+            {
+                std::string msg = "Could not load model. Factory returned nullptr.";
+                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                throw std::runtime_error(msg);
+            }
+
+            // If everything went fine, we "copy" the created Visualizer object to _omVisualizer.
+            _modelVisualizer = tmpVisualizer;
         }
 
         void GUIController::unloadModel()
@@ -145,19 +154,22 @@ namespace OMVIS
 
         void GUIController::startVisualization()
         {
-            _modelVisualizer->startVisualization();
+            if (_modelVisualizer != nullptr)
+                _modelVisualizer->startVisualization();
         }
 
         void GUIController::pauseVisualization()
         {
-            _modelVisualizer->pauseVisualization();
+            if (_modelVisualizer != nullptr)
+                _modelVisualizer->pauseVisualization();
         }
 
         void GUIController::initVisualization()
         {
             // Todo: Check if input variables need to be specified in order to interact with the FMU. If so,
             // open a Gui.
-            _modelVisualizer->initVisualization();
+            if (_modelVisualizer != nullptr)
+                _modelVisualizer->initVisualization();
         }
 
         void GUIController::sceneUpdate()
