@@ -124,7 +124,7 @@ TEST (TestVisualizationConstructionPlans, ConstructRemoteVisualizationConstructi
 {
     OMVIS::Initialization::RemoteVisualizationConstructionPlan cP("BouncingBall.fmu", "/home/", "141.30.73.103",
                                                                   4444, "/tmp");
-    EXPECT_EQ(OMVIS::VisualizationType::FMU, cP.visType);
+    EXPECT_EQ(OMVIS::VisualizationType::FMU_REMOTE, cP.visType);
     EXPECT_EQ("BouncingBall.fmu", cP.modelFile);
     EXPECT_EQ("/tmp", cP.workingDirectory);
     EXPECT_EQ(4444, cP.portNumber);
