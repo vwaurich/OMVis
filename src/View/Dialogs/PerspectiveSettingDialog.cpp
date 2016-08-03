@@ -32,7 +32,8 @@ namespace OMVIS
     {
         PerspectiveSettingDialog::PerspectiveSettingDialog(QWidget* parent)
                 : QDialog(parent),
-                  _perspectiveCombo(new QComboBox())
+                  _perspectiveCombo(new QComboBox()),
+                  _perspective(Perspective::home)
         {
             // Perspective
             _perspectiveCombo->addItem(QString("to home position"));
