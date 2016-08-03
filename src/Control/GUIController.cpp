@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Model/VisualizerFMU.hpp>
-#include <Model/VisualizerFMUClient.hpp>
+#include "Model/VisualizerFMU.hpp"
+#include "Model/VisualizerFMUClient.hpp"
 #include "Control/TimeManager.hpp"
 #include "Initialization/Factory.hpp"
 #include "Control/GUIController.hpp"
