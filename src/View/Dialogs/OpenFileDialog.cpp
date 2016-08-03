@@ -40,7 +40,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         OpenFileDialog::OpenFileDialog(QWidget* parent)
-                : QFileDialog(parent, tr("Open Remote Connection3"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)")),
+                : QFileDialog(parent, tr("Open Simulation File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)")),
                   _modelFile(),
                   _path()
         {
