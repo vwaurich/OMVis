@@ -190,7 +190,7 @@ namespace OMVIS
             return _xmlDoc.first_node();
         }
 
-        const std::string OMVisualBase::getModelName() const
+        const std::string OMVisualBase::getModelFile() const
         {
             return _modelFile;
         }

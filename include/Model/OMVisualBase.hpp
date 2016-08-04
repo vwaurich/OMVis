@@ -93,7 +93,7 @@ namespace OMVIS
 			std::vector<std::string> getVisualizationVariables() const;
 
             /*! \brief Returns name of the model. */
-            const std::string getModelName() const;
+            const std::string getModelFile() const;
 
             /*! \brief Returns directory path of the model file and the visual XML file. */
             const std::string getPath() const;
