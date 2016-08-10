@@ -27,9 +27,9 @@
 #ifndef INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 
+#include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
-#include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Control/JoystickDevice.hpp"
@@ -145,9 +145,9 @@ namespace OMVIS
              */
             NetOff::VariableList getInputVariables();
 
-            /*! \brief Returns "fmuclient".
-             */
-            std::string getType() const override;
+//            /*! \brief Returns "fmuclient".
+//             */
+//            std::string getType() const override;
 
             std::shared_ptr<InputData> getInputData();
 

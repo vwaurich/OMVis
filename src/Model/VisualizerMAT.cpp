@@ -46,7 +46,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         VisualizerMAT::VisualizerMAT(const std::string& modelFile, const std::string& path)
-                : VisualizerAbstract(modelFile, path),
+                : VisualizerAbstract(modelFile, path, VisType::MAT),
                   _matReader()
         {
         }
@@ -58,7 +58,7 @@ namespace OMVIS
         void VisualizerMAT::initData()
         {
             VisualizerAbstract::initData();
-            readMat(_baseData->getModelName(), _baseData->getPath());
+            readMat(_baseData->getModelFile(), _baseData->getPath());
             _timeManager->setStartTime(omc_matlab4_startTime(&_matReader));
             _timeManager->setEndTime(omc_matlab4_stopTime(&_matReader));
         }
@@ -222,10 +222,10 @@ namespace OMVIS
          * GETTERS AND SETTERS
          *---------------------------------------*/
 
-        std::string VisualizerMAT::getType() const
-        {
-            return "mat";
-        }
+//        std::string VisualizerMAT::getType() const
+//        {
+//            return "mat";
+//        }
 
     }  // End namepsace Model
 }  // End namespace OMVIS

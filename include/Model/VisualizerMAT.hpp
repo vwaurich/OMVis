@@ -110,14 +110,6 @@ namespace OMVIS
              */
             double omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time);
 
-            /*-----------------------------------------
-             * GETTERS AND SETTERS
-             *---------------------------------------*/
-
-            /*! \brief Returns "mat".
-             */
-            std::string getType() const;
-
          private:
             /*-----------------------------------------
              * MEMBERS

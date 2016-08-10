@@ -35,8 +35,8 @@ namespace OMVIS
          *---------------------------------------*/
 
         VisualizerFMU::VisualizerFMU(const std::string& modelFile, const std::string& path)
-                : VisualizerAbstract(modelFile, path),
-                  _fmu(new FMU()),
+                : VisualizerAbstract(modelFile, path, VisType::FMU),
+                  _fmu(new FMUWrapper()),
                   _simSettings(new SimSettings()),
                   _inputData(new InputData()),
                   _joysticks()
@@ -52,7 +52,7 @@ namespace OMVIS
         void VisualizerFMU::initData()
         {
             VisualizerAbstract::initData();
-            loadFMU(_baseData->getModelName(), _baseData->getPath());
+            loadFMU(_baseData->getModelFile(), _baseData->getPath());
             _simSettings->setTend(_timeManager->getEndTime());
             _simSettings->setHdef(0.001);
             setVarReferencesInVisAttributes();
@@ -122,12 +122,7 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        std::string VisualizerFMU::getType() const
-        {
-            return "fmu";
-        }
-
-        const FMU* VisualizerFMU::getFMU() const
+        const FMUWrapper* VisualizerFMU::getFMU() const
         {
             return _fmu.get();
         }

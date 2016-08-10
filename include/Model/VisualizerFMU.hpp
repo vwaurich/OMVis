@@ -27,8 +27,8 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
+#include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerAbstract.hpp"
-#include "FMU.hpp"
 #include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Control/JoystickDevice.hpp"
@@ -105,12 +105,8 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-            /*! \brief Returns "fmu".
-             */
-            std::string getType() const override;
-
             /*! Returns const pointer to \ref FMU member. */
-            const FMU* getFMU() const;
+            const FMUWrapper* getFMU() const;
 
             // const InputData* getInputData() const;
             std::shared_ptr<InputData> getInputData() const;
@@ -157,7 +153,7 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! The encapsulated FMU data. */
-            std::shared_ptr<FMU> _fmu;
+            std::shared_ptr<FMUWrapper> _fmu;
             /*! Simulation settings, e.g., start and end time. */
             std::shared_ptr<SimSettings> _simSettings;
 

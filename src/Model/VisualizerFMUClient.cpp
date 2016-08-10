@@ -26,7 +26,7 @@ namespace OMVIS
     {
 
         VisualizerFMUClient::VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
-                : VisualizerAbstract(cP->modelFile, cP->workingDirectory),
+                : VisualizerAbstract(cP->modelFile, cP->workingDirectory, VisType::FMU_REMOTE),
                   _noFC(cP->ipAddress, cP->portNumber),
                   _simID(-1),
                   _simSettings(new SimSettings()),
@@ -69,12 +69,12 @@ namespace OMVIS
 
         void VisualizerFMUClient::loadFMU()
         {
-            auto a = _baseData->getModelName();
+            auto a = _baseData->getModelFile();
             auto p = _baseData->getPath();
 
             // Send server data about the simulation you want to calculate and get the ID of the simulation.
             //_simID = _noFC.addSimulation(_baseData->getModelName());
-            auto c = _remotePathToModelFile + _baseData->getModelName();
+            auto c = _remotePathToModelFile + _baseData->getModelFile();
             _simID = _noFC.addSimulation(a);
 
             // Set visualization relevant output variables.
@@ -156,10 +156,10 @@ namespace OMVIS
             return varList;
         }
 
-        std::string VisualizerFMUClient::getType() const
-        {
-            return "fmuclient";
-        }
+//        std::string VisualizerFMUClient::getType() const
+//        {
+//            return "fmuclient";
+//        }
 
         std::shared_ptr<InputData> VisualizerFMUClient::getInputData()
         {
