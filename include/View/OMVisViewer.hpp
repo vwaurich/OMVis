@@ -61,8 +61,16 @@ namespace OMVIS
     namespace View
     {
 
+        /*! \brief This class holds the OMVis GUI.
+         *
+         * OMVis is a open source tool for model and simulation visualization. What shall be visualized is described
+         * in a XML file and the result files (in MAT format) provide the corresponding data. Besides the animation
+         * of result files, there is a possibility to animate multibody-systems with a FMU interactively.
+         *
+         * Since we use a toolbar, we have to derive from QMainWindow. In order to visualize the models, we have to
+         * inherit from osgViewer::CompositeViewer.
+         */
         class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
-        //If we want to use a toolbar, we have to derive from QMainWindow.
         {
         Q_OBJECT
 
@@ -71,13 +79,13 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            /*! \brief Constructs the MainWidget object from arguments.
+            /*! \brief Constructs the OMVisViewer object from arguments.
              *
-             * A empty GUI is created and the model has to be loaded via the file open dialog.
+             * A empty OMVis GUI is created and the model has to be loaded via the file open dialog.
              *
-             * @param parent Parent for initialization of QWidget Baseclass.
-             * @param flags Window flags for initialization of QWidget Baseclass.
-             * @param threadingModel The threading model.
+             * \param parent            Parent for initialization of QWidget Baseclass.
+             * \param flags             Window flags for initialization of QWidget Baseclass.
+             * \param threadingModel    The threading model.
              */
             OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
 
@@ -117,7 +125,7 @@ namespace OMVIS
 
             /*! \brief This function sets up the widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
              *
-             * This function encapsulates all the single functions to set up all "Teilfenster".
+             * This function encapsulates all the functions to set up the widgets of the GUI.
              */
             void setupWidgets();
 
