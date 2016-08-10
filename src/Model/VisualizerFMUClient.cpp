@@ -118,7 +118,8 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
             else
             {
-                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
+                             Util::LC_LOADER, Util::LL_INFO);
 
                 //Load joystick
                 LOGGER_WRITE(std::string("START LOADING JOYSTICKS!!!!!!!!!"), Util::LC_LOADER, Util::LL_INFO);
@@ -130,7 +131,8 @@ namespace OMVIS
                     _joysticks.push_back(newJoyStick);
 
                     if (newJoyStick == nullptr)
-                        LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+                        LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),
+                                     Util::LC_LOADER, Util::LL_INFO);
                 }
             }
         }
@@ -263,7 +265,8 @@ namespace OMVIS
 
             catch (std::exception& e)
             {
-                LOGGER_WRITE(std::string("Something went wrong in Visualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("Something went wrong in Visualizer::setVarReferencesInVisAttributes"),
+                             Util::LC_SOLVER, Util::LL_WARNING);
                 isOk = 1;
             }
             return isOk;
@@ -310,8 +313,14 @@ namespace OMVIS
                     Util::updateObjectAttributeFMUClient(shape._T[6], outputCont);
                     Util::updateObjectAttributeFMUClient(shape._T[7], outputCont);
                     Util::updateObjectAttributeFMUClient(shape._T[8], outputCont);
-                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp), osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp), osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp, shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
-                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp), osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
+                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+                                        osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+                                        osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
+                                                     shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
+                                                     shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
+                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+                                        osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
+                                        shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
