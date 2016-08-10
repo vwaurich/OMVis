@@ -68,10 +68,12 @@ namespace OMVIS
 
             //load and initialize fmu
             _fmu->load(modelFile, path);
-            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER,
+                         Util::LL_DEBUG);
 
             _fmu->initialize(_simSettings);
-            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER,
+                         Util::LL_DEBUG);
 
             _inputData->initializeInputs(_fmu->getFMU());
             _inputData->printValues();
@@ -101,7 +103,8 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
             else
             {
-                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
+                             Util::LC_LOADER, Util::LL_INFO);
 
                 //Load joystick
                 LOGGER_WRITE(std::string("START LOADING JOYSTICKS!!!!!!!!!"), Util::LC_LOADER, Util::LL_INFO);
@@ -113,7 +116,8 @@ namespace OMVIS
                     _joysticks.push_back(newJoyStick);
 
                     if (newJoyStick == nullptr)
-                        LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+                        LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),
+                                     Util::LC_LOADER, Util::LL_INFO);
                 }
             }
         }
@@ -192,7 +196,8 @@ namespace OMVIS
 
             catch (std::exception& e)
             {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"), Util::LC_SOLVER, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"),
+                             Util::LC_SOLVER, Util::LL_WARNING);
                 isOk = 1;
             }
             return isOk;
