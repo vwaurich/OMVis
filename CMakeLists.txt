@@ -56,7 +56,8 @@ FIND_PACKAGE(FMILib)
 IF(FMILIB_FOUND)
   MESSAGE(STATUS "FMI library found.")
 ELSE(FMILIB_FOUND)
-  MESSAGE(FATAL_ERROR "FMI library not found but required. Set FMILIB_HOME to the location containing lib and include folder of FMI library.")
+  MESSAGE(FATAL_ERROR "FMI library not found but required. Set FMILIB_HOME to the location containing lib and include 
+                       folder of FMI library.")
 ENDIF(FMILIB_FOUND)
 
 # Find OpenSceneGraph
@@ -72,7 +73,8 @@ FIND_PACKAGE(SDL2 REQUIRED sdl2)
 IF(SDL2_FOUND)
   MESSAGE(STATUS "SDL2 library found.")
 ELSEIF(SDL2_FOUND)
-  MESSAGE(FATAL_ERROR "SDL2 not found but required. Set SDL2DIR to the location containing lib and include folder of SDL2 library.")
+  MESSAGE(FATAL_ERROR "SDL2 not found but required. Set SDL2DIR to the location containing lib and include folder of \
+                       SDL2 library.")
 ENDIF(SDL2_FOUND)
 FIND_PACKAGE(SDL2_net)
 IF(NOT(SDL2_NET_FOUND))
@@ -118,12 +120,6 @@ ELSE(DEFINED ENV{OPENMODELICAHOME})
                    this CMakefile.")
   SET(MATLABREADER_FOUND NO)
 ENDIF(DEFINED ENV{OPENMODELICAHOME})
-
-
-# Find GTest
-#SET(GTEST_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/include")
-#SET(GTEST_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/gtest-1.7.0/build")
-# LINK_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${GTEST_LIBRARIES})
 
 
 # ---------------------------
@@ -173,7 +169,6 @@ ELSEIF(UNIX)
 ELSE()
   MESSAGE(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
 ENDIF()
-#MESSAGE(STATUS "Libraries extra: ${LIBRARIES_EXTRA} ...")
 
 
 # ---------------------------
@@ -236,8 +231,8 @@ ADD_SUBDIRECTORY(thirdparty/NetworkOffloader/)
 # Find Sources
 FILE(GLOB_RECURSE SRCS "src/*/*.cpp" "src/Visualize.cpp" "src/Expression.cpp")
 
-# Moc necessary files. Automoc does not work for us, since the header files containing the QObject macro and the source files which 
-# include this files are in separated (sub)folders.
+# Moc necessary files. Automoc does not work for us, since the header files containing the QObject macro and the 
+# source files which include this files are in separated (sub)folders.
 QT5_WRAP_CPP(MOC_OMVISVIEWER include/View/OMVisViewer.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/BackgroundColorSettingDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/PerspectiveSettingDialog.hpp)
@@ -267,7 +262,7 @@ INCLUDE_DIRECTORIES(SYSTEM ${FMILIB_INCLUDE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/th
 TARGET_INCLUDE_DIRECTORIES(OMVis PRIVATE ${INCLUDEDIRS})
 TARGET_INCLUDE_DIRECTORIES(OMVisTests PRIVATE ${INCLUDEDIRS} "test/include")
 
-SET(LINKLIBRARIES ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_NET_LIBRARIES} ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
+SET(LINKLIBRARIES ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_NET_LIBRARIES} 
+                  ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
 TARGET_LINK_LIBRARIES(OMVis ${LINKLIBRARIES} "netoff")
 TARGET_LINK_LIBRARIES(OMVisTests ${LINKLIBRARIES} "gtest" "netoff")
-
