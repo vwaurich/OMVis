@@ -103,9 +103,9 @@ namespace OMVIS
              * \todo: The method omc_matlab4_val which is called inside this method returns 0 on success. Thus, we
              *        should test the return value.
              *
-             * \param reader The ModelicaMatReader object to use for reading the MAT file.
-             * \param varName The name of the variable to fetch the value for.
-             * \param time The time to get the value for.
+             * \param reader    The ModelicaMatReader object to use for reading the MAT file.
+             * \param varName   The name of the variable to fetch the value for.
+             * \param time      The time to get the value for.
              * \return Value of the variable at the specified time.
              */
             double omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time);
