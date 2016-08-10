@@ -259,7 +259,8 @@ namespace OMVIS
 
             camera->setClearColor(osg::Vec4(0.2, 0.2, 0.6, 1.0));
             camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
-            camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
+            camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height),
+                                                     1.0f, 10000.0f);
 
             _sceneView->setSceneData(rootNode);
             _sceneView->addEventHandler(new osgViewer::StatsHandler());
@@ -269,7 +270,8 @@ namespace OMVIS
             return gw->getGLWidget();
         }
 
-        osg::ref_ptr<osgQt::GraphicsWindowQt> OMVisViewer::createGraphicsWindow(int x, int y, int w, int h, const std::string& name, bool windowDecoration)
+        osg::ref_ptr<osgQt::GraphicsWindowQt> OMVisViewer::createGraphicsWindow(int x, int y, int w, int h,
+                                                                                const std::string& name, bool windowDecoration)
         {
             osg::ref_ptr<osg::DisplaySettings> ds = osg::DisplaySettings::instance().get();
             osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits();
@@ -296,7 +298,8 @@ namespace OMVIS
             _timeSlider->setMaximum(100);
             _timeSlider->setSliderPosition(0);
 
-            LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ") + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
+            LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ")
+                         + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
 
             QObject::connect(_timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
             return _timeSlider;
@@ -427,7 +430,8 @@ namespace OMVIS
                 // and initialize the simulation.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
 
-                LOGGER_WRITE(std::string("The model has been successfully loaded and initialized for remote visualization."), Util::LC_GUI, Util::LL_INFO);
+                LOGGER_WRITE(std::string("The model has been successfully loaded and initialized for remote visualization."),
+                             Util::LC_GUI, Util::LL_INFO);
 
                 // Set up the osg viewer widget
                 osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
@@ -473,7 +477,8 @@ namespace OMVIS
         {
             QFileDialog* dialog = new QFileDialog();
             // The user can filter for *.fmu or *.mat files.
-            QString fileName = dialog->getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
+            QString fileName = dialog->getOpenFileName(this, tr("Choose a Scene Description File"), QString(),
+                                                       tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
             return fileName;
         }
 
@@ -734,7 +739,10 @@ namespace OMVIS
             osg::Matrixd mat = manipulator->getMatrix();
 
             //assemble
-            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0, newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0, newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0, abs(mat(3, 0)), abs(mat(3, 2)), abs(mat(3, 1)), 1);
+            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
+                               newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
+                               newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
+                               abs(mat(3, 0)), abs(mat(3, 2)), abs(mat(3, 1)), 1);
             manipulator->setByMatrix(mat);
         }
 
@@ -749,7 +757,10 @@ namespace OMVIS
             osg::Matrixd mat = manipulator->getMatrix();
 
             //assemble
-            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0, newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0, newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0, abs(mat(3, 1)), abs(mat(3, 2)), abs(mat(3, 0)), 1);
+            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
+                               newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
+                               newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
+                               abs(mat(3, 1)), abs(mat(3, 2)), abs(mat(3, 0)), 1);
             manipulator->setByMatrix(mat);
         }
 
@@ -764,7 +775,10 @@ namespace OMVIS
             osg::Matrixd mat = manipulator->getMatrix();
 
             //assemble
-            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0, newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0, newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0, abs(mat(3, 0)), -abs(mat(3, 1)), abs(mat(3, 2)), 1);
+            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
+                               newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
+                               newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
+                               abs(mat(3, 0)), -abs(mat(3, 1)), abs(mat(3, 2)), 1);
             manipulator->setByMatrix(mat);
         }
 
@@ -836,12 +850,18 @@ namespace OMVIS
             // Check if newPos in the sliders range. If not give out a warning and reset position.
             if (_timeSlider->minimum() > newPos)
             {
-                LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to minimum."), Util::LC_GUI, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos)
+                             + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum())
+                             + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to minimum."),
+                             Util::LC_GUI, Util::LL_WARNING);
                 newPos = _timeSlider->minimum();
             }
             else if (_timeSlider->maximum() < newPos)
             {
-                LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos) + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum()) + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to maximum."), Util::LC_GUI, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos)
+                             + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum())
+                             + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to maximum."),
+                             Util::LC_GUI, Util::LL_WARNING);
                 newPos = _timeSlider->maximum();
             }
 
