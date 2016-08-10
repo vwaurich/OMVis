@@ -178,7 +178,7 @@ namespace OMVIS
             catch (std::exception& ex)
             {
                 std::string msg = "Error in VisualizerMAT::updateVisAttributes at time point " + std::to_string(time)
-                                                                                         + "\n" + std::string(ex.what());
+                                  + "\n" + std::string(ex.what());
                    LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
                    throw(msg);
             }
@@ -187,7 +187,8 @@ namespace OMVIS
         void VisualizerMAT::updateScene(const double time)
         {
             if (0.0 > time)
-                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER, Util::LL_ERROR);
+                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER,
+                             Util::LL_ERROR);
 
             _timeManager->updateTick();  //for real-time measurement
             double visTime = _timeManager->getRealTime();
@@ -211,21 +212,14 @@ namespace OMVIS
             ModelicaMatVariable_t* var = nullptr;
             var = omc_matlab4_find_var(reader, varName);
             if (var == nullptr)
-                LOGGER_WRITE(std::string("Did not get variable from result file. Variable name is " + std::string(varName) + "."), Util::LC_SOLVER, Util::LL_ERROR);
+                LOGGER_WRITE(std::string("Did not get variable from result file. Variable name is "
+                             + std::string(varName) + "."), Util::LC_SOLVER, Util::LL_ERROR);
             else
                 omc_matlab4_val(&val, reader, var, time);
 
             return val;
         }
 
-        /*-----------------------------------------
-         * GETTERS AND SETTERS
-         *---------------------------------------*/
-
-//        std::string VisualizerMAT::getType() const
-//        {
-//            return "mat";
-//        }
 
     }  // End namepsace Model
 }  // End namespace OMVIS
