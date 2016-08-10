@@ -145,10 +145,6 @@ namespace OMVIS
              */
             NetOff::VariableList getInputVariables();
 
-//            /*! \brief Returns "fmuclient".
-//             */
-//            std::string getType() const override;
-
             std::shared_ptr<InputData> getInputData();
 
             int setVarReferencesInVisAttributes();

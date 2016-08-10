@@ -115,7 +115,8 @@ namespace OMVIS
             */
             fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
 
-            /*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable references in the visattributes
+            /*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable
+             *         references in the visattributes
             */
             int setVarReferencesInVisAttributes();
 
@@ -137,8 +138,9 @@ namespace OMVIS
 
             /*! \brief This method does a scene update, i.e., the FMU is integrated/simulated up to the given time.
              *
-             * For FMU-based visualization, we have to simulate until the next visualization time step. This method is called
-             * by the method \ref VisualizerAbstract::sceneUpdate, which does the time handling (visTime, simTime) around.
+             * For FMU-based visualization, we have to simulate until the next visualization time step. This method is
+             * called by the method \ref VisualizerAbstract::sceneUpdate, which does the time handling (visTime,
+             * simTime) around.
              *
              * \remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
              */
