@@ -28,22 +28,13 @@
 #define INCLUDE_INITIALIZATION_VISUALIZATIONCONSTRUCTIONPLANS_HPP_
 
 #include "Util/Util.hpp"
+#include "Model/VisualizationTypes.hpp"
 
 #include <string>
 #include <stdexcept>
 
 namespace OMVIS
 {
-
-    /*! This enum holds the possible visualization modes of OMVis. */
-    enum VisualizationType
-    {
-        NONE = 0,
-        FMU = 1,
-        FMU_REMOTE = 2,
-        MAT = 3,
-        MAT_REMOTE = 4
-    };
 
     namespace Initialization
     {
@@ -83,7 +74,7 @@ namespace OMVIS
              * \param pathIn        Path to the model file.
              */
             VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn)
-                    : visType(VisualizationType::NONE),
+                    : visType(Model::VisType::NONE),
                       modelFile(modelFileIn),
                       path(pathIn)
             {
@@ -94,9 +85,9 @@ namespace OMVIS
 
                 // Get visualization type.
                 if (Util::isFMU(modelFile))
-                    visType = VisualizationType::FMU;
+                    visType = Model::VisType::FMU;
                 else if (Util::isMAT(modelFile))
-                    visType = VisualizationType::MAT;
+                    visType = Model::VisType::MAT;
                 else
                     throw std::invalid_argument("VisualizationType is NONE.");
             }
@@ -110,7 +101,7 @@ namespace OMVIS
              * Members
              *---------------------------------------*/
 
-            VisualizationType visType;
+            Model::VisType visType;
             /*! Name of the model file without path but with prefix, e.g., modelFoo.fmu . */
             std::string modelFile;
             /*! Path to the model file, e.g., /home/user/models/ . */
@@ -171,9 +162,9 @@ namespace OMVIS
 
                 // Get visualization type.
                 if (Util::isFMU(modelFile))
-                    visType = VisualizationType::FMU_REMOTE;
+                    visType = Model::VisType::FMU_REMOTE;
                 else if (Util::isMAT(modelFile))
-                    visType = VisualizationType::MAT_REMOTE;
+                    visType = Model::VisType::MAT_REMOTE;
                 else
                     throw std::invalid_argument("VisualizationType is NONE.");
             }
