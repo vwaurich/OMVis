@@ -27,8 +27,9 @@
 #ifndef INCLUDE_FACTORY_HPP_
 #define INCLUDE_FACTORY_HPP_
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
+
 #include <memory>
 
 namespace OMVIS

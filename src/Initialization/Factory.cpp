@@ -17,9 +17,9 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Model/VisualizerFMU.hpp>
-#include <Model/VisualizerFMUClient.hpp>
-#include <Model/VisualizerMAT.hpp>
+#include "Model/VisualizerFMU.hpp"
+#include "Model/VisualizerFMUClient.hpp"
+#include "Model/VisualizerMAT.hpp"
 #include "Initialization/Factory.hpp"
 #include "Model/OMVisualizerMATClient.hpp"
 #include "Util/Logger.hpp"
@@ -59,24 +59,24 @@ namespace OMVIS
 //            }
 
             // FMU based visualization
-            if (cP->visType == VisualizationType::FMU)
+            if (cP->visType == Model::VisType::FMU)
             {
                 result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerFMU(cP->modelFile, cP->path));
                 LOGGER_WRITE("Initialize OMVisualizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
             }
             // MAT file based visualization
-            else if (cP->visType == VisualizationType::MAT)
+            else if (cP->visType == Model::VisType::MAT)
             {
                 result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerMAT(cP->modelFile, cP->path));
                 LOGGER_WRITE("Initialize VisualizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            else if (cP->visType == VisualizationType::FMU_REMOTE)
+            else if (cP->visType == Model::VisType::FMU_REMOTE)
             {
                 result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerFMUClient(dynamic_cast<const RemoteVisualizationConstructionPlan*>(cP)));
                 LOGGER_WRITE("Initialize VisualizerFMUClient.", Util::LC_LOADER, Util::LL_DEBUG);
             }
             // MAT file based visualization
-            else if (cP->visType == VisualizationType::MAT_REMOTE)
+            else if (cP->visType == Model::VisType::MAT_REMOTE)
             {
                 /// \todo Todo Implement OMVisualizerMATClient!
                 // result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
