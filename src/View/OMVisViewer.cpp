@@ -18,11 +18,14 @@
  */
 
 #include "Control/GUIController.hpp"
-#include "Model/FMU.hpp"
 #include "Util/Logger.hpp"
 #include "View/OMVisViewer.hpp"
 #include "Util/Algebra.hpp"
 #include "View/Dialogs.hpp"
+#include "Initialization/VisualizationConstructionPlans.hpp"
+#include "Model/FMUWrapper.hpp"
+#include "Model/VisualizerFMU.hpp"
+
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
 #include <osgViewer/ViewerEventHandlers>
@@ -48,8 +51,6 @@
 #include <QMenuBar>
 
 #include <assert.h>
-#include <Initialization/VisualizationConstructionPlans.hpp>
-#include <Model/VisualizerFMU.hpp>
 
 #include <stdexcept>
 
@@ -391,7 +392,7 @@ namespace OMVIS
                 _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
 
                 //set the inputData to handle Keyboard-events as inputs
-                if (_guiController->modelIsFMU())
+                if (_guiController->visTypeIsFMU())
                 {
                     Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
@@ -419,8 +420,8 @@ namespace OMVIS
                 dialog.exec();
                 Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
 
-                assert(constructionPlan.visType != VisualizationType::FMU);
-                assert(constructionPlan.visType != VisualizationType::MAT);
+                assert(constructionPlan.visType != Model::VisType::FMU);
+                assert(constructionPlan.visType != Model::VisType::MAT);
 
                 // Now, let the factory create the VisualizerFMUClient object, establish the connection
                 // and initialize the simulation.
@@ -438,7 +439,7 @@ namespace OMVIS
                 _visTimer.start(_guiController->getVisStepsize());  // we need milliseconds in here
 
                 //set the inputData to handle Keyboard-events as inputs
-                if (_guiController->modelIsFMUClient())
+                if (_guiController->visTypeIsFMURemote())
                 {
                     Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
@@ -451,7 +452,7 @@ namespace OMVIS
             }
             catch (std::exception& ex)
             {
-                QMessageBox::critical(0, QString("Error"), QString(ex.what()));
+                QMessageBox::critical(0, QString("Error OMVis"), QString(ex.what()));
                 std::cout << ex.what();
             }
         }
@@ -492,7 +493,8 @@ namespace OMVIS
                 msgBox.exec();
             }
             // If a result file is visualized, we cannot map keys to input variables.
-            else if (_guiController->modelIsMATFile())
+//X4            else if (_guiController->modelIsMATFile())
+            else if (_guiController->visTypeIsMAT())
             {
                 QString information("Input Mapping is not available for mat file visualization.");
                 QMessageBox msgBox(QMessageBox::Information, tr("Not Available"), information, QMessageBox::NoButton);
@@ -672,10 +674,24 @@ namespace OMVIS
 
         void OMVisViewer::simSettingsDialog()
         {
-            SimSettingDialog dialog(this);
-            if (dialog.exec())
+            if (_guiController->modelIsLoaded())
             {
-                std::cout << "implement me" << std::endl;
+                if (_guiController->visTypeIsFMU() || _guiController->visTypeIsFMURemote())
+                {
+                    SimSettingDialogFMU dialog(this);
+                    if (dialog.exec())
+                    {
+                        SimSettingsFMU simSetFMU = dialog.getSimSettings();
+                    }
+                }
+                else if (_guiController->visTypeIsMAT() || _guiController->visTypeIsMATRemote())
+                {
+                    SimSettingDialogMAT dialog(this);
+                    if (dialog.exec())
+                    {
+                        SimSettingsMAT simSetMAT = dialog.getSimSettings();
+                    }
+                }
             }
         }
 
