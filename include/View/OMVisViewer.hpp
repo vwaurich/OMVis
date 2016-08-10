@@ -164,14 +164,14 @@ namespace OMVIS
 
             /*! \brief Updates the time slider to the position which corresponds to the current visualization time.
              *
-             * The new position of the slider is provided by the function \ref Control::GUIController::->getTimeProgress().
+             * The new position of the slider is provided by the function \ref Control::GUIController::getTimeProgress().
              * If the position is out of the sliders range, a warning is triggered by the Logger.
              */
             void updateTimeSliderPosition();
 
             /*! \brief Updates the time display to the current visualization time.
              *
-             * The current visualization time is provided by the function \ref Control::GUIController::->getVisProgress().
+             * The current visualization time is provided by the function \ref Control::GUIController::getVisTime().
              */
             void updateTimeDisplays();
 
