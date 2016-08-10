@@ -28,6 +28,7 @@
 
 #include <gtest/gtest.h>
 
+
 /*! \brief Class to test the factory of OMVis \ref OMVIS::Initialization::Factory.
  *
  * The test fixtures test that the factory creates the right "product", i.e., if we visualize a
@@ -65,7 +66,7 @@ TEST_F (TestOMVisFactory, CreateOMVisualizerFMU)
 {
     // FMU.
     _omvisualizerAbstract = _factory->createVisualizerObject(constructionPlan.get());
-    EXPECT_EQ("fmu", _omvisualizerAbstract->getType());
+    EXPECT_EQ(OMVIS::Model::VisType::FMU, _omvisualizerAbstract->getVisType());
 }
 
 /*! Test the creation of an OMVisualizerMAT object by the factory. */
@@ -74,7 +75,7 @@ TEST_F (TestOMVisFactory, CreateOMVisualizerMAT)
     // MAT.
     reset("pendulum_res.mat", "./examples/");
     _omvisualizerAbstract = _factory->createVisualizerObject(constructionPlan.get());
-    EXPECT_EQ("mat", _omvisualizerAbstract->getType());
+    EXPECT_EQ(OMVIS::Model::VisType::MAT, _omvisualizerAbstract->getVisType());
 }
 
 #endif /* TEST_INCLUDE_TESTFACTORY_HPP_ */

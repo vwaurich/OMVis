@@ -113,7 +113,7 @@ TEST (TestVisualizationConstructionPlans, noWorkingDirectory)
 TEST (TestVisualizationConstructionPlans, ConstructVisualizationConstructionPlan)
 {
     OMVIS::Initialization::VisualizationConstructionPlan cP("BouncingBall.fmu", "/home/");
-    EXPECT_EQ(OMVIS::VisualizationType::FMU, cP.visType);
+    EXPECT_EQ(OMVIS::Model::VisType::FMU, cP.visType);
     EXPECT_EQ("BouncingBall.fmu", cP.modelFile);
 }
 
@@ -124,12 +124,11 @@ TEST (TestVisualizationConstructionPlans, ConstructRemoteVisualizationConstructi
 {
     OMVIS::Initialization::RemoteVisualizationConstructionPlan cP("BouncingBall.fmu", "/home/", "141.30.73.103",
                                                                   4444, "/tmp");
-    EXPECT_EQ(OMVIS::VisualizationType::FMU_REMOTE, cP.visType);
+    EXPECT_EQ(OMVIS::Model::VisType::FMU_REMOTE, cP.visType);
     EXPECT_EQ("BouncingBall.fmu", cP.modelFile);
     EXPECT_EQ("/tmp", cP.workingDirectory);
     EXPECT_EQ(4444, cP.portNumber);
     EXPECT_EQ("141.30.73.103", cP.ipAddress);
 }
-
 
 #endif /* TEST_INCLUDE_TESTVISUALIZATIONCONSTRUCTIONPLANS_HPP_ */

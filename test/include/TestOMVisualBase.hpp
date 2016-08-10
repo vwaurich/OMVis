@@ -64,7 +64,7 @@ TEST_F (TestOMVisualBase, Constructor)
     // Not nullptr
     EXPECT_TRUE(_omVisualBase);
 
-    EXPECT_EQ(constructionPlan->modelFile, _omVisualBase->getModelName());
+    EXPECT_EQ(constructionPlan->modelFile, _omVisualBase->getModelFile());
     std::string mpath = OMVIS::Util::makeAbsolutePath(path);
     std::string xmlFile = OMVIS::Util::getXMLFileName(modelFile, mpath);
     EXPECT_EQ(xmlFile, _omVisualBase->getXMLFileName());

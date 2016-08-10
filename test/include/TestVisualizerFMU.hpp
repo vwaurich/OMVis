@@ -65,7 +65,7 @@ TEST_F (TestVisualizerFMU, Constructor)
     // Not nullptr.
     ASSERT_TRUE(_visualizerFMU.get());
     // Knows its type.
-    ASSERT_EQ("fmu", _visualizerFMU->getType());
+    ASSERT_EQ(OMVIS::Model::VisType::FMU, _visualizerFMU->getVisType());
 }
 
 /*!
@@ -77,7 +77,7 @@ TEST_F (TestVisualizerFMU, Initialization)
     _visualizerFMU->initialize();
 
     // Check FMU.
-    const OMVIS::Model::FMU* fmu = _visualizerFMU->getFMU();
+    const OMVIS::Model::FMUWrapper* fmu = _visualizerFMU->getFMU();
     ASSERT_TRUE(fmu);
 
     // Check FMUData.
