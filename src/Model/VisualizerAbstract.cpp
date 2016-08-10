@@ -35,17 +35,19 @@ namespace OMVIS
          *---------------------------------------*/
 
         VisualizerAbstract::VisualizerAbstract()
-                : _baseData(nullptr),
+                : _visType(VisType::NONE),
+                  _baseData(nullptr),
                   _viewerStuff(nullptr),
                   _nodeUpdater(nullptr),
                   _timeManager(nullptr)
         {
         }
 
-        VisualizerAbstract::VisualizerAbstract(const std::string& modelFile, const std::string& path)
-                : _baseData(nullptr),
-                  _viewerStuff(new OMVisScene),
-                  _nodeUpdater(new Model::UpdateVisitor),
+        VisualizerAbstract::VisualizerAbstract(const std::string& modelFile, const std::string& path, const VisType visType)
+                : _visType(visType),
+                  _baseData(nullptr),
+                  _viewerStuff(new OMVisScene()),
+                  _nodeUpdater(new Model::UpdateVisitor()),
                   _timeManager(new Control::TimeManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
         {
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
@@ -87,9 +89,9 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        std::string VisualizerAbstract::getType() const
+        VisType VisualizerAbstract::getVisType() const
         {
-            return "abstract";
+            return _visType;
         }
 
         std::shared_ptr<OMVisualBase> VisualizerAbstract::getBaseData() const
@@ -105,6 +107,11 @@ namespace OMVIS
         std::shared_ptr<OMVisScene> VisualizerAbstract::getOMVisScene() const
         {
             return _viewerStuff;
+        }
+
+        std::string VisualizerAbstract::getModelFile() const
+        {
+            return _baseData->getModelFile();
         }
 
         /*-----------------------------------------

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016, Volker Waurich
+* Copyright (C) 2016, Volker Waurich
  *
  * This file is part of OMVis.
  *
@@ -33,6 +33,7 @@
 #include "Model/UpdateVisitor.hpp"
 #include "Visualize.hpp"
 #include "ShapeObjectAttribute.hpp"
+#include "Model/VisualizationTypes.hpp"
 
 #include <memory>
 
@@ -67,7 +68,7 @@ namespace OMVIS
              * \param[in] modelFile Name of the model file.
              * \param[in] path Path to the FMU or result file and corresponding XML file.
              */
-            VisualizerAbstract(const std::string& modelFile, const std::string& path);
+            VisualizerAbstract(const std::string& modelFile, const std::string& path, const VisType visType = VisType::NONE);
 
             /// Destructs OMVisualizer object.
             virtual ~VisualizerAbstract() = default;
@@ -121,14 +122,19 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-            /*! \brief Returns "abstract". */
-            virtual std::string getType() const;
+//            /*! \brief Returns "abstract". */
+//            virtual std::string getType() const;
+
+            /*! \brief Returns VisType::NONE. */
+            VisType getVisType() const;
 
             std::shared_ptr<OMVisualBase> getBaseData() const;
 
             std::shared_ptr<Control::TimeManager> getTimeManager() const;
 
             std::shared_ptr<OMVisScene> getOMVisScene() const;
+
+            std::string getModelFile() const;
 
             /*-----------------------------------------
              * SIMULATION METHODS
@@ -178,11 +184,13 @@ namespace OMVIS
              * MEMBERS
              *---------------------------------------*/
 
+            const VisType _visType;
             std::shared_ptr<OMVisualBase> _baseData;
             std::shared_ptr<OMVisScene> _viewerStuff;
             std::shared_ptr<UpdateVisitor> _nodeUpdater;
             std::shared_ptr<Control::TimeManager> _timeManager;
         };
+
 
     }  // End namespace Model
 }  // End namespace OMVIS
