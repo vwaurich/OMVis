@@ -126,12 +126,14 @@ namespace OMVIS
                 LOGGER_WRITE(std::string("Start visualization ..."), Util::LC_CTR, Util::LL_INFO);
             }
             else
-                LOGGER_WRITE(std::string("There is nothing left to visualize. Initialize the model first."), Util::LC_CTR, Util::LL_INFO);
+                LOGGER_WRITE(std::string("There is nothing left to visualize. Initialize the model first."),
+                             Util::LC_CTR, Util::LL_INFO);
         }
 
         void VisualizerAbstract::pauseVisualization()
         {
-            LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_timeManager->getVisTime()) + std::string("."), Util::LC_CTR, Util::LL_INFO);
+            LOGGER_WRITE(std::string("Pause visualization at ") + std::to_string(_timeManager->getVisTime())
+                         + std::string("."), Util::LC_CTR, Util::LL_INFO);
             _timeManager->setPause(true);
         }
 
@@ -152,7 +154,10 @@ namespace OMVIS
                 updateScene(_timeManager->getVisTime());
                 _timeManager->setVisTime(_timeManager->getVisTime() + _timeManager->getHVisual());
 
-                LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_timeManager->getVisTime()) + std::string(" simTime ") + std::to_string(_timeManager->getSimTime()) + std::string(" _visStepSize ") + std::to_string(_timeManager->getHVisual()), Util::LC_CTR, Util::LL_INFO);
+                LOGGER_WRITE(std::string("Update scene at ") + std::to_string(_timeManager->getVisTime())
+                             + std::string(" simTime ") + std::to_string(_timeManager->getSimTime())
+                             + std::string(" _visStepSize ") + std::to_string(_timeManager->getHVisual()),
+                             Util::LC_CTR, Util::LL_INFO);
                 if (_timeManager->getVisTime() >= _timeManager->getEndTime() - 1.e-6)
                 {
                     LOGGER_WRITE(std::string("The End."), Util::LC_CTR, Util::LL_INFO);
