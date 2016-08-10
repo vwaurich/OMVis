@@ -122,9 +122,6 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-//            /*! \brief Returns "abstract". */
-//            virtual std::string getType() const;
-
             /*! \brief Returns VisType::NONE. */
             VisType getVisType() const;
 
@@ -156,7 +153,8 @@ namespace OMVIS
              */
             virtual void updateVisAttributes(const double time) = 0;
 
-            /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the fmu)
+            /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time
+             *         step (i.e. simulate the FMU)
              *
              * \remark All classes that derive from OMVisualizerAbstract
              */
