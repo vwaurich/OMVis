@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Model/FMUWrapper.hpp"
 #include "Model/SimSettings.hpp"
-#include "Model/FMU.hpp"
 
 namespace OMVIS
 {
