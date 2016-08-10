@@ -473,15 +473,6 @@ namespace OMVIS
             LOGGER_WRITE(std::string("Model unloaded."), Util::LC_LOADER, Util::LL_INFO);
         }
 
-        QString OMVisViewer::modelSelectionDialog()
-        {
-            QFileDialog* dialog = new QFileDialog();
-            // The user can filter for *.fmu or *.mat files.
-            QString fileName = dialog->getOpenFileName(this, tr("Choose a Scene Description File"), QString(),
-                                                       tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
-            return fileName;
-        }
-
         void OMVisViewer::exportVideo()
         {
             QMessageBox::warning(0, QString("Information"), QString("This functionality might come soon."));

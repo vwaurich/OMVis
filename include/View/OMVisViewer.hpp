@@ -150,12 +150,6 @@ namespace OMVIS
              */
             QWidget* setupTimeSliderWidget();
 
-            /*! \brief This methods shows the window to choose the model file.
-             *
-             * The member variables _modelName, _modelPath and _useFMU are set according to the users chosen model.
-             */
-            QString modelSelectionDialog();
-
             /*! \brief Creates a GUI element to set the mapping for a input value.
              */
             QHBoxLayout* createInputMapperRow(const int inputIdx, const std::string& varName, const std::string& type) const;
