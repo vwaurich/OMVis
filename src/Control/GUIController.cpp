@@ -67,11 +67,11 @@ namespace OMVIS
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
             // this case. If the model is already loaded, we initialize it again.
-            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath()
-                                && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
+            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
-                                         "The model will be initialized again."), Util::LC_LOADER, Util::LL_WARNING);
+                                         "The model will be initialized again."),
+                             Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else
@@ -102,19 +102,18 @@ namespace OMVIS
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
             // this case. If the model is already loaded, we initialize it again.
-            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath()
-                                && cP.modelFile == _modelVisualizer->getBaseData()->getModelName())
+            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
-                                         "The model will be initialized again."),Util::LC_LOADER, Util::LL_WARNING);
+                                         "The model will be initialized again."),
+                             Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else
                 loadModelHelper(dynamic_cast<const Initialization::VisualizationConstructionPlan*>(&cP), timeSliderStart, timeSliderEnd);
         }
 
-        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP,
-                                            const int timeSliderStart, const int timeSliderEnd)
+        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart, const int timeSliderEnd)
         {
             // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model
             // cannot be loaded.
@@ -216,19 +215,44 @@ namespace OMVIS
             return _modelVisualizer->getTimeManager()->getHVisual() * 1000.0;
         }
 
-        bool GUIController::modelIsMATFile()
+        bool GUIController::visTypeIs(const Model::VisType visType) const
         {
-            return (_modelVisualizer->getType() == "mat") ? true : false;
+            return (_modelVisualizer->getVisType() == visType) ? true : false;
         }
 
-        bool GUIController::modelIsFMU()
+        bool GUIController::visTypeIsNone() const
         {
-            return (_modelVisualizer->getType() == "fmu") ? true : false;
+            return visTypeIs(Model::VisType::NONE);
         }
 
-        bool GUIController::modelIsFMUClient()
+        bool GUIController::visTypeIsFMU() const
         {
-            return (_modelVisualizer->getType() == "fmuclient") ? true : false;
+            return visTypeIs(Model::VisType::FMU);
+        }
+
+        bool GUIController::visTypeIsFMURemote() const
+        {
+            return visTypeIs(Model::VisType::FMU_REMOTE);
+        }
+
+        bool GUIController::visTypeIsMAT() const
+        {
+            return visTypeIs(Model::VisType::MAT);
+        }
+
+        bool GUIController::visTypeIsMATRemote() const
+        {
+            return visTypeIs(Model::VisType::MAT_REMOTE);
+        }
+
+        bool GUIController::getVisType() const
+        {
+            return _modelVisualizer->getVisType();
+        }
+
+        std::string GUIController::getModelFile() const
+        {
+            return _modelVisualizer->getModelFile();
         }
 
         bool GUIController::modelIsLoaded()
@@ -238,12 +262,12 @@ namespace OMVIS
 
         std::shared_ptr<Model::InputData> GUIController::getInputData()
         {
-            if (modelIsFMU())
+            if (visTypeIsFMU())
             {
                 std::shared_ptr<Model::VisualizerFMU> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
                 return omVisFMU->getInputData();
             }
-            else if (modelIsFMUClient())
+            else if (visTypeIsFMURemote())
             {
                 std::shared_ptr<Model::VisualizerFMUClient> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMUClient>(_modelVisualizer);
                 return omVisFMU->getInputData();

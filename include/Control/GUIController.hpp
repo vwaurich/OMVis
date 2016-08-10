@@ -172,12 +172,17 @@ namespace OMVIS
             /*! \brief Returns the visualization step size in milliseconds. */
             double getVisStepsize();
 
-            /*! \brief Returns true, if the currently loaded model is a MAT result file simulation. */
-            bool modelIsMATFile();
-            /*! \brief Returns true, if the currently loaded model is a FMU simulation. */
-            bool modelIsFMU();
-            /*! \brief Returns true, if the currently loaded model is a FMU in remote visualization mode. */
-            bool modelIsFMUClient();
+            bool visTypeIs(const Model::VisType visType) const;
+            bool visTypeIsNone() const;
+            bool visTypeIsFMU() const;
+            bool visTypeIsFMURemote() const;
+            bool visTypeIsMAT() const;
+            bool visTypeIsMATRemote() const;
+
+            bool getVisType() const;
+
+            /*! \brief Returns name of the model. */
+            std::string getModelFile() const;
 
             /*! \brief Returns true, if a model is loaded into OMVis, i.e., the Visualizer object is not nullptr. */
             bool modelIsLoaded();
