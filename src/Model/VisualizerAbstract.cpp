@@ -48,7 +48,7 @@ namespace OMVIS
                   _baseData(nullptr),
                   _viewerStuff(new OMVisScene()),
                   _nodeUpdater(new Model::UpdateVisitor()),
-                  _timeManager(new Control::TimeManager(0.0, 0.0, -1.0, 0.0, 0.1, 0.0, 100.0))
+                  _timeManager(new Control::TimeManager(0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
         {
             // We need the absolute path to the directory. Otherwise the FMUlibrary can not open the shared objects.
             //char fullPathTmp[PATH_MAX];
@@ -142,6 +142,7 @@ namespace OMVIS
             LOGGER_WRITE(std::string("Initialize visualization."), Util::LC_CTR, Util::LL_INFO);
             initializeVisAttributes(_timeManager->getStartTime());
             _timeManager->setVisTime(_timeManager->getStartTime());
+            _timeManager->setRealTimeFactor(0.0);
             _timeManager->setPause(true);
         }
 
