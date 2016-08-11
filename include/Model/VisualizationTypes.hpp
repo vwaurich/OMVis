@@ -13,8 +13,8 @@ namespace OMVIS
     namespace Model
     {
 
-        /*! This enum holds the possible visualization modes of OMVis. */
-        enum VisType
+        /*! This enum class holds the possible visualization modes of OMVis. */
+        enum class VisType
         {
             NONE = 0,
             FMU = 1,
