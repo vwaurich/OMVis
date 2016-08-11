@@ -312,7 +312,13 @@ namespace OMVIS
 			QLabel* _RTFactorDisplay;
             /// Triggers a new frame.
             QTimer _renderTimer;
-            /// Triggers a new scene-update.
+
+            /*! \brief This timer controls the frequency of the scene updates.
+             *
+             * Its timeout() signal is connected to the \ref sceneUpdate method in order to trigger a scene update
+             * at constant time. The default value is 100 ms. It can be changed by the user via the simulation
+             * settings dialog.
+             */
             QTimer _visTimer;
 
             /// The GUIController object will take the users input from GUI and handle it.
