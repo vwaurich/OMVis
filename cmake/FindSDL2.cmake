@@ -34,8 +34,8 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-find_package(PkgConfig QUIET)
-pkg_check_modules(PC_SDL2 QUIET sdl2)
+# find_package(PkgConfig QUIET)
+# pkg_check_modules(PC_SDL2 QUIET sdl2)
 
 find_path(SDL2_INCLUDE_DIR
   NAMES SDL.h
