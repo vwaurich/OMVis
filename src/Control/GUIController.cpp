@@ -245,11 +245,6 @@ namespace OMVIS
             return visTypeIs(Model::VisType::MAT_REMOTE);
         }
 
-        bool GUIController::getVisType() const
-        {
-            return _modelVisualizer->getVisType();
-        }
-
         std::string GUIController::getModelFile() const
         {
             return _modelVisualizer->getModelFile();
@@ -274,6 +269,24 @@ namespace OMVIS
             }
             else
                 return nullptr;
+        }
+
+        void GUIController::handleSimulationSettings(const Model::UserSimSettingsFMU& simSetFMU)
+        {
+            if (visTypeIsFMU())
+            {
+                _modelVisualizer->setSimulationSettings(simSetFMU);
+                initVisualization();
+            }
+            else if (visTypeIsFMURemote())
+                LOGGER_WRITE("Not yet implemented for FMU Remote visualization.", Util::LC_CTR, Util::LL_INFO);
+            else
+                throw std::runtime_error("Wrong function called");
+        }
+
+        void GUIController::handleSimulationSettings(const Model::UserSimSettingsMAT& simSetMAT)
+        {
+
         }
 
     }  // End namespace Control

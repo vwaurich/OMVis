@@ -27,9 +27,10 @@
 #ifndef INCLUDE_GUICONTROLLER_HPP_
 #define INCLUDE_GUICONTROLLER_HPP_
 
-#include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
+#include "Model/VisualizerAbstract.hpp"
 #include "Model/InputData.hpp"
+#include "Model/SimSettings.hpp"
 
 #include <osg/Node>
 
@@ -179,8 +180,6 @@ namespace OMVIS
             bool visTypeIsMAT() const;
             bool visTypeIsMATRemote() const;
 
-            bool getVisType() const;
-
             /*! \brief Returns name of the model. */
             std::string getModelFile() const;
 
@@ -194,6 +193,15 @@ namespace OMVIS
              * \return A pointer to the \ref Model::InputData object.
              */
             std::shared_ptr<Model::InputData> getInputData();
+
+            /*! \brief Handles the simulation settings specified by the user via Simulation Settings dialogs.
+             *
+             * This method reinitializes the simulation in order to apply the settings.
+             *
+             * \param simSetFMU     The simulation settings for a FMU visualization
+             */
+            void handleSimulationSettings(const Model::UserSimSettingsFMU& simSetFMU);
+            void handleSimulationSettings(const Model::UserSimSettingsMAT& simSetFMU);
 
          private:
             /*-----------------------------------------
