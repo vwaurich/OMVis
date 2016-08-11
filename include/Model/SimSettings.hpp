@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INCLUDE_MODEL_SIMSETTINGS_HPP_
-#define INCLUDE_MODEL_SIMSETTINGS_HPP_
+#ifndef INCLUDE_SIMSETTINGS_HPP_
+#define INCLUDE_SIMSETTINGS_HPP_
 
 namespace OMVIS
 {
@@ -57,4 +57,4 @@ namespace OMVIS
     }  // End namespace Model
 }  // End namespace OMVIS
 
-#endif /* INCLUDE_MODEL_SIMSETTINGS_HPP_ */
+#endif /* INCLUDE_SIMSETTINGS_HPP_ */
