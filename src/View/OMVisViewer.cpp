@@ -25,6 +25,7 @@
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerFMU.hpp"
+#include "Model/SimSettings.hpp"
 
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
@@ -312,14 +313,10 @@ namespace OMVIS
             QPushButton* initButton = new QPushButton("Initialize", this);
 
             // Time value of -1.0 indicates, that no model is loaded into OMVis.
-            _timeDisplay->setText(QString("Time ").append(QString::fromStdString("-1.0")));
-            _timeDisplay->setFixedWidth(60);
-            _timeDisplay->setFixedHeight(20);
+            _timeDisplay->setText(QString("Time [s]: ").append(QString::fromStdString("")));
 
             // Time value of -1.0 indicates, that no model is loaded into OMVis.
-            _RTFactorDisplay->setText(QString("RT-Factor ").append(QString::fromStdString("-1.0")));
-            _RTFactorDisplay->setFixedWidth(60);
-            _RTFactorDisplay->setFixedHeight(20);
+            _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::fromStdString("")));
 
             //the button row
             QHBoxLayout* buttonRowLayOut = new QHBoxLayout();
@@ -489,7 +486,6 @@ namespace OMVIS
                 msgBox.exec();
             }
             // If a result file is visualized, we cannot map keys to input variables.
-//X4            else if (_guiController->modelIsMATFile())
             else if (_guiController->visTypeIsMAT())
             {
                 QString information("Input Mapping is not available for mat file visualization.");
@@ -677,7 +673,8 @@ namespace OMVIS
                     SimSettingDialogFMU dialog(this);
                     if (dialog.exec())
                     {
-                        SimSettingsFMU simSetFMU = dialog.getSimSettings();
+                        Model::UserSimSettingsFMU simSetFMU = dialog.getSimSettings();
+                        _guiController->handleSimulationSettings(simSetFMU);
                     }
                 }
                 else if (_guiController->visTypeIsMAT() || _guiController->visTypeIsMATRemote())
@@ -685,7 +682,8 @@ namespace OMVIS
                     SimSettingDialogMAT dialog(this);
                     if (dialog.exec())
                     {
-                        SimSettingsMAT simSetMAT = dialog.getSimSettings();
+                        Model::UserSimSettingsMAT simSetMAT = dialog.getSimSettings();
+                        _guiController->handleSimulationSettings(simSetMAT);
                     }
                 }
             }
@@ -817,8 +815,8 @@ namespace OMVIS
         void OMVisViewer::resetTimingElements()
         {
             _timeSlider->setSliderPosition(0);
-            _timeDisplay->setText(QString("Time ").append(QString::fromStdString("-1.0")));
-            _RTFactorDisplay->setText(QString("RT ").append(QString::fromStdString("-1.0")));
+            _timeDisplay->setText(QString("Time [s]: ").append(QString::fromStdString("")));
+            _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::fromStdString("")));
         }
 
         void OMVisViewer::updateTimingElements()
@@ -831,8 +829,8 @@ namespace OMVIS
         {
             double visTime = _guiController->getVisTime();
             double rtf = _guiController->getRealTimeFactor();
-            _timeDisplay->setText(QString("time ").append(QString::number(visTime)).append(QString(" sec")));
-            _RTFactorDisplay->setText(QString("RT ").append(QString::number(rtf)));
+            _timeDisplay->setText(QString("Time [s]: ").append(QString::number(visTime)).append(QString(" s")));
+            _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::number(rtf)));
         }
 
         void OMVisViewer::updateTimeSliderPosition()
