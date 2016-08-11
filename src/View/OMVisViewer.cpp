@@ -80,7 +80,7 @@ namespace OMVIS
                   _aboutOMVisAct(nullptr),
                   _perspectiveAct(nullptr),
                   _bgcAct(nullptr),
-                  _simSettingscAct(nullptr),
+                  _simSettingsAct(nullptr),
                   _sceneView(new osgViewer::View()),
                   _osgViewerWidget(nullptr),
                   _controlElementWidget(nullptr),
@@ -189,8 +189,8 @@ namespace OMVIS
             QObject::connect(_perspectiveAct, SIGNAL(triggered()), this, SLOT(perspectiveDialog()));
             _bgcAct = new QAction(tr("Background Color..."), this);
             QObject::connect(_bgcAct, SIGNAL(triggered()), this, SLOT(backgroundColorDialog()));
-            _simSettingscAct = new QAction(tr("Simulation Settings..."), this);
-            QObject::connect(_simSettingscAct, SIGNAL(triggered()), this, SLOT(simSettingsDialog()));
+            _simSettingsAct = new QAction(tr("Simulation Settings..."), this);
+            QObject::connect(_simSettingsAct, SIGNAL(triggered()), this, SLOT(simSettingsDialog()));
 
             // Menu caption "Inputs".
             _mapInputAct = new QAction(tr("Map Inputs..."), this);
@@ -219,7 +219,7 @@ namespace OMVIS
             _settingsMenu = new QMenu(tr("Settings"), this);
             _settingsMenu->addAction(_perspectiveAct);
             _settingsMenu->addAction(_bgcAct);
-            _settingsMenu->addAction(_simSettingscAct);
+            _settingsMenu->addAction(_simSettingsAct);
 
             // Menu caption "Inputs".
             _inputMenu = new QMenu(tr("Inputs"), this);
@@ -312,10 +312,7 @@ namespace OMVIS
             QPushButton* pauseButton = new QPushButton("Pause", this);
             QPushButton* initButton = new QPushButton("Initialize", this);
 
-            // Time value of -1.0 indicates, that no model is loaded into OMVis.
             _timeDisplay->setText(QString("Time [s]: ").append(QString::fromStdString("")));
-
-            // Time value of -1.0 indicates, that no model is loaded into OMVis.
             _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::fromStdString("")));
 
             //the button row
@@ -829,7 +826,7 @@ namespace OMVIS
         {
             double visTime = _guiController->getVisTime();
             double rtf = _guiController->getRealTimeFactor();
-            _timeDisplay->setText(QString("Time [s]: ").append(QString::number(visTime)).append(QString(" s")));
+            _timeDisplay->setText(QString("Time [s]: ").append(QString::number(visTime)));
             _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::number(rtf)));
         }
 

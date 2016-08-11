@@ -287,7 +287,7 @@ namespace OMVIS
             QAction* _aboutOMVisAct;
             QAction* _perspectiveAct;
             QAction* _bgcAct;
-			QAction* _simSettingscAct;
+			QAction* _simSettingsAct;
             QAction* _unloadAct;
 
             /*! \brief The view which holds the osg scene.
