@@ -33,8 +33,7 @@
 #include "WrapperFMILib.hpp"
 #include "Model/ShapeObjectAttribute.hpp"
 
-#include "WrapperRapidXML.hpp"
-//#include <rapidxml.hpp>
+#include <rapidxml.hpp>
 
 // NetOff
 #include <ValueContainer.hpp>
