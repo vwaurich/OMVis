@@ -144,8 +144,26 @@ MAT-file.
 
 \subsection remoteVisualization Remote Visualization
 In this case, the computation is done on a server while the visualization and 
-steering of the simulation is handled on the local machine.
+steering of the simulation is handled on the local machine (localhost).
 
 This functionality is under development.
+
+Remarks:
+  - Visual XML file has to present in working directory
+
+\section development Development
+Dear future developer, dear future me,
+
+There are some points of interest that I want to write down in order to release some memory in my
+head:
+
+- While developing OMVis, we used the so called 'const correctnesses', i.e., if a variable is 
+  declared const in a method declaration and definition, it is not altered. If a method is 
+  declared const, it does not alter the internal status of the objects. Vice versa, if a function 
+  or a variable in function declaration is not declared const, than the object or variable will be
+  altered.
+
+- 
+
  
 */

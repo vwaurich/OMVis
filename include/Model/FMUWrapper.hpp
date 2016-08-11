@@ -27,9 +27,8 @@
 #ifndef INCLUDE_FMUSIMULATE_HPP_
 #define INCLUDE_FMUSIMULATE_HPP_
 
+#include <Model/SimSettingsFMU.hpp>
 #include "WrapperFMILib.hpp"
-#include "Model/SimSettings.hpp"
-
 #include <string>
 #include <memory>
 
@@ -93,7 +92,7 @@ namespace OMVIS
             void load(const std::string& modelFile, const std::string& path);
 
             /*! \brief Initializes the FMU with the given simulation settings. */
-            void initialize(const std::shared_ptr<Model::SimSettings> simSettings);
+            void initialize(const std::shared_ptr<Model::SimSettingsFMU> simSettings);
 
             /*-----------------------------------------
              * GETTERS and SETTERS

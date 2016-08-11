@@ -27,10 +27,10 @@
 #ifndef INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 #define INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 
+#include "Model/SimSettingsFMU.hpp"
 #include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
-#include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
@@ -207,7 +207,7 @@ namespace OMVIS
             int _simID;
 
             /*! Simulation settings, e.g., start and end time. */
-            std::shared_ptr<SimSettings> _simSettings;
+            std::shared_ptr<SimSettingsFMU> _simSettings;
 
             /*! Names of all output variables. */
             NetOff::VariableList _outputVars;

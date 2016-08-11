@@ -34,6 +34,7 @@
 #include "Visualize.hpp"
 #include "ShapeObjectAttribute.hpp"
 #include "Model/VisualizationTypes.hpp"
+#include "Model/SimSettings.hpp"
 
 #include <memory>
 
@@ -132,6 +133,8 @@ namespace OMVIS
             std::shared_ptr<OMVisScene> getOMVisScene() const;
 
             std::string getModelFile() const;
+
+            virtual void setSimulationSettings(const UserSimSettingsFMU& simSetFMU) { };
 
             /*-----------------------------------------
              * SIMULATION METHODS

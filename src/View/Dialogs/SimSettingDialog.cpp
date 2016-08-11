@@ -38,7 +38,7 @@ namespace OMVIS
                 : QDialog(parent),
                   _solverBox(new QComboBox()),
                   _simStepSizeLineEdit(new QLineEdit("0.0001")),
-                  _visStepSizeLineEdit(new QLineEdit("10"))
+                  _visStepSizeLineEdit(new QLineEdit("100"))
         {
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -62,13 +62,13 @@ namespace OMVIS
 
             // Step size
             QHBoxLayout* simStepSizeLayout = new QHBoxLayout();
-            QLabel* simStepSizeLabel = new QLabel(tr("Simulation Step Size (h): "));
+            QLabel* simStepSizeLabel = new QLabel(tr("Simulation Step Size: "));
             simStepSizeLayout->addWidget(simStepSizeLabel);
             simStepSizeLayout->addWidget(_simStepSizeLineEdit);
 
             // Visualization step size, aka render frequency
             QHBoxLayout* visStepSizeLayout = new QHBoxLayout();
-            QLabel* visStepSizeLabel = new QLabel(tr("Visualization Step Size (msec): "));
+            QLabel* visStepSizeLabel = new QLabel(tr("Visualization Step Size [ms]: "));
             visStepSizeLayout->addWidget(visStepSizeLabel);
             visStepSizeLayout->addWidget(_visStepSizeLineEdit);
 
@@ -80,13 +80,14 @@ namespace OMVIS
 
         void SimSettingDialogFMU::accept()
         {
-            _simSet.solver = static_cast<Solver>(_solverBox->currentIndex());
-            _simSet.simStepSize = _simStepSizeLineEdit->text().toFloat();
-            _simSet.visStepSize = _visStepSizeLineEdit->text().toFloat();
+            // Shift by one, because 0 equals to Solver::NONE which is not available from the dialog.
+            _simSet.solver = static_cast<Model::Solver>(_solverBox->currentIndex() + 1);
+            _simSet.simStepSize = _simStepSizeLineEdit->text().toDouble();
+            _simSet.visStepSize = _visStepSizeLineEdit->text().toDouble();
             QDialog::accept();
         }
 
-        SimSettingsFMU SimSettingDialogFMU::getSimSettings() const
+        Model::UserSimSettingsFMU SimSettingDialogFMU::getSimSettings() const
         {
             return _simSet;
         }
@@ -137,7 +138,8 @@ namespace OMVIS
             _simSet.speedup = _speedupLineEdit->text().toFloat();
             QDialog::accept();
         }
-        SimSettingsMAT SimSettingDialogMAT::getSimSettings() const
+
+        Model::UserSimSettingsMAT SimSettingDialogMAT::getSimSettings() const
         {
             return _simSet;
         }

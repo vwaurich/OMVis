@@ -21,6 +21,7 @@
 #define INCLUDE_VIEW_DIALOGS_SIMSETTINGDIALOG_HPP_
 
 #include "Model/VisualizationTypes.hpp"
+#include "Model/SimSettings.hpp"
 
 #include <QDialog>
 #include <QLineEdit>
@@ -34,24 +35,7 @@ namespace OMVIS
     namespace View
     {
 
-        // \todo Move to appropriate place
-        enum Solver
-        {
-            forwardEuler = 0
-        };
 
-
-        struct SimSettingsFMU
-        {
-            Solver solver;
-            float simStepSize;
-            float visStepSize;
-        };
-
-        struct SimSettingsMAT
-        {
-            float speedup;
-        };
 
 
         /*! \brief This is a dialog to specify the simulation settings for FMU visualization.
@@ -63,7 +47,7 @@ namespace OMVIS
         Q_OBJECT
          public:
             SimSettingDialogFMU(QWidget* parent = Q_NULLPTR);
-            SimSettingsFMU getSimSettings() const;
+            Model::UserSimSettingsFMU getSimSettings() const;
 
          private slots:
             void accept() Q_DECL_OVERRIDE;
@@ -72,7 +56,7 @@ namespace OMVIS
             QComboBox* _solverBox;
             QLineEdit* _simStepSizeLineEdit;
             QLineEdit* _visStepSizeLineEdit;
-            SimSettingsFMU _simSet;
+            Model::UserSimSettingsFMU _simSet;
         };
 
         /*! \brief This is a dialog to specify the simulation settings for MAT file visualization.
@@ -86,14 +70,14 @@ namespace OMVIS
         Q_OBJECT
          public:
             SimSettingDialogMAT(QWidget* parent = Q_NULLPTR);
-            SimSettingsMAT getSimSettings() const;
+            Model::UserSimSettingsMAT getSimSettings() const;
 
          private slots:
             void accept() Q_DECL_OVERRIDE;
 
          private:
             QLineEdit* _speedupLineEdit;
-            SimSettingsMAT _simSet;
+            Model::UserSimSettingsMAT _simSet;
         };
 
     }  // End namespace View

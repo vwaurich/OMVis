@@ -126,6 +126,9 @@ namespace OMVIS
 
             // GUI will be resized to half of screen.
             resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
+
+            // Default interval to trigger timeout signal for this timer.
+            _visTimer.setInterval(100);
         }
 
         /*-----------------------------------------
@@ -682,6 +685,9 @@ namespace OMVIS
                     {
                         Model::UserSimSettingsFMU simSetFMU = dialog.getSimSettings();
                         _guiController->handleSimulationSettings(simSetFMU);
+
+                        // Set new interval value to call sceneUpdate()
+                        _visTimer.setInterval(simSetFMU.visStepSize);
                     }
                 }
                 else if (_guiController->visTypeIsMAT() || _guiController->visTypeIsMATRemote())

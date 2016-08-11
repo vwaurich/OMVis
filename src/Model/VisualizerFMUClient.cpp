@@ -29,7 +29,7 @@ namespace OMVIS
                 : VisualizerAbstract(cP->modelFile, cP->workingDirectory, VisType::FMU_REMOTE),
                   _noFC(cP->ipAddress, cP->portNumber),
                   _simID(-1),
-                  _simSettings(new SimSettings()),
+                  _simSettings(new SimSettingsFMU()),
                   _outputVars(),
                   _inputData(new InputData()),
                   _joysticks(),

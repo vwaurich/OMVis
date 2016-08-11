@@ -27,9 +27,9 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
+#include <Model/SimSettingsFMU.hpp>
 #include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerAbstract.hpp"
-#include "Model/SimSettings.hpp"
 #include "Model/InputData.hpp"
 #include "Control/JoystickDevice.hpp"
 #include "Control/KeyboardEventHandler.hpp"
@@ -101,6 +101,8 @@ namespace OMVIS
              */
             void initializeVisAttributes(const double time = 0.0) override;
 
+            void setSimulationSettings(const UserSimSettingsFMU& simSetFMU);
+
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
@@ -157,7 +159,7 @@ namespace OMVIS
             /*! The encapsulated FMU data. */
             std::shared_ptr<FMUWrapper> _fmu;
             /*! Simulation settings, e.g., start and end time. */
-            std::shared_ptr<SimSettings> _simSettings;
+            std::shared_ptr<SimSettingsFMU> _simSettings;
 
             std::shared_ptr<InputData> _inputData;
 

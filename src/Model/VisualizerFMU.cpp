@@ -37,7 +37,7 @@ namespace OMVIS
         VisualizerFMU::VisualizerFMU(const std::string& modelFile, const std::string& path)
                 : VisualizerAbstract(modelFile, path, VisType::FMU),
                   _fmu(new FMUWrapper()),
-                  _simSettings(new SimSettings()),
+                  _simSettings(new SimSettingsFMU()),
                   _inputData(new InputData()),
                   _joysticks()
         {
@@ -201,6 +201,19 @@ namespace OMVIS
                 isOk = 1;
             }
             return isOk;
+        }
+
+        void VisualizerFMU::setSimulationSettings(const UserSimSettingsFMU& simSetFMU)
+        {
+            if (simSetFMU.solver == Solver::NONE)
+                throw std::runtime_error("Solver:NONE is not a valid solver.");
+            else
+                _simSettings->setSolver(simSetFMU.solver);
+
+            if (0.0 >= simSetFMU.simStepSize)
+                throw std::runtime_error("Simulation step size of " + std::to_string(simSetFMU.simStepSize) + " is not valid.");
+            else
+                _simSettings->setHdef(simSetFMU.simStepSize);
         }
 
         /*-----------------------------------------
@@ -387,3 +400,4 @@ namespace OMVIS
 
     }  // End namespace Model
 }  // End namespace OMVIS
+

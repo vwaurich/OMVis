@@ -126,7 +126,7 @@ namespace OMVIS
             }
         }
 
-        void FMUWrapper::initialize(const std::shared_ptr<SimSettings> simSettings)
+        void FMUWrapper::initialize(const std::shared_ptr<SimSettingsFMU> simSettings)
         {
             // Initialize data
             _fmuData._hcur = simSettings->getHdef();
