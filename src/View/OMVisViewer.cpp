@@ -190,6 +190,7 @@ namespace OMVIS
             _bgcAct = new QAction(tr("Background Color..."), this);
             QObject::connect(_bgcAct, SIGNAL(triggered()), this, SLOT(backgroundColorDialog()));
             _simSettingsAct = new QAction(tr("Simulation Settings..."), this);
+            _simSettingsAct->setEnabled(false);
             QObject::connect(_simSettingsAct, SIGNAL(triggered()), this, SLOT(simSettingsDialog()));
 
             // Menu caption "Inputs".
@@ -405,6 +406,9 @@ namespace OMVIS
                 QMessageBox::critical(0, QString("Error"), QString(ex.what()));
                 std::cout << ex.what();
             }
+
+            // If a model is loaded, we can enable some buttons
+            _simSettingsAct->setEnabled(true);
         }
 
         //MF: Compute on a server, visualize on localhost
@@ -453,6 +457,9 @@ namespace OMVIS
                 QMessageBox::critical(0, QString("Error OMVis"), QString(ex.what()));
                 std::cout << ex.what();
             }
+
+            // If a model is loaded, we can enable some buttons
+            _simSettingsAct->setEnabled(true);
         }
 
         void OMVisViewer::unloadModel()
@@ -465,6 +472,9 @@ namespace OMVIS
             _visTimer.stop();
             resetTimingElements();
             LOGGER_WRITE(std::string("Model unloaded."), Util::LC_LOADER, Util::LL_INFO);
+
+            // If a model is loaded, we can enable some buttons
+            _simSettingsAct->setEnabled(false);
         }
 
         void OMVisViewer::exportVideo()
