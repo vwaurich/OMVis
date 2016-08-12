@@ -112,17 +112,6 @@ namespace OMVIS
             QLineEdit* speedUp = new QLineEdit("1");
             speedUp->setValidator(new QDoubleValidator(0, 10, 2, this));
 
-            //                int* l = new int();
-            //                int* t = new int();
-            //                int* r = new int();
-            //                int* b = new int();
-            //                //speedUp->getTextMargins(int &l, int &t, int &r, int &b);
-            //                speedUp->getTextMargins(l, t, r, b);
-            //                std::cout << "l= " << *l << std::endl;
-            //                std::cout << "r= " << *l << std::endl;
-            //                std::cout << "t= " << *l << std::endl;
-            //                std::cout << "b= " << *l << std::endl;
-
             QHBoxLayout* speedUpLayout = new QHBoxLayout();
             QLabel* speedUpLabel = new QLabel(tr("Speed Up: "));
             speedUpLayout->addWidget(speedUpLabel);
