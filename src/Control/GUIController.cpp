@@ -46,7 +46,8 @@ namespace OMVIS
          * INITIALIZATION METHODS
          *---------------------------------------*/
 
-        void GUIController::loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd)
+        void GUIController::loadModel(const Initialization::VisualizationConstructionPlan& cP, const int timeSliderStart,
+                                      const int timeSliderEnd)
         {
             LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
 
@@ -67,7 +68,8 @@ namespace OMVIS
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
             // this case. If the model is already loaded, we initialize it again.
-            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
+            if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath()
+                                && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
                                          "The model will be initialized again."),
@@ -78,7 +80,8 @@ namespace OMVIS
                 loadModelHelper(&cP, timeSliderStart, timeSliderEnd);
         }
 
-        void GUIController::loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart, const int timeSliderEnd)
+        void GUIController::loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart,
+                                      const int timeSliderEnd)
         {
             LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
 
@@ -102,7 +105,8 @@ namespace OMVIS
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
             // this case. If the model is already loaded, we initialize it again.
-            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath() && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
+            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath()
+                                && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
                                          "The model will be initialized again."),
@@ -110,10 +114,12 @@ namespace OMVIS
                 initVisualization();
             }
             else
-                loadModelHelper(dynamic_cast<const Initialization::VisualizationConstructionPlan*>(&cP), timeSliderStart, timeSliderEnd);
+                loadModelHelper(dynamic_cast<const Initialization::VisualizationConstructionPlan*>(&cP), timeSliderStart,
+                                timeSliderEnd);
         }
 
-        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart, const int timeSliderEnd)
+        void GUIController::loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart,
+                                            const int timeSliderEnd)
         {
             // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model
             // cannot be loaded.
@@ -192,7 +198,9 @@ namespace OMVIS
 
         void GUIController::setVisTime(const int val)
         {
-            _modelVisualizer->getTimeManager()->setVisTime((_modelVisualizer->getTimeManager()->getEndTime() - _modelVisualizer->getTimeManager()->getStartTime()) * (float) (val / 100.0));
+            _modelVisualizer->getTimeManager()->setVisTime((_modelVisualizer->getTimeManager()->getEndTime()
+                                                            - _modelVisualizer->getTimeManager()->getStartTime())
+                                                            * (float) (val / 100.0));
         }
 
         double GUIController::getVisTime()
@@ -259,12 +267,14 @@ namespace OMVIS
         {
             if (visTypeIsFMU())
             {
-                std::shared_ptr<Model::VisualizerFMU> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
+                std::shared_ptr<Model::VisualizerFMU> omVisFMU =
+                                                     std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
                 return omVisFMU->getInputData();
             }
             else if (visTypeIsFMURemote())
             {
-                std::shared_ptr<Model::VisualizerFMUClient> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMUClient>(_modelVisualizer);
+                std::shared_ptr<Model::VisualizerFMUClient> omVisFMU =
+                                               std::dynamic_pointer_cast<Model::VisualizerFMUClient>(_modelVisualizer);
                 return omVisFMU->getInputData();
             }
             else
