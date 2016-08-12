@@ -124,6 +124,12 @@ namespace OMVIS
             return _hVisual;
         }
 
+        void TimeManager::setHVisual(const double hVis)
+        {
+            _hVisual = hVis;
+        }
+
+
         double TimeManager::getRealTime() const
         {
             return _realTime;

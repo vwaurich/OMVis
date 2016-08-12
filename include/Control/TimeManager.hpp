@@ -116,6 +116,8 @@ namespace OMVIS
 
             /*! \brief Returns the current step size of the simulation. */
             double getHVisual() const;
+            /*! \brief Sets the step size to the given value. */
+            void setHVisual(const double hVis);
 
             /*! \brief Returns real time. */
             double getRealTime() const;
