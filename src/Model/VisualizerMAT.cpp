@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Model/VisualizerMAT.hpp>
+#include "Model/VisualizerMAT.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -220,6 +220,11 @@ namespace OMVIS
             return val;
         }
 
+        void VisualizerMAT::setSimulationSettings(const Model::UserSimSettingsMAT& simSetMAT)
+        {
+            auto newVal = simSetMAT.speedup * _timeManager->getHVisual();
+            _timeManager->setHVisual(newVal);
+        }
 
     }  // End namepsace Model
 }  // End namespace OMVIS

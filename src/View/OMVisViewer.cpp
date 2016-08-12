@@ -696,6 +696,7 @@ namespace OMVIS
                     if (dialog.exec())
                     {
                         Model::UserSimSettingsMAT simSetMAT = dialog.getSimSettings();
+                        // Currently, the user can only specify a speed up and slow down, respectively.
                         _guiController->handleSimulationSettings(simSetMAT);
                     }
                 }

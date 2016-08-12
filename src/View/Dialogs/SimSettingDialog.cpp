@@ -92,6 +92,11 @@ namespace OMVIS
             return _simSet;
         }
 
+
+
+
+
+
         SimSettingDialogMAT::SimSettingDialogMAT(QWidget* parent)
                 : QDialog(parent)
         {
@@ -109,23 +114,44 @@ namespace OMVIS
             setWindowTitle(tr("Simulation Settings"));
 
             // Speed up or slow down of visualization
-            QLineEdit* speedUp = new QLineEdit("1");
-            speedUp->setValidator(new QDoubleValidator(0, 10, 2, this));
+            _speedupLineEdit = new QLineEdit("1.0");
+
+            // MF: Yeah, the validator stuff just do no work for me or I do not understand it right.
+            //     From my point of view, I want to set a restriction to only enter values for which
+            //     1.0 <= val <= 10.0 holds.
+//            QDoubleValidator* valid = new QDoubleValidator(1.0, 10.0, 2, this);
+//            valid->setLocale(QLocale::English);
+//            valid->setBottom(1.0);
+            //valid.setLocale(QLocale::English);
+//            _speedupLineEdit->setValidator(valid);
+//            new QRegExpValidator(QRegExp("[1-9]"));
+            //_speedupLineEdit->setValidator(new QDoubleValidator(1.0, 10.0, 2, this));
 
             QHBoxLayout* speedUpLayout = new QHBoxLayout();
-            QLabel* speedUpLabel = new QLabel(tr("Speed Up: "));
+            QLabel* speedUpLabel = new QLabel(tr("Visualization Speedup: "));
+            QLabel* explanationLabel = new QLabel(tr("A speedup greater than 1.0 means that<br>"
+                                                     "the simulation runs faster and gives a <br>"
+                                                     "rough overview on the model behavior."));
+
             speedUpLayout->addWidget(speedUpLabel);
-            speedUpLayout->addWidget(speedUp);
+            speedUpLayout->addWidget(_speedupLineEdit);
 
             mainLayout->addLayout(speedUpLayout);
-
+            mainLayout->addWidget(explanationLabel);
             mainLayout->addLayout(buttonsLayout);
         }
 
         void SimSettingDialogMAT::accept()
         {
-            _simSet.speedup = _speedupLineEdit->text().toFloat();
-            QDialog::accept();
+                if (_speedupLineEdit->isModified())
+                {
+                    _simSet.speedup = _speedupLineEdit->text().toDouble();
+                    if (1.0 > _simSet.speedup)
+                    {
+                        QMessageBox::warning(0, QString("Information"), QString("A speedup less than 1.0 is not valid."));
+                        _simSet.speedup = 1.0;
+                    }
+                }            QDialog::accept();
         }
 
         Model::UserSimSettingsMAT SimSettingDialogMAT::getSimSettings() const

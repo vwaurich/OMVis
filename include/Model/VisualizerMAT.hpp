@@ -77,6 +77,8 @@ namespace OMVIS
 
             void readMat(const std::string& modelFile, const std::string& path);
 
+            void setSimulationSettings(const Model::UserSimSettingsMAT& simSetMAT);
+
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/

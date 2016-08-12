@@ -18,6 +18,7 @@
  */
 
 #include "Model/VisualizerFMU.hpp"
+#include "Model/VisualizerMAT.hpp"
 #include "Model/VisualizerFMUClient.hpp"
 #include "Control/TimeManager.hpp"
 #include "Initialization/Factory.hpp"
@@ -296,7 +297,15 @@ namespace OMVIS
 
         void GUIController::handleSimulationSettings(const Model::UserSimSettingsMAT& simSetMAT)
         {
-
+            if (visTypeIsMAT())
+            {
+                std::dynamic_pointer_cast<Model::VisualizerMAT>(_modelVisualizer)->setSimulationSettings(simSetMAT);
+                //initVisualization();
+            }
+            else if (visTypeIsMATRemote())
+                LOGGER_WRITE("Not yet implemented for MAT Remote visualization.", Util::LC_CTR, Util::LL_INFO);
+            else
+                throw std::runtime_error("Wrong function called");
         }
 
     }  // End namespace Control
