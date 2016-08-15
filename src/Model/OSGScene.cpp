@@ -64,8 +64,9 @@ namespace OMVIS
 			{
 
 				std::string filename = Util::extractCADFilename(type);
-				LOGGER_WRITE(std::string("Its a STL and the path is ") + _path ,Util::LC_LOADER, Util::LL_INFO);
 				filename = _path + filename;
+
+				LOGGER_WRITE(std::string("Its a STL and the filename is ") + filename ,Util::LC_LOADER, Util::LL_INFO);
 				// \todo What do we do at this point?
 				if (!Util::fileExists(filename))
 				{
