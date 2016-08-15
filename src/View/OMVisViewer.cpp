@@ -169,7 +169,7 @@ namespace OMVIS
         void OMVisViewer::createActions()
         {
             // Menu caption "File".
-            _openAct = new QAction(tr("&Open..."), this);
+            _openAct = new QAction(tr("Open..."), this);
             _openAct->setShortcut(tr("Ctrl+O"));
             QObject::connect(_openAct, SIGNAL(triggered()), this, SLOT(open()));
 
@@ -183,7 +183,7 @@ namespace OMVIS
 
             _exportAct = new QAction(tr("Export Video"), this);
             QObject::connect(_exportAct, SIGNAL(triggered()), this, SLOT(exportVideo()));
-            _exitAct = new QAction(tr("&Quit"), this);
+            _exitAct = new QAction(tr("Quit"), this);
             _exitAct->setShortcut(tr("Ctrl+Q"));
             QObject::connect(_exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
@@ -375,7 +375,8 @@ namespace OMVIS
             {
                 // Get model file name and path from dialog.
                 OpenFileDialog dialog(this);
-                dialog.exec();
+				dialog.getFileNameAndPath();
+                
                 Initialization::VisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
 
                 // Let the GUIController load the model.

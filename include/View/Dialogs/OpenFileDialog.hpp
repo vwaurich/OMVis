@@ -53,9 +53,9 @@ namespace OMVIS
              * SLOTS
              *---------------------------------------*/
 
-         private slots:
+         //private slots:
             /*! \brief Accepts user input and stores it into member variables. */
-            void accept() Q_DECL_OVERRIDE;
+            //void accept() Q_DECL_OVERRIDE;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
@@ -64,6 +64,13 @@ namespace OMVIS
          public:
             /*! \brief Returns the construction plan for the visualization of the chosen model. */
             Initialization::VisualizationConstructionPlan getConstructionPlan() const;
+
+			/*-----------------------------------------
+			* FUNCTIONS
+			*---------------------------------------*/
+
+			/*! \brief Gets the filename and path for the selected file in the opening dialog. */
+			void getFileNameAndPath();
 
          private:
             /*-----------------------------------------

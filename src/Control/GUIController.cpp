@@ -56,7 +56,7 @@ namespace OMVIS
             bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.path);
             if (!xmlExists)
             {
-                std::string msg = "Could not find the visual XML file in the model file directory.";
+                std::string msg = "Could not find the visual XML file "+ Util::getXMLFileName(cP.modelFile, cP.path) +" in the model file directory "+ cP.path;
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }

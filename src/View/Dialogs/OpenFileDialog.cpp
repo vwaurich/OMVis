@@ -49,25 +49,36 @@ namespace OMVIS
         /*-----------------------------------------
          * SLOTS
          *---------------------------------------*/
-
+		/*
         void OpenFileDialog::accept()
         {
             QStringList fileNames;
             QString modelFile;
+
+			//QString fileName = getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
+			//std::cout << "fileName " << fileName.toStdString() << std::endl;
+		
             if (exec())
             {
                 fileNames = selectedFiles();
-                if (fileNames.size() > 0)
-                    modelFile = fileNames.at(0);
+
+
+				if (fileNames.size() > 0) {
+					modelFile = fileNames.at(0);
+				}
+
             }
-            if (modelFile.isEmpty())
-                QMessageBox::warning(0, QString("Information"), QString(" Filename is empty."));
+
+			if (modelFile.isEmpty())
+			{
+				QMessageBox::warning(0, QString("Information"), QString(" Filename is empty."));
+			}
 
             _path = Util::getPath(modelFile.toStdString());           // /home/user/models/
             _modelFile = Util::getFileName(modelFile.toStdString());  // modelX.fmu
             QDialog::accept();
         }
-
+		*/
         /*-----------------------------------------
          * GETTERS AND SETTERS
          *---------------------------------------*/
@@ -76,6 +87,14 @@ namespace OMVIS
         {
             return Initialization::VisualizationConstructionPlan(_modelFile, _path);
         }
+
+		void OpenFileDialog::getFileNameAndPath()
+		{
+			_modelFile = getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)")).toStdString();
+			int pos = _modelFile.find_last_of("/\\");
+			_path = _modelFile.substr(0, pos + 1);
+			_modelFile = _modelFile.substr(pos + 1);
+		}
 
     }  // End namespace View
 }  // End namespace OMVIS
