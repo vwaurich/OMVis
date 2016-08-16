@@ -94,6 +94,10 @@ namespace OMVIS
             getVariableNames(booleanInputs, _data.getNumBoolean(), _data._namesBool);
             getVariableNames(stringInputs, _data.getNumString(), _data._namesString);
 
+			// Initialize attributes for all real inputs
+			_data._attrReal = new Model::AttributesReal[_data.getNumReal()];
+
+			// Get attributes for all real inputs from modeldescription
             for (size_t r = 0; r < _data.getNumReal(); ++r)
             {
                 fmi1_import_real_variable_t* var = fmi1_import_get_variable_as_real(fmi1_import_get_variable(realInputs, r));
