@@ -66,6 +66,8 @@ namespace OMVIS
         {
             SDL_PollEvent(&_inputEvent);
 
+			inputKey key;
+
             if (_inputEvent.type == SDL_JOYAXISMOTION)
             {
                 //Motion on first joystick
@@ -75,16 +77,17 @@ namespace OMVIS
                     if (_inputEvent.jaxis.axis == 0)
                     {
                         _xDir = _inputEvent.jaxis.value;
-                        //Model::setRealInputValueForInputKey(inputKey(_joystickId), _xDir, *inputInfo);
-                        inputInfo->setRealInputValueForInputKey(inputKey(_joystickId), _xDir);
+						key = inputKey(0 + (_joystickId * 2));
+						//std::cout << "set x " << _joystickId << " to " << key << std::endl;
+                        inputInfo->setRealInputValueForInputKey(key, _xDir);
                     }
                     //Y axis motion
                     else if (_inputEvent.jaxis.axis == 1)
                     {
                         _yDir = _inputEvent.jaxis.value;
-                        //Model::setRealInputValueForInputKey(inputKey(_joystickId + 1), _yDir, *inputInfo);
-                        inputInfo->setRealInputValueForInputKey(inputKey(_joystickId), _xDir);
-
+					    key = inputKey(1 + (_joystickId * 2));
+						//std::cout << "set y " << _joystickId << " to "<< key <<std::endl;
+                        inputInfo->setRealInputValueForInputKey(key, _yDir);
                     }
                     else
                     {

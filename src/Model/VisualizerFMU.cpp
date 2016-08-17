@@ -228,9 +228,6 @@ namespace OMVIS
 
         double VisualizerFMU::simulateStep(const double time)
         {
-            //tcur = settings.tstart;
-            //hcur = settings.hdef;
-            //std::cout << "start" << std::endl;
             int zero_crossning_event = 0;
             _fmu->prepareSimulationStep(time);
 
@@ -253,20 +250,15 @@ namespace OMVIS
             for (auto& joystick : _joysticks)
             {
                 joystick->detectContinuousInputEvents(_inputData);
-                _inputData->setInputsInFMU(_fmu->getFMU());
-                //std::cout << "JOY" << i << " XDir " <<_joysticks[i]->getXDir() <<" YDir "<< _joysticks[i]->getYDir() << std::endl;
             }
+			_inputData->setInputsInFMU(_fmu->getFMU());
+            //_inputData->printValues();
 
-            //_inputData.printValues();
-            //X2 MF: On my system, this line is needed in order to get the keyboard input working
-            _inputData->setInputsInFMU(_fmu->getFMU());
-
-            //std::cout << "inputs" << std::endl;
             /* Solve system */
             _fmu->solveSystem();
 
             //print out some values for debugging:
-            //std::cout<<"DO EULER at "<< _fmu->_fmuData._tcur<<std::endl;
+            //std::cout<<"DO EULER at "<< _fmu->getFMUData()->_tcur<<std::endl;
             //fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmul._fmu, "prismatic.s");
             //const fmi1_value_reference_t vr  = fmi1_import_get_variable_vr(var);
             //double value = -1.0;
@@ -283,7 +275,6 @@ namespace OMVIS
             _fmu->completedIntegratorStep(_simSettings->getCallEventUpdate());
 
             //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
-            //X2 MF: On my system, this line is needed in order to get the keyboard inpot working
             _inputData->resetDiscreteInputValues();
             return _fmu->getFMUData()->_tcur;
         }
