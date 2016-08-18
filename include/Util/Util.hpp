@@ -193,7 +193,7 @@ namespace OMVIS
          */
         inline std::string getPath(const std::string& fileIn)
         {
-            std::size_t pos = fileIn.find_last_of("/");
+            std::size_t pos = fileIn.find_last_of("/\\");
             std::string dirPath = fileIn.substr(0, pos + 1);
             return dirPath;
         }
@@ -206,7 +206,7 @@ namespace OMVIS
          */
         inline std::string getFileName(const std::string& fileIn)
         {
-            std::size_t pos = fileIn.find_last_of("/");
+            std::size_t pos = fileIn.find_last_of("/\\");
             std::string modelFileName = fileIn.substr(pos + 1, fileIn.length());
             return modelFileName;
         }

@@ -91,9 +91,12 @@ namespace OMVIS
 		void OpenFileDialog::getFileNameAndPath()
 		{
 			_modelFile = getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)")).toStdString();
-			int pos = _modelFile.find_last_of("/\\");
-			_path = _modelFile.substr(0, pos + 1);
-			_modelFile = _modelFile.substr(pos + 1);
+//			int pos = _modelFile.find_last_of("/\\");
+//			_path = _modelFile.substr(0, pos + 1);
+//			_modelFile = _modelFile.substr(pos + 1);
+
+			_path = Util::getPath(_modelFile);           // /home/user/models/
+			_modelFile = Util::getFileName(_modelFile);  // modelX.fmu
 		}
 
     }  // End namespace View
