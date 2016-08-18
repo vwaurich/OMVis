@@ -92,11 +92,6 @@ namespace OMVIS
             return _simSet;
         }
 
-
-
-
-
-
         SimSettingDialogMAT::SimSettingDialogMAT(QWidget* parent)
                 : QDialog(parent)
         {
