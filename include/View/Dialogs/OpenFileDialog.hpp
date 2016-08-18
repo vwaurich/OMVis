@@ -65,13 +65,6 @@ namespace OMVIS
             /*! \brief Returns the construction plan for the visualization of the chosen model. */
             Initialization::VisualizationConstructionPlan getConstructionPlan() const;
 
-			/*-----------------------------------------
-			* FUNCTIONS
-			*---------------------------------------*/
-
-			/*! \brief Gets the filename and path for the selected file in the opening dialog. */
-			void getFileNameAndPath();
-
          private:
             /*-----------------------------------------
              * MEMBERS

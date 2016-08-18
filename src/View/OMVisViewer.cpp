@@ -379,7 +379,6 @@ namespace OMVIS
             {
                 // Get model file name and path from dialog.
                 OpenFileDialog dialog(this);
-//				dialog.getFileNameAndPath();
                 dialog.exec();
                 
                 Initialization::VisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
