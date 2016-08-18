@@ -138,15 +138,16 @@ namespace OMVIS
 
         void SimSettingDialogMAT::accept()
         {
-                if (_speedupLineEdit->isModified())
+            if (_speedupLineEdit->isModified())
+            {
+                _simSet.speedup = _speedupLineEdit->text().toDouble();
+                if (1.0 > _simSet.speedup)
                 {
-                    _simSet.speedup = _speedupLineEdit->text().toDouble();
-                    if (1.0 > _simSet.speedup)
-                    {
-                        QMessageBox::warning(0, QString("Information"), QString("A speedup less than 1.0 is not valid."));
-                        _simSet.speedup = 1.0;
-                    }
-                }            QDialog::accept();
+                    QMessageBox::warning(0, QString("Information"), QString("A speedup less than 1.0 is not valid."));
+                    _simSet.speedup = 1.0;
+                }
+            }
+            QDialog::accept();
         }
 
         Model::UserSimSettingsMAT SimSettingDialogMAT::getSimSettings() const
