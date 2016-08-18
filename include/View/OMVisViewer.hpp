@@ -268,7 +268,7 @@ namespace OMVIS
             /*! \brief Shows information about OMVis. */
             void aboutOMVis();
 
-
+            void help();
 
          private:
             // --- Menus ---
@@ -285,6 +285,7 @@ namespace OMVIS
             QAction* _mapInputAct;
             QAction* _dontCareAct;
             QAction* _aboutOMVisAct;
+            QAction* _helpAct;
             QAction* _perspectiveAct;
             QAction* _bgcAct;
 			QAction* _simSettingsAct;

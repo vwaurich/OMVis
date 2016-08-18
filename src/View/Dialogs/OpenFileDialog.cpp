@@ -49,7 +49,7 @@ namespace OMVIS
         /*-----------------------------------------
          * SLOTS
          *---------------------------------------*/
-		/*
+
         void OpenFileDialog::accept()
         {
             QStringList fileNames;
@@ -58,8 +58,8 @@ namespace OMVIS
 			//QString fileName = getOpenFileName(this, tr("Choose a Scene Description File"), QString(), tr("Visualization FMU(*.fmu);; Visualization MAT(*.mat)"));
 			//std::cout << "fileName " << fileName.toStdString() << std::endl;
 		
-            if (exec())
-            {
+//            if (exec())
+//            {
                 fileNames = selectedFiles();
 
 
@@ -67,7 +67,7 @@ namespace OMVIS
 					modelFile = fileNames.at(0);
 				}
 
-            }
+//            }
 
 			if (modelFile.isEmpty())
 			{
@@ -78,7 +78,7 @@ namespace OMVIS
             _modelFile = Util::getFileName(modelFile.toStdString());  // modelX.fmu
             QDialog::accept();
         }
-		*/
+
         /*-----------------------------------------
          * GETTERS AND SETTERS
          *---------------------------------------*/

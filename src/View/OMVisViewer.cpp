@@ -78,6 +78,7 @@ namespace OMVIS
                   _mapInputAct(nullptr),
                   _dontCareAct(nullptr),
                   _aboutOMVisAct(nullptr),
+                  _helpAct(nullptr),
                   _perspectiveAct(nullptr),
                   _bgcAct(nullptr),
                   _simSettingsAct(nullptr),
@@ -205,6 +206,8 @@ namespace OMVIS
             // Menu caption "Help".
             _aboutOMVisAct = new QAction(tr("About OMVis..."), this);
             QObject::connect(_aboutOMVisAct, SIGNAL(triggered()), this, SLOT(aboutOMVis()));
+            _helpAct = new QAction(tr("Help..."), this);
+            QObject::connect(_helpAct, SIGNAL(triggered()), this, SLOT(help()));
         }
 
         void OMVisViewer::createMenuBar()
@@ -233,6 +236,7 @@ namespace OMVIS
             // Menu caption "Help".
             _helpMenu = new QMenu(tr("&Help"), this);
             _helpMenu->addAction(_aboutOMVisAct);
+            _helpMenu->addAction(_helpAct);
 
             // Add the menus to the menubar.
             menuBar()->addMenu(_fileMenu);
@@ -375,7 +379,8 @@ namespace OMVIS
             {
                 // Get model file name and path from dialog.
                 OpenFileDialog dialog(this);
-				dialog.getFileNameAndPath();
+//				dialog.getFileNameAndPath();
+                dialog.exec();
                 
                 Initialization::VisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
 
@@ -811,18 +816,30 @@ namespace OMVIS
             int ret = msgBox.exec();
         }
 
-//void OMVisViewer::help()
-//{
-//    QString information("<p><b>Usefull Keyboard Bindings:</b>"
-//                        "Space bar: Reset the view to home position."
-//                        "<p><b>Usefull Mouse Bindings:</b>"
-//                        "Trackball -: Zoom out"
-//                        "Trackball +: Zoom in");
-//
-//    QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information);
-//    msgBox.setStandardButtons(QMessageBox::Close);
-//    msgBox.exec();
-//}
+        void OMVisViewer::help()
+        {
+            QString information("<p><b>Usefull Keyboard Bindings:</b>"
+                                "<ul>"
+                                "<li> Space bar: Reset the view to home position. </li>"
+                                "</ul>"
+                                "<p><b>Usefull Mouse Bindings:</b>"
+                                "<ul>"
+                                "<li> Drag and stir: Rotate the model </li>"
+                                "<li> Trackball +: Zoom in </li>"
+                                "<li> Trackball +: Zoom in </li>"
+                                "</ul>"
+                                "<p><b>Steering of FMUs with inputs:</b>"
+                                "<ol>"
+                                "<li> Press Start button </li>"
+                                "<li> Left click the scene view (model) </li>"
+                                "<li> Press buttons and move joystick device, respectively to steer the model </li>"
+                                "</ol>"
+                                );
+            QMessageBox msgBox(QMessageBox::Information, tr("Help"), information);
+            msgBox.setStandardButtons(QMessageBox::Close);
+            msgBox.exec();
+        }
+
         /*-----------------------------------------
          * OTHER FUNCTIONS
          *---------------------------------------*/

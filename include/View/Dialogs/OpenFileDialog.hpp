@@ -53,9 +53,9 @@ namespace OMVIS
              * SLOTS
              *---------------------------------------*/
 
-         //private slots:
+         private slots:
             /*! \brief Accepts user input and stores it into member variables. */
-            //void accept() Q_DECL_OVERRIDE;
+            void accept() Q_DECL_OVERRIDE;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
