@@ -153,6 +153,7 @@ namespace OMVIS
                     updateObjectAttributeMAT(&shape._color[2], time, tmpReaderPtr);
 
                     updateObjectAttributeMAT(&shape._specCoeff, time, tmpReaderPtr);
+					updateObjectAttributeMAT(&shape._extra, time, tmpReaderPtr);
 
                     rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
                                         osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
@@ -167,7 +168,7 @@ namespace OMVIS
 
                     // Update the shapes.
                     _nodeUpdater->_shape = shape;
-                    ///shape.dumpVisAttributes();
+                    //shape.dumpVisAttributes();
 
                     // Get the scene graph nodes and stuff.
                     child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
@@ -202,7 +203,7 @@ namespace OMVIS
 
         void VisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
         {
-            if (!attr->isConst)
+			if (!attr->isConst)
                 attr->exp = omcGetVarValue(reader, attr->cref.c_str(), time);
         }
 

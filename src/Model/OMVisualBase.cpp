@@ -170,6 +170,9 @@ namespace OMVIS
 
 					expNode = shapeNode->first_node((const char*) "specCoeff")->first_node();
 					shape._specCoeff = Util::getObjectAttributeForNode(expNode);
+					expNode = shapeNode->first_node((const char*) "extra")->first_node();
+					shape._extra = Util::getObjectAttributeForNode(expNode);
+
 
 					_shapes.push_back(shape);
 				}

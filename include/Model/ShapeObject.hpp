@@ -83,6 +83,8 @@ namespace OMVIS
 
             /*! 4x4 */
             osg::Matrix _mat;
+
+			ShapeObjectAttribute _extra;
         };
 
     } // End namespace Model;

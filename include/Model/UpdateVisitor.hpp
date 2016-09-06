@@ -32,6 +32,7 @@
 #include <osg/NodeVisitor>
 #include <osg/Geode>
 #include <osg/MatrixTransform>
+#include "View/AdditionalShapes.hpp"
 
 namespace OMVIS
 {

@@ -24,6 +24,8 @@
 
 #include <osgDB/ReadFile>
 #include <osg/Material>
+#include <osg/LineWidth>
+#include <osg/Point>
 
 namespace OMVIS
 {
@@ -69,8 +71,18 @@ namespace OMVIS
                 //osg::ref_ptr<osg::ShapeDrawable> shapeDraw = dynamic_cast<osg::ShapeDrawable*>(draw.get());
                 //shapeDraw->setColor(osg::Vec4(visAttr.color,1.0));
 
-                if (_shape._type == "pipecylinder")
-                    draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _shape._width.exp / 2.0, _shape._length.exp));
+				if (_shape._type == "pipe") {
+					node.removeDrawable(draw);
+					draw = (new Pipecylinder((_shape._width.exp * _shape._extra.exp) / 2, (_shape._width.exp) / 2, _shape._length.exp))->asDrawable();
+				}
+				else if (_shape._type == "pipecylinder") {
+					node.removeDrawable(draw);
+					draw = (new Pipecylinder((_shape._width.exp * _shape._extra.exp) / 2, (_shape._width.exp) / 2, _shape._length.exp))->asDrawable();
+				}
+				else if (_shape._type == "spring") {
+					node.removeDrawable(draw);
+					draw = (new Spring(_shape._width.exp, _shape._height.exp, _shape._extra.exp, _shape._length.exp))->asDrawable();
+				}
                 else if (_shape._type == "cylinder")
                     draw->setShape(new osg::Cylinder(osg::Vec3f(0.0, 0.0, 0.0), _shape._width.exp / 2.0, _shape._length.exp));
                 else if (_shape._type == "box")
@@ -92,7 +104,13 @@ namespace OMVIS
             osg::ref_ptr<osg::Material> material = new osg::Material;
             material->setDiffuse(osg::Material::FRONT, osg::Vec4f(_shape._color[0].exp / 255, _shape._color[1].exp / 255, _shape._color[2].exp / 255, 1.0));
             ss->setAttribute(material);
+			
+			osg::LineWidth* linewidth = new osg::LineWidth();
+			linewidth->setWidth(50.0f);
+			ss->setAttribute(new osg::Point(5.0f));
+
             node.setStateSet(ss);
+			//node.getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
             traverse(node);
         }
 

@@ -181,6 +181,18 @@ namespace OMVIS
                 res._r = r;
                 //r_offset = dirs.lDir*length/2.0;
             }
+			else if (type == "pipecylinder")
+			{
+				res._r = V3mulMat3(r_shape, T);
+				res._r = res._r + r;
+				res._T = Mat3mulMat3(T0, T);
+			}
+			else if (type == "spring")
+			{
+				res._r = V3mulMat3(r_shape, T);
+				res._r = res._r + r;
+				res._T = Mat3mulMat3(T0, T);
+			}
             else
             {
                 r_offset = dirs._lDir * length / 2.0;
