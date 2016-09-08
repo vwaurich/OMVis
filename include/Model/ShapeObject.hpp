@@ -87,7 +87,7 @@ namespace OMVIS
 			ShapeObjectAttribute _extra;
         };
 
-    } // End namespace Model;
-} // End namespace OMVIS;
+    } // End namespace Model
+} // End namespace OMVIS
 
 #endif /* INCLUDE_SHAPEOBJECT_HPP_ */
