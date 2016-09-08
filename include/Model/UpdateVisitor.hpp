@@ -28,18 +28,18 @@
 #define INCLUDE_UPDATEVISITOR_HPP_
 
 #include "Model/ShapeObject.hpp"
+#include "Model/AdditionalShapes.hpp"
 
 #include <osg/NodeVisitor>
 #include <osg/Geode>
 #include <osg/MatrixTransform>
-#include "View/AdditionalShapes.hpp"
 
 namespace OMVIS
 {
     namespace Model
     {
 
-        /*! \brief  Upatevisitor to update the osg tree.
+        /*! \brief  Updatevisitor to update the osg tree.
          */
         class UpdateVisitor : public osg::NodeVisitor
         {
