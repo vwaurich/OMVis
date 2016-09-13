@@ -1,8 +1,8 @@
-/**\mainpage OMVis - An open source tool for model and simulation visualization.
+# OMVis - An open source tool for model and simulation visualization.
 
-\tableofcontents
 
-\section what_sec What is OMVis?
+
+## What is OMVis?
 OMVis is a tool to visualize and animate simulation models. It is meant to visualize models 
 from different simulation tools. What shall be visualized is described in a XML-file and the 
 result files provide the corresponding data. Besides the animation of result files, there is 
@@ -15,9 +15,9 @@ OMVis is open-source and released under GNU GENERAL PUBLIC LICENSE (v3.0). See t
 which is comes with OMVis or visit http://www.gnu.org/licenses/gpl.html for further information.
 
 
-\section install_sec Installation
+## Installation
 
-\subsection dependencies Software Dependencies
+### Software Dependencies
 OMVis, like most other software projects, builds up on a variety of software packages. In the 
 following we give a list of all necessary dependencies and the version number, which is required.
 
@@ -75,7 +75,7 @@ following we give a list of all necessary dependencies and the version number, w
 
 
 
-\subsection configure Configure and Build
+### Configure and Build
 \code
 ~> mkdir build
 ~> cd build
@@ -83,7 +83,7 @@ following we give a list of all necessary dependencies and the version number, w
 ~> make OMVis
 \endcode
 
-\subsubsection environment Environment Settings / Configure Options
+### Environment Settings / Configure Options
 It might be neccessary to provide one or all of the following environment settings to the CMake 
 makefile of OMVis:
 
@@ -91,10 +91,10 @@ As usual, the C/C++ compiler and the compiler flags can be controlled via the en
 CC=<cc>, CXX=<cxx>, CFLAGS=<> and CXXFLAGS=<cxxflags>.
 
 More to come.
-    
-    
-\subsection msvc2015 Configure and Build using MSVC2015
- 
+
+
+### Configure and Build using MSVC2015
+
 -compile OSG and SDL2 from source using the same Compiler(msvc2015)
 
 -added to additional dependencies:
@@ -107,7 +107,7 @@ fmilib_shared.lib
 SDL2main.lib
 
 
-\subsection eclipse Develop OMVis using Eclipse (Linux)
+### Develop OMVis using Eclipse (Linux)
 
 1. Create Eclipse project from cmake:
 -------------------------------------
@@ -129,9 +129,9 @@ It might be necessary to add these paths to C as well as to C++. After that, you
 click on project -> Index -> Rebuild.
 
 
-\section Usage
+## Usage
 
-\subsection Visualization
+### Visualization
 It is quite easy to use OMVIS to visualize a simulation present in a FMU or 
 MAT-file.
 
@@ -142,7 +142,7 @@ MAT-file.
 5. Step: Visualize the simulation by pressing "Start".  
 
 
-\subsection remoteVisualization Remote Visualization
+### Remote Visualization
 In this case, the computation is done on a server while the visualization and 
 steering of the simulation is handled on the local machine (localhost).
 
@@ -151,7 +151,7 @@ This functionality is under development.
 Remarks:
   - Visual XML file has to present in working directory
 
-\section development Development
+## Development
 Dear future developer, dear future me,
 
 There are some points of interest that I want to write down in order to release some memory in my
@@ -162,8 +162,3 @@ head:
   declared const, it does not alter the internal status of the objects. Vice versa, if a function 
   or a variable in function declaration is not declared const, than the object or variable will be
   altered.
-
-- 
-
- 
-*/
