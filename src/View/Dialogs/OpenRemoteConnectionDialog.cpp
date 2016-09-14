@@ -47,12 +47,13 @@ namespace OMVIS
                   _ipAddressLineEdit(new QLineEdit()),
                   _portNumberLineEdit(new QLineEdit()),
                   _modelFileLineEdit(new QLineEdit()),
+                  _pathLineEdit(new QLineEdit()),
                   _workingDirectoryLineEdit(new QLineEdit()),
                   _ipAddress(),
                   _portNumber(-1),
-                  _workingDirectory(),
                   _modelFile(),
-                  _path()
+                  _path(),
+                  _workingDirectory()
         {
             setWindowTitle(tr("Open Remote Connection"));
 
@@ -70,16 +71,23 @@ namespace OMVIS
             _portNumberLineEdit->setFixedWidth(320);
             portLabel->setBuddy(_portNumberLineEdit.get());
 
-            // Local Working Directory
-            QLabel* modelFileLabel = new QLabel(tr("&Location of the model file on server:"));
-            _modelFileLineEdit->setPlaceholderText("/scratch/p_hpcom/remoteVisualization/cranes_crane_input5.fmu"); //("/PATH/TO/MODEL.fmu");
+            // Model file
+            QLabel* modelFileLabel = new QLabel(tr("&Model file:"));
+            _modelFileLineEdit->setPlaceholderText("cranes_crane_input5.fmu");
             _modelFileLineEdit->setMaximumWidth(400);
             _modelFileLineEdit->setFixedWidth(320);
             modelFileLabel->setBuddy(_modelFileLineEdit.get());
 
+            // Path
+            QLabel* pathLabel = new QLabel(tr("&Location of the model file on server:"));
+            _pathLineEdit->setPlaceholderText("/scratch/p_hpcom/remoteVisualization/");  //("/PATH/TO/MODEL.fmu");
+            _pathLineEdit->setMaximumWidth(400);
+            _pathLineEdit->setFixedWidth(320);
+            pathLabel->setBuddy(_pathLineEdit.get());
+
             // Local Working Directory
             QLabel* wDirLabel = new QLabel(tr("&Local working directory:"));
-            _workingDirectoryLineEdit->setPlaceholderText("./rVis/"); //("./");
+            _workingDirectoryLineEdit->setPlaceholderText("./rVis/");  //("./");
             _workingDirectoryLineEdit->setMaximumWidth(400);
             _workingDirectoryLineEdit->setFixedWidth(320);
             wDirLabel->setBuddy(_workingDirectoryLineEdit.get());
@@ -91,6 +99,8 @@ namespace OMVIS
             perspectiveLayout->addWidget(_portNumberLineEdit.get());
             perspectiveLayout->addWidget(modelFileLabel);
             perspectiveLayout->addWidget(_modelFileLineEdit.get());
+            perspectiveLayout->addWidget(pathLabel);
+            perspectiveLayout->addWidget(_pathLineEdit.get());
             perspectiveLayout->addWidget(wDirLabel);
             perspectiveLayout->addWidget(_workingDirectoryLineEdit.get());
 
@@ -113,40 +123,55 @@ namespace OMVIS
 
         void OpenRemoteConnectionDialog::accept()
         {
-//X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
             /// Todo: Get cP.path from modelFileLineEdit
-//X123            if (_ipAddressLineEdit->isModified())
-//X123            {
-//X123                if (Util::isValidIPv4(_ipAddressLineEdit->text().toStdString()) || Util::isValidIPv6(_ipAddressLineEdit->text().toStdString()))
-//                    _cP.ipAddress = _ipAddressLineEdit->text().toStdString();
-//                else
-//                    QMessageBox::warning(0, QString("Information"), QString("Invalid IP Address!"));
-//            }
-//            if (_portNumberLineEdit->isModified())
-//                _cP.portNumber = _portNumberLineEdit->text().toInt();
-//            else
-//                QMessageBox::warning(0, QString("Information"), QString("Specify a port! (e.g., 4444)"));
-//            /// \todo Todo: Use default port number which is set in the constructor of this class.
-//
-//            if (_workingDirectoryLineEdit->isModified())
-//                _cP.workingDirectory = _workingDirectoryLineEdit->text().toStdString();
-//            else
-//                QMessageBox::warning(0, QString("Information"), QString("Specify a Working Directory!"));
-//
-//            if (_modelFileLineEdit->isModified())
-//            {
-//              _cP.modelFile = _modelFileLineEdit->text().toStdString();
-//              _cP.isFMU = Util::isFMU(_cP.modelFile());
-//            }
-//            else
-//X123                QMessageBox::warning(0, QString("Information"), QString("Specify a model file!"));
+            if (_ipAddressLineEdit->isModified())
+            {
+                if (Util::isValidIPv4(_ipAddressLineEdit->text().toStdString()) || Util::isValidIPv6(_ipAddressLineEdit->text().toStdString()))
+                    _ipAddress = _ipAddressLineEdit->text().toStdString();
+            }
+            else
+            {
+                //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+                _ipAddress = "127.0.0.1";  // 141.30.73.103";
+                // QMessageBox::warning(0, QString("Information"), QString("Invalid IP Address!"));
+            }
 
-            //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
-            _ipAddress = "127.0.0.1"; // 141.30.73.103";
-            _portNumber = 4444;
-            _workingDirectory = "./rVis/";
-            _modelFile = "BouncingBall.fmu";    //cranes_crane_input5.fmu";
-            _path = "/home/mf/opt/HPCOM/parallel_fmu_eclipse/test/data/"; //"/scratch/p_hpcom/remoteVisualization/";
+            /// \todo Todo: Use default port number which is set in the constructor of this class.
+            if (_portNumberLineEdit->isModified())
+                _portNumber = _portNumberLineEdit->text().toInt();
+            else
+            {
+                //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+                _portNumber = 4444;
+                // QMessageBox::warning(0, QString("Information"), QString("Specify a port! (e.g., 4444)"));
+            }
+
+            if (_workingDirectoryLineEdit->isModified())
+                _workingDirectory = _workingDirectoryLineEdit->text().toStdString();
+            else
+            {
+                //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+                _workingDirectory = "./rVis/";
+                // QMessageBox::warning(0, QString("Information"), QString("Specify a Working Directory!"));
+            }
+
+            if (_modelFileLineEdit->isModified())
+                _modelFile = _modelFileLineEdit->text().toStdString();
+            else
+            {
+                //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+                _modelFile = "BouncingBall.fmu";    //cranes_crane_input5.fmu";
+                // QMessageBox::warning(0, QString("Information"), QString("Specify a model file!"));
+            }
+
+            if (_pathLineEdit->isModified())
+                _path = _pathLineEdit->text().toStdString();
+            else
+            {
+                //X123 MF: Abkuerzung fuer den Entwickler: Nutze Defaultwerte.
+                _path = "/home/mf/opt/HPCOM/parallel_fmu_eclipse/test/data/";  //"/scratch/p_hpcom/remoteVisualization/";
+                // QMessageBox::warning(0, QString("Information"), QString("Specify the path where to find the model file!"));
+            }
 
             QDialog::accept();
         }

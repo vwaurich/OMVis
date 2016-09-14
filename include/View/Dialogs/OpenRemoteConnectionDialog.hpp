@@ -27,7 +27,6 @@
 
 #include <memory>
 
-
 namespace OMVIS
 {
     namespace View
@@ -84,13 +83,14 @@ namespace OMVIS
             std::unique_ptr<QLineEdit> _ipAddressLineEdit;
             std::unique_ptr<QLineEdit> _portNumberLineEdit;
             std::unique_ptr<QLineEdit> _modelFileLineEdit;
+            std::unique_ptr<QLineEdit> _pathLineEdit;
             std::unique_ptr<QLineEdit> _workingDirectoryLineEdit;
 
             std::string _ipAddress;
             int _portNumber;
-            std::string _workingDirectory;
             std::string _modelFile;
             std::string _path;
+            std::string _workingDirectory;
         };
 
     }  // End namespace View
