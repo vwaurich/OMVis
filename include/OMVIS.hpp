@@ -43,7 +43,7 @@
 #include "Model/UpdateVisitor.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
-#include "Util/CommandLineArgs.hpp"
+#include "Initialization/CommandLineArgs.hpp"
 
 #include <QApplication>
 

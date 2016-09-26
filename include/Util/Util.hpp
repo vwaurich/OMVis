@@ -104,7 +104,7 @@ namespace OMVIS
             return b ? "true" : "false";
         }
 
-        /*! \brief Returns absolute path to the given path.
+        /*! \brief Returns absolute path for the given path.
          *
          * \remark: It seems to be no other platform independent way than boost::filesystem.
          *          With the use of some ifdefs to encapsulate the platform dependent functions,

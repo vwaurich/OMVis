@@ -242,7 +242,7 @@ QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenRemoteConnectionDialog
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenFileDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/SimSettingDialog.hpp)
 
-FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/Factory.cpp" "src/Util/Logger.cpp" 
+FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/*.cpp" "src/Util/Logger.cpp" 
                              "src/Visualize.cpp" "src/Expression.cpp" "src/Util/Algebra.cpp")
 
 ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")

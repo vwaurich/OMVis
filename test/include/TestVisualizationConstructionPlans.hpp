@@ -126,9 +126,9 @@ TEST (TestVisualizationConstructionPlans, ConstructRemoteVisualizationConstructi
                                                                   4444, "/tmp");
     EXPECT_EQ(OMVIS::Model::VisType::FMU_REMOTE, cP.visType);
     EXPECT_EQ("BouncingBall.fmu", cP.modelFile);
-    EXPECT_EQ("/tmp", cP.workingDirectory);
-    EXPECT_EQ(4444, cP.portNumber);
-    EXPECT_EQ("141.30.73.103", cP.ipAddress);
+    EXPECT_EQ("/tmp", cP.wDir);
+    EXPECT_EQ(4444, cP.port);
+    EXPECT_EQ("141.30.73.103", cP.hostAddress);
 }
 
 #endif /* TEST_INCLUDE_TESTVISUALIZATIONCONSTRUCTIONPLANS_HPP_ */

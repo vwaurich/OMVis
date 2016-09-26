@@ -42,9 +42,10 @@
  *
  */
 
+#include "OMVIS.hpp"
+
 #include <stdexcept>
 #include <iostream>
-#include "OMVIS.hpp"
 #include <clocale>
 
 int main(int argc, char* argv[])
@@ -55,16 +56,17 @@ int main(int argc, char* argv[])
     try
     {
         // Parse command line arguments for logger specific settings.
-        OMVIS::Util::CommandLineArgs clArgs = OMVIS::Util::getCommandLineArguments(argc, argv);
+        OMVIS::Initialization::CommandLineArgs clArgs = OMVIS::Initialization::getCommandLineArguments(argc, argv);
 
         // Initialize logger with logger settings from command line.
-        OMVIS::Util::Logger::initialize(clArgs._logSettings);
+        clArgs.print();
+        OMVIS::Util::Logger::initialize(clArgs.logSet);
         OMVIS::Util::Logger logger = OMVIS::Util::Logger::getInstance();
 
         LOGGER_WRITE(std::string("Okay, let's create the main widget..."), OMVIS::Util::LC_OTHER, OMVIS::Util::LL_INFO);
         QApplication app(argc, argv);
 
-        OMVIS::View::OMVisViewer omvisViewer;
+        OMVIS::View::OMVisViewer omvisViewer(clArgs);
         omvisViewer.show();
 
         app.exec();

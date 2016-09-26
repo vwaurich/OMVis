@@ -27,7 +27,8 @@
 #ifndef INCLUDE_OMVISVIEWER_HPP_
 #define INCLUDE_OMVISVIEWER_HPP_
 
-#include <Model/VisualizerAbstract.hpp>
+#include "Initialization/CommandLineArgs.hpp"
+#include "Model/VisualizerAbstract.hpp"
 #include "Control/TimeManager.hpp"
 #include "View/ViewSettings.hpp"
 
@@ -87,7 +88,10 @@ namespace OMVIS
              * \param flags             Window flags for initialization of QWidget Baseclass.
              * \param threadingModel    The threading model.
              */
-            OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
+//            OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded);
+            OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded,
+                        const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
+            OMVisViewer(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             /*-----------------------------------------
              * INITIALIZATION FUNCTIONS
@@ -216,10 +220,10 @@ namespace OMVIS
              *
              * @param visFMU
              */
-            void open();
+            void open(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             /*! \brief Open remote connection. */
-            void openRemoteConnection();
+            void openRemoteConnection(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             void unloadModel();
 

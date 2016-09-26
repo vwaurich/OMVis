@@ -54,15 +54,11 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            /*! \brief The default constructor for VisualizationConstructionPlan is forbidden.
+            /*! \brief Default constructor.
              *
-             * The rationale is: If we provide a default constructor, than we need to provide setter methods for the
-             * members and a valid method, that needs to be called from the user code in order to check for validity of
-             * a construction plan. This sounds error prone. Thus, we just provide the constructor with parameters,
-             * which throws, if the parameters are not valid, to construct a fully specified and valid object of this
-             * class.
+             * Initializes the members with default values.
              */
-            VisualizationConstructionPlan() = delete;
+            VisualizationConstructionPlan();
 
             /*! \brief Constructor from arguments.
              *
@@ -73,24 +69,7 @@ namespace OMVIS
              * \param modelFileIn   Name of the model file with prefix, e.g., ModelX.fmu
              * \param pathIn        Path to the model file.
              */
-            VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn)
-                    : visType(Model::VisType::NONE),
-                      modelFile(modelFileIn),
-                      path(pathIn)
-            {
-                if (modelFileIn.empty())
-                    throw std::invalid_argument("No model file specified.");
-                if (pathIn.empty())
-                    throw std::invalid_argument("No path specified.");
-
-                // Get visualization type.
-                if (Util::isFMU(modelFile))
-                    visType = Model::VisType::FMU;
-                else if (Util::isMAT(modelFile))
-                    visType = Model::VisType::MAT;
-                else
-                    throw std::invalid_argument("VisualizationType is NONE.");
-            }
+            VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn);
 
             virtual ~VisualizationConstructionPlan() = default;
 
@@ -127,47 +106,29 @@ namespace OMVIS
              * Constructors
              *---------------------------------------*/
 
-            /*!
-             * The default constructor is deleted for the very same reason as the default constructor for
-             * \ref VisualizationConstructionPlan is deleted.
+            /*! \brief Default constructor.
+             *
+             * Initializes the members with default values.
              */
-            RemoteVisualizationConstructionPlan() = delete;
+            RemoteVisualizationConstructionPlan();
 
             /*! \brief Constructor from arguments.
              *
              * This constructors throws std::invalid_argument exceptions, if the object can not be constructed. This
              * arises, if
              *      - the model file name or the path is empty
-             *      - the model tpe (FMU or MAT) cannot determined
-             *      - the IP address is not valid.
+             *      - the model type (FMU or MAT) cannot determined
+             *      - the host address is not valid.
              *
-             * \param modelFileIn   Name of the model file with prefix, e.g., ModelX.fmu
-             * \param pathIn        Path to the model file.
-             * \param ipAddressIn   IP address of the remote server.
-             * \param portNumberIn  The port number to use for the connection to the remote server.
-             * \param workingDirIn  Local working directory for the remote visualization.
+             * \param modelFile     Name of the model file with prefix, e.g., ModelX.fmu
+             * \param path          Path to the model file.
+             * \param hostAddress   Host address of the remote server.
+             * \param port          The port to use for the connection to the remote server.
+             * \param workingDir    Local working directory for the remote visualization.
              */
-            RemoteVisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn,
-                                                const std::string& ipAddressIn, const int portNumberIn,
-                                                const std::string& workingDirIn)
-                    : VisualizationConstructionPlan(modelFileIn, pathIn),
-                      ipAddress(ipAddressIn),
-                      portNumber(portNumberIn),
-                      workingDirectory(workingDirIn)
-            {
-                if (!(Util::isValidIPv4(ipAddressIn) || Util::isValidIPv6(ipAddressIn)))
-                    throw std::invalid_argument("Invalid IP address.");
-                if (workingDirIn.empty())
-                    throw std::invalid_argument("No local working directory specified.");
-
-                // Get visualization type.
-                if (Util::isFMU(modelFile))
-                    visType = Model::VisType::FMU_REMOTE;
-                else if (Util::isMAT(modelFile))
-                    visType = Model::VisType::MAT_REMOTE;
-                else
-                    throw std::invalid_argument("VisualizationType is NONE.");
-            }
+            RemoteVisualizationConstructionPlan(const std::string& modelFile, const std::string& path,
+                                                const std::string& hostAddress, const int port,
+                                                const std::string& wDir);
 
             virtual ~RemoteVisualizationConstructionPlan() = default;
 
@@ -179,11 +140,11 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! The IP address of the server. */
-            std::string ipAddress;
+            std::string hostAddress;
             /*! The port to use for the connection. */
-            int portNumber;
+            int port;
             /*! The local working directory. */
-            std::string workingDirectory;
+            std::string wDir;
         };
 
     }  // End namespace Initialization

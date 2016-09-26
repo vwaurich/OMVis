@@ -26,8 +26,8 @@ namespace OMVIS
     {
 
         VisualizerFMUClient::VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
-                : VisualizerAbstract(cP->modelFile, cP->workingDirectory, VisType::FMU_REMOTE),
-                  _noFC(cP->ipAddress, cP->portNumber),
+                : VisualizerAbstract(cP->modelFile, cP->wDir, VisType::FMU_REMOTE),
+                  _noFC(cP->hostAddress, cP->port),
                   _simID(-1),
                   _simSettings(new SimSettingsFMU()),
                   _outputVars(),
@@ -48,14 +48,15 @@ namespace OMVIS
             // If visual XML file is not present, we need to copy it from server to localhost
             // (before calling OMVisualizerAbstract::initialize().
 
-            initializeConnectionToServer();
-//            catch (std::exception& ex)
-//            {
-//                std::string msg = "VisualizerFMUClient exception: " + std::string(ex.what());
-//                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
-//                isOk += 1;
-//                throw std::runtime_error(msg);
-//            }
+            try {
+                initializeConnectionToServer();
+            }
+            catch (std::exception& ex)
+            {
+                std::string msg = "VisualizerFMUClient exception: " + std::string(ex.what());
+                LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
+                throw std::runtime_error(msg);
+            }
 
             VisualizerAbstract::initialize();
         }

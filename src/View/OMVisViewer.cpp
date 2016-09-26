@@ -19,8 +19,8 @@
 
 #include "Control/GUIController.hpp"
 #include "Util/Logger.hpp"
-#include "View/OMVisViewer.hpp"
 #include "Util/Algebra.hpp"
+#include "View/OMVisViewer.hpp"
 #include "View/Dialogs.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/FMUWrapper.hpp"
@@ -64,7 +64,16 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel)
+
+        OMVisViewer::OMVisViewer(const Initialization::CommandLineArgs& clArgs)
+            : OMVisViewer(osgViewer::CompositeViewer::SingleThreaded, clArgs)
+        {
+
+        }
+
+        //OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel)
+        OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel,
+                                 const Initialization::CommandLineArgs& clArgs)
                 : QMainWindow(/*parent, f*/),
                   osgViewer::CompositeViewer(),
                   _fileMenu(nullptr),
@@ -130,6 +139,18 @@ namespace OMVIS
 
             // Default interval to trigger timeout signal for this timer.
             _visTimer.setInterval(100);
+
+            // Load model from command line
+            if (clArgs.localVisualization())
+            {
+                std::cout << "Local Visualization!" << std::endl;
+                open(clArgs);
+            }
+            else if (clArgs.remoteVisualization())
+            {
+                std::cout << "Remote Visualization!" << std::endl;
+                openRemoteConnection(clArgs);
+            }
         }
 
         /*-----------------------------------------
@@ -373,15 +394,23 @@ namespace OMVIS
         }
 
         /// \todo FIXME We the user clicks "Cancel" the error message is shown.
-        void OMVisViewer::open()
+        void OMVisViewer::open(const Initialization::CommandLineArgs& clArgs)
         {
             try
             {
-                // Get model file name and path from dialog.
-                OpenFileDialog dialog(this);
-                dialog.exec();
-                
-                Initialization::VisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
+                Initialization::VisualizationConstructionPlan constructionPlan;
+
+                if (clArgs.empty())
+                {
+                    // Get model file name and path from dialog.
+                    OpenFileDialog dialog(this);
+                    dialog.exec();
+                    constructionPlan = dialog.getConstructionPlan();
+                }
+                else
+                {
+                    constructionPlan = clArgs.getVisualizationConstructionPlan();
+                }
 
                 // Let the GUIController load the model.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
@@ -420,14 +449,23 @@ namespace OMVIS
         }
 
         //MF: Compute on a server, visualize on localhost
-        void OMVisViewer::openRemoteConnection()
+        void OMVisViewer::openRemoteConnection(const Initialization::CommandLineArgs& clArgs)
         {
             try
             {
-                // Get IP address and port as well as model file and path from dialog.
-                OpenRemoteConnectionDialog dialog(this);
-                dialog.exec();
-                Initialization::RemoteVisualizationConstructionPlan constructionPlan = dialog.getConstructionPlan();
+                Initialization::RemoteVisualizationConstructionPlan constructionPlan;
+
+                if (clArgs.empty())
+                {
+                    // Get IP address and port as well as model file and path from dialog.
+                    OpenRemoteConnectionDialog dialog(this);
+                    dialog.exec();
+                    constructionPlan = dialog.getConstructionPlan();
+                }
+                else
+                {
+                    constructionPlan = clArgs.getRemoteVisualizationConstructionPlan();
+                }
 
                 assert(constructionPlan.visType != Model::VisType::FMU);
                 assert(constructionPlan.visType != Model::VisType::MAT);
@@ -797,7 +835,7 @@ namespace OMVIS
 
         void OMVisViewer::aboutOMVis()
         {
-            QString information("OMVis - The open-source FMU visualization<br><br>"
+            QString information("OMVis - An open source tool for model and simulation visualization.<br><br>"
                                 "Copyright (C) 2016 Volker Waurich and Martin Flehmig,<br>"
                                 "TU Dresden, Federal Republic of Germany"
                                 "<p>Version: 0.01 <br>"
@@ -817,11 +855,11 @@ namespace OMVIS
 
         void OMVisViewer::help()
         {
-            QString information("<p><b>Usefull Keyboard Bindings:</b>"
+            QString information("<p><b>Useful Keyboard Bindings:</b>"
                                 "<ul>"
                                 "<li> Space bar: Reset the view to home position. </li>"
                                 "</ul>"
-                                "<p><b>Usefull Mouse Bindings:</b>"
+                                "<p><b>Useful Mouse Bindings:</b>"
                                 "<ul>"
                                 "<li> Drag and stir: Rotate the model </li>"
                                 "<li> Trackball +: Zoom in </li>"

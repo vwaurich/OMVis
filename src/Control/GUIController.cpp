@@ -87,7 +87,7 @@ namespace OMVIS
             LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
 
             // Check for XML description file. For remote visualization this file needs to be on the localhost.
-            bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.workingDirectory);
+            bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.wDir);
             if (!xmlExists)
             {
                 std::string msg = "Visual XML file does not exist on localhost in working directory.";
@@ -96,17 +96,17 @@ namespace OMVIS
             }
 
             // Some useful output for the user and developer.
-            LOGGER_WRITE(std::string("IP address: ") + cP.ipAddress, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("IP address: ") + cP.hostAddress, Util::LC_CTR, Util::LL_DEBUG);
             LOGGER_WRITE(std::string("Model file: ") + cP.modelFile, Util::LC_CTR, Util::LL_DEBUG);
             LOGGER_WRITE(std::string("Path of model file: ") + cP.path, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Port number: ") + std::to_string(cP.portNumber), Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Local working directory: ") + cP.workingDirectory, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("Port number: ") + std::to_string(cP.port), Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE(std::string("Local working directory: ") + cP.wDir, Util::LC_CTR, Util::LL_DEBUG);
             LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
             // this case. If the model is already loaded, we initialize it again.
-            if (modelIsLoaded() && cP.workingDirectory == _modelVisualizer->getBaseData()->getPath()
+            if (modelIsLoaded() && cP.wDir == _modelVisualizer->getBaseData()->getPath()
                                 && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
                 LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
