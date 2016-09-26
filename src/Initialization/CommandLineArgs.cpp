@@ -21,14 +21,6 @@
 
 #include <iostream>
 
-/*
- * Remote Simulation
- * ./OMVis --remoteSimulation --server= --port= --model= --path= --wdir=
- *
- * Local Simulation
- * ./OMVis --model= --path=
- */
-
 namespace OMVIS
 {
     namespace Initialization
@@ -77,7 +69,7 @@ namespace OMVIS
         void CommandLineArgs::print()
         {
             std::cout << "\nHei, the command line arguments for OMVis are as follows:" << std::endl;
-            std::cout << "  Server: " << hostAddress << std::endl;
+            std::cout << "  Host: " << hostAddress << std::endl;
             std::cout << "  Port: " << port << std::endl;
             std::cout << "  Model File: " << modelFile << std::endl;
             std::cout << "  Model Path: " << modelPath << std::endl;
@@ -92,12 +84,6 @@ namespace OMVIS
             else
                 return false;
         }
-
-
-
-
-
-
 
 
 
@@ -123,7 +109,7 @@ namespace OMVIS
                     ("path", boost::program_options::value<std::string>(), "Path where the model file is stored in.")
                     ("model", boost::program_options::value<std::string>(), "Name of the model file which should be visualized.")
                     ("remoteSimulation", boost::program_options::value<std::string>(), "Start a remote visualization.")
-                    ("host", boost::program_options::value<std::string>(), "Name or IP address of server for remote visualization.")
+                    ("host", boost::program_options::value<std::string>(), "Name or IP address of the host server for remote visualization.")
                     ("port", boost::program_options::value<int>(), "Port to use for remote visualization.")
                     ("wdir", boost::program_options::value<std::string>(), "Local working directory for remote visualization.")
                     ("loggerSettings,l", po::value<std::vector<std::string> >(), "Specification of the logging information.\n"
@@ -131,7 +117,7 @@ namespace OMVIS
                     "Available levels: error, warning, info, debug.\n"
                     "Hint: Different settings of logger category and level can be specified "
                     "separately to allow fine grained control, e.g., -l=\"loader=error\" -l=\"viewer=info\".\n"
-                    "All categories can be set to the very same level via -l=\"all=LEVEL\"");
+                    "All categories can be set to the very same level via -l=\"all=LEVEL\".");
 
             po::variables_map vm;
             CommandLineArgs result;
@@ -144,7 +130,7 @@ namespace OMVIS
                 {
                     std::cout << "Usage:" << std::endl;
                     std::cout << " Local Visualization: OMVis --model=BouncingBall.fmu --path=/PATH/TO/BOUNCINGBALL/ " << std::endl;
-                    std::cout << "Remote Visualization: OMVis --server=SERVER --port=PORTNUMBER --model=BouncingBall.fmu "
+                    std::cout << "Remote Visualization: OMVis --host=HOSTNAME --port=PORT --model=BouncingBall.fmu "
                               "--path=/PATH/TO/BOUNCINGBALL/ --wdir=/PATH/TO/WORKINGDIR/"
                               << std::endl;
                     std::cout << "\n" << std::endl;
@@ -169,7 +155,8 @@ namespace OMVIS
                         //boost::split(tmpvec, logVec[i], boost::is_any_of("="));
                         boost::split(tmpvec, logElem, boost::is_any_of("="));
                         std::cout << i << ". " << tmpvec[0] << "\t" << tmpvec[1] << std::endl;
-                        if (tmpvec.size() > 1 && loglvlmap.find(tmpvec[1]) != loglvlmap.end() && (tmpvec[0] == "all" || logcatmap.find(tmpvec[0]) != logcatmap.end()))
+                        if (tmpvec.size() > 1 && loglvlmap.find(tmpvec[1]) != loglvlmap.end() && (tmpvec[0] == "all"
+                            || logcatmap.find(tmpvec[0]) != logcatmap.end()))
                         {
                             if (tmpvec[0] == "all")
                             {
@@ -242,13 +229,13 @@ namespace OMVIS
             if (remoteVis)
             {
                 if (clArgs.hostAddress.empty())
-                    throw std::runtime_error("No server for remote visualization given. Use --server=SERVER.");
+                    throw std::runtime_error("No host for remote visualization given. Use --host=HOSTNAME.");
 
                 if (1 > clArgs.port)
-                    throw std::runtime_error("No port for remote visualization given. Use --port=PORTNUMBER.");
+                    throw std::runtime_error("No port for remote visualization given. Use --port=PORT.");
 
                 if (clArgs.wDir.empty())
-                    throw std::runtime_error("No (local) working directory for remote visualization given. Use --wdir=/PATH/TO/WORKDING/DIR.");
+                    throw std::runtime_error("No (local) working directory for remote visualization given. Use --wdir=/PATH/TO/WORKDING/DIR/.");
             }
         }
 
