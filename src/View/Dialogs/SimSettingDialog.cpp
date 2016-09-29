@@ -20,7 +20,6 @@
 #include "View/Dialogs/SimSettingDialog.hpp"
 #include "Util/Util.hpp"
 
-#include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDebug>
@@ -34,11 +33,13 @@ namespace OMVIS
 {
     namespace View
     {
+
         SimSettingDialogFMU::SimSettingDialogFMU(QWidget* parent)
                 : QDialog(parent),
                   _solverBox(new QComboBox()),
                   _simStepSizeLineEdit(new QLineEdit("0.0001")),
-                  _visStepSizeLineEdit(new QLineEdit("100"))
+                  _visStepSizeLineEdit(new QLineEdit("100")),
+                  _simSet()
         {
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -58,19 +59,19 @@ namespace OMVIS
             QLabel* solverLabel = new QLabel(tr("Solver Method: "));
             QHBoxLayout* solverLayout = new QHBoxLayout();
             solverLayout->addWidget(solverLabel);
-            solverLayout->addWidget(_solverBox);
+            solverLayout->addWidget(_solverBox.get());
 
             // Step size
             QHBoxLayout* simStepSizeLayout = new QHBoxLayout();
             QLabel* simStepSizeLabel = new QLabel(tr("Simulation Step Size: "));
             simStepSizeLayout->addWidget(simStepSizeLabel);
-            simStepSizeLayout->addWidget(_simStepSizeLineEdit);
+            simStepSizeLayout->addWidget(_simStepSizeLineEdit.get());
 
             // Visualization step size, aka render frequency
             QHBoxLayout* visStepSizeLayout = new QHBoxLayout();
             QLabel* visStepSizeLabel = new QLabel(tr("Visualization Step Size [ms]: "));
             visStepSizeLayout->addWidget(visStepSizeLabel);
-            visStepSizeLayout->addWidget(_visStepSizeLineEdit);
+            visStepSizeLayout->addWidget(_visStepSizeLineEdit.get());
 
             mainLayout->addLayout(solverLayout);
             mainLayout->addLayout(simStepSizeLayout);
@@ -93,7 +94,9 @@ namespace OMVIS
         }
 
         SimSettingDialogMAT::SimSettingDialogMAT(QWidget* parent)
-                : QDialog(parent)
+                : QDialog(parent),
+                  _speedupLineEdit(new QLineEdit("1.0")),
+                  _simSet()
         {
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -109,7 +112,7 @@ namespace OMVIS
             setWindowTitle(tr("Simulation Settings"));
 
             // Speed up or slow down of visualization
-            _speedupLineEdit = new QLineEdit("1.0");
+//            _speedupLineEdit = new QLineEdit("1.0");
 
             // MF: Yeah, the validator stuff just do no work for me or I do not understand it right.
             //     From my point of view, I want to set a restriction to only enter values for which
@@ -129,7 +132,7 @@ namespace OMVIS
                                                      "rough overview on the model behavior."));
 
             speedUpLayout->addWidget(speedUpLabel);
-            speedUpLayout->addWidget(_speedupLineEdit);
+            speedUpLayout->addWidget(_speedupLineEdit.get());
 
             mainLayout->addLayout(speedUpLayout);
             mainLayout->addWidget(explanationLabel);

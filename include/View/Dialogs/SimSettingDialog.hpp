@@ -28,15 +28,11 @@
 #include <QComboBox>
 
 #include <memory>
-#include <string>
 
 namespace OMVIS
 {
     namespace View
     {
-
-
-
 
         /*! \brief This is a dialog to specify the simulation settings for FMU visualization.
          *
@@ -45,19 +41,35 @@ namespace OMVIS
         class SimSettingDialogFMU : public QDialog
         {
         Q_OBJECT
+
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             SimSettingDialogFMU(QWidget* parent = Q_NULLPTR);
+
             Model::UserSimSettingsFMU getSimSettings() const;
 
+            /*-----------------------------------------
+             * SLOTS
+             *---------------------------------------*/
+
          private slots:
+            /*! \brief Accepts user input and stores it into member variables. */
             void accept() Q_DECL_OVERRIDE;
 
          private:
-            QComboBox* _solverBox;
-            QLineEdit* _simStepSizeLineEdit;
-            QLineEdit* _visStepSizeLineEdit;
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            std::unique_ptr<QComboBox> _solverBox;
+            std::unique_ptr<QLineEdit> _simStepSizeLineEdit;
+            std::unique_ptr<QLineEdit> _visStepSizeLineEdit;
             Model::UserSimSettingsFMU _simSet;
         };
+
 
         /*! \brief This is a dialog to specify the simulation settings for MAT file visualization.
          *
@@ -68,15 +80,34 @@ namespace OMVIS
         class SimSettingDialogMAT : public QDialog
         {
         Q_OBJECT
+
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             SimSettingDialogMAT(QWidget* parent = Q_NULLPTR);
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
             Model::UserSimSettingsMAT getSimSettings() const;
 
+            /*-----------------------------------------
+             * SLOTS
+             *---------------------------------------*/
+
          private slots:
+            /*! \brief Accepts user input and stores it into member variables. */
             void accept() Q_DECL_OVERRIDE;
 
          private:
-            QLineEdit* _speedupLineEdit;
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            std::unique_ptr<QLineEdit> _speedupLineEdit;
             Model::UserSimSettingsMAT _simSet;
         };
 
