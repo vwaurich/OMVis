@@ -17,10 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "View/Dialogs/PerspectiveSettingDialog.hpp"
 
-#include <QGroupBox>
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QDebug>
@@ -41,12 +39,10 @@ namespace OMVIS
             _perspectiveCombo->addItem(QString("normal to x-z plane"));
             _perspectiveCombo->addItem(QString("normal to y-z plane"));
 
-            //X11 QGroupBox* perspectiveGroup = new QGroupBox(tr("View Settings"));
             QLabel* perspectiveLabel = new QLabel(tr("Set view "));
             QHBoxLayout* perspectiveLayout = new QHBoxLayout();
             perspectiveLayout->addWidget(perspectiveLabel);
             perspectiveLayout->addWidget(_perspectiveCombo.get());
-            //X11 perspectiveGroup->setLayout(perspectiveLayout);
 
             QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
             QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -57,7 +53,6 @@ namespace OMVIS
 
             // Main layout
             QVBoxLayout* mainLayout = new QVBoxLayout();
-            //X11 mainLayout->addWidget(perspectiveGroup);
             mainLayout->addLayout(perspectiveLayout);
             mainLayout->addLayout(buttonsLayout);
             mainLayout->addStretch(1);
