@@ -27,8 +27,6 @@
 #include <QDialogButtonBox>
 #include <QMessageBox>
 
-#include <string>
-
 #ifndef _WIN32
 #include <arpa/inet.h>
 #endif

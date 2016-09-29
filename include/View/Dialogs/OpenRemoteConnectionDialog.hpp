@@ -26,6 +26,7 @@
 #include <QLineEdit>
 
 #include <memory>
+#include <string>
 
 namespace OMVIS
 {
