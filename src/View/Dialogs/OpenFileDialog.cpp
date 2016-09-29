@@ -18,17 +18,11 @@
  */
 
 #include "View/Dialogs/OpenFileDialog.hpp"
-#include "View/Dialogs/OpenRemoteConnectionDialog.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
-#include <QLabel>
-#include <QHBoxLayout>
 #include <QDebug>
-#include <QDialogButtonBox>
 #include <QMessageBox>
-
-#include <string>
 
 namespace OMVIS
 {
