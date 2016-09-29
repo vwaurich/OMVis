@@ -30,6 +30,11 @@ namespace OMVIS
 {
     namespace View
     {
+
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         BackgroundColorSettingDialog::BackgroundColorSettingDialog(QWidget* parent)
                 : QDialog(parent),
                   _bgcCombo(new QComboBox()),
@@ -65,12 +70,20 @@ namespace OMVIS
             setWindowTitle(tr("Perspective"));
         }
 
+        /*-----------------------------------------
+         * SLOTS
+         *---------------------------------------*/
+
         void BackgroundColorSettingDialog::accept()
         {
             // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
             _bgc = static_cast<BackgroundColor>(_bgcCombo->currentIndex());
             QDialog::accept();
         }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
 
         BackgroundColor BackgroundColorSettingDialog::getResult() const
         {

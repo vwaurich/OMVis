@@ -34,6 +34,10 @@ namespace OMVIS
     namespace View
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         SimSettingDialogFMU::SimSettingDialogFMU(QWidget* parent)
                 : QDialog(parent),
                   _solverBox(new QComboBox()),
@@ -77,20 +81,6 @@ namespace OMVIS
             mainLayout->addLayout(simStepSizeLayout);
             mainLayout->addLayout(visStepSizeLayout);
             mainLayout->addLayout(buttonsLayout);
-        }
-
-        void SimSettingDialogFMU::accept()
-        {
-            // Shift by one, because 0 equals to Solver::NONE which is not available from the dialog.
-            _simSet.solver = static_cast<Model::Solver>(_solverBox->currentIndex() + 1);
-            _simSet.simStepSize = _simStepSizeLineEdit->text().toDouble();
-            _simSet.visStepSize = _visStepSizeLineEdit->text().toDouble();
-            QDialog::accept();
-        }
-
-        Model::UserSimSettingsFMU SimSettingDialogFMU::getSimSettings() const
-        {
-            return _simSet;
         }
 
         SimSettingDialogMAT::SimSettingDialogMAT(QWidget* parent)
@@ -139,6 +129,19 @@ namespace OMVIS
             mainLayout->addLayout(buttonsLayout);
         }
 
+        /*-----------------------------------------
+         * SLOTS
+         *---------------------------------------*/
+
+        void SimSettingDialogFMU::accept()
+        {
+            // Shift by one, because 0 equals to Solver::NONE which is not available from the dialog.
+            _simSet.solver = static_cast<Model::Solver>(_solverBox->currentIndex() + 1);
+            _simSet.simStepSize = _simStepSizeLineEdit->text().toDouble();
+            _simSet.visStepSize = _visStepSizeLineEdit->text().toDouble();
+            QDialog::accept();
+        }
+
         void SimSettingDialogMAT::accept()
         {
             if (_speedupLineEdit->isModified())
@@ -151,6 +154,15 @@ namespace OMVIS
                 }
             }
             QDialog::accept();
+        }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
+
+        Model::UserSimSettingsFMU SimSettingDialogFMU::getSimSettings() const
+        {
+            return _simSet;
         }
 
         Model::UserSimSettingsMAT SimSettingDialogMAT::getSimSettings() const

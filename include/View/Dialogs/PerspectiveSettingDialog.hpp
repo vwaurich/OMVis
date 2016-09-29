@@ -41,16 +41,28 @@ namespace OMVIS
         Q_OBJECT
 
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /*! \brief Constructor which creates the Qt dialog window to chose the perspective.
              *
              */
             PerspectiveSettingDialog(QWidget* parent = Q_NULLPTR);
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
 
             /*! \brief
              *
              * @return Perspective which was selected.
              */
             Perspective getResult() const;
+
+            /*-----------------------------------------
+             * SLOTS
+             *---------------------------------------*/
 
          private slots:
             /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _perspective.
@@ -59,6 +71,11 @@ namespace OMVIS
             void accept() Q_DECL_OVERRIDE;
 
          private:
+
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             /*! Qt combo box which provides the predefined perspectives. */
             std::unique_ptr<QComboBox> _perspectiveCombo;
             Perspective _perspective;

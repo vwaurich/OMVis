@@ -31,6 +31,7 @@ namespace OMVIS
 {
     namespace View
     {
+
         /*! \brief This class provides a dialog to select a simulation model file from the local file system.
          *
          */
@@ -50,20 +51,19 @@ namespace OMVIS
             OpenFileDialog(QWidget* parent = Q_NULLPTR);
 
             /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
+            /*! \brief Returns the construction plan for the visualization of the chosen model. */
+            Initialization::VisualizationConstructionPlan getConstructionPlan() const;
+
+            /*-----------------------------------------
              * SLOTS
              *---------------------------------------*/
 
          private slots:
             /*! \brief Accepts user input and stores it into member variables. */
             void accept() Q_DECL_OVERRIDE;
-
-            /*-----------------------------------------
-             * GETTERS AND SETTERS
-             *---------------------------------------*/
-
-         public:
-            /*! \brief Returns the construction plan for the visualization of the chosen model. */
-            Initialization::VisualizationConstructionPlan getConstructionPlan() const;
 
          private:
             /*-----------------------------------------

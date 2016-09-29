@@ -41,6 +41,10 @@ namespace OMVIS
         Q_OBJECT
 
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /*! \brief Constructor which creates the Qt dialog window to chose the background color.
              *
              */
@@ -51,17 +55,29 @@ namespace OMVIS
 
             ~BackgroundColorSettingDialog() = default;
 
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
             /*! \brief
              *
              * @return BackgroundColor which was selected.
              */
             BackgroundColor getResult() const;
 
+            /*-----------------------------------------
+             * SLOTS
+             *---------------------------------------*/
+
          private slots:
             /*! \brief If the user made a selection this method reads and stores the selection into member \ref _bgc. */
             void accept() Q_DECL_OVERRIDE;
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             /*! Qt combo box which provides the predefined perspectives. */
             std::unique_ptr<QComboBox> _bgcCombo;
             BackgroundColor _bgc;

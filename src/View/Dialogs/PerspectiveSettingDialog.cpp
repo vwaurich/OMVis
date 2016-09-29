@@ -28,6 +28,11 @@ namespace OMVIS
 {
     namespace View
     {
+
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         PerspectiveSettingDialog::PerspectiveSettingDialog(QWidget* parent)
                 : QDialog(parent),
                   _perspectiveCombo(new QComboBox()),
@@ -60,12 +65,19 @@ namespace OMVIS
             setWindowTitle(tr("Perspective"));
         }
 
+        /*-----------------------------------------
+         * SLOTS
+         *---------------------------------------*/
         void PerspectiveSettingDialog::accept()
         {
             // qDebug() << "perspective = " << _perspectiveCombo->currentText() << " " << _perspectiveCombo->currentIndex();
             _perspective = static_cast<Perspective>(_perspectiveCombo->currentIndex());
             QDialog::accept();
         }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
 
         Perspective PerspectiveSettingDialog::getResult() const
         {

@@ -62,19 +62,18 @@ namespace OMVIS
             ~OpenRemoteConnectionDialog() = default;
 
             /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
+            Initialization::RemoteVisualizationConstructionPlan getConstructionPlan() const;
+
+            /*-----------------------------------------
              * SLOTS
              *---------------------------------------*/
 
          private slots:
             /*! \brief Accepts user input and stores it into member variables. */
             void accept() Q_DECL_OVERRIDE;
-
-            /*-----------------------------------------
-             * GETTERS AND SETTERS
-             *---------------------------------------*/
-
-         public:
-            Initialization::RemoteVisualizationConstructionPlan getConstructionPlan() const;
 
          private:
             /*-----------------------------------------

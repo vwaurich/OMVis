@@ -49,6 +49,10 @@ namespace OMVIS
 
             SimSettingDialogFMU(QWidget* parent = Q_NULLPTR);
 
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
+
             Model::UserSimSettingsFMU getSimSettings() const;
 
             /*-----------------------------------------
