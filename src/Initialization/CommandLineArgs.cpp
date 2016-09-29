@@ -220,7 +220,7 @@ namespace OMVIS
             }
 
             // We assume the user wants remote visualization if one of the following parameter is specified: host, port, wdir.
-            bool remoteVis = !clArgs.hostAddress.empty() || 1 > clArgs.port || !clArgs.wDir.empty();
+            bool remoteVis = !clArgs.hostAddress.empty() || -1 < clArgs.port || !clArgs.wDir.empty();
             if (remoteVis)
             {
                 if (clArgs.hostAddress.empty())
