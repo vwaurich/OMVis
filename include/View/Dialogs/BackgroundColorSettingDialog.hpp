@@ -49,7 +49,7 @@ namespace OMVIS
             BackgroundColorSettingDialog(const BackgroundColorSettingDialog&) = delete;
             BackgroundColorSettingDialog& operator=(const BackgroundColorSettingDialog&) = delete;
 
-            //~BackgroundColorSettingDialog() = default;
+            ~BackgroundColorSettingDialog() = default;
 
             /*! \brief
              *
@@ -58,9 +58,7 @@ namespace OMVIS
             BackgroundColor getResult() const;
 
          private slots:
-            /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _bgc.
-             *
-             */
+            /*! \brief If the user made a selection this method reads and stores the selection into member \ref _bgc. */
             void accept() Q_DECL_OVERRIDE;
 
          private:
