@@ -30,6 +30,7 @@
 #include "Initialization/CommandLineArgs.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Control/TimeManager.hpp"
+#include "Control/GUIController.hpp"
 #include "View/ViewSettings.hpp"
 
 #include <QTimer>
@@ -41,15 +42,7 @@
 #include <osgQt/GraphicsWindowQt>
 
 #include <string>
-
-// Forward declarations
-namespace OMVIS
-{
-    namespace Control
-    {
-        class GUIController;
-    }
-}
+#include <memory>
 
 QT_FORWARD_DECLARE_CLASS(QMenu)
 QT_FORWARD_DECLARE_CLASS(QLabel)
@@ -93,6 +86,16 @@ namespace OMVIS
                         const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
             OMVisViewer(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
+            OMVisViewer(const OMVisViewer& rhs) = delete;
+            OMVisViewer& operator=(const OMVisViewer& rhs) = delete;
+
+            /*! \brief Destructs the OMVisViewer object and frees memory.
+             *
+             * Since we use smart pointers where possible, we do not need to call delete explicitely.
+             * The Qt stuff uses the parent-child model and thus memory is freed automaticaly.
+             */
+            ~OMVisViewer() = default;
+
             /*-----------------------------------------
              * INITIALIZATION FUNCTIONS
              *---------------------------------------*/
@@ -102,11 +105,11 @@ namespace OMVIS
              * @param gw The graphical window.
              * @return The widget for the osg-viewer.
              */
-            QWidget* setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw, osg::ref_ptr<osg::Node> rootNode);
+            QWidget* setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw, const osg::ref_ptr<osg::Node> rootNode);
 
             /*! \brief Creates a default osg-viewer-widget
              */
-            QWidget* setupOSGViewerWidget(osg::ref_ptr<osg::Node> rootNode);
+            QWidget* setupOSGViewerWidget(const osg::ref_ptr<osg::Node> rootNode);
 
             /*! \brief Creates a osgQt::createGraphicsWindow
              *
@@ -270,11 +273,16 @@ namespace OMVIS
             void updateKeyMapValue(QString key);
 
             /*! \brief Shows information about OMVis. */
-            void aboutOMVis();
+            void aboutOMVis() const;
 
-            void help();
+            void help() const;
 
          private:
+
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             // --- Menus ---
             QMenu* _fileMenu;
             QMenu* _settingsMenu;
@@ -295,11 +303,8 @@ namespace OMVIS
 			QAction* _simSettingsAct;
             QAction* _unloadAct;
 
-            /*! \brief The view which holds the osg scene.
-             *
-             * \todo Should be a unique pointer but at least a shared pointer
-             */
-            osgViewer::View* _sceneView;
+            /*! \brief The view which holds the osg scene. */
+            osg::ref_ptr<osgViewer::View> _sceneView;
 
             // --- Widgets---
             /// Widget which handles the OSG scene.
@@ -328,7 +333,7 @@ namespace OMVIS
 
             /// The GUIController object will take the users input from GUI and handle it.
             /// \todo Should be a unique pointer but at least a shared pointer
-            Control::GUIController* _guiController;
+            std::unique_ptr<Control::GUIController> _guiController;
         };
 
     }  // End namespace View

@@ -30,9 +30,6 @@
 #include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
 #include <osgViewer/ViewerEventHandlers>
-#include <osg/Vec3>
-#include <osg/io_utils>
-#include <osg/MatrixTransform>
 
 #include <QScreen>
 #include <QDialogButtonBox>
@@ -63,7 +60,6 @@ namespace OMVIS
         /*-----------------------------------------
          * CONSTRUCTORS
          *---------------------------------------*/
-
 
         OMVisViewer::OMVisViewer(const Initialization::CommandLineArgs& clArgs)
             : OMVisViewer(osgViewer::CompositeViewer::SingleThreaded, clArgs)
@@ -105,14 +101,14 @@ namespace OMVIS
             // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
             setlocale(LC_ALL, "en_US.UTF-8");
 
-            //the names
+            // The widgets 1names
             setObjectName("MainWindow");
             setWindowTitle("OMVIS - The Open-Source FMU-visualization");
 
-            //the osg threading model
+            // The osg threading model
             setThreadingModel(threadingModel);
 
-            // disable the default setting of viewer.done() by pressing Escape.
+            // Disable the default setting of viewer.done() by pressing Escape.
             setKeyEventSetsDone(0);
 
             // Create the widgets for time slider, osg viewer and control elements.
@@ -175,7 +171,7 @@ namespace OMVIS
         // Assemble the widgets to a layout and create the father of all widgets with this layout.
         void OMVisViewer::createLayout()
         {
-            QVBoxLayout* mainRowLayout = new QVBoxLayout();
+            QVBoxLayout* mainRowLayout = new QVBoxLayout(this);
             assert(_osgViewerWidget != nullptr);
             assert(_timeSliderWidget != nullptr);
             assert(_controlElementWidget != nullptr);
@@ -183,7 +179,7 @@ namespace OMVIS
             mainRowLayout->addWidget(_timeSliderWidget);
             mainRowLayout->addWidget(_controlElementWidget);
 
-            QWidget* topWidget = new QWidget();
+            QWidget* topWidget = new QWidget(this);
             topWidget->setLayout(mainRowLayout);
             setCentralWidget(topWidget);
         }
@@ -266,7 +262,7 @@ namespace OMVIS
             menuBar()->addMenu(_helpMenu);
         }
 
-        QWidget* OMVisViewer::setupOSGViewerWidget(osg::ref_ptr<osg::Node> rootNode)
+        QWidget* OMVisViewer::setupOSGViewerWidget(const osg::ref_ptr<osg::Node> rootNode)
         {
             //the osg-viewer widget
             osg::ref_ptr<osgQt::GraphicsWindowQt> window = createGraphicsWindow(0, 0, 100, 100);
@@ -276,11 +272,10 @@ namespace OMVIS
             return setupViewWidget(window, rootNode);
         }
 
-        QWidget* OMVisViewer::setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw, osg::ref_ptr<osg::Node> rootNode)
+        QWidget* OMVisViewer::setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw, const osg::ref_ptr<osg::Node> rootNode)
         {
-            if (_sceneView == nullptr)
-                _sceneView = new osgViewer::View();
-            addView(_sceneView);
+            _sceneView = new osgViewer::View();
+            addView(_sceneView.get());
 
             osg::ref_ptr<osg::Camera> camera = _sceneView->getCamera();
             camera->setGraphicsContext(gw);
@@ -833,7 +828,7 @@ namespace OMVIS
             _sceneView->home();
         }
 
-        void OMVisViewer::aboutOMVis()
+        void OMVisViewer::aboutOMVis() const
         {
             QString information("OMVis - An open source tool for model and simulation visualization.<br><br>"
                                 "Copyright (C) 2016 Volker Waurich and Martin Flehmig,<br>"
@@ -850,10 +845,10 @@ namespace OMVIS
 
             QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information, QMessageBox::NoButton);
             msgBox.setStandardButtons(QMessageBox::Close);
-            int ret = msgBox.exec();
+            msgBox.exec();
         }
 
-        void OMVisViewer::help()
+        void OMVisViewer::help() const
         {
             QString information("<p><b>Useful Keyboard Bindings:</b>"
                                 "<ul>"
