@@ -17,7 +17,6 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Control/GUIController.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Algebra.hpp"
 #include "View/OMVisViewer.hpp"
@@ -27,7 +26,6 @@
 #include "Model/VisualizerFMU.hpp"
 #include "Model/SimSettings.hpp"
 
-#include <osgDB/ReadFile>
 #include <osgGA/MultiTouchTrackballManipulator>
 #include <osgViewer/ViewerEventHandlers>
 
@@ -42,14 +40,12 @@
 #include <QObject>
 #include <QAction>
 #include <QSlider>
-#include <QFileDialog>
 #include <QMessageBox>
 #include <QDialog>
 #include <QComboBox>
 #include <QMenuBar>
 
 #include <assert.h>
-
 #include <stdexcept>
 
 namespace OMVIS
@@ -67,7 +63,6 @@ namespace OMVIS
 
         }
 
-        //OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel)
         OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel,
                                  const Initialization::CommandLineArgs& clArgs)
                 : QMainWindow(/*parent, f*/),
