@@ -45,11 +45,11 @@ namespace OMVIS
     namespace Util
     {
 
-        /*! \brief Checks if the type is a cad file
+        /*! \brief Checks if the given type is a cad file
          */
-        inline bool isCADType(const std::string& typeName)
+        inline bool isCADType(const std::string& type)
         {
-            return (typeName.size() >= 12 && std::string(typeName.begin(), typeName.begin() + 11) == "modelica://");
+            return (type.size() >= 12 && std::string(type.begin(), type.begin() + 11) == "modelica://");
         }
 
         /*! \brief Get file name of the cad file
