@@ -88,12 +88,7 @@ namespace OMVIS
              *
              * Encapsulates the three stages/methods of initialization process into one single method.
              */
-            virtual void initialize()
-            {
-                initData();
-                setUpScene();
-                updateVisAttributes(0.0);
-            }
+            virtual void initialize();
 
             /*! \brief Initializes OMVisualizer object.
              *

@@ -59,12 +59,18 @@ namespace OMVIS
 
             // Now we can use the full path.
             _baseData = std::shared_ptr<OMVisualBase>(new OMVisualBase(modelFile, fullPath));
-            _viewerStuff->getScene().setPath(fullPath);
+            _viewerStuff->getScene()->setPath(fullPath);
         }
 
         /*-----------------------------------------
          * INITIALIZATION METHODS
          *---------------------------------------*/
+        void VisualizerAbstract::initialize()
+        {
+            initData();
+            setUpScene();
+            updateVisAttributes(0.0);
+        }
 
         void VisualizerAbstract::initData()
         {
@@ -82,7 +88,7 @@ namespace OMVIS
             // Build scene graph.
             LOGGER_WRITE(std::string("Setup scene for ") + std::to_string(_baseData->_shapes.size()) + " shapes.",
                                                                                      Util::LC_LOADER, Util::LL_DEBUG);
-            _viewerStuff->getScene().setUpScene(_baseData->_shapes);
+            _viewerStuff->getScene()->setUpScene(_baseData->_shapes);
         }
 
         /*-----------------------------------------
