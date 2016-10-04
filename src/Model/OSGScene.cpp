@@ -25,19 +25,26 @@
 #include <osg/MatrixTransform>
 #include <osg/ShapeDrawable>
 #include <osg/Material>
-
-#include <string>
+#include <osgDB/ReadFile>
 
 namespace OMVIS
 {
     namespace Model
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         OSGScene::OSGScene()
                 : _rootNode(new osg::Group()),
                   _path("")
         {
         }
+
+        /*-----------------------------------------
+         * INITIALIZATION METHODS
+         *---------------------------------------*/
 
         void OSGScene::setUpScene(const std::vector<Model::ShapeObject>& allShapes)
         {
@@ -97,6 +104,10 @@ namespace OMVIS
                 _rootNode->addChild(transf.get());
             }
         }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
 
         osg::ref_ptr<osg::Group> OSGScene::getRootNode()
         {

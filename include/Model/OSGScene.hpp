@@ -31,7 +31,8 @@
 
 #include <rapidxml.hpp>
 #include <osg/Group>
-#include <osgDB/ReadFile>
+
+#include <string>
 
 namespace OMVIS
 {
