@@ -26,6 +26,9 @@ namespace OMVIS
 {
     namespace Model
     {
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
 
         ShapeObject::ShapeObject()
                 : _id("noID"),
@@ -33,36 +36,24 @@ namespace OMVIS
                   _length(ShapeObjectAttribute(0.1)),
                   _width(ShapeObjectAttribute(0.1)),
                   _height(ShapeObjectAttribute(0.1)),
+                  _r{ShapeObjectAttribute(0.1), ShapeObjectAttribute(0.1), ShapeObjectAttribute(0.1)},
+                  _rShape{ShapeObjectAttribute(0.0), ShapeObjectAttribute(0.0), ShapeObjectAttribute(0.0)},
+                  _lDir{ShapeObjectAttribute(1.0), ShapeObjectAttribute(0.0), ShapeObjectAttribute(0.0)},
+                  _wDir{ShapeObjectAttribute(0.0), ShapeObjectAttribute(1.0), ShapeObjectAttribute(0.0)},
+                  _color{ShapeObjectAttribute(255.0), ShapeObjectAttribute(255.0), ShapeObjectAttribute(255.0)},
+                  _T{ShapeObjectAttribute(0.0), ShapeObjectAttribute(0.0), ShapeObjectAttribute(1.0),
+                     ShapeObjectAttribute(1.0), ShapeObjectAttribute(0.0), ShapeObjectAttribute(0.0),
+                     ShapeObjectAttribute(0.0), ShapeObjectAttribute(1.0), ShapeObjectAttribute(0.0)},
                   _specCoeff(ShapeObjectAttribute(0.7)),
                   _mat(osg::Matrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)),
                   _extra(0.0)
+
         {
-            _r[0] = ShapeObjectAttribute(0.1);
-            _r[1] = ShapeObjectAttribute(0.1);
-            _r[2] = ShapeObjectAttribute(0.1);
-            _rShape[0] = ShapeObjectAttribute(0.0);
-            _rShape[1] = ShapeObjectAttribute(0.0);
-            _rShape[2] = ShapeObjectAttribute(0.0);
-            _lDir[0] = ShapeObjectAttribute(1.0);
-            _lDir[1] = ShapeObjectAttribute(0.0);
-            _lDir[2] = ShapeObjectAttribute(0.0);
-            _wDir[0] = ShapeObjectAttribute(0.0);
-            _wDir[1] = ShapeObjectAttribute(1.0);
-            _wDir[2] = ShapeObjectAttribute(0.0);
-            _color[0] = ShapeObjectAttribute(255.0);
-            _color[1] = ShapeObjectAttribute(255.0);
-            _color[2] = ShapeObjectAttribute(255.0);
-            _T[0] = ShapeObjectAttribute(0.0);
-            _T[1] = ShapeObjectAttribute(0.0);
-            _T[2] = ShapeObjectAttribute(1.0);
-            _T[3] = ShapeObjectAttribute(1.0);
-            _T[4] = ShapeObjectAttribute(0.0);
-            _T[5] = ShapeObjectAttribute(0.0);
-            _T[6] = ShapeObjectAttribute(0.0);
-            _T[7] = ShapeObjectAttribute(1.0);
-            _T[8] = ShapeObjectAttribute(0.0);
-            _extra = ShapeObjectAttribute(0.0);
         }
+
+        /*-----------------------------------------
+         * PRINT METHODS
+         *---------------------------------------*/
 
         void ShapeObject::dumpVisAttributes() const
         {
