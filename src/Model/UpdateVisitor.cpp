@@ -32,11 +32,19 @@ namespace OMVIS
     namespace Model
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         UpdateVisitor::UpdateVisitor()
                 : _shape()
         {
             setTraversalMode(NodeVisitor::TRAVERSE_ALL_CHILDREN);
         }
+
+        /*-----------------------------------------
+         * METHODS
+         *---------------------------------------*/
 
         /**
          MatrixTransform
@@ -61,7 +69,6 @@ namespace OMVIS
             {
                 std::string filename = Util::extractCADFilename(_shape._type);
                 osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(filename);
-
             }
             //its a drawable
             else
@@ -104,13 +111,10 @@ namespace OMVIS
             osg::ref_ptr<osg::Material> material = new osg::Material;
             material->setDiffuse(osg::Material::FRONT, osg::Vec4f(_shape._color[0].exp / 255, _shape._color[1].exp / 255, _shape._color[2].exp / 255, 1.0));
             ss->setAttribute(material);
-			
-			osg::LineWidth* linewidth = new osg::LineWidth();
-			linewidth->setWidth(50.0f);
-			ss->setAttribute(new osg::Point(5.0f));
+
+			ss->setAttribute(new osg::Point(50.0f));
 
             node.setStateSet(ss);
-			//node.getOrCreateStateSet()->setMode(GL_LIGHTING, osg::StateAttribute::OFF);
             traverse(node);
         }
 
