@@ -47,6 +47,7 @@ namespace OMVIS
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
+
             UpdateVisitor();
             virtual ~UpdateVisitor() = default;
 
@@ -57,6 +58,9 @@ namespace OMVIS
              * METHODS
              *---------------------------------------*/
 
+            /**
+             * \todo Finish implementation of the branch 'isCADType'.
+             */
             virtual void apply(osg::Geode& node);
             virtual void apply(osg::MatrixTransform& node);
 
