@@ -194,7 +194,7 @@ namespace OMVIS
 
         osg::ref_ptr<osg::Node> GUIController::getSceneRootNode() const
         {
-            return _modelVisualizer->getOMVisScene()->getScene().getRootNode();
+            return _modelVisualizer->getOMVisScene()->getScene()->getRootNode();
         }
 
         void GUIController::setVisTime(const int val)
@@ -286,7 +286,7 @@ namespace OMVIS
         {
             if (visTypeIsFMU())
             {
-                _modelVisualizer->setSimulationSettings(simSetFMU);
+                std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer)->setSimulationSettings(simSetFMU);
                 initVisualization();
             }
             else if (visTypeIsFMURemote())

@@ -129,8 +129,6 @@ namespace OMVIS
 
             std::string getModelFile() const;
 
-            virtual void setSimulationSettings(const UserSimSettingsFMU& simSetFMU) { };
-
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/
