@@ -31,10 +31,10 @@
 #include "Model/OMVisScene.hpp"
 #include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
-#include "Visualize.hpp"
-#include "ShapeObjectAttribute.hpp"
 #include "Model/VisualizationTypes.hpp"
 #include "Model/SimSettings.hpp"
+#include "Visualize.hpp"
+#include "ShapeObjectAttribute.hpp"
 
 #include <memory>
 
