@@ -47,9 +47,11 @@ namespace OMVIS
              *---------------------------------------*/
 
             ShapeObject();
+
             ~ShapeObject() = default;
 
             ShapeObject(const ShapeObject&) = default;
+
             ShapeObject& operator=(const ShapeObject&) = default;
 
             /*-----------------------------------------
@@ -58,10 +60,6 @@ namespace OMVIS
 
             /// Dumps the attributes to std::cout.
             void dumpVisAttributes() const;
-
-            /// Computes the attributes of the shape for a certain time.
-            void fetchVisAttributes(rapidxml::xml_node<>* node, ModelicaMatReader matReader, fmi1_import_t* fmu,
-                                    double time, bool useFMU);
 
          public:
             /*-----------------------------------------
