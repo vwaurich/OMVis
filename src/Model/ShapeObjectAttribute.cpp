@@ -32,7 +32,7 @@ namespace OMVIS
         {
         }
 
-        ShapeObjectAttribute::ShapeObjectAttribute(float value)
+        ShapeObjectAttribute::ShapeObjectAttribute(const float value)
                 : isConst(true),
                   exp(value),
                   cref("NONE"),

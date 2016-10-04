@@ -36,16 +36,28 @@ namespace OMVIS
         class ShapeObjectAttribute
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             ShapeObjectAttribute();
 
-            ShapeObjectAttribute(float value);
+            ShapeObjectAttribute(const float value);
 
             ~ShapeObjectAttribute() = default;
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
 
             //outputs a string representation for the attribute
             std::string getValueString() const;
 
          public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             //if true, check the exp, if wrong check the cref
             bool isConst;
             float exp;
