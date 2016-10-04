@@ -45,17 +45,31 @@ namespace OMVIS
         class OSGScene
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             OSGScene();
+
             ~OSGScene() = default;
+
             OSGScene(const OSGScene& osgs) = delete;
+
             OSGScene& operator=(const OSGScene& osgs) = delete;
+
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
 
             /*! \brief Sets up all nodes initially.
              *
-             * @param xmlRoot
-             * \return Error value.
+             * \param
              */
-            int setUpScene(std::vector<Model::ShapeObject> allShapes);
+            void setUpScene(const std::vector<Model::ShapeObject>& allShapes);
+
+            /*-----------------------------------------
+             * SETTERS AND GETTERS
+             *---------------------------------------*/
 
             /*! \brief Return shared pointer to rootNode. */
             osg::ref_ptr<osg::Group> getRootNode();
@@ -64,9 +78,13 @@ namespace OMVIS
             std::string getPath() const;
 
             /*! \brief Set path to the scene file. */
-            void setPath(const std::string path);
+            void setPath(const std::string& path);
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             /*! Root node of the scene. */
             osg::ref_ptr<osg::Group> _rootNode;
 
