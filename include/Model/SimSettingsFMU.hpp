@@ -59,8 +59,9 @@ namespace OMVIS
 
             ~SimSettingsFMU() = default;
 
-            SimSettingsFMU(const SimSettingsFMU& ss) = delete;
-            SimSettingsFMU& operator=(const SimSettingsFMU& ss) = delete;
+            SimSettingsFMU(const SimSettingsFMU& rhs) = delete;
+
+            SimSettingsFMU& operator=(const SimSettingsFMU& rhs) = delete;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
