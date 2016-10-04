@@ -178,6 +178,7 @@ namespace OMVIS
              * MEMBERS
              *---------------------------------------*/
 
+            /** \brief Every Visualizer object knows its type, i.e., the visualization mode. */
             const VisType _visType;
             std::shared_ptr<OMVisualBase> _baseData;
             std::shared_ptr<OMVisScene> _viewerStuff;
