@@ -166,17 +166,16 @@ namespace OMVIS
         // Assemble the widgets to a layout and create the father of all widgets with this layout.
         void OMVisViewer::createLayout()
         {
-            QVBoxLayout* mainRowLayout = new QVBoxLayout(this);
+            _centralWidget = new QWidget(this);
+            _mainLayout = new QVBoxLayout( _centralWidget );
             assert(_osgViewerWidget != nullptr);
             assert(_timeSliderWidget != nullptr);
             assert(_controlElementWidget != nullptr);
-            mainRowLayout->addWidget(_osgViewerWidget);
-            mainRowLayout->addWidget(_timeSliderWidget);
-            mainRowLayout->addWidget(_controlElementWidget);
-
-            QWidget* topWidget = new QWidget(this);
-            topWidget->setLayout(mainRowLayout);
-            setCentralWidget(topWidget);
+            _mainLayout->addWidget(_osgViewerWidget);
+            _mainLayout->addWidget(_timeSliderWidget);
+            _mainLayout->addWidget(_controlElementWidget);
+            _centralWidget->setLayout(_mainLayout);
+            setCentralWidget( _centralWidget );
         }
 
         void OMVisViewer::createActions()

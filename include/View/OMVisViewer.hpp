@@ -36,6 +36,7 @@
 #include <QTimer>
 #include <QMainWindow>
 #include <QString>
+#include <QVBoxLayout>
 
 #include <osgViewer/CompositeViewer>
 #include <osgViewer/View>
@@ -88,6 +89,7 @@ namespace OMVIS
                         const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             OMVisViewer(const OMVisViewer& rhs) = delete;
+
             OMVisViewer& operator=(const OMVisViewer& rhs) = delete;
 
             /*! \brief Destructs the OMVisViewer object and frees memory.
@@ -323,6 +325,11 @@ namespace OMVIS
 			QLabel* _RTFactorDisplay;
             /// Triggers a new frame.
             QTimer _renderTimer;
+
+            /*! This is the central widget for QMainWindow */
+            QWidget* _centralWidget;
+            /*! This is the layout added to the central widget. */
+            QVBoxLayout* _mainLayout;
 
             /*! \brief This timer controls the frequency of the scene updates.
              *
