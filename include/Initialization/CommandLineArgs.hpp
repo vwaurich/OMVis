@@ -50,12 +50,22 @@ namespace OMVIS
         class CommandLineArgs
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /// Default constructor. Attributes are initialized with default values;
             CommandLineArgs();
 
             ~CommandLineArgs() = default;
-            CommandLineArgs(const CommandLineArgs& cla) = default;
-            CommandLineArgs& operator=(const CommandLineArgs& cla) = delete;
+
+            CommandLineArgs(const CommandLineArgs& rhs) = default;
+
+            CommandLineArgs& operator=(const CommandLineArgs& rhs) = delete;
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
 
             /*!
              * @return
@@ -76,16 +86,24 @@ namespace OMVIS
              */
             bool remoteVisualization() const;
 
-            /// Outputs command line arguments to screen.
-            void print();
-
             /*!
              * Return true if model file or path are empty. If both, model file and path, are specified, this method
              * returns false.
              */
             bool empty() const;
 
+            /*-----------------------------------------
+             * PRINT METHODS
+             *---------------------------------------*/
+
+            /// Outputs command line arguments to screen.
+            void print();
+
          public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             std::string hostAddress;
             int port;
             std::string modelFile;
@@ -93,7 +111,6 @@ namespace OMVIS
             std::string wDir;
             Util::LogSettings logSet;
         };
-
 
         /*! \brief This method parses the command line arguments for visualization settings.
          *

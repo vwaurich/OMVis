@@ -26,6 +26,10 @@ namespace OMVIS
     namespace Initialization
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         CommandLineArgs::CommandLineArgs()
                 : hostAddress(),
                   port(-1),
@@ -35,6 +39,10 @@ namespace OMVIS
                   logSet()
         {
         }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
 
         VisualizationConstructionPlan CommandLineArgs::getVisualizationConstructionPlan() const
         {
@@ -65,6 +73,18 @@ namespace OMVIS
                 return true;
         }
 
+        bool CommandLineArgs::empty() const
+        {
+            if (modelFile.empty() || modelPath.empty())
+                return true;
+            else
+                return false;
+        }
+
+        /*-----------------------------------------
+         * PRINT MEHTODS
+         *---------------------------------------*/
+
         void CommandLineArgs::print()
         {
             if (!empty())
@@ -79,17 +99,19 @@ namespace OMVIS
             }
         }
 
-        bool CommandLineArgs::empty() const
-        {
-            if (modelFile.empty() || modelPath.empty())
-                return true;
-            else
-                return false;
-        }
 
         CommandLineArgs getCommandLineArguments(int argc, char *argv[])
         {
             CommandLineArgs result;
+
+            Util::LogSettings logSet;
+#ifndef NDEBUG
+            logSet.setAll(Util::LogLevel::LL_DEBUG);
+#else
+            logSet.setAll(Util::LogLevel::LL_WARNING);
+#endif
+            result.logSet = logSet;
+
             if (argc > 1)
             {
                 std::map<std::string, Util::LogCategory> logcatmap;
@@ -138,6 +160,7 @@ namespace OMVIS
                         return result;
                     }
 
+                    // User can overwrite logger settings via command line
                     Util::LogSettings logSet;
                     if (vm.count("loggerSettings"))
                     {
@@ -203,6 +226,7 @@ namespace OMVIS
                     throw std::runtime_error((std::string("Error with command lines:") + std::string(e.what())).c_str());
                 }
             }
+
             return result;
         }
 
