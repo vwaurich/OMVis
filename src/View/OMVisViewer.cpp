@@ -57,15 +57,15 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisViewer::OMVisViewer(const Initialization::CommandLineArgs& clArgs)
-            : OMVisViewer(osgViewer::CompositeViewer::SingleThreaded, clArgs)
+        OMVisViewer::OMVisViewer(QWidget* parent, const Initialization::CommandLineArgs& clArgs)
+            : OMVisViewer(parent, osgViewer::CompositeViewer::SingleThreaded, clArgs)
         {
 
         }
 
-        OMVisViewer::OMVisViewer(/*QWidget* parent, Qt::WindowFlags f,*/osgViewer::ViewerBase::ThreadingModel threadingModel,
+        OMVisViewer::OMVisViewer(QWidget* parent, osgViewer::ViewerBase::ThreadingModel threadingModel,
                                  const Initialization::CommandLineArgs& clArgs)
-                : QMainWindow(/*parent, f*/),
+                : QMainWindow(parent, Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint),
                   osgViewer::CompositeViewer(),
                   _fileMenu(nullptr),
                   _settingsMenu(nullptr),
@@ -118,12 +118,12 @@ namespace OMVIS
 
             // To trigger the paint event which renders the view.
             //MF: What is this good for?
-            QObject::connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
+            connect(&_renderTimer, SIGNAL(timeout()), this, SLOT(update()));
             _renderTimer.start(10);
 
             // To trigger the scene updates with the visualization step size.
-            QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
-            QObject::connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
+            connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
+            connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
 
             // GUI will be resized to half of screen.
             resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
@@ -167,7 +167,7 @@ namespace OMVIS
         void OMVisViewer::createLayout()
         {
             _centralWidget = new QWidget(this);
-            _mainLayout = new QVBoxLayout( _centralWidget );
+            _mainLayout = new QVBoxLayout(_centralWidget);
             assert(_osgViewerWidget != nullptr);
             assert(_timeSliderWidget != nullptr);
             assert(_controlElementWidget != nullptr);
@@ -425,7 +425,7 @@ namespace OMVIS
                 // Update the slider and the time displays.
                 updateTimingElements();
 
-                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_INFO);
             }
             catch (std::exception& ex)
             {

@@ -75,7 +75,7 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! \brief Constructs the OMVisViewer from command line arguments. */
-            OMVisViewer(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
+            OMVisViewer(QWidget* parent = Q_NULLPTR, const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             /*! \brief Constructs the OMVisViewer object from arguments.
              *
@@ -85,7 +85,7 @@ namespace OMVIS
              * \param flags             Window flags for initialization of QWidget Baseclass.
              * \param threadingModel    The threading model.
              */
-            OMVisViewer(osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded,
+            OMVisViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded,
                         const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             OMVisViewer(const OMVisViewer& rhs) = delete;
