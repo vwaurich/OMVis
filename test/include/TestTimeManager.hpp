@@ -20,7 +20,7 @@
 #ifndef TEST_INCLUDE_TESTTIMEMANAGER_HPP_
 #define TEST_INCLUDE_TESTTIMEMANAGER_HPP_
 
-#include <Control/TimeManager.hpp>
+#include "Control/TimeManager.hpp"
 #include <gtest/gtest.h>
 
 /*! \brief Class to test the class \ref Control::TimeManager.
