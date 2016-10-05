@@ -81,6 +81,7 @@ namespace OMVIS
             {
 
             }
+
             /**
              * Set all categories at once to the given level.
              * @param level The new level for all categories.
