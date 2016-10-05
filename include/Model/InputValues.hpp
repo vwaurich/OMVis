@@ -52,6 +52,10 @@ namespace OMVIS
         class InputValues
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /*! \brief Default constructor. Attributes are initialized with default values. */
             InputValues()
                     : _vrReal(nullptr),
@@ -80,6 +84,10 @@ namespace OMVIS
             /// \todo Check: Do we copy the pointer or should we copy the values the pointers point to?!
             InputValues(const InputValues& ipv) = default;
             InputValues& operator=(const InputValues& ipv) = delete;
+
+            /*-----------------------------------------
+             * SETTERS AND GETTERS
+             *---------------------------------------*/
 
             void setNumReal(const size_t num)
             {
@@ -116,6 +124,10 @@ namespace OMVIS
             }
 
          public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             const fmi1_value_reference_t* _vrReal;
             const fmi1_value_reference_t* _vrInteger;
             const fmi1_value_reference_t* _vrBoolean;
