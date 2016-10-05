@@ -167,7 +167,11 @@ namespace OMVIS
             void printKeyToInputMap() const;
 
          private:
-            InputValues _data;
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            InputValues _inputVals;
             keyMap _keyToInputMap;
             keyboardMap _keyboardToKeyMap;
         };
