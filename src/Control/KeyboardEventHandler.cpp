@@ -19,14 +19,18 @@
 
 #include "Control/KeyboardEventHandler.hpp"
 #include "Model/InputData.hpp"
+#include "Util/Logger.hpp"
 
 #include <string>
-#include <iostream>
 
 namespace OMVIS
 {
     namespace Control
     {
+
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
 
         KeyboardEventHandler::KeyboardEventHandler(std::shared_ptr<Model::InputData> inputs)
                 : GUIEventHandler(),
@@ -34,13 +38,17 @@ namespace OMVIS
         {
         }
 
+        /*-----------------------------------------
+         * FUNCTIONS
+         *---------------------------------------*/
+
         bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
         {
             switch (ea.getEventType())
             {
                 case (osgGA::GUIEventAdapter::KEYDOWN):
                 {
-                    std::cout << "KEYDOWN" << std::endl;
+                    LOGGER_WRITE(std::string("KEYDOWN"), Util::LC_CTR, Util::LL_DEBUG);
                     unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
 
                     keyBoardMapIter keyboardmapValue = _inputs->getKeyboardMap()->find(keyboardValue);
@@ -52,12 +60,13 @@ namespace OMVIS
                         keyMapIter iter = _inputs->getKeyMap()->find((inputKey) keyboardmapValue->second);
                         //this key is not assigned as input
                         if (iter == _inputs->getKeyMap()->end())
-                            std::cout << "wrong key: " << keyboardValue << std::endl;
+                            LOGGER_WRITE(std::string("Wrong key ") + std::to_string(keyboardValue), Util::LC_CTR, Util::LL_DEBUG);
                         //set the input variable
                         else
                         {
                             KeyMapValue iterValue = iter->second;
-                            std::cout << "got right key: " << keyboardValue << " and base type " << (int) iterValue._baseType << std::endl;
+                            LOGGER_WRITE(std::string("Got the right key ") + std::to_string(keyboardValue) +
+                                         " and base type " + std::to_string((int)iterValue._baseType), Util::LC_CTR, Util::LL_DEBUG);
                             int baseTypeIdx = (int) iterValue._baseType;
                             switch (baseTypeIdx)
                             {

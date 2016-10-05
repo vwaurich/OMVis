@@ -51,6 +51,10 @@ namespace OMVIS
         class KeyboardEventHandler : public osgGA::GUIEventHandler
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /// Default constructor is forbidden.
             KeyboardEventHandler() = delete;
 
@@ -69,6 +73,10 @@ namespace OMVIS
             /// The assignment operator is forbidden.
             KeyboardEventHandler& operator=(const KeyboardEventHandler& keh) = delete;
 
+            /*-----------------------------------------
+             * FUNCTIONS
+             *---------------------------------------*/
+
             /*! \todo According to /.../include/osgGA/GUIEventHandler, this method is deprecated. We should move to
              *     1. virtual bool handle(osgGA::Event* event, osg::Object* object, osg::NodeVisitor* nv);
              *  or 2. virtual bool handle(const GUIEventAdapter& ea,GUIActionAdapter& aa, osg::Object*, osg::NodeVisitor*);
@@ -76,6 +84,10 @@ namespace OMVIS
             virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             std::shared_ptr<Model::InputData> _inputs;
         };
 
