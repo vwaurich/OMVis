@@ -58,6 +58,12 @@ namespace OMVIS
             }
         }
 
+        JoystickDevice::~JoystickDevice()
+        {
+            if (_joystick != nullptr)
+                SDL_JoystickClose(_joystick);
+        }
+
         /*-----------------------------------------
          * SIMULATION METHODS
          *---------------------------------------*/

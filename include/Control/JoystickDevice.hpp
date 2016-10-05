@@ -52,14 +52,12 @@ namespace OMVIS
 
             /*! \brief Constructor.
              *
-             * Initializes the joystick with the corresponding ID
+             * Initializes the joystick with the corresponding ID.
              */
             JoystickDevice(const int joyID);
 
             /// Destructor.
-            ~JoystickDevice()
-            {
-            }
+            ~JoystickDevice();
 
             /// The copy constructor is forbidden.
             JoystickDevice(const JoystickDevice& jd) = delete;
@@ -81,7 +79,7 @@ namespace OMVIS
             int getYDir() const;
 
          private:
-            /// \todo Should be a std::unique_ptr, but at least std::shared_ptr. Memory is allocated in this class!
+            /// Memory is allocated and freed within SDL library. Just call the appropriate methods.
             SDL_Joystick* _joystick;
             SDL_Event _inputEvent;
             int _xDir;
