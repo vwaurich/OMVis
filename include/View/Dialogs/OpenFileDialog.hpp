@@ -44,11 +44,17 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            /*! \brief Constructor which creates the Qt dialog window to select the simulation file.
+            /*! \brief Constructor which creates the Qt dialog window to select a simulation file.
              *
              * The user selects the simulation file from the local file system.
              */
             OpenFileDialog(QWidget* parent = Q_NULLPTR);
+
+            ~OpenFileDialog() = default;
+
+            OpenFileDialog(const OpenFileDialog& rhs) = delete;
+
+            OpenFileDialog& operator=(const OpenFileDialog& rhs) = delete;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
