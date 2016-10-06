@@ -44,6 +44,10 @@ namespace OMVIS
         class InfoVisitor : public osg::NodeVisitor
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             /// Default constructor. Attributes are set to default values and call osg::setTraversalMode method.
             InfoVisitor();
 
@@ -56,6 +60,10 @@ namespace OMVIS
             /// The assignment operator is forbidden.
             InfoVisitor& operator=(const InfoVisitor& iv) = delete;
 
+            /*-----------------------------------------
+             * SIMULATION METHODS
+             *---------------------------------------*/
+
             /// Returns some spaces
             std::string spaces();
 
@@ -66,6 +74,10 @@ namespace OMVIS
             virtual void apply(osg::Geode& node);
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             unsigned int _level;
         };
 

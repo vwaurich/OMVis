@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Model/InfoVisitor.hpp>
+#include "Model/InfoVisitor.hpp"
 
 #include <iostream>
 
@@ -58,5 +58,5 @@ namespace OMVIS
             --_level;
         }
 
-    }  //End namespace view
+    }  //End namespace View
 }  // End namespace OMVIS
