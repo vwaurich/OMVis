@@ -49,10 +49,12 @@ namespace OMVIS
              *---------------------------------------*/
 
             UpdateVisitor();
+
             virtual ~UpdateVisitor() = default;
 
-            UpdateVisitor(const UpdateVisitor& uv) = delete;
-            UpdateVisitor& operator=(const UpdateVisitor& uv) = delete;
+            UpdateVisitor(const UpdateVisitor& rhs) = delete;
+
+            UpdateVisitor& operator=(const UpdateVisitor& rhs) = delete;
 
             /*-----------------------------------------
              * METHODS
@@ -62,6 +64,7 @@ namespace OMVIS
              * \todo Finish implementation of the branch 'isCADType'.
              */
             virtual void apply(osg::Geode& node);
+
             virtual void apply(osg::MatrixTransform& node);
 
          public:

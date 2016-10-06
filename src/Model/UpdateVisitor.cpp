@@ -18,7 +18,7 @@
  */
 
 #include "Model/UpdateVisitor.hpp"
-#include "Visualize.hpp"
+#include "Util/Visualize.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
