@@ -70,8 +70,10 @@ namespace OMVIS
             VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP);
 
             virtual ~VisualizerFMUClient() = default;
-            VisualizerFMUClient(const VisualizerFMUClient& omvf) = delete;
-            VisualizerFMUClient& operator=(const VisualizerFMUClient& omvf) = delete;
+
+            VisualizerFMUClient(const VisualizerFMUClient& rhs) = delete;
+
+            VisualizerFMUClient& operator=(const VisualizerFMUClient& rhs) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
