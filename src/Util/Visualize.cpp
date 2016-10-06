@@ -17,10 +17,10 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Visualize.hpp"
+#include "Util/Visualize.hpp"
 #include "Util/Algebra.hpp"
 #include "Util/Util.hpp"
-#include "Expression.hpp"
+#include "Util/Expression.hpp"
 #include "Model/ShapeObjectAttribute.hpp"
 
 namespace OMVIS
@@ -32,23 +32,25 @@ namespace OMVIS
          Calculate Transformations
          *******************************/
 
-        osg::Vec3f normalize(osg::Vec3f vec)
+        osg::Vec3f normalize(const osg::Vec3f& vec)
         {
             osg::Vec3f vecOut;
             if (vec.length() >= 100 * 1.e-15)
                 vecOut = vec / vec.length();
             else
-                vec / 100 * 1.e-15;
+                vecOut = vec / 100 * 1.e-15;
 
             return vecOut;
         }
 
-        osg::Vec3f cross(osg::Vec3f vec1, osg::Vec3f vec2)
+        osg::Vec3f cross(const osg::Vec3f& vec1, const osg::Vec3f& vec2)
         {
-            return osg::Vec3f(vec1[1] * vec2[2] - vec1[2] * vec2[1], vec1[2] * vec2[0] - vec1[0] * vec2[2], vec1[0] * vec2[1] - vec1[1] * vec2[0]);
+            return osg::Vec3f(vec1[1] * vec2[2] - vec1[2] * vec2[1],
+                              vec1[2] * vec2[0] - vec1[0] * vec2[2],
+                              vec1[0] * vec2[1] - vec1[1] * vec2[0]);
         }
 
-        Directions fixDirections(osg::Vec3f lDir, osg::Vec3f wDir)
+        Directions fixDirections(const osg::Vec3f& lDir, const osg::Vec3f& wDir)
         {
             Directions dirs;
             osg::Vec3f e_x;
@@ -124,7 +126,9 @@ namespace OMVIS
             //return M;
         }
 
-        rAndT rotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, float length, float width, float height, std::string type)
+        rAndT rotation(const osg::Vec3f& r, const osg::Vec3f& r_shape, const osg::Matrix3& T,
+                       const osg::Vec3f& lDirIn, const osg::Vec3f& wDirIn,
+                       const float length, const std::string& type)
         {
             rAndT res;
 
@@ -175,23 +179,23 @@ namespace OMVIS
             }
             else if (Util::isCADType(type))
             {
-                r = r + r_shape;
+                //!r = r + r_shape;
                 res._T = T;
-                res._r = r;
+                res._r = r + r_shape;
                 //r_offset = dirs.lDir*length/2.0;
             }
-			else if (type == "pipecylinder")
-			{
-				res._r = V3mulMat3(r_shape, T);
-				res._r = res._r + r;
-				res._T = Mat3mulMat3(T0, T);
-			}
-			else if (type == "spring")
-			{
-				res._r = V3mulMat3(r_shape, T);
-				res._r = res._r + r;
-				res._T = Mat3mulMat3(T0, T);
-			}
+            else if (type == "pipecylinder")
+            {
+                res._r = V3mulMat3(r_shape, T);
+                res._r = res._r + r;
+                res._T = Mat3mulMat3(T0, T);
+            }
+            else if (type == "spring")
+            {
+                res._r = V3mulMat3(r_shape, T);
+                res._r = res._r + r;
+                res._T = Mat3mulMat3(T0, T);
+            }
             else
             {
                 r_offset = dirs._lDir * length / 2.0;
@@ -207,6 +211,8 @@ namespace OMVIS
             //cout<<"roffset "<<r_offset[0]<<", "<<r_offset[1]<<", "<<r_offset[2]<<", "<<std::endl;
             return res;
         }
+
+
 
         /****************************
          * Extract Shape information

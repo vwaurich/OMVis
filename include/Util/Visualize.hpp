@@ -87,21 +87,22 @@ namespace OMVIS
          * @param
          * @return
          */
-        osg::Vec3f normalize(osg::Vec3f vec);
+        osg::Vec3f normalize(const osg::Vec3f& vec);
 
-        /*! \brief Cross
+        /*! \brief Calculates the cross product of two three-dimensional vectors.
          *
-         * @param
-         * @return
+         * \param vec1  First vector
+         * \param vec2  Second vector
+         * \return Cross product of first and second vector
          */
-        osg::Vec3f cross(osg::Vec3f vec1, osg::Vec3f vec2);
+        osg::Vec3f cross(const osg::Vec3f& vec1, const osg::Vec3f& vec2);
 
         /*! \brief Bla Bla
          *
          * @param
          * @return
          */
-        Directions fixDirections(osg::Vec3f lDir, osg::Vec3f wDir);
+        Directions fixDirections(const osg::Vec3f& lDir, const osg::Vec3f& wDir);
 
         //-----------------------
         // FUNCTIONS
@@ -162,7 +163,9 @@ namespace OMVIS
          * @param
          * @return
          */
-        rAndT rotation(osg::Vec3f r, osg::Vec3f r_shape, osg::Matrix3 T, osg::Vec3f lDirIn, osg::Vec3f wDirIn, float length, float width, float height, std::string type);
+        rAndT rotation(const osg::Vec3f& r, const osg::Vec3f& r_shape, const osg::Matrix3& T,
+                       const osg::Vec3f& lDirIn, const osg::Vec3f& wDirIn,
+                       const float length, const std::string& type);
 
     }  // End namespace Util
 }  // End namespace OMVIS
