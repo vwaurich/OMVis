@@ -132,13 +132,13 @@ namespace OMVIS
             }
         }
 
-        osg::Vec3f Spring::normalize(osg::Vec3f vec)
+        osg::Vec3f Spring::normalize(const osg::Vec3f& vec)
         {
             float abs = absoluteVector(vec);
             return osg::Vec3f(vec[0] / abs, vec[1] / abs, vec[2] / abs);
         }
 
-        osg::Vec3f Spring::getNormal(osg::Vec3f vec, float length)
+        osg::Vec3f Spring::getNormal(const osg::Vec3f& vec, float length)
         {
             osg::Vec3f vecN = normalize(vec);
             osg::Vec3f vecN_Abs = osg::Vec3f(std::abs(vecN[0]), std::abs(vecN[1]), std::abs(vecN[2]));
@@ -182,33 +182,33 @@ namespace OMVIS
             return n;
         }
 
-        float Spring::absoluteVector(osg::Vec3f vec)
+        float Spring::absoluteVector(const osg::Vec3f& vec)
         {
             return std::sqrt(std::pow(vec[0], 2) + std::pow(vec[1], 2) + std::pow(vec[2], 2));
         }
 
-        float Spring::angleBetweenVectors(osg::Vec3f vec1, osg::Vec3f vec2)
+        float Spring::angleBetweenVectors(const osg::Vec3f& vec1, osg::Vec3f vec2)
         {
             float scalarProduct = vec1[0] * vec2[0] + vec1[1] * vec2[1] + vec1[2] * vec2[2];
             return (std::acos(scalarProduct / (absoluteVector(vec1) * absoluteVector(vec2)))/* / M_PI * 180*/);
         }
 
-        osg::Vec3f Spring::rotateX(osg::Vec3f vec, float phi)
+        osg::Vec3f Spring::rotateX(const osg::Vec3f& vec, float phi)
         {
             return osg::Vec3f(vec[0], vec[1] * std::cos(phi) - vec[2] * std::sin(phi), vec[1] * std::sin(phi) + vec[2] * std::cos(phi));
         }
 
-        osg::Vec3f Spring::rotateY(osg::Vec3f vec, float phi)
+        osg::Vec3f Spring::rotateY(const osg::Vec3f& vec, float phi)
         {
             return osg::Vec3f(vec[2] * std::sin(phi) + vec[0] * std::cos(phi), vec[1], vec[2] * std::cos(phi) - vec[0] * std::sin(phi));
         }
 
-        osg::Vec3f Spring::rotateZ(osg::Vec3f vec, float phi)
+        osg::Vec3f Spring::rotateZ(const osg::Vec3f& vec, float phi)
         {
             return osg::Vec3f(vec[0] * std::cos(phi) - vec[1] * std::sin(phi), vec[0] * std::sin(phi) + vec[1] * std::cos(phi), vec[2]);
         }
 
-        osg::Vec3f Spring::rotateArbitraryAxes_expensive(osg::Vec3f vec, osg::Vec3f axes, float phi)
+        osg::Vec3f Spring::rotateArbitraryAxes_expensive(const osg::Vec3f& vec, const osg::Vec3f& axes, float phi)
         {
             //this is how I would do it by hand.  Check out rotateArbitraryAxes, thats the shortest formula.
             //There is also still something wrong in here
@@ -228,7 +228,7 @@ namespace OMVIS
             return aux;
         }
 
-        osg::Vec3f Spring::rotateArbitraryAxes(osg::Vec3f vec, osg::Vec3f axes, float phi)
+        osg::Vec3f Spring::rotateArbitraryAxes(const osg::Vec3f& vec, const osg::Vec3f& axes, float phi)
         {
             osg::Vec3f axesN = normalize(axes);
             float M1_1 = (1 - std::cos(phi)) * axesN[0] * axesN[0] + std::cos(phi) * 1 + std::sin(phi) * 0;
@@ -240,71 +240,75 @@ namespace OMVIS
             float M3_1 = (1 - std::cos(phi)) * axesN[0] * axesN[2] + std::cos(phi) * 0 + std::sin(phi) * (-axesN[1]);
             float M3_2 = (1 - std::cos(phi)) * axesN[1] * axesN[2] + std::cos(phi) * 0 + std::sin(phi) * (axesN[0]);
             float M3_3 = (1 - std::cos(phi)) * axesN[2] * axesN[2] + std::cos(phi) * 1 + std::sin(phi) * 0;
-            return osg::Vec3f(M1_1 * vec[0] + M1_2 * vec[1] + M1_3 * vec[2], M2_1 * vec[0] + M2_2 * vec[1] + M2_3 * vec[2], M3_1 * vec[0] + M3_2 * vec[1] + M3_3 * vec[2]);
+            return osg::Vec3f(M1_1 * vec[0] + M1_2 * vec[1] + M1_3 * vec[2],
+                              M2_1 * vec[0] + M2_2 * vec[1] + M2_3 * vec[2],
+                              M3_1 * vec[0] + M3_2 * vec[1] + M3_3 * vec[2]);
         }
 
         Spring::Spring(const float r, const float rCoil, const float nWindings, const float l)
-                : osg::Geometry()
+                : osg::Geometry(),
+                  _outerVertices(nullptr),
+                  _splineVertices(nullptr)
         {
-            float R = r;
-            float L = l;
-            float RCOIL = rCoil;
-            float NWIND = nWindings;
-
             const int ELEMENTS_WINDING = 10;
             const int ELEMENTS_CONTOUR = 6;
 
-            this->getPrimitiveSetList().clear();
-
             //the inner line points
-            int numSegments = (ELEMENTS_WINDING * NWIND) + 1;
-            splineVertices = new osg::Vec3Array(numSegments);
+            int numSegments = (ELEMENTS_WINDING * nWindings) + 1;
+            _splineVertices = new osg::Vec3Array(numSegments);
 
-            for (int segIdx = 0; segIdx < numSegments; segIdx++)
+            double c1 = 2.0 * M_PI / (double) ELEMENTS_WINDING;
+            double c2 = l / numSegments;
+            float x, y, z;
+            for (int segIdx = 0; segIdx < numSegments; ++segIdx)
             {
-                float x = std::sin(2 * M_PI / ELEMENTS_WINDING * segIdx) * R;
-                float y = std::cos(2 * M_PI / ELEMENTS_WINDING * segIdx) * R;
-                float z = L / numSegments * segIdx;
-                (*splineVertices)[segIdx].set(osg::Vec3(x, y, z));
+                x = std::sin(c1 * segIdx) * r;
+                y = std::cos(c1 * segIdx) * r;
+                z = c2 * segIdx;
+                (*_splineVertices)[segIdx].set(osg::Vec3(x, y, z));
             }
 
-            //the outer points for the facettes
+            //the outer points for the facets
             int numVertices = (numSegments + 1) * ELEMENTS_CONTOUR;
-            outerVertices = new osg::Vec3Array(numVertices);
+            _outerVertices = new osg::Vec3Array(numVertices);
             osg::Vec3f normal;
             osg::Vec3f v1;
             osg::Vec3f v2;
             int vertIdx = 0;
-            for (int i = 0; i < numSegments - 1; i++)
+            osg::Vec3f vec0, a1;
+            float angle;
+            float c3 = M_PI * 2 / ELEMENTS_CONTOUR;
+            for (int i = 0; i < numSegments - 1; ++i)
             {
-                v1 = splineVertices->at(i);
-                v2 = splineVertices->at(i + 1);
+                v1 = (*_splineVertices)[i];
+                v2 = (*_splineVertices)[i + 1];
                 normal = osg::Vec3f(v2[0] - v1[0], v2[1] - v1[1], v2[2] - v1[2]);
-                osg::Vec3f vec0 = normal;
-                normal = getNormal(normal, RCOIL);
-                for (int i1 = 0; i1 < ELEMENTS_CONTOUR; i1++)
+                vec0 = normal;
+                normal = getNormal(normal, rCoil);
+                for (int i1 = 0; i1 < ELEMENTS_CONTOUR; ++i1)
                 {
-                    float angle = M_PI * 2 / ELEMENTS_CONTOUR * i1;
-                    osg::Vec3f a1 = rotateArbitraryAxes(normal, vec0, angle);
-                    (*outerVertices)[vertIdx].set(osg::Vec3f((v1[0] + a1[0]), (v1[1] + a1[1]), (v1[2] + a1[2])));
-                    vertIdx++;
+                    angle = c3 * i1;
+                    a1 = rotateArbitraryAxes(normal, vec0, angle);
+                    (*_outerVertices)[vertIdx].set(osg::Vec3f((v1[0] + a1[0]), (v1[1] + a1[1]), (v1[2] + a1[2])));
+                    ++vertIdx;
                 }
             }
 
             // pass the created vertex array to the points geometry object.
-            this->setVertexArray(outerVertices);
+            this->setVertexArray(_outerVertices);
 
             //PLANES
             // base plane bottom
-            osg::DrawElementsUInt* basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
+            osg::DrawElementsUInt* basePlane;  // = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
             int numFacettes = ELEMENTS_CONTOUR * (numSegments - 2);
-            for (int i = 0; i < numFacettes; i++)
+            for (int i = 0; i < numFacettes; ++i)
             {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-                basePlane->push_back(i);
-                basePlane->push_back(i + 1);
-                basePlane->push_back(i + ELEMENTS_CONTOUR);
-                basePlane->push_back(i + ELEMENTS_CONTOUR - 1);
+                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+                (*basePlane)[0] = i;
+                (*basePlane)[1] = i + 1;
+                (*basePlane)[2] = i + ELEMENTS_CONTOUR;
+                (*basePlane)[3] = i + ELEMENTS_CONTOUR - 1;
+
                 this->addPrimitiveSet(basePlane);
             }
             //std::cout << "NUM " << outerVertices->size() << std::endl;

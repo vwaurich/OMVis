@@ -35,6 +35,7 @@
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/Shape>
+#include <osg/ref_ptr>
 
 namespace OMVIS
 {
@@ -44,7 +45,12 @@ namespace OMVIS
         class Pipecylinder : public osg::Geometry
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             Pipecylinder(const float rI, const float rO, const float l);
+
             ~Pipecylinder() = default;
 
         };
@@ -52,24 +58,35 @@ namespace OMVIS
         class Spring : public osg::Geometry
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             Spring(const float r, const float rCoil, const float nWindings, const float l);
-            ~Spring()
-            {
-            }
+
+            ~Spring() = default;
 
          private:
-            osg::Vec3f getNormal(osg::Vec3f vec, float length = 1);
-            osg::Vec3f normalize(osg::Vec3f vec);
-            osg::Vec3f rotateX(osg::Vec3f vec, float phi);
-            osg::Vec3f rotateY(osg::Vec3f vec, float phi);
-            osg::Vec3f rotateZ(osg::Vec3f vec, float phi);
-            osg::Vec3f rotateArbitraryAxes_expensive(osg::Vec3f vec, osg::Vec3f axes, float phi);
-            osg::Vec3f rotateArbitraryAxes(osg::Vec3f vec, osg::Vec3f axes, float phi);
-            float absoluteVector(osg::Vec3f vec);
-            float angleBetweenVectors(osg::Vec3f vec1, osg::Vec3f vec2);
+            /*-----------------------------------------
+             * MATH FUNCTIONS
+             *---------------------------------------*/
 
-            osg::Vec3Array* outerVertices;
-            osg::Vec3Array* splineVertices;
+            osg::Vec3f getNormal(const osg::Vec3f& vec, float length = 1);
+            osg::Vec3f normalize(const osg::Vec3f& vec);
+            osg::Vec3f rotateX(const osg::Vec3f& vec, float phi);
+            osg::Vec3f rotateY(const osg::Vec3f& vec, float phi);
+            osg::Vec3f rotateZ(const osg::Vec3f& vec, float phi);
+            osg::Vec3f rotateArbitraryAxes_expensive(const osg::Vec3f& vec, const osg::Vec3f& axes, float phi);
+            osg::Vec3f rotateArbitraryAxes(const osg::Vec3f& vec, const osg::Vec3f& axes, float phi);
+            float absoluteVector(const osg::Vec3f& vec);
+            float angleBetweenVectors(const osg::Vec3f& vec1, osg::Vec3f vec2);
+
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            osg::ref_ptr<osg::Vec3Array> _outerVertices;
+            osg::ref_ptr<osg::Vec3Array> _splineVertices;
         };
 
     }  // End namespace Model
