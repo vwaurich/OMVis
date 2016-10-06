@@ -18,7 +18,7 @@
  */
 
 #include "Model/ShapeObject.hpp"
-#include "Visualize.hpp"
+#include "Util/Visualize.hpp"
 
 #include <iostream>
 
@@ -26,6 +26,7 @@ namespace OMVIS
 {
     namespace Model
     {
+
         /*-----------------------------------------
          * CONSTRUCTORS
          *---------------------------------------*/
@@ -47,7 +48,6 @@ namespace OMVIS
                   _specCoeff(ShapeObjectAttribute(0.7)),
                   _mat(osg::Matrix(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)),
                   _extra(0.0)
-
         {
         }
 

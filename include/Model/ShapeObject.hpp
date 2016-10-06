@@ -55,7 +55,7 @@ namespace OMVIS
             ShapeObject& operator=(const ShapeObject&) = default;
 
             /*-----------------------------------------
-             * METHODS
+             * PRINT METHODS
              *---------------------------------------*/
 
             /// Dumps the attributes to std::cout.
