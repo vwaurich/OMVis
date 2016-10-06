@@ -50,13 +50,19 @@ namespace OMVIS
              */
             PerspectiveSettingDialog(QWidget* parent = Q_NULLPTR);
 
+            ~PerspectiveSettingDialog() = default;
+
+            PerspectiveSettingDialog(const PerspectiveSettingDialog& rhs) = delete;
+
+            PerspectiveSettingDialog& operator=(const PerspectiveSettingDialog& rhs) = delete;
+
             /*-----------------------------------------
              * GETTERS AND SETTERS
              *---------------------------------------*/
 
             /*! \brief
              *
-             * @return Perspective which was selected.
+             * \return Perspective which was selected.
              */
             Perspective getResult() const;
 
@@ -65,8 +71,10 @@ namespace OMVIS
              *---------------------------------------*/
 
          private slots:
-            /*! If the user made a selection and clicked the apply button, this method reads and stores the selection into member \ref _perspective.
+            /*!
              *
+             * If the user made a selection and clicked the apply button, this method reads and stores the selection
+             * into member \ref _perspective.
              */
             void accept() Q_DECL_OVERRIDE;
 
