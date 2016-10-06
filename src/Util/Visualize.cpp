@@ -112,7 +112,6 @@ namespace OMVIS
             return dirs;
         }
 
-        //osg::Matrix assemblePokeMatrix(osg::Matrix M, const osg::Matrix3& T, const osg::Vec3f& r)
         void assemblePokeMatrix(osg::Matrix& M, const osg::Matrix3& T, const osg::Vec3f& r)
         {
             M(3, 3) = 1.0;
@@ -123,7 +122,6 @@ namespace OMVIS
                 for (int col = 0; col < 3; ++col)
                     M(row, col) = T[row * 3 + col];
             }
-            //return M;
         }
 
         rAndT rotation(const osg::Vec3f& r, const osg::Vec3f& r_shape, const osg::Matrix3& T,
@@ -142,7 +140,7 @@ namespace OMVIS
             osg::Vec3f r_offset = osg::Vec3f(0.0, 0.0, 0.0);  // since in osg, the rotation starts in the symmetric centre and in msl at the end of the body, we need an offset here of l/2 for some geometries
             osg::Matrix3 T0 = osg::Matrix3(dirs._wDir[0], dirs._wDir[1], dirs._wDir[2], hDir[0], hDir[1], hDir[2], dirs._lDir[0], dirs._lDir[1], dirs._lDir[2]);
 
-            if (type == "cylinder")
+            if (type == "cylinder" || type == "box")
             {
                 /*
                  r = r + r_shape;
@@ -151,64 +149,37 @@ namespace OMVIS
                  res.r = r+r_offset;
                  */
                 r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
+                res._r = Util::V3mulMat3(r_shape + r_offset, T) + r;
                 res._T = Util::Mat3mulMat3(T0, T);
             }
             else if (type == "sphere")
             {
                 T0 = osg::Matrix3(dirs._lDir[0], dirs._lDir[1], dirs._lDir[2], dirs._wDir[0], dirs._wDir[1], dirs._wDir[2], hDir[0], hDir[1], hDir[2]);
                 r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
-            else if (type == "cone")
-            {
-                // no offset needed
-                res._r = Util::V3mulMat3(r_shape, T);
-                res._r = res._r + r;
-                res._T = Util::Mat3mulMat3(T0, T);
-            }
-            else if (type == "box")
-            {
-                r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
+                res._r = Util::V3mulMat3(r_shape + r_offset, T) + r;
                 res._T = Util::Mat3mulMat3(T0, T);
             }
             else if (Util::isCADType(type))
             {
                 //!r = r + r_shape;
                 res._T = T;
-                res._r = r + r_shape;
+                res._r += r_shape;
                 //r_offset = dirs.lDir*length/2.0;
             }
-            else if (type == "pipecylinder")
+            else if (type == "pipecylinder" || type == "spring" || type == "cone")
             {
-                res._r = V3mulMat3(r_shape, T);
-                res._r = res._r + r;
-                res._T = Mat3mulMat3(T0, T);
-            }
-            else if (type == "spring")
-            {
-                res._r = V3mulMat3(r_shape, T);
-                res._r = res._r + r;
+                res._r = V3mulMat3(r_shape, T) + r;
                 res._T = Mat3mulMat3(T0, T);
             }
             else
             {
                 r_offset = dirs._lDir * length / 2.0;
-                res._r = Util::V3mulMat3(r_shape + r_offset, T);
-                res._r = res._r + r;
+                res._r = Util::V3mulMat3(r_shape + r_offset, T) + r;
                 res._T = Util::Mat3mulMat3(T0, T);
             }
 
-            //std::cout<<"lDir "<<dirs.lDir[0]<<", "<<dirs.lDir[1]<<", "<<dirs.lDir[2]<<", "<<std::endl;
-            //std::cout<<"wDir "<<dirs.wDir[0]<<", "<<dirs.wDir[1]<<", "<<dirs.wDir[2]<<", "<<std::endl;
-            //std::cout<<"hDir "<<hDir[0]<<", "<<hDir[1]<<", "<<hDir[2]<<", "<<std::endl;
-            //cout<<"rin "<<r[0]<<", "<<r[1]<<", "<<r[2]<<", "<<std::endl;
-            //cout<<"roffset "<<r_offset[0]<<", "<<r_offset[1]<<", "<<r_offset[2]<<", "<<std::endl;
+//            std::cout<<"res_r "<<res._r[0]<<", "<<res._r[1]<<", "<<res._r[2]<<", "<<std::endl;
+//            std::cout << "------------------------------\n";
             return res;
         }
 
