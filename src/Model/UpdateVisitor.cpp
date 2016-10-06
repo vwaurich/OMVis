@@ -18,6 +18,8 @@
  */
 
 #include "Model/UpdateVisitor.hpp"
+#include "Model/Shapes/Spring.hpp"
+#include "Model/Shapes/Pipecylinder.hpp"
 #include "Util/Visualize.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"

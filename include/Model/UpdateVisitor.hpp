@@ -28,7 +28,6 @@
 #define INCLUDE_UPDATEVISITOR_HPP_
 
 #include "Model/ShapeObject.hpp"
-#include "Model/AdditionalShapes.hpp"
 
 #include <osg/NodeVisitor>
 #include <osg/Geode>
