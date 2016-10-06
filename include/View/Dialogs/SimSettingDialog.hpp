@@ -49,6 +49,12 @@ namespace OMVIS
 
             SimSettingDialogFMU(QWidget* parent = Q_NULLPTR);
 
+            ~SimSettingDialogFMU() = default;
+
+            SimSettingDialogFMU(const SimSettingDialogFMU& rhs) = delete;
+
+            SimSettingDialogFMU& operator= (const SimSettingDialogFMU& rhs) = delete;
+
             /*-----------------------------------------
              * GETTERS AND SETTERS
              *---------------------------------------*/
@@ -91,6 +97,12 @@ namespace OMVIS
              *---------------------------------------*/
 
             SimSettingDialogMAT(QWidget* parent = Q_NULLPTR);
+
+            ~SimSettingDialogMAT() = default;
+
+            SimSettingDialogMAT(const SimSettingDialogMAT& rhs) = delete;
+
+            SimSettingDialogMAT& operator= (const SimSettingDialogMAT& rhs) = delete;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
