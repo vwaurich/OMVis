@@ -27,7 +27,7 @@
 #ifndef INCLUDE_OMVISUALBASE_HPP_
 #define INCLUDE_OMVISUALBASE_HPP_
 
-#include "Visualize.hpp"
+#include "Util/Visualize.hpp"
 #include "Model/ShapeObject.hpp"
 
 #include <rapidxml.hpp>
@@ -63,8 +63,10 @@ namespace OMVIS
             OMVisualBase(const std::string& modelFile, const std::string& path);
 
             ~OMVisualBase() = default;
-            OMVisualBase(const OMVisualBase& omvb) = delete;
-            OMVisualBase& operator=(const OMVisualBase& omvb) = delete;
+
+            OMVisualBase(const OMVisualBase& rhs) = delete;
+
+            OMVisualBase& operator=(const OMVisualBase& rhs) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
