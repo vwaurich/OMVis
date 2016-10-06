@@ -231,7 +231,7 @@ ADD_SUBDIRECTORY(thirdparty/gtest-1.7.0/)
 ADD_SUBDIRECTORY(thirdparty/NetworkOffloader/)
 
 # Find Sources
-FILE(GLOB_RECURSE SRCS "src/*/*.cpp" "src/Visualize.cpp" "src/Expression.cpp")
+FILE(GLOB_RECURSE SRCS "src/*/*.cpp")
 
 # Moc necessary files. Automoc does not work for us, since the header files containing the QObject macro and the 
 # source files which include this files are in separated (sub)folders.
@@ -242,11 +242,11 @@ QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenRemoteConnectionDialog
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenFileDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/SimSettingDialog.hpp)
 
-FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/*.cpp" "src/Util/Logger.cpp" 
-                             "src/Visualize.cpp" "src/Expression.cpp" "src/Util/Algebra.cpp")
+FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/*.cpp" "src/Util/*.cpp")
 
 ADD_EXECUTABLE(OMVis ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")
 ADD_EXECUTABLE(OMVisTests EXCLUDE_FROM_ALL ${SRCS_TESTS} ${OMC_MATLAB_READER_C} "test/Main.cpp")
+ADD_EXECUTABLE(OMVisBase ${SRCS} ${OMC_MATLAB_READER_C} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} "mf_benchs/Main.cpp")
 
 SET(INCLUDEDIRS "include")
 
@@ -268,7 +268,8 @@ SET(LINKLIBRARIES ${FMILIB_LIBRARIES} ${OPENSCENEGRAPH_LIBRARIES} ${SDL2_LIBRARI
                   ${Boost_LIBRARIES} ${LIBRARIES_EXTRA} Qt5::Widgets Qt5::Gui Qt5::OpenGL Qt5::Core)
 TARGET_LINK_LIBRARIES(OMVis ${LINKLIBRARIES} "netoff")
 TARGET_LINK_LIBRARIES(OMVisTests ${LINKLIBRARIES} "gtest" "netoff")
-
+TARGET_INCLUDE_DIRECTORIES(OMVisBase PRIVATE ${INCLUDEDIRS})
 
 MESSAGE(STATUS "OSG INClUDE: ${OPENSCENEGRAPH_INCLUDE_DIRS}")
 MESSAGE(STATUS "OSG LIBRARIES ${OPENSCENEGRAPH_LIBRARIES}")
+TARGET_LINK_LIBRARIES(OMVisBase ${LINKLIBRARIES} "netoff")
