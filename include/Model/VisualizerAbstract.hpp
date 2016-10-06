@@ -33,7 +33,7 @@
 #include "Model/UpdateVisitor.hpp"
 #include "Model/VisualizationTypes.hpp"
 #include "Model/SimSettings.hpp"
-#include "Visualize.hpp"
+#include "Util/Visualize.hpp"
 #include "ShapeObjectAttribute.hpp"
 
 #include <memory>
@@ -75,10 +75,10 @@ namespace OMVIS
             virtual ~VisualizerAbstract() = default;
 
             /// The copy constructor is forbidden.
-            VisualizerAbstract(const VisualizerAbstract& omv) = delete;
+            VisualizerAbstract(const VisualizerAbstract& rhs) = delete;
 
             /// The assignment operator is forbidden.
-            VisualizerAbstract& operator=(const VisualizerAbstract& omv) = delete;
+            VisualizerAbstract& operator=(const VisualizerAbstract& rhs) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
