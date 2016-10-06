@@ -162,7 +162,7 @@ namespace OMVIS
                                                      shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
                                         osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
                                         osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
-                                        shape._length.exp, shape._width.exp, shape._height.exp, shape._type);
+                                        shape._length.exp, shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
@@ -171,7 +171,7 @@ namespace OMVIS
                     //shape.dumpVisAttributes();
 
                     // Get the scene graph nodes and stuff.
-                    child = _viewerStuff->getScene().getRootNode()->getChild(shapeIdx);  // the transformation
+                    child = _viewerStuff->getScene()->getRootNode()->getChild(shapeIdx);  // the transformation
                     child->accept(*_nodeUpdater);
                     ++shapeIdx;
                 }
