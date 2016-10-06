@@ -17,11 +17,10 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "Util/Expression.hpp"
 
 #include <iostream>
 #include <cmath>
-#include "Expression.hpp"
-
 
 using namespace rapidxml;
 
