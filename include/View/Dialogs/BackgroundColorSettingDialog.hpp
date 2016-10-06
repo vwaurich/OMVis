@@ -50,10 +50,11 @@ namespace OMVIS
              */
             BackgroundColorSettingDialog(QWidget* parent = Q_NULLPTR);
 
-            BackgroundColorSettingDialog(const BackgroundColorSettingDialog&) = delete;
-            BackgroundColorSettingDialog& operator=(const BackgroundColorSettingDialog&) = delete;
-
             ~BackgroundColorSettingDialog() = default;
+
+            BackgroundColorSettingDialog(const BackgroundColorSettingDialog& rhs) = delete;
+
+            BackgroundColorSettingDialog& operator=(const BackgroundColorSettingDialog& rhs) = delete;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
