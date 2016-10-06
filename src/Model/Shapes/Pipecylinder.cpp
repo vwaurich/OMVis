@@ -35,102 +35,96 @@ namespace OMVIS
             const int nEdges = 20;
             double phi = 2 * M_PI / nEdges;
 
-            std::cout << "rI " << rI << "  rO " << rO << std::endl;
-
             //VERTICES
-            osg::Vec3Array* vertices = new osg::Vec3Array;
-            // inner base ring
-            for (int i = 0; i < nEdges; i++)
+            osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array(4*nEdges);
+
+            for (int i = 0; i < nEdges; ++i)
             {
-                vertices->push_back(osg::Vec3(sin(phi * i) * rI, cos(phi * i) * rI, 0));
-            }
-            // outer base ring
-            for (int i = 0; i < nEdges; i++)
-            {
-                vertices->push_back(osg::Vec3(sin(phi * i) * rO, cos(phi * i) * rO, 0));
-            }
-            // inner end ring
-            for (int i = 0; i < nEdges; i++)
-            {
-                vertices->push_back(osg::Vec3(sin(phi * i) * rI, cos(phi * i) * rI, l));
-            }
-            // outer end ring
-            for (int i = 0; i < nEdges; i++)
-            {
-                vertices->push_back(osg::Vec3(sin(phi * i) * rO, cos(phi * i) * rO, l));
+                // inner base ring
+                (*vertices)[i] = osg::Vec3(sin(phi * i) * rI, cos(phi * i) * rI, 0);
+
+                // outer base ring
+                (*vertices)[i+nEdges] = osg::Vec3(sin(phi * i) * rO, cos(phi * i) * rO, 0);
+
+                // inner end ring
+                (*vertices)[i+2*nEdges] = osg::Vec3(sin(phi * i) * rI, cos(phi * i) * rI, l);
+
+                // outer end ring
+                (*vertices)[i+3*nEdges] = osg::Vec3(sin(phi * i) * rO, cos(phi * i) * rO, l);
             }
             this->setVertexArray(vertices);
 
             //PLANES
             // base plane bottom
-            osg::DrawElementsUInt* basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-            basePlane->push_back(0);
-            basePlane->push_back(nEdges - 1);
-            basePlane->push_back(2 * nEdges - 1);
-            basePlane->push_back(nEdges);
+            osg::ref_ptr<osg::DrawElementsUInt> basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+            (*basePlane)[0] = 0;
+            (*basePlane)[1] = nEdges - 1;
+            (*basePlane)[2] = (2 * nEdges - 1);
+            (*basePlane)[3] = (nEdges);
             this->addPrimitiveSet(basePlane);
 
-            for (int i = 0; i < (nEdges - 1); i++)
+            for (int i = 0; i < (nEdges - 1); ++i)
             {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-                basePlane->push_back(0 + i);
-                basePlane->push_back(1 + i);
-                basePlane->push_back(nEdges + 1 + i);
-                basePlane->push_back(nEdges + 0 + i);
+                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+                (*basePlane)[0] = i;
+                (*basePlane)[1] = i + 1;
+                (*basePlane)[2] = nEdges + 1 + i;
+                (*basePlane)[3] = nEdges + i;
                 this->addPrimitiveSet(basePlane);
             }
 
             // base plane top
-            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-            basePlane->push_back(0 + 2 * nEdges);
-            basePlane->push_back(nEdges - 1 + 2 * nEdges);
-            basePlane->push_back(2 * nEdges - 1 + 2 * nEdges);
-            basePlane->push_back(nEdges + 2 * nEdges);
+            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+            (*basePlane)[0] = 2 * nEdges;
+            (*basePlane)[1] = nEdges - 1 + 2 * nEdges;
+            (*basePlane)[2] = 2 * nEdges - 1 + 2 * nEdges;
+            (*basePlane)[3] = nEdges + 2 * nEdges;
             this->addPrimitiveSet(basePlane);
 
-            for (int i = (2 * nEdges); i < (nEdges - 1 + (2 * nEdges)); i++)
+            for (int i = (2 * nEdges); i < (nEdges - 1 + (2 * nEdges)); ++i)
             {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-                basePlane->push_back(0 + i);
-                basePlane->push_back(1 + i);
-                basePlane->push_back(nEdges + 1 + i);
-                basePlane->push_back(nEdges + 0 + i);
+                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+                (*basePlane)[0] = i;
+                (*basePlane)[1] = i + 1;
+                (*basePlane)[2] = nEdges +1 + i;
+                (*basePlane)[3] = nEdges + i;
                 this->addPrimitiveSet(basePlane);
             }
 
             //inner lateral planes
-            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-            basePlane->push_back(0);
-            basePlane->push_back(nEdges - 1);
-            basePlane->push_back(3 * nEdges - 1);
-            basePlane->push_back(2 * nEdges);
+            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+            (*basePlane)[0] = 0;
+            (*basePlane)[1] = nEdges - 1;
+            (*basePlane)[2] = 3 * nEdges - 1;
+            (*basePlane)[3] = 2 * nEdges;
             this->addPrimitiveSet(basePlane);
 
-            for (int i = 0; i < (nEdges - 1); i++)
+            for (int i = 0; i < (nEdges - 1); ++i)
             {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-                basePlane->push_back(i);
-                basePlane->push_back(i + 1);
-                basePlane->push_back(i + 1 + 2 * nEdges);
-                basePlane->push_back(i + 2 * nEdges);
+                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+                (*basePlane)[0] = i;
+                (*basePlane)[1] = i + 1;
+                (*basePlane)[2] = i + 1 + 2 * nEdges;
+                (*basePlane)[3] = i + 2 * nEdges;
                 this->addPrimitiveSet(basePlane);
             }
+
             //outer lateral planes
-            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-            basePlane->push_back(nEdges);
-            basePlane->push_back(2 * nEdges - 1);
-            basePlane->push_back(4 * nEdges - 1);
-            basePlane->push_back(3 * nEdges);
+            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+            (*basePlane)[0] = nEdges;
+            (*basePlane)[1] = 2 * nEdges - 1;
+            (*basePlane)[2] = 4 * nEdges - 1;
+            (*basePlane)[3] = 3 * nEdges;
             this->addPrimitiveSet(basePlane);
 
             //outer lateral planes
-            for (int i = nEdges; i < (2 * nEdges - 1); i++)
+            for (int i = nEdges; i < (2 * nEdges - 1); ++i)
             {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 0);
-                basePlane->push_back(i);
-                basePlane->push_back(i + 1);
-                basePlane->push_back(i + 1 + 2 * nEdges);
-                basePlane->push_back(i + 2 * nEdges);
+                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
+                (*basePlane)[0] = i;
+                (*basePlane)[1] = i + 1;
+                (*basePlane)[2] = i + 1 + 2 * nEdges;
+                (*basePlane)[3] = i + 2 * nEdges;
                 this->addPrimitiveSet(basePlane);
             }
         }
