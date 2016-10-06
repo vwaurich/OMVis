@@ -35,15 +35,15 @@
 
 #include "Model/SimSettingsFMU.hpp"
 #include "Model/VisualizerAbstract.hpp"
-#include "Control/TimeManager.hpp"
-#include "Initialization/Factory.hpp"
 #include "Model/InfoVisitor.hpp"
-#include "View/OMVisViewer.hpp"
-#include "Visualize.hpp"
 #include "Model/UpdateVisitor.hpp"
+#include "Control/TimeManager.hpp"
+#include "Initialization/CommandLineArgs.hpp"
+#include "Initialization/Factory.hpp"
+#include "View/OMVisViewer.hpp"
+#include "Util/Visualize.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
-#include "Initialization/CommandLineArgs.hpp"
 
 #include <QApplication>
 
