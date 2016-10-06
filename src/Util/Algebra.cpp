@@ -33,31 +33,32 @@ namespace OMVIS
     namespace Util
     {
 
-        osg::Vec3f Mat3mulV3(osg::Matrix3 M, osg::Vec3f V)
+        osg::Vec3f Mat3mulV3(const osg::Matrix3& M, const osg::Vec3f& V)
         {
             return osg::Vec3f(M[0] * V[0] + M[1] * V[1] + M[2] * V[2], M[3] * V[0] + M[4] * V[1] + M[5] * V[2], M[6] * V[0] + M[7] * V[1] + M[8] * V[2]);
         }
 
-        osg::Vec3f V3mulMat3(osg::Vec3f V, osg::Matrix3 M)
+        osg::Vec3f V3mulMat3(const osg::Vec3f& V, const osg::Matrix3& M)
         {
             return osg::Vec3f(M[0] * V[0] + M[3] * V[1] + M[6] * V[2], M[1] * V[0] + M[4] * V[1] + M[7] * V[2], M[2] * V[0] + M[5] * V[1] + M[8] * V[2]);
         }
 
-        osg::Matrix3 Mat3mulMat3(osg::Matrix3 M1, osg::Matrix3 M2)
+        osg::Matrix3 Mat3mulMat3(const osg::Matrix3& M1, const osg::Matrix3& M2)
         {
             osg::Matrix3 M3;
+            float val;
             for (int i = 0; i < 3; ++i)
             {
                 for (int j = 0; j < 3; ++j)
                 {
                     //cout<<" i and j "<<i<<" "<<j<<endl;
-                    float x = 0.0;
+                    val = 0.0f;
                     for (int k = 0; k < 3; ++k)
                     {
                         //cout<<M1[i*3+k]<<" * "<<M2[k*3+j]<<" = "<<M1[i*3+k]*M2[k*3+j]<<endl;
-                        x = M1[i * 3 + k] * M2[k * 3 + j] + x;
+                        val += M1[i * 3 + k] * M2[k * 3 + j];
                     }
-                    M3[i * 3 + j] = x;
+                    M3[i * 3 + j] = val;
                 }
             }
 

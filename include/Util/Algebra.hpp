@@ -39,21 +39,21 @@ namespace OMVIS
          @param
          @return
          */
-        osg::Vec3f Mat3mulV3(osg::Matrix3 M, osg::Vec3f V);
+        osg::Vec3f Mat3mulV3(const osg::Matrix3& M, const osg::Vec3f& V);
 
         /*! \brief Multiplication of 3x3 Matrix and 3x3 Matrix.
          *
          @param
          @return
          */
-        osg::Matrix3 Mat3mulMat3(osg::Matrix3 M1, osg::Matrix3 M2);
+        osg::Matrix3 Mat3mulMat3(const osg::Matrix3& M1, const osg::Matrix3& M2);
 
         /*! \brief Multiplication of 3-col-Vector and a 3x3 Matrix.
          *
          * @param
          @return
          */
-        osg::Vec3f V3mulMat3(osg::Vec3f V, osg::Matrix3 M);
+        osg::Vec3f V3mulMat3(const osg::Vec3f& V, const osg::Matrix3& M);
 
     }  // End namespace Util
 }  // End namespace OMVIS
