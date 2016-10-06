@@ -57,9 +57,11 @@ namespace OMVIS
              */
             OpenRemoteConnectionDialog(QWidget* parent = Q_NULLPTR);
 
-            OpenRemoteConnectionDialog(const OpenRemoteConnectionDialog&) = delete;
-            OpenRemoteConnectionDialog& operator=(const OpenRemoteConnectionDialog&) = delete;
             ~OpenRemoteConnectionDialog() = default;
+
+            OpenRemoteConnectionDialog(const OpenRemoteConnectionDialog& rhs) = delete;
+
+            OpenRemoteConnectionDialog& operator=(const OpenRemoteConnectionDialog& rhs) = delete;
 
             /*-----------------------------------------
              * GETTERS AND SETTERS
