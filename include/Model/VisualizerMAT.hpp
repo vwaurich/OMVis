@@ -59,8 +59,9 @@ namespace OMVIS
 
             virtual ~VisualizerMAT() = default;
 
-            VisualizerMAT(const VisualizerMAT& omvm) = delete;
-            VisualizerMAT& operator=(const VisualizerMAT& omvm) = delete;
+            VisualizerMAT(const VisualizerMAT& rhs) = delete;
+
+            VisualizerMAT& operator=(const VisualizerMAT& rhs) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
