@@ -28,6 +28,7 @@
 #define INCLUDE_OMVISSCENE_HPP_
 
 #include "Model/OSGScene.hpp"
+#include <memory>
 
 namespace OMVIS
 {
@@ -41,20 +42,34 @@ namespace OMVIS
         class OMVisScene
         {
          public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
             OMVisScene();
+
             ~OMVisScene() = default;
 
             OMVisScene(const OMVisScene& omvv) = delete;
             OMVisScene& operator=(const OMVisScene& omvv) = delete;
+
+            /*-----------------------------------------
+             * GETTERS AND SETTERS
+             *---------------------------------------*/
 
             /*! \brief This method dumps a string representation of the scene graph to stdOut.
              *
              */
             void dumpOSGTreeDebug();
 
-            OSGScene& getScene();
+            /*! \brief Returns pointer to OSGScene. */
+            OSGScene* getScene();
 
          private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
             OSGScene _scene;
         };
 

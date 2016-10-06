@@ -20,17 +20,24 @@
 #include "Model/InfoVisitor.hpp"
 #include "Model/OMVisScene.hpp"
 
-//#include <osgGA/TrackballManipulator>
 
 namespace OMVIS
 {
     namespace Model
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         OMVisScene::OMVisScene()
                 : _scene()
         {
         }
+
+        /*-----------------------------------------
+         * GETTERS AND SETTERS
+         *---------------------------------------*/
 
         void OMVisScene::dumpOSGTreeDebug()
         {
@@ -39,9 +46,9 @@ namespace OMVIS
             _scene.getRootNode()->accept(infoVisitor);
         }
 
-        OSGScene& OMVisScene::getScene()
+        OSGScene* OMVisScene::getScene()
         {
-            return _scene;
+            return &_scene;
         }
 
     }  // End namespace Model
