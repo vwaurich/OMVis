@@ -66,8 +66,9 @@ namespace OMVIS
 
             virtual ~VisualizerFMU() = default;
 
-            VisualizerFMU(const VisualizerFMU& omvf) = delete;
-            VisualizerFMU& operator=(const VisualizerFMU& omvf) = delete;
+            VisualizerFMU(const VisualizerFMU& rhs) = delete;
+
+            VisualizerFMU& operator=(const VisualizerFMU& rhs) = delete;
 
             /*-----------------------------------------
              * INITIALIZATION METHODS
