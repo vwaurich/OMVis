@@ -166,7 +166,7 @@ namespace OMVIS
              * A connection to the method \ref setVisTimeSlotFunction(int) is created and triggered if the user
              * moves the slider.
              */
-            QWidget* setupTimeSliderWidget();
+            void setupTimeSliderWidget();
 
             /*! \brief Creates a GUI element to set the mapping for a input value.
              */
@@ -187,6 +187,20 @@ namespace OMVIS
 
             /*! \brief Resets the time slider and time display. */
             void resetTimingElements();
+
+            /*! \brief Enables the time slider.
+             *
+             * In case of MAT result file visualization, the user can move the time slider and the appropriate
+             * simulation status will be loaded.
+             * \todo: This is a todo!
+             */
+            void enableTimeSlider();
+
+            /*! \brief Disables the time slider.
+             *
+             * If no model or a FMU is loaded, the user is not allowed to move the time slider.
+             */
+            void disableTimeSlider();
 
             /*-----------------------------------------
              * SLOT FUNCTIONS
@@ -314,8 +328,6 @@ namespace OMVIS
             QWidget* _osgViewerWidget;
             /// Widget which handles the control elements (e.g., play, stop button).
             QWidget* _controlElementWidget;
-            /// Widget which handles the time slider.
-            QWidget* _timeSliderWidget;
 
             /// Slider that corresponds to the current simulation time with respect to start and end time.
             QSlider* _timeSlider;

@@ -85,7 +85,6 @@ namespace OMVIS
                   _sceneView(new osgViewer::View()),
                   _osgViewerWidget(nullptr),
                   _controlElementWidget(nullptr),
-                  _timeSliderWidget(nullptr),
                   _timeSlider(nullptr),
                   _timeDisplay(new QLabel()),
                   _RTFactorDisplay(new QLabel()),
@@ -159,8 +158,8 @@ namespace OMVIS
             // Set up the control elements widget
             _controlElementWidget = setupControlElementWidget();
 
-            // Set up the time slider widget and set the slider to start position.
-            _timeSliderWidget = setupTimeSliderWidget();
+            // Set up the time slider and set the slider to start position.
+            setupTimeSliderWidget();
         }
 
         // Assemble the widgets to a layout and create the father of all widgets with this layout.
@@ -169,10 +168,9 @@ namespace OMVIS
             _centralWidget = new QWidget(this);
             _mainLayout = new QVBoxLayout(_centralWidget);
             assert(_osgViewerWidget != nullptr);
-            assert(_timeSliderWidget != nullptr);
             assert(_controlElementWidget != nullptr);
             _mainLayout->addWidget(_osgViewerWidget);
-            _mainLayout->addWidget(_timeSliderWidget);
+            _mainLayout->addWidget(_timeSlider);
             _mainLayout->addWidget(_controlElementWidget);
             _centralWidget->setLayout(_mainLayout);
             setCentralWidget( _centralWidget );
@@ -309,19 +307,22 @@ namespace OMVIS
             return new osgQt::GraphicsWindowQt(traits.get());
         }
 
-        QWidget* OMVisViewer::setupTimeSliderWidget()
+        void OMVisViewer::setupTimeSliderWidget()
         {
             _timeSlider = new QSlider(Qt::Horizontal, this);
             _timeSlider->setFixedHeight(30);
             _timeSlider->setMinimum(0);
             _timeSlider->setMaximum(100);
             _timeSlider->setSliderPosition(0);
+            _timeSlider->setTracking(false);
+
+            // By default, the time slider cannot be moved by the user. This enabled, when a MAT result file is loaded.
+            _timeSlider->setEnabled(false);
 
             LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ")
                          + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
 
             QObject::connect(_timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
-            return _timeSlider;
         }
 
         QWidget* OMVisViewer::setupControlElementWidget()
@@ -420,6 +421,11 @@ namespace OMVIS
                 {
                     Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
+                    disableTimeSlider();
+                }
+                if (_guiController->visTypeIsMAT())
+                {
+                    enableTimeSlider();
                 }
 
                 // Update the slider and the time displays.
@@ -510,6 +516,7 @@ namespace OMVIS
 
             // If a model is loaded, we can enable some buttons
             _simSettingsAct->setEnabled(false);
+            disableTimeSlider();
         }
 
         void OMVisViewer::exportVideo()
@@ -914,6 +921,18 @@ namespace OMVIS
 
             // Set new position.
             _timeSlider->setSliderPosition(newPos);
+        }
+
+        void OMVisViewer::disableTimeSlider()
+        {
+            //_timeSlider->blockSignals(true);
+            _timeSlider->setEnabled(false);
+        }
+
+        void OMVisViewer::enableTimeSlider()
+        {
+            _timeSlider->blockSignals(false);
+            _timeSlider->setEnabled(true);
         }
 
     }  // End namespace View
