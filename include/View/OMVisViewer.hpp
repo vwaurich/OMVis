@@ -77,17 +77,6 @@ namespace OMVIS
             /*! \brief Constructs the OMVisViewer from command line arguments. */
             OMVisViewer(QWidget* parent = Q_NULLPTR, const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
-            /*! \brief Constructs the OMVisViewer object from arguments.
-             *
-             * A empty OMVis GUI is created and the model has to be loaded via the file open dialog.
-             *
-             * \param parent            Parent for initialization of QWidget Baseclass.
-             * \param flags             Window flags for initialization of QWidget Baseclass.
-             * \param threadingModel    The threading model.
-             */
-            OMVisViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded,
-                        const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
-
             OMVisViewer(const OMVisViewer& rhs) = delete;
 
             OMVisViewer& operator=(const OMVisViewer& rhs) = delete;
@@ -98,6 +87,18 @@ namespace OMVIS
              * The Qt stuff uses the parent-child model and thus memory is freed automaticaly.
              */
             ~OMVisViewer() = default;
+
+         private:
+            /*! \brief Constructs the OMVisViewer object from arguments.
+             *
+             * A empty OMVis GUI is created and the model has to be loaded via the file open dialog.
+             *
+             * \param parent            Parent for initialization of QWidget Baseclass.
+             * \param flags             Window flags for initialization of QWidget Baseclass.
+             * \param threadingModel    The threading model.
+             */
+            OMVisViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded,
+                        const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             /*-----------------------------------------
              * INITIALIZATION FUNCTIONS
@@ -206,7 +207,7 @@ namespace OMVIS
              * SLOT FUNCTIONS
              *---------------------------------------*/
 
-         public slots:
+         private slots:
             /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
              *
              * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplay().
