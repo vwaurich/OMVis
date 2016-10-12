@@ -64,9 +64,11 @@ namespace OMVIS
 
             /*! \brief Default constructor with save initialization of members. */
             GUIController();
+
             ~GUIController() = default;
 
             GUIController(const GUIController& gc) = delete;
+
             GUIController& operator=(const GUIController& gc) = delete;
 
             /*-----------------------------------------
@@ -114,8 +116,7 @@ namespace OMVIS
             void loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP, const int timeSliderStart,
                            const int timeSliderEnd);
 
-            void loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart,
-                                 const int timeSliderEnd);
+
 
             /*! \brief Unloads the currently loaded model and frees associated memory. */
             void unloadModel();
@@ -204,6 +205,10 @@ namespace OMVIS
             void handleSimulationSettings(const Model::UserSimSettingsMAT& simSetFMU);
 
          private:
+            /*! \brief This is a helper method for the two \ref loadModel() methods. */
+            void loadModelHelper(const Initialization::VisualizationConstructionPlan* cP, const int timeSliderStart,
+                                 const int timeSliderEnd);
+
             /*-----------------------------------------
              * MEMBERS
              *---------------------------------------*/
