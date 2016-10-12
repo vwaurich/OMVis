@@ -58,7 +58,9 @@ namespace OMVIS
             Factory() = default;
 
             ~Factory() = default;
+
             Factory(const Factory& f) = delete;
+
             Factory& operator=(const Factory& f) = delete;
 
             /*-----------------------------------------
