@@ -352,6 +352,8 @@ namespace OMVIS
             /// The GUIController object will take the users input from GUI and handle it.
             /// \todo Should be a unique pointer but at least a shared pointer
             std::unique_ptr<Control::GUIController> _guiController;
+
+            const std::string _logo = "logo.osg";
         };
 
     }  // End namespace View

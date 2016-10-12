@@ -149,8 +149,8 @@ namespace OMVIS
 
         void OMVisViewer::setupWidgets()
         {
-            //X8 We have a initial scene:
-            osg::ref_ptr<osg::Node> rootNode = osgDB::readNodeFile("dumptruck.osg");
+            // Show logo
+            osg::ref_ptr<osg::Node> rootNode = osgDB::readNodeFile(_logo);
 
             // Set up the osg viewer widget
             _osgViewerWidget = setupOSGViewerWidget(rootNode);
@@ -309,7 +309,7 @@ namespace OMVIS
 
         void OMVisViewer::paintEvent(QPaintEvent* event)
         {
-            frame();
+                frame();
         }
 
         void OMVisViewer::setupTimeSliderWidget()
@@ -511,17 +511,19 @@ namespace OMVIS
         void OMVisViewer::unloadModel()
         {
             LOGGER_WRITE(std::string("Unload model..."), Util::LC_LOADER, Util::LL_INFO);
-            _sceneView->setSceneData(new osg::Node());
-
             _guiController->unloadModel();
 
             _visTimer.stop();
             resetTimingElements();
             LOGGER_WRITE(std::string("Model unloaded."), Util::LC_LOADER, Util::LL_INFO);
 
-            // If a model is loaded, we can enable some buttons
+            // If a model is unloaded, we can disable some buttons
             _simSettingsAct->setEnabled(false);
             disableTimeSlider();
+
+            // Show logo
+            osg::ref_ptr<osg::Node> rootNode = osgDB::readNodeFile(_logo);
+            _sceneView->setSceneData(rootNode);
         }
 
         void OMVisViewer::exportVideo()
