@@ -307,6 +307,11 @@ namespace OMVIS
             return new osgQt::GraphicsWindowQt(traits.get());
         }
 
+        void OMVisViewer::paintEvent(QPaintEvent* event)
+        {
+            frame();
+        }
+
         void OMVisViewer::setupTimeSliderWidget()
         {
             _timeSlider = new QSlider(Qt::Horizontal, this);

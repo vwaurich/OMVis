@@ -129,10 +129,7 @@ namespace OMVIS
 
             /*! \brief Renders the widget in case of a paint event
              */
-            virtual void paintEvent(QPaintEvent* event)
-            {
-                frame();
-            }
+            virtual void paintEvent(QPaintEvent* event);
 
             /*! \brief This function sets up the widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
              *
