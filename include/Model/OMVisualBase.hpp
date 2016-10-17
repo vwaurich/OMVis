@@ -88,11 +88,11 @@ namespace OMVIS
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-			/*! \brief Gets all variable names which are needed for the visualization.
-			*
-			* \return Vector of strings containing the variable names.
-			*/
-			std::vector<std::string> getVisualizationVariables() const;
+            /*! \brief Gets all variable names which are needed for the visualization.
+             *
+             * \return Vector of strings containing the variable names.
+             */
+            std::vector<std::string> getVisualizationVariables() const;
 
             /*! \brief Returns name of the model. */
             const std::string getModelFile() const;
