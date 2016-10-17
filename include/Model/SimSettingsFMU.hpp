@@ -78,7 +78,7 @@ namespace OMVIS
             fmi1_real_t getTstart() const;
 
             void setHdef(const fmi1_real_t h);
-            double getHdef() const;
+            fmi1_real_t getHdef() const;
 
             void setRelativeTolerance(const fmi1_real_t t);
             fmi1_real_t getRelativeTolerance();
