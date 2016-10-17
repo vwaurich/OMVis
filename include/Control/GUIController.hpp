@@ -195,14 +195,24 @@ namespace OMVIS
              */
             std::shared_ptr<Model::InputData> getInputData();
 
-            /*! \brief Handles the simulation settings specified by the user via Simulation Settings dialogs.
+            /*! \brief Handles the simulation settings specified by the user via Simulation Settings dialog for a FMU visualization.
              *
              * This method reinitializes the simulation in order to apply the settings.
              *
-             * \param simSetFMU     The simulation settings for a FMU visualization
+             * \param simSetFMU     The simulation settings for a FMU visualization.
              */
             void handleSimulationSettings(const Model::UserSimSettingsFMU& simSetFMU);
-            void handleSimulationSettings(const Model::UserSimSettingsMAT& simSetFMU);
+
+            /*! \brief Handles the simulation settings specified by the user via Simulation Settings dialog for a MAT
+             *         result file based visualization.
+             *
+             * This method does not reinitializes the simulation. The settings are applied to the visualization.
+             *
+             * \param simSetMAT     The simulation settings for a MAT result file based visualization.
+             */
+            void handleSimulationSettings(const Model::UserSimSettingsMAT& simSetMAT);
+
+            Model::UserSimSettingsFMU getCurrentSimSettings() const;
 
          private:
             /*! \brief This is a helper method for the two \ref loadModel() methods. */
@@ -220,6 +230,7 @@ namespace OMVIS
              *  2. \ref Model::VisualizerFMU for FMU simulations.
              *  3. \ref Model::VisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system.
              *
+             * \todo This member should be a unique pointer!
              */
             std::shared_ptr<Model::VisualizerAbstract> _modelVisualizer;
         };
