@@ -206,7 +206,7 @@ namespace OMVIS
         void VisualizerFMU::setSimulationSettings(const UserSimSettingsFMU& simSetFMU)
         {
             if (simSetFMU.solver == Solver::NONE)
-                throw std::runtime_error("Solver:NONE is not a valid solver.");
+                throw std::runtime_error("Solver: NONE is not a valid solver.");
             else
                 _simSettings->setSolver(simSetFMU.solver);
 
@@ -214,6 +214,18 @@ namespace OMVIS
                 throw std::runtime_error("Simulation step size of " + std::to_string(simSetFMU.simStepSize) + " is not valid.");
             else
                 _simSettings->setHdef(simSetFMU.simStepSize);
+
+            if (simSetFMU.simEndTime <= 0.0)
+                throw std::runtime_error("Solver: NONE is not a valid solver.");
+            else
+            {
+                _timeManager->setEndTime(simSetFMU.simEndTime);
+            }
+        }
+
+        UserSimSettingsFMU VisualizerFMU::getCurrentSimSettings() const
+        {
+            return {_simSettings->getSolver(), _simSettings->getHdef(), 99, _timeManager->getEndTime()};
         }
 
         /*-----------------------------------------

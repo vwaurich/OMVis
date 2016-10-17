@@ -27,7 +27,8 @@
 #ifndef INCLUDE_OMVISUALIZERFMU_HPP_
 #define INCLUDE_OMVISUALIZERFMU_HPP_
 
-#include <Model/SimSettingsFMU.hpp>
+#include "Model/SimSettings.hpp"
+#include "Model/SimSettingsFMU.hpp"
 #include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Model/InputData.hpp"
@@ -122,6 +123,8 @@ namespace OMVIS
              *         references in the visattributes
             */
             int setVarReferencesInVisAttributes();
+
+            UserSimSettingsFMU getCurrentSimSettings() const;
 
             /*-----------------------------------------
              * SIMULATION METHODS
