@@ -67,8 +67,10 @@ namespace OMVIS
                         const double hVisual, const double startTime, const double endTime);
 
             ~TimeManager() = default;
-            TimeManager(const TimeManager& omvm) = delete;
-            TimeManager& operator=(const TimeManager& omvm) = delete;
+
+            TimeManager(const TimeManager& rhs) = delete;
+
+            TimeManager& operator=(const TimeManager& rhs) = delete;
 
             /*-----------------------------------------
              * SIMULATION METHODS
