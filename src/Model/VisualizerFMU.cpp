@@ -216,7 +216,7 @@ namespace OMVIS
                 _simSettings->setHdef(simSetFMU.simStepSize);
 
             if (simSetFMU.simEndTime <= 0.0)
-                throw std::runtime_error("Solver: NONE is not a valid solver.");
+                throw std::runtime_error("Solver: Simulation end time <= 0.0 is not valid.");
             else
             {
                 _timeManager->setEndTime(simSetFMU.simEndTime);
@@ -232,6 +232,7 @@ namespace OMVIS
          * SIMULATION METHODS
          *---------------------------------------*/
 
+        // MF, 17.10.2016: Unused?!
         void VisualizerFMU::simulate(Control::TimeManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
