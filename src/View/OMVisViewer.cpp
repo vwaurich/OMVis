@@ -91,7 +91,7 @@ namespace OMVIS
                   _RTFactorDisplay(new QLabel()),
                   _renderTimer(),
                   _centralWidget(new QWidget()),
-                  _mainLayout(nullptr),
+                  _mainLayout(new QVBoxLayout(_centralWidget)),
                   _visTimer(),
                   _guiController(new Control::GUIController())
         {
@@ -167,8 +167,6 @@ namespace OMVIS
         // Assemble the widgets to a layout and create the father of all widgets with this layout.
         void OMVisViewer::createLayout()
         {
-//            _centralWidget = new QWidget(this);
-            _mainLayout = new QVBoxLayout(_centralWidget);
             assert(_osgViewerWidget != nullptr);
             assert(_controlElementWidget != nullptr);
             _mainLayout->addWidget(_osgViewerWidget);
@@ -729,6 +727,7 @@ namespace OMVIS
             {
                 if (_guiController->visTypeIsFMU() || _guiController->visTypeIsFMURemote())
                 {
+                    // SimSettingDialogFMU dialog(this);
                     auto simSet = _guiController->getCurrentSimSettings();
                     SimSettingDialogFMU dialog(this, simSet);
                     if (dialog.exec())
