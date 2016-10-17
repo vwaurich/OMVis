@@ -38,20 +38,14 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        SimSettingDialogFMU::SimSettingDialogFMU(QWidget* parent)
-                : QDialog(parent),
+        SimSettingDialogFMU::SimSettingDialogFMU(QWidget* parent,  const Model::UserSimSettingsFMU& simSetFMU)
+                : OkCancelHelpButtonBox(),
                   _solverBox(new QComboBox()),
-                  _simStepSizeLineEdit(new QLineEdit("0.0001")),
-                  _visStepSizeLineEdit(new QLineEdit("100")),
+                  _simStepSizeLineEdit(new QLineEdit(QString::number(simSetFMU.simStepSize))),
+                  _visStepSizeLineEdit(new QLineEdit(QString::number(simSetFMU.visStepSize))),
+                  _simEndTimeLineEdit(new QLineEdit(QString::number(simSetFMU.simEndTime))),
                   _simSet()
         {
-            QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-            QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-            QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-            QVBoxLayout* buttonsLayout = new QVBoxLayout();
-            buttonsLayout->addStretch(1);
-            buttonsLayout->addWidget(buttonBox);
-
             // Main layout
             QVBoxLayout* mainLayout = new QVBoxLayout();
             mainLayout->addStretch(1);
@@ -77,24 +71,24 @@ namespace OMVIS
             visStepSizeLayout->addWidget(visStepSizeLabel);
             visStepSizeLayout->addWidget(_visStepSizeLineEdit.get());
 
+            // Visualization step size, aka render frequency
+            QHBoxLayout* endTimeLayout = new QHBoxLayout();
+            QLabel* endTimeLabel = new QLabel(tr("Simulation End Time [s]: "));
+            endTimeLayout->addWidget(endTimeLabel);
+            endTimeLayout->addWidget(_simEndTimeLineEdit.get());
+
             mainLayout->addLayout(solverLayout);
             mainLayout->addLayout(simStepSizeLayout);
             mainLayout->addLayout(visStepSizeLayout);
-            mainLayout->addLayout(buttonsLayout);
+            mainLayout->addLayout(endTimeLayout);
+            mainLayout->addLayout(_okCancelHelpButtonLayout);
         }
 
         SimSettingDialogMAT::SimSettingDialogMAT(QWidget* parent)
-                : QDialog(parent),
+                : OkCancelHelpButtonBox(),
                   _speedupLineEdit(new QLineEdit("1.0")),
                   _simSet()
         {
-            QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-            QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-            QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-            QVBoxLayout* buttonsLayout = new QVBoxLayout();
-            buttonsLayout->addStretch(1);
-            buttonsLayout->addWidget(buttonBox);
-
             // Main layout
             QVBoxLayout* mainLayout = new QVBoxLayout();
             mainLayout->addStretch(1);
@@ -117,16 +111,16 @@ namespace OMVIS
 
             QHBoxLayout* speedUpLayout = new QHBoxLayout();
             QLabel* speedUpLabel = new QLabel(tr("Visualization Speedup: "));
-            QLabel* explanationLabel = new QLabel(tr("A speedup greater than 1.0 means that<br>"
-                                                     "the simulation runs faster and gives a <br>"
-                                                     "rough overview on the model behavior."));
+//            QLabel* explanationLabel = new QLabel(tr("A speedup greater than 1.0 means that<br>"
+//                                                     "the simulation runs faster and gives a <br>"
+//                                                     "rough overview on the model behavior."));
 
             speedUpLayout->addWidget(speedUpLabel);
             speedUpLayout->addWidget(_speedupLineEdit.get());
 
             mainLayout->addLayout(speedUpLayout);
-            mainLayout->addWidget(explanationLabel);
-            mainLayout->addLayout(buttonsLayout);
+//            mainLayout->addWidget(explanationLabel);
+            mainLayout->addLayout(_okCancelHelpButtonLayout);
         }
 
         /*-----------------------------------------
@@ -139,7 +133,23 @@ namespace OMVIS
             _simSet.solver = static_cast<Model::Solver>(_solverBox->currentIndex() + 1);
             _simSet.simStepSize = _simStepSizeLineEdit->text().toDouble();
             _simSet.visStepSize = _visStepSizeLineEdit->text().toDouble();
+            _simSet.simEndTime = _simEndTimeLineEdit->text().toDouble();
             QDialog::accept();
+        }
+
+        void SimSettingDialogFMU::help() const
+        {
+          QString information("For a FMU visualization, the user can select several settings:"
+                              "<ul>"
+                              "<li><b>Solver:</b> The integration algorithm (a.k.a. solver) can be chosen. </li>"
+                              "<li><b>Simulation Step Size:</b> </li>"
+                              "<li><b>Visualization Step Size (aka render frequency):</b> </li>"
+                              "<li><b>Simulation End Time:</b> Set the simulation end time.</li>"
+                              "</ul>"
+          );
+          QMessageBox msgBox(QMessageBox::Information, tr("Help"), information);
+          msgBox.setStandardButtons(QMessageBox::Close);
+          msgBox.exec();
         }
 
         void SimSettingDialogMAT::accept()
@@ -154,6 +164,19 @@ namespace OMVIS
                 }
             }
             QDialog::accept();
+        }
+
+        void SimSettingDialogMAT::help() const
+        {
+          QString information("A speedup greater than 1.0 means that<br>"
+                               "the simulation runs faster and gives a <br>"
+                               "rough overview on the model behavior. <br><br>"
+                               "[A speedup less than 1.0 is not possible, <br>"
+                               "since the result file does not provide <br>"
+                               "enough (intermediate) data.]");
+          QMessageBox msgBox(QMessageBox::Information, tr("Help"), information);
+          msgBox.setStandardButtons(QMessageBox::Close);
+          msgBox.exec();
         }
 
         /*-----------------------------------------

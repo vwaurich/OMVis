@@ -22,6 +22,7 @@
 
 #include "Model/VisualizationTypes.hpp"
 #include "Model/SimSettings.hpp"
+#include "View/Dialogs/OkCancelHelpButtonBox.hpp"
 
 #include <QDialog>
 #include <QLineEdit>
@@ -36,18 +37,20 @@ namespace OMVIS
 
         /*! \brief This is a dialog to specify the simulation settings for FMU visualization.
          *
-         * The user can specify the simulation step size, the render frequency and the solver method.
+         * The user can specify the simulation step size, the render frequency, the solver method and the simulation
+         * end time.
          */
-        class SimSettingDialogFMU : public QDialog
+        class SimSettingDialogFMU : public OkCancelHelpButtonBox
         {
-        Q_OBJECT
 
          public:
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            SimSettingDialogFMU(QWidget* parent = Q_NULLPTR);
+            /// Todo Implement that all solvers can be selected. I.e., Model::Solver --> QComboBox
+            SimSettingDialogFMU(QWidget* parent = Q_NULLPTR,
+                                const Model::UserSimSettingsFMU& simSetFMU = {Model::Solver::NONE, 0.1, 100, 10.0});
 
             ~SimSettingDialogFMU() = default;
 
@@ -69,6 +72,9 @@ namespace OMVIS
             /*! \brief Accepts user input and stores it into member variables. */
             void accept() Q_DECL_OVERRIDE;
 
+            /// Todo Make the help useful by providing better description.
+            void help() const Q_DECL_OVERRIDE;
+
          private:
             /*-----------------------------------------
              * MEMBERS
@@ -77,6 +83,7 @@ namespace OMVIS
             std::unique_ptr<QComboBox> _solverBox;
             std::unique_ptr<QLineEdit> _simStepSizeLineEdit;
             std::unique_ptr<QLineEdit> _visStepSizeLineEdit;
+            std::unique_ptr<QLineEdit> _simEndTimeLineEdit;
             Model::UserSimSettingsFMU _simSet;
         };
 
@@ -87,9 +94,8 @@ namespace OMVIS
          * visualization of the simulation result is slowed down if speed up < 1 and accelerated if the speed up > 1,
          * respectively.
          */
-        class SimSettingDialogMAT : public QDialog
+        class SimSettingDialogMAT : public OkCancelHelpButtonBox
         {
-        Q_OBJECT
 
          public:
             /*-----------------------------------------
@@ -117,6 +123,7 @@ namespace OMVIS
          private slots:
             /*! \brief Accepts user input and stores it into member variables. */
             void accept() Q_DECL_OVERRIDE;
+            void help() const Q_DECL_OVERRIDE;
 
          private:
             /*-----------------------------------------
