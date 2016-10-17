@@ -37,14 +37,15 @@ namespace OMVIS
         /*! \brief This struct holds the simulation settings the user can chose via the GUI for a FMU.
          *
          * The user can specify the settings of a FMU based simulation via the \ref View::SimSettingDialog. The user
-         * can specify the solver that should be used for integration, the simulation step size and the visualization
-         * step size. The later determines the interval to call the sceneUpdate() method.
+         * can specify the solver that should be used for integration, the simulation step size the simulation end time
+         * and the visualization step size. The later determines the interval to call the sceneUpdate() method.
          */
         struct UserSimSettingsFMU
         {
             Solver solver;
             double simStepSize;
             double visStepSize;
+            double simEndTime;
         };
 
         /*! \brief This struct holds the simulation settings the user can chose via the GUI for a MAT file.
