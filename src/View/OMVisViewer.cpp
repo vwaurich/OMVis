@@ -729,7 +729,8 @@ namespace OMVIS
             {
                 if (_guiController->visTypeIsFMU() || _guiController->visTypeIsFMURemote())
                 {
-                    SimSettingDialogFMU dialog(this);
+                    auto simSet = _guiController->getCurrentSimSettings();
+                    SimSettingDialogFMU dialog(this, simSet);
                     if (dialog.exec())
                     {
                         Model::UserSimSettingsFMU simSetFMU = dialog.getSimSettings();
