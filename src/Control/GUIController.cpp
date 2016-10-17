@@ -90,7 +90,7 @@ namespace OMVIS
             bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.wDir);
             if (!xmlExists)
             {
-                std::string msg = "Visual XML file does not exist on localhost in working directory.";
+                std::string msg = "Visual XML file does not exist on localhost in the working directory " + cP.wDir + ".\n";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
@@ -123,7 +123,7 @@ namespace OMVIS
                                             const int timeSliderEnd)
         {
             // Okay, do we already have a model loaded? If so, we keep this loaded model in case of the new model
-            // cannot be loaded.
+            // cannot be loaded. If everything went fine, we take the loaded model.
 
             // Ask the factory to create an appropriate Visualizer object.
             Initialization::Factory* factory = new Initialization::Factory();
@@ -257,6 +257,12 @@ namespace OMVIS
         std::string GUIController::getModelFile() const
         {
             return _modelVisualizer->getModelFile();
+        }
+
+        Model::UserSimSettingsFMU GUIController::getCurrentSimSettings() const
+        {
+          std::shared_ptr<Model::VisualizerFMU> omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
+          return omVisFMU->getCurrentSimSettings();
         }
 
         bool GUIController::modelIsLoaded()
