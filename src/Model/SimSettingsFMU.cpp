@@ -67,7 +67,7 @@ namespace OMVIS
             return _tstart;
         }
 
-        fmi1_real_t SimSettingsFMU::getHdef()
+        fmi1_real_t SimSettingsFMU::getHdef() const
         {
             return _hdef;
         }
@@ -85,6 +85,11 @@ namespace OMVIS
         void SimSettingsFMU::setSolver(const Solver& solver)
         {
             _solver = solver;
+        }
+
+        Solver SimSettingsFMU::getSolver() const
+        {
+          return _solver;
         }
 
         fmi1_boolean_t* SimSettingsFMU::getCallEventUpdate()

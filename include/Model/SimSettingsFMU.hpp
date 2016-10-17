@@ -78,7 +78,7 @@ namespace OMVIS
             fmi1_real_t getTstart() const;
 
             void setHdef(const fmi1_real_t h);
-            fmi1_real_t getHdef();
+            double getHdef() const;
 
             void setRelativeTolerance(const fmi1_real_t t);
             fmi1_real_t getRelativeTolerance();
@@ -86,6 +86,7 @@ namespace OMVIS
             fmi1_boolean_t getToleranceControlled() const;
 
             void setSolver(const Solver& solver);
+            Solver getSolver() const;
 
             /*!
              * Returns a pointer to the member _callEventUpdate. It is perfectly fine to return just a pointer and not
