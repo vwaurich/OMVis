@@ -200,16 +200,17 @@ namespace OMVIS
              */
             void disableTimeSlider();
 
+            /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
+             *
+             * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplay().
+             */
+            void updateTimingElements();
+
             /*-----------------------------------------
              * SLOT FUNCTIONS
              *---------------------------------------*/
 
          private slots:
-            /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
-             *
-             * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplay().
-             * */
-            void updateTimingElements();
 
             /*! \brief Function that is triggered by the play-button.
              */
@@ -248,8 +249,7 @@ namespace OMVIS
             /*! \todo Implement me. */
             void exportVideo();
 
-            /*! \brief Function that opens the input mapper dialog
-             */
+            /*! \brief Function that opens the input mapper dialog. */
             void openDialogInputMapper();
 
             /*! \brief Creates dialog window to specify the perspective to the scene view. */
@@ -261,16 +261,13 @@ namespace OMVIS
              */
             void resetCamera();
 
-            /*! \brief This functions resets the camera normal to X-Y-plane
-             */
+            /*! \brief This functions resets the camera normal to X-Y-plane. */
             void cameraPositionXY();
 
-            /*! \brief This functions resets the camera normal to X-Z-plane
-             */
+            /*! \brief This functions resets the camera normal to X-Z-plane. */
             void cameraPositionXZ();
 
-            /*! \brief This functions resets the camera normal to Y-Z-plane
-             */
+            /*! \brief This functions resets the camera normal to Y-Z-plane. */
             void cameraPositionYZ();
 
             /*! \brief Creates dialog window to specify the background color of the scene view.
@@ -279,9 +276,9 @@ namespace OMVIS
              */
             void backgroundColorDialog();
 
-			/*! \brief Creates dialog window to specify the simulationSettings
-			*/
-			void simSettingsDialog();
+            /*! \brief Creates dialog window to specify the simulationSettings
+             */
+            void simSettingsDialog();
 
             /*! \brief Updates the key-input-map
              */
@@ -315,7 +312,7 @@ namespace OMVIS
             QAction* _helpAct;
             QAction* _perspectiveAct;
             QAction* _bgcAct;
-			QAction* _simSettingsAct;
+            QAction* _simSettingsAct;
             QAction* _unloadAct;
 
             /*! \brief The view which holds the osg scene. */
@@ -331,8 +328,8 @@ namespace OMVIS
             QSlider* _timeSlider;
             /// This label displays the current visualization time.
             QLabel* _timeDisplay;
-			/// This label displays the current real time factor.
-			QLabel* _RTFactorDisplay;
+            /// This label displays the current real time factor.
+            QLabel* _RTFactorDisplay;
             /// Triggers a new frame.
             QTimer _renderTimer;
 
@@ -349,10 +346,14 @@ namespace OMVIS
              */
             QTimer _visTimer;
 
-            /// The GUIController object will take the users input from GUI and handle it.
-            /// \todo Should be a unique pointer but at least a shared pointer
+            /*! \brief The GUIController object will take the users input from GUI and handle it.
+             *
+             * The GUIController holds the VisualizerObject and controls it in order to the users required actions (e.g.,
+             * load a model, initialize a model, play simulation/visualization, pause simulation/visualization, etc.).
+             */
             std::unique_ptr<Control::GUIController> _guiController;
 
+            /*! \brief The name of the logo file of OMVis. */
             const std::string _logo = "logo.osg";
         };
 

@@ -82,6 +82,7 @@ namespace OMVIS
                   _perspectiveAct(nullptr),
                   _bgcAct(nullptr),
                   _simSettingsAct(nullptr),
+                  _unloadAct(nullptr),
                   _sceneView(new osgViewer::View()),
                   _osgViewerWidget(nullptr),
                   _controlElementWidget(nullptr),
@@ -89,13 +90,15 @@ namespace OMVIS
                   _timeDisplay(new QLabel()),
                   _RTFactorDisplay(new QLabel()),
                   _renderTimer(),
+                  _centralWidget(new QWidget()),
+                  _mainLayout(nullptr),
                   _visTimer(),
                   _guiController(new Control::GUIController())
         {
             // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
             setlocale(LC_ALL, "en_US.UTF-8");
 
-            // The widgets 1names
+            // The widgets names
             setObjectName("MainWindow");
             setWindowTitle("OMVIS - The Open-Source FMU-visualization");
 
@@ -122,7 +125,6 @@ namespace OMVIS
 
             // To trigger the scene updates with the visualization step size.
             connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateScene()));
-            connect(&_visTimer, SIGNAL(timeout()), this, SLOT(updateTimingElements()));
 
             // GUI will be resized to half of screen.
             resize(QGuiApplication::primaryScreen()->availableSize() * 0.5);
@@ -165,7 +167,7 @@ namespace OMVIS
         // Assemble the widgets to a layout and create the father of all widgets with this layout.
         void OMVisViewer::createLayout()
         {
-            _centralWidget = new QWidget(this);
+//            _centralWidget = new QWidget(this);
             _mainLayout = new QVBoxLayout(_centralWidget);
             assert(_osgViewerWidget != nullptr);
             assert(_controlElementWidget != nullptr);
@@ -380,6 +382,7 @@ namespace OMVIS
         void OMVisViewer::updateScene()
         {
             _guiController->sceneUpdate();
+            updateTimingElements();
         }
 
         void OMVisViewer::setVisTimeSlotFunction(int val)
