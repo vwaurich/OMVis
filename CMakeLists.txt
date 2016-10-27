@@ -240,7 +240,8 @@ QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/BackgroundColorSettingDial
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/PerspectiveSettingDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenRemoteConnectionDialog.hpp)
 QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OpenFileDialog.hpp)
-QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/SimSettingDialog.hpp)
+QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OkCancelHelpButtonBox.hpp)
+
 
 FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/*.cpp" "src/Util/*.cpp")
 
