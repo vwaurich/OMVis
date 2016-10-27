@@ -76,19 +76,18 @@ following we give a list of all necessary dependencies and the version number, w
 
 
 ### Configure and Build
-<!-- ``` -->
     ~> mkdir build
     ~> cd build
     ~> cmake -DFMILIB_HOME=/PATH/TO/FMILIB2/ -DRAPIDXML_ROOT=/PATH/TO/RAPIDXML/
     ~> make OMVis
-<!-- ``` -->
+
 
 ### Environment Settings / Configure Options
 It might be neccessary to provide one or all of the following environment settings to the CMake 
 makefile of OMVis:
 
 As usual, the C/C++ compiler and the compiler flags can be controlled via the environment variables 
-`CC=<cc>`, `CXX=<cxx>`, `CFLAGS=<cflags>` and `CXXFLAGS=<cxxflags>`.
+<i>`CC=<cc>`</i>, `CXX=<cxx>`, `CFLAGS=<cflags>` and `CXXFLAGS=<cxxflags>`.
 
 More to come.
 
@@ -113,11 +112,10 @@ SDL2main.lib
 -------------------------------------
 In order to create a proper Eclipse project for OMVis call cmake with -G="Eclipse CDT4 - Unix Makefiles". This has to 
 be done out ouf source, i.e., means create a build directory on top of the source folder:
-```
-~> mkdir OMVis_eclipse
-~> cd OMVis_eclipse
-~> cmake ../OMVis/ -G="Eclipse CDT4 - Unix Makefiles"
-```
+    ~> mkdir OMVis_eclipse
+    ~> cd OMVis_eclipse
+    ~> cmake ../OMVis/ -G="Eclipse CDT4 - Unix Makefiles"
+
 
 2. Configure Eclipse project:
 -----------------------------
@@ -139,7 +137,7 @@ MAT-file.
 2. Step: Open a model file by using the "File Open" dialog.
 3. Step: Initialize the simulation.
 4. Step: (If possible) Specify the input mapping to keyboard or joystick.
-5. Step: Visualize the simulation by pressing "Start".  
+5. Step: Visualize the simulation by pressing "Start".
 
 
 ### Remote Visualization
