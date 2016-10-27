@@ -76,12 +76,12 @@ following we give a list of all necessary dependencies and the version number, w
 
 
 ### Configure and Build
-```
-~> mkdir build
-~> cd build
-~> cmake -DFMILIB_HOME=/PATH/TO/FMILIB2/ -DRAPIDXML_ROOT=/PATH/TO/RAPIDXML/
-~> make OMVis
-```
+<!-- ``` -->
+    ~> mkdir build
+    ~> cd build
+    ~> cmake -DFMILIB_HOME=/PATH/TO/FMILIB2/ -DRAPIDXML_ROOT=/PATH/TO/RAPIDXML/
+    ~> make OMVis
+<!-- ``` -->
 
 ### Environment Settings / Configure Options
 It might be neccessary to provide one or all of the following environment settings to the CMake 
