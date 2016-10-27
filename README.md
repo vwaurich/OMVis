@@ -76,18 +76,19 @@ following we give a list of all necessary dependencies and the version number, w
 
 
 ### Configure and Build
+<!-- ``` -->
     ~> mkdir build
     ~> cd build
     ~> cmake -DFMILIB_HOME=/PATH/TO/FMILIB2/ -DRAPIDXML_ROOT=/PATH/TO/RAPIDXML/
     ~> make OMVis
-
+<!-- ``` -->
 
 ### Environment Settings / Configure Options
 It might be neccessary to provide one or all of the following environment settings to the CMake 
 makefile of OMVis:
 
 As usual, the C/C++ compiler and the compiler flags can be controlled via the environment variables 
-<i>`CC=<cc>`</i>, `CXX=<cxx>`, `CFLAGS=<cflags>` and `CXXFLAGS=<cxxflags>`.
+<i>`CXX=<cxx>`</i>, and </i>`CXXFLAGS=<cxxflags>`</i>.
 
 More to come.
 
@@ -130,10 +131,9 @@ click on project -> Index -> Rebuild.
 ## Usage
 
 ### Visualization
-It is quite easy to use OMVIS to visualize a simulation present in a FMU or 
-MAT-file.
+It is quite easy to use OMVis to visualize a simulation present in a FMU or MAT-file.
 
-1. Step: Run OMVIS by starting the executable.
+1. Step: Run OMVis by starting the executable.
 2. Step: Open a model file by using the "File Open" dialog.
 3. Step: Initialize the simulation.
 4. Step: (If possible) Specify the input mapping to keyboard or joystick.
