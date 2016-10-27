@@ -111,12 +111,13 @@ SDL2main.lib
 
 1. Create Eclipse project from cmake:
 -------------------------------------
-In order to create a proper Eclipse project for OMVis call cmake with -G="Eclipse CDT4 - Unix Makefiles". This has to 
-be done out ouf source, i.e., means create a build directory on top of the source folder:
+In order to create a proper Eclipse project for OMVis call cmake with <i>-G="Eclipse CDT4 - Unix Makefiles"</i>. This has to 
+be done out ouf source, i.e., create a build directory on top of the source folder:
+<!-- ``` -->
     ~> mkdir OMVis_eclipse
     ~> cd OMVis_eclipse
     ~> cmake ../OMVis/ -G="Eclipse CDT4 - Unix Makefiles"
-
+<!-- ``` -->
 
 2. Configure Eclipse project:
 -----------------------------
