@@ -67,27 +67,17 @@ namespace OMVIS
                 // Matrix transformation
                 transf = new osg::MatrixTransform();
 
-                // stl node
-                if (Util::isCADType(type))
-                {
-                    std::string filename = _path + Util::extractCADFilename(type);
+				//cad node
+				if ((shape._type.compare("dxf") == 0) || (shape._type.compare("stl") == 0))
+				{
+					//std::cout<<"Its a CAD and the filename is "<<shape._fileName<<std::endl;
+					osg::ref_ptr<osg::Node> node = osgDB::readNodeFile(shape._fileName);
+					osg::ref_ptr<osg::StateSet> ss = node->getOrCreateStateSet();
 
-                    LOGGER_WRITE(std::string("Its a STL and the filename is ") + filename, Util::LC_LOADER, Util::LL_INFO);
-                    // \todo What do we do at this point?
-                    if (!Util::fileExists(filename))
-                    {
-                        std::string msg = "Could not find the file " + filename + ".";
-                        LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
-                        throw std::runtime_error(msg);
-                    }
-
-                    osg::Node* node = osgDB::readNodeFile(filename);
-                    osg::StateSet* ss = node->getOrCreateStateSet();
-
-                    ss->setAttribute(material.get());
-                    node->setStateSet(ss);
-                    transf->addChild(node);
-                }
+					ss->setAttribute(material.get());
+					node->setStateSet(ss);
+					transf->addChild(node.get());
+				}
                 // Geode with shape drawable
                 else
                 {

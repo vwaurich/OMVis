@@ -34,6 +34,7 @@ namespace OMVIS
         ShapeObject::ShapeObject()
                 : _id("noID"),
                   _type("box"),
+			      _fileName("noFile"),
                   _length(ShapeObjectAttribute(0.1)),
                   _width(ShapeObjectAttribute(0.1)),
                   _height(ShapeObjectAttribute(0.1)),
@@ -59,6 +60,7 @@ namespace OMVIS
         {
             std::cout << "id " << _id << std::endl;
             std::cout << "type " << _type << std::endl;
+			std::cout << "fileName " << _fileName << std::endl;
             std::cout << "length " << _length.getValueString() << std::endl;
             std::cout << "width " << _width.getValueString() << std::endl;
             std::cout << "height " << _height.getValueString() << std::endl;

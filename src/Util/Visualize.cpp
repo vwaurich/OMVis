@@ -166,6 +166,11 @@ namespace OMVIS
                 res._r += r_shape;
                 //r_offset = dirs.lDir*length/2.0;
             }
+			else if (type == "stl" || type == "dxf")
+			{
+				res._r = r + r_shape;
+				res._T = T;
+			}
             else if (type == "pipecylinder" || type == "spring" || type == "cone")
             {
                 res._r = V3mulMat3(r_shape, T) + r;

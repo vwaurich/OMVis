@@ -68,6 +68,7 @@ namespace OMVIS
 
             std::string _id;
             std::string _type;
+			std::string _fileName;
             ShapeObjectAttribute _length;
             ShapeObjectAttribute _width;
             ShapeObjectAttribute _height;

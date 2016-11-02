@@ -98,16 +98,30 @@ namespace OMVIS
 
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
 
-                if (expNode == 0)
-                {
-                    LOGGER_WRITE(std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
-                                 Util::LC_LOADER, Util::LL_DEBUG);
-                }
-                else
-                {
-                    shape._type = std::string(expNode->value());
+				if (expNode == 0)
+				{
+					std::cout << "The type of  " << shape._id << " is not supported right in the visxml file." << std::endl;
+				}
+				else
+				{
+					shape._type = std::string(expNode->value());
+					if (Util::isCADType(shape._type)){
+						shape._fileName = Util::extractCADFilename(shape._type);
+						if (Util::dxfFileType(shape._fileName))
+						{
+							shape._type = "dxf";
+						}
+						else if (Util::stlFileType(shape._fileName)){
+							shape._type = "stl";
+						}
+						if (!Util::fileExists(shape._fileName)){
+							std::cout << "Could not find the file " << shape._fileName << std::endl;
+						}
+					}
+					//std::cout<<"type "<<shape._id<<std::endl;
+					//std::cout<<"type "<<shape._type<<std::endl;
 
-                    expNode = shapeNode->first_node((const char*) "length")->first_node();
+					expNode = shapeNode->first_node((const char*) "length")->first_node();
                     shape._length = Util::getObjectAttributeForNode(expNode);
                     expNode = shapeNode->first_node((const char*) "width")->first_node();
                     shape._width = Util::getObjectAttributeForNode(expNode);
