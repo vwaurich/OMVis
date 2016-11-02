@@ -53,27 +53,27 @@ namespace OMVIS
             // Check if the XML file is available.
             if (!Util::fileExists(_xmlFileName))
             {
-                std::string msg = "Could not find the visual XML file" + _xmlFileName + ".";
+                auto msg = "OMVisualBase: Could not find the visxml file" + _xmlFileName + ".";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
-                // read xml
-                osgDB::ifstream t;
-                // unused const char * titel = _xmlFileName.c_str();
-                t.open(_xmlFileName.c_str(), std::ios::binary);      // open input file
-                t.seekg(0, std::ios::end);    // go to the end
-                int length = t.tellg();       // report location (this is the length)
-                t.seekg(0, std::ios::beg);    // go back to the beginning
-                char* buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
-                t.read(buffer, length);       // read the whole file into the buffer
-                t.close();
-                std::string buff = std::string(buffer);  // strings are good
-                std::string buff2 = buff.substr(0, buff.find("</visualization>"));  // remove the crappy ending
-                buff2.append("</visualization>");
-                char* buff3 = strdup(buff2.c_str());  // cast to char*
-                _xmlDoc.parse<0>(buff3);
-                LOGGER_WRITE(std::string("Reading the xml file ") + _xmlFileName + " was successful.",
-                             Util::LC_LOADER, Util::LL_DEBUG);
+            // read xml
+            osgDB::ifstream t;
+            // unused const char * titel = _xmlFileName.c_str();
+            t.open(_xmlFileName.c_str(), std::ios::binary);      // open input file
+            t.seekg(0, std::ios::end);    // go to the end
+            int length = t.tellg();       // report location (this is the length)
+            t.seekg(0, std::ios::beg);    // go back to the beginning
+            char* buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
+            t.read(buffer, length);       // read the whole file into the buffer
+            t.close();
+            std::string buff = std::string(buffer);  // strings are good
+            std::string buff2 = buff.substr(0, buff.find("</visualization>"));  // remove the crappy ending
+            buff2.append("</visualization>");
+            char* buff3 = strdup(buff2.c_str());  // cast to char*
+            _xmlDoc.parse<0>(buff3);
+            LOGGER_WRITE(std::string("Reading the visxml file ") + _xmlFileName + " was successful.", Util::LC_LOADER,
+                         Util::LL_DEBUG);
         }
 
         /// \todo Can we call std::vector<T>::reserve before pushing back all shapes?
@@ -91,37 +91,45 @@ namespace OMVIS
             //_shapes.reserve(i);
             // End std::vector<T>::reserve()
 
-            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode;
+                    shapeNode = shapeNode->next_sibling())
             {
                 expNode = shapeNode->first_node((const char*) "ident")->first_node();
                 shape._id = std::string(expNode->value());
 
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
 
-				if (expNode == 0)
-				{
-					std::cout << "The type of  " << shape._id << " is not supported right in the visxml file." << std::endl;
-				}
-				else
-				{
-					shape._type = std::string(expNode->value());
-					if (Util::isCADType(shape._type)){
-						shape._fileName = Util::extractCADFilename(shape._type);
-						if (Util::dxfFileType(shape._fileName))
-						{
-							shape._type = "dxf";
-						}
-						else if (Util::stlFileType(shape._fileName)){
-							shape._type = "stl";
-						}
-						if (!Util::fileExists(shape._fileName)){
-							std::cout << "Could not find the file " << shape._fileName << std::endl;
-						}
-					}
-					//std::cout<<"type "<<shape._id<<std::endl;
-					//std::cout<<"type "<<shape._type<<std::endl;
+                if (expNode == 0)
+                {
+                    LOGGER_WRITE(
+                            std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
+                            Util::LC_LOADER, Util::LL_DEBUG);
+                }
+                else
+                {
+                    shape._type = std::string(expNode->value());
+                    if (Util::isCADType(shape._type))
+                    {
+                        shape._fileName = Util::extractCADFilename(shape._type);
+                        if (Util::dxfFileType(shape._fileName))
+                        {
+                            shape._type = "dxf";
+                        }
+                        else if (Util::stlFileType(shape._fileName))
+                        {
+                            shape._type = "stl";
+                        }
+                        if (!Util::fileExists(shape._fileName))
+                        {
+                            auto msg = "OMVisualBase: Could not find the file " + shape._fileName + ".";
+                            LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_DEBUG);
+                            throw std::runtime_error(msg);
+                        }
+                    }
+                    //std::cout<<"type "<<shape._id<<std::endl;
+                    //std::cout<<"type "<<shape._type<<std::endl;
 
-					expNode = shapeNode->first_node((const char*) "length")->first_node();
+                    expNode = shapeNode->first_node((const char*) "length")->first_node();
                     shape._length = Util::getObjectAttributeForNode(expNode);
                     expNode = shapeNode->first_node((const char*) "width")->first_node();
                     shape._width = Util::getObjectAttributeForNode(expNode);
@@ -189,7 +197,7 @@ namespace OMVIS
 
                     _shapes.push_back(shape);
                 }
-            } // end for-loop
+            }  // end for-loop
 
             //std::vector<std::string> vs = getVisualizationVariables();
         }
@@ -223,7 +231,8 @@ namespace OMVIS
             return _xmlFileName;
         }
 
-        void OMVisualBase::appendVisVariable(const rapidxml::xml_node<>* node, std::vector<std::string>& visVariables) const
+        void OMVisualBase::appendVisVariable(const rapidxml::xml_node<>* node,
+                                             std::vector<std::string>& visVariables) const
         {
             if (strcmp("cref", node->name()) == 0)
             {
@@ -242,7 +251,8 @@ namespace OMVIS
             std::vector<std::string> visVariables;
             visVariables.reserve(_shapes.size());
 
-            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode;
+                    shapeNode = shapeNode->next_sibling())
             {
                 expNode = shapeNode->first_node((const char*) "ident")->first_node();
                 shape._id = std::string(expNode->value());
@@ -250,7 +260,9 @@ namespace OMVIS
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
                 if (expNode == 0)
                 {
-                    LOGGER_WRITE(std::string("The type of  ") + shape._id + " is not supported right in the visxml file.", Util::LC_LOADER, Util::LL_DEBUG);
+                    LOGGER_WRITE(
+                            std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
+                            Util::LC_LOADER, Util::LL_DEBUG);
                     break;
                 }
 
