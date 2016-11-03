@@ -18,6 +18,7 @@
  */
 
 #include "Model/ShapeObjectAttribute.hpp"
+#include "Util/Util.hpp"
 
 namespace OMVIS
 {
@@ -42,8 +43,9 @@ namespace OMVIS
 
         std::string ShapeObjectAttribute::getValueString() const
         {
-            return std::to_string(exp) + "  (" + std::to_string(fmuValueRef) + ") "
-                    + std::to_string(static_cast<int>(isConst)) + " ";
+            return std::to_string(exp) + " (" + std::to_string(fmuValueRef) + ") Is const: "
+                    + Util::boolToString(isConst);
+//                    std::to_string(static_cast<int>(isConst)) + " ";
         }
 
     }  // namespace Model
