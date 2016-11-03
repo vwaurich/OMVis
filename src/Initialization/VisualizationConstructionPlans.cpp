@@ -31,55 +31,77 @@ namespace OMVIS
         {
         }
 
-        VisualizationConstructionPlan::VisualizationConstructionPlan(const std::string& modelFileIn, const std::string& pathIn)
-            : visType(Model::VisType::NONE),
-              modelFile(modelFileIn),
-              path(pathIn)
+        VisualizationConstructionPlan::VisualizationConstructionPlan(const std::string& modelFileIn,
+                                                                     const std::string& pathIn)
+                : visType(Model::VisType::NONE),
+                  modelFile(modelFileIn),
+                  path(pathIn)
         {
             if (modelFileIn.empty())
+            {
                 throw std::invalid_argument("No model file specified.");
+            }
             if (pathIn.empty())
+            {
                 throw std::invalid_argument("No path specified.");
+            }
 
             // Get visualization type.
             if (Util::isFMU(modelFile))
+            {
                 visType = Model::VisType::FMU;
+            }
             else if (Util::isMAT(modelFile))
+            {
                 visType = Model::VisType::MAT;
+            }
             else
+            {
                 throw std::invalid_argument("VisualizationType is NONE.");
+            }
         }
 
         RemoteVisualizationConstructionPlan::RemoteVisualizationConstructionPlan()
-            : VisualizationConstructionPlan(),
-              hostAddress(""),
-              port(-1),
-              wDir("")
+                : VisualizationConstructionPlan(),
+                  hostAddress(""),
+                  port(-1),
+                  wDir("")
         {
         }
 
         RemoteVisualizationConstructionPlan::RemoteVisualizationConstructionPlan(const std::string& modelFile,
                                                                                  const std::string& path,
                                                                                  const std::string& hostAddress,
-                                                                                 const int port, const std::string& wDir)
-            : VisualizationConstructionPlan(modelFile, path),
-              hostAddress(hostAddress),
-              port(port),
-              wDir(wDir)
+                                                                                 const int port,
+                                                                                 const std::string& wDir)
+                : VisualizationConstructionPlan(modelFile, path),
+                  hostAddress(hostAddress),
+                  port(port),
+                  wDir(wDir)
         {
             if (hostAddress != "localhost" && (!(Util::isValidIPv4(hostAddress) || Util::isValidIPv6(hostAddress))))
+            {
                 throw std::invalid_argument("Invalid IP address.");
+            }
             if (wDir.empty())
+            {
                 throw std::invalid_argument("No local working directory specified.");
+            }
 
             // Get visualization type.
-            if (Util::isFMU (modelFile))
+            if (Util::isFMU(modelFile))
+            {
                 visType = Model::VisType::FMU_REMOTE;
+            }
             else if (Util::isMAT(modelFile))
+            {
                 visType = Model::VisType::MAT_REMOTE;
+            }
             else
+            {
                 throw std::invalid_argument("VisualizationType is NONE.");
+            }
         }
 
-    }  // End namespace Initialization
-}  // End namespace OMVIS
+    }  // namespace Initialization
+}  // namespace OMVIS
