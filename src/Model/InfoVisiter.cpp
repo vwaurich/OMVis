@@ -23,7 +23,7 @@
 
 namespace OMVIS
 {
-    namespace View
+    namespace Model
     {
 
         InfoVisitor::InfoVisitor()
@@ -49,14 +49,15 @@ namespace OMVIS
         {
             std::cout << spaces() << geode.libraryName() << "::" << geode.className() << std::endl;
             ++_level;
+            osg::Drawable* drawable = nullptr;
             for (size_t i = 0; i < geode.getNumDrawables(); ++i)
             {
-                osg::Drawable* drawable = geode.getDrawable(i);
+                drawable = geode.getDrawable(i);
                 std::cout << spaces() << drawable->libraryName() << "::" << drawable->className() << std::endl;
             }
             traverse(geode);
             --_level;
         }
 
-    }  //End namespace View
-}  // End namespace OMVIS
+    }  // namespace View
+}  // namespace OMVIS

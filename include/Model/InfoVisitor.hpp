@@ -34,7 +34,7 @@
 
 namespace OMVIS
 {
-    namespace View
+    namespace Model
     {
 
         /*! \brief InfoVisitor to print the osg tree.
@@ -71,7 +71,7 @@ namespace OMVIS
             virtual void apply(osg::Node& node);
 
             /// Geode information
-            virtual void apply(osg::Geode& node);
+            virtual void apply(osg::Geode& geode);
 
          private:
             /*-----------------------------------------
@@ -81,8 +81,8 @@ namespace OMVIS
             unsigned int _level;
         };
 
-    }  // End namespace View
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_INFOVISITOR_HPP_ */
 /**
