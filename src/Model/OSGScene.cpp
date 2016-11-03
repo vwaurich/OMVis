@@ -81,7 +81,7 @@ namespace OMVIS
                 // Geode with shape drawable
                 else
                 {
-                    osg::ShapeDrawable* shapeDraw = new osg::ShapeDrawable();
+                    auto shapeDraw = new osg::ShapeDrawable();
                     shapeDraw->setColor(osg::Vec4(1.0, 1.0, 1.0, 1.0));
                     geode = new osg::Geode();
                     geode->addDrawable(shapeDraw);
@@ -90,7 +90,6 @@ namespace OMVIS
                     geode->setStateSet(ss);
                     transf->addChild(geode);
                 }
-
                 _rootNode->addChild(transf.get());
             }
         }
@@ -114,5 +113,5 @@ namespace OMVIS
             _path = path;
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
