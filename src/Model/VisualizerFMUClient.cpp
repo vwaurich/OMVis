@@ -29,9 +29,9 @@ namespace OMVIS
                 : VisualizerAbstract(cP->modelFile, cP->wDir, VisType::FMU_REMOTE),
                   _noFC(cP->hostAddress, cP->port),
                   _simID(-1),
-                  _simSettings(new SimSettingsFMU()),
+                  _simSettings(std::make_shared<SimSettingsFMU>()),
                   _outputVars(),
-                  _inputData(new InputData()),
+                  _inputData(std::make_shared<InputData>()),
                   _joysticks(),
                   _remotePathToModelFile(cP->path)
         {
@@ -48,12 +48,13 @@ namespace OMVIS
             // If visual XML file is not present, we need to copy it from server to localhost
             // (before calling OMVisualizerAbstract::initialize().
 
-            try {
+            try
+            {
                 initializeConnectionToServer();
             }
             catch (std::exception& ex)
             {
-                std::string msg = "VisualizerFMUClient exception: " + std::string(ex.what());
+                auto msg = "VisualizerFMUClient exception: " + std::string(ex.what());
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
@@ -65,17 +66,16 @@ namespace OMVIS
         {
             // Test if server can be reached
             if (!_noFC.initializeConnection())
+            {
                 throw std::runtime_error("Timeout: Cannot connect to server.");
+            }
         }
 
         void VisualizerFMUClient::loadFMU()
         {
             auto a = _baseData->getModelFile();
-            auto p = _baseData->getPath();
-
             // Send server data about the simulation you want to calculate and get the ID of the simulation.
             //_simID = _noFC.addSimulation(_baseData->getModelName());
-            auto c = _remotePathToModelFile + _baseData->getModelFile();
             _simID = _noFC.addSimulation(a);
 
             // Set visualization relevant output variables.
@@ -111,12 +111,16 @@ namespace OMVIS
         void VisualizerFMUClient::initJoySticks()
         {
             //Initialize SDL
-            if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
+            if (0 > SDL_Init(SDL_INIT_JOYSTICK))
+            {
                 LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
+            }
 
             //Check for joysticks
-            if (SDL_NumJoysticks() < 1)
+            if (1 > SDL_NumJoysticks())
+            {
                 LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+            }
             else
             {
                 LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
@@ -131,14 +135,14 @@ namespace OMVIS
                     newJoyStick = new Control::JoystickDevice(i);
                     _joysticks.push_back(newJoyStick);
 
-                    if (newJoyStick == nullptr)
+                    if (nullptr == newJoyStick)
+                    {
                         LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),
                                      Util::LC_LOADER, Util::LL_INFO);
+                    }
                 }
             }
         }
-
-
 
         /*-----------------------------------------
          * GETTERS and SETTERS
@@ -159,11 +163,6 @@ namespace OMVIS
             return varList;
         }
 
-//        std::string VisualizerFMUClient::getType() const
-//        {
-//            return "fmuclient";
-//        }
-
         std::shared_ptr<InputData> VisualizerFMUClient::getInputData()
         {
             return _inputData;
@@ -175,9 +174,10 @@ namespace OMVIS
 
         void VisualizerFMUClient::simulate(Control::TimeManager& omvm)
         {
+            double newSimTime;
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
             {
-                double newSimTime = simulateStep(omvm.getSimTime());
+                newSimTime = simulateStep(omvm.getSimTime());
                 omvm.setSimTime(newSimTime);
             }
         }
@@ -186,7 +186,7 @@ namespace OMVIS
         {
             double newTime = time + _simSettings->getHdef();
 
-            NetOff::ValueContainer & inputCont = _noFC.getInputValueContainer(_simID);
+            NetOff::ValueContainer& inputCont = _noFC.getInputValueContainer(_simID);
             // Set inputs in inputData
             for (auto& joystick : _joysticks)
             {
@@ -208,7 +208,7 @@ namespace OMVIS
             return newTime;
         }
 
-        void VisualizerFMUClient::initializeVisAttributes(const double time)
+        void VisualizerFMUClient::initializeVisAttributes(const double /*time*/)
         {
             _timeManager->setVisTime(_timeManager->getStartTime());
             _timeManager->setSimTime(_timeManager->getStartTime());
@@ -220,7 +220,9 @@ namespace OMVIS
         {
             fmi1_value_reference_t vr = 0;
             if (!attr->isConst)
+            {
                 vr = _outputVars.findRealVariableNameIndex(attr->cref);
+            }
             return vr;
         }
 
@@ -314,14 +316,15 @@ namespace OMVIS
                     Util::updateObjectAttributeFMUClient(shape._T[6], outputCont);
                     Util::updateObjectAttributeFMUClient(shape._T[7], outputCont);
                     Util::updateObjectAttributeFMUClient(shape._T[8], outputCont);
-                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
-                                        osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
-                                        osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
-                                                     shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
-                                                     shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
-                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
-                                        osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
-                                        shape._length.exp, shape._type);
+                    rT = Util::rotation(
+                            osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+                            osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+                            osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp,
+                                         shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp,
+                                         shape._T[8].exp),
+                            osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+                            osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp,
+                            shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
@@ -338,8 +341,8 @@ namespace OMVIS
 
             catch (std::exception& ex)
             {
-                std::string msg = "Error in VisualizerFMUClient::updateVisAttributes at time point "
-                                                + std::to_string(time) + "\n" + std::string(ex.what());
+                auto msg = "Error in VisualizerFMUClient::updateVisAttributes at time point " + std::to_string(time)
+                        + "\n" + std::string(ex.what());
                 LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
             }
         }
@@ -347,9 +350,13 @@ namespace OMVIS
         void VisualizerFMUClient::startVisualization()
         {
             if (!_noFC.isStarted())
+            {
                 _noFC.start();
+            }
             else
+            {
                 _noFC.unpause();
+            }
             VisualizerAbstract::startVisualization();
         }
 
@@ -359,7 +366,7 @@ namespace OMVIS
             VisualizerAbstract::pauseVisualization();
         }
 
-        void VisualizerFMUClient::updateScene(const double time)
+        void VisualizerFMUClient::updateScene(const double /*time*/)
         {
             _timeManager->updateTick();            //for real-time measurement
 
@@ -371,6 +378,8 @@ namespace OMVIS
             {
                 //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
                 //_inputData.printValues();
+                std::cout << "Press Enter to Continue";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 _timeManager->setSimTime(simulateStep(_timeManager->getSimTime()));
             }
             _timeManager->updateTick();                     //for real-time measurement
@@ -378,5 +387,5 @@ namespace OMVIS
             updateVisAttributes(_timeManager->getVisTime());
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
