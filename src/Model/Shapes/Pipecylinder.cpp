@@ -20,7 +20,7 @@
 #include "Model/Shapes/Pipecylinder.hpp"
 
 #define _USE_MATH_DEFINES // for C++
-#include <math.h>
+#include <cmath>
 
 #include <iostream>
 

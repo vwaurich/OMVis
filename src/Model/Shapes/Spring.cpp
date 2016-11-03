@@ -20,7 +20,7 @@
 #include "Model/Shapes/Spring.hpp"
 
 #define _USE_MATH_DEFINES // for C++
-#include <math.h>
+#include <cmath>
 
 namespace OMVIS
 {
@@ -43,7 +43,7 @@ namespace OMVIS
             int numSegments = (ELEMENTS_WINDING * nWindings) + 1;
             _splineVertices = new osg::Vec3Array(numSegments);
 
-            double c1 = 2.0 * M_PI / (double) ELEMENTS_WINDING;
+            double c1 = 2.0 * M_PI / static_cast<double>(ELEMENTS_WINDING);
             double c2 = l / numSegments;
             float x, y, z;
             for (int segIdx = 0; segIdx < numSegments; ++segIdx)
@@ -101,7 +101,6 @@ namespace OMVIS
             //this->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::POINTS, 0, outerVertices->size()));
         }
 
-
         /*-----------------------------------------
          * MATH FUNCTIONS
          *---------------------------------------*/
@@ -121,11 +120,17 @@ namespace OMVIS
             float maxVal = std::fmaxf(std::fmaxf(vecN_Abs[0], vecN_Abs[1]), vecN_Abs[2]);
             int imax = 0;
             if (vecN_Abs[0] == maxVal)
+            {
                 imax = 0;
+            }
             else if (vecN_Abs[1] == maxVal)
+            {
                 imax = 1;
+            }
             else
+            {
                 imax = 2;
+            }
 
             int rest[2] = { 0, 0 };
 
@@ -145,7 +150,7 @@ namespace OMVIS
                     break;
             }
             //calc a normal vector
-            osg::Vec3f n = osg::Vec3f(0, 0, 0);
+            auto n = osg::Vec3f(0, 0, 0);
             n[rest[0]] = 1;
             n[rest[1]] = 1;
             n[imax] = -(vecN[rest[0]] + vecN[rest[1]]) / vecN[imax];
@@ -169,17 +174,20 @@ namespace OMVIS
 
         osg::Vec3f Spring::rotateX(const osg::Vec3f& vec, float phi)
         {
-            return osg::Vec3f(vec[0], vec[1] * std::cos(phi) - vec[2] * std::sin(phi), vec[1] * std::sin(phi) + vec[2] * std::cos(phi));
+            return osg::Vec3f(vec[0], vec[1] * std::cos(phi) - vec[2] * std::sin(phi),
+                              vec[1] * std::sin(phi) + vec[2] * std::cos(phi));
         }
 
         osg::Vec3f Spring::rotateY(const osg::Vec3f& vec, float phi)
         {
-            return osg::Vec3f(vec[2] * std::sin(phi) + vec[0] * std::cos(phi), vec[1], vec[2] * std::cos(phi) - vec[0] * std::sin(phi));
+            return osg::Vec3f(vec[2] * std::sin(phi) + vec[0] * std::cos(phi), vec[1],
+                              vec[2] * std::cos(phi) - vec[0] * std::sin(phi));
         }
 
         osg::Vec3f Spring::rotateZ(const osg::Vec3f& vec, float phi)
         {
-            return osg::Vec3f(vec[0] * std::cos(phi) - vec[1] * std::sin(phi), vec[0] * std::sin(phi) + vec[1] * std::cos(phi), vec[2]);
+            return osg::Vec3f(vec[0] * std::cos(phi) - vec[1] * std::sin(phi),
+                              vec[0] * std::sin(phi) + vec[1] * std::cos(phi), vec[2]);
         }
 
         osg::Vec3f Spring::rotateArbitraryAxes_expensive(const osg::Vec3f& vec, const osg::Vec3f& axes, float phi)
@@ -219,8 +227,5 @@ namespace OMVIS
                               M3_1 * vec[0] + M3_2 * vec[1] + M3_3 * vec[2]);
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
-
-
-
+    }  // namespace Model
+}  // namespace OMVIS
