@@ -91,8 +91,8 @@ namespace OMVIS
             std::shared_ptr<Model::InputData> _inputs;
         };
 
-    }  // End namespace Control
-}  // End namespace OMVIS
+    }  // namespace Control
+}  // namespace OMVIS
 
 #endif /* INCLUDE_CONTROL_KEYBOARDEVENTHANDLER_HPP_ */
 /**

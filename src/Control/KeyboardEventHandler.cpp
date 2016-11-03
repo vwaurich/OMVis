@@ -34,7 +34,7 @@ namespace OMVIS
 
         KeyboardEventHandler::KeyboardEventHandler(std::shared_ptr<Model::InputData> inputs)
                 : GUIEventHandler(),
-                  _inputs(inputs)
+                  _inputs(std::move(inputs))
         {
         }
 
@@ -42,7 +42,7 @@ namespace OMVIS
          * FUNCTIONS
          *---------------------------------------*/
 
-        bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa)
+        bool KeyboardEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& /*aa*/)
         {
             switch (ea.getEventType())
             {
@@ -51,23 +51,28 @@ namespace OMVIS
                     LOGGER_WRITE(std::string("KEYDOWN"), Util::LC_CTR, Util::LL_DEBUG);
                     unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
 
-                    keyBoardMapIter keyboardmapValue = _inputs->getKeyboardMap()->find(keyboardValue);
+                    auto keyboardmapValue = _inputs->getKeyboardMap()->find(keyboardValue);
 
                     if (keyboardmapValue != _inputs->getKeyboardMap()->end())
                     {
                         //std::cout<<"pressed key "<<keyboardValue<<". Thats the input key: "<<keyboardmapValue->second<<std::endl;
                         //its a assigned key
-                        keyMapIter iter = _inputs->getKeyMap()->find((inputKey) keyboardmapValue->second);
+                        auto iter = _inputs->getKeyMap()->find(static_cast<inputKey>(keyboardmapValue->second));
                         //this key is not assigned as input
                         if (iter == _inputs->getKeyMap()->end())
-                            LOGGER_WRITE(std::string("Wrong key ") + std::to_string(keyboardValue), Util::LC_CTR, Util::LL_DEBUG);
-                        //set the input variable
+                        {
+                            LOGGER_WRITE(std::string("Wrong key ") + std::to_string(keyboardValue), Util::LC_CTR,
+                                         Util::LL_DEBUG);
+                            //set the input variable
+                        }
                         else
                         {
                             KeyMapValue iterValue = iter->second;
-                            LOGGER_WRITE(std::string("Got the right key ") + std::to_string(keyboardValue) +
-                                         " and base type " + std::to_string((int)iterValue._baseType), Util::LC_CTR, Util::LL_DEBUG);
-                            int baseTypeIdx = (int) iterValue._baseType;
+                            LOGGER_WRITE(
+                                    std::string("Got the right key ") + std::to_string(keyboardValue)
+                                            + " and base type " + std::to_string((int )iterValue._baseType),
+                                    Util::LC_CTR, Util::LL_DEBUG);
+                            int baseTypeIdx = static_cast<int>(iterValue._baseType);
                             switch (baseTypeIdx)
                             {
                                 case (0):
@@ -77,7 +82,7 @@ namespace OMVIS
                                     _inputs->getInputValues()->_valuesInteger[iterValue._valueIdx] = 1;
                                     break;
                                 case (2):
-                                    _inputs->getInputValues()->_valuesBoolean[iterValue._valueIdx] = true;
+                                    _inputs->getInputValues()->_valuesBoolean[iterValue._valueIdx] = 1;
                                     break;
                                 case (3):
                                     _inputs->getInputValues()->_valuesString[iterValue._valueIdx] = "";
