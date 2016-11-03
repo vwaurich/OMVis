@@ -30,6 +30,7 @@
 #include "WrapperFMILib.hpp"
 #include "InputValues.hpp"
 
+// NetworkOffloader
 #include <VariableList.hpp>
 
 #include <map>
@@ -54,10 +55,7 @@ typedef struct
 
 //mapping from inputKeys to the input variable values
 typedef std::map<inputKey, KeyMapValue> keyMap;
-typedef keyMap::const_iterator keyMapIter;
-
 typedef std::map<unsigned int, inputKey> keyboardMap;
-typedef keyboardMap::const_iterator keyBoardMapIter;
 
 namespace OMVIS
 {
@@ -82,7 +80,7 @@ namespace OMVIS
             ~InputData() = default;
 
             /*! \brief Copy constructor. */
-            InputData(const InputData& ipd);
+            InputData(const InputData& ipd) = default;
 
             /*! The assignment operator is forbidden. */
             InputData& operator=(const InputData& ipd) = delete;
