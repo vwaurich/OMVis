@@ -21,9 +21,7 @@
 #include "Model/VisualizerFMUClient.hpp"
 #include "Model/VisualizerMAT.hpp"
 #include "Initialization/Factory.hpp"
-#include "Model/OMVisualizerMATClient.hpp"
 #include "Util/Logger.hpp"
-#include "Util/Util.hpp"
 
 namespace OMVIS
 {
@@ -34,7 +32,8 @@ namespace OMVIS
          * CREATE METHODS
          *---------------------------------------*/
 
-        std::shared_ptr<Model::VisualizerAbstract> Factory::createVisualizerObject(const VisualizationConstructionPlan* cP)
+        std::shared_ptr<Model::VisualizerAbstract> Factory::createVisualizerObject(
+                const VisualizationConstructionPlan* cP)
         {
             std::shared_ptr<Model::VisualizerAbstract> result(nullptr);
 
@@ -70,21 +69,25 @@ namespace OMVIS
                 result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerMAT(cP->modelFile, cP->path));
                 LOGGER_WRITE("Initialize VisualizerMAT.", Util::LC_LOADER, Util::LL_DEBUG);
             }
+            // FMU based remote visualization
             else if (cP->visType == Model::VisType::FMU_REMOTE)
             {
-                result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerFMUClient(dynamic_cast<const RemoteVisualizationConstructionPlan*>(cP)));
+                result = std::shared_ptr<Model::VisualizerAbstract>(
+                        new Model::VisualizerFMUClient(dynamic_cast<const RemoteVisualizationConstructionPlan*>(cP)));
                 LOGGER_WRITE("Initialize VisualizerFMUClient.", Util::LC_LOADER, Util::LL_DEBUG);
             }
-            // MAT file based visualization
+            // MAT file based remote visualization
+            /// \todo Todo Implement OMVisualizerMATClient!
             else if (cP->visType == Model::VisType::MAT_REMOTE)
             {
-                /// \todo Todo Implement OMVisualizerMATClient!
                 // result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
-                LOGGER_WRITE("Initialize OMVisualizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER, Util::LL_ERROR);
+                LOGGER_WRITE("Initialize OMVisualizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER,
+                             Util::LL_ERROR);
             }
             else
             {
-                std::string msg = "The construction plan does not have a valid visualization type. A OMVisualizerAbstract(nullptr) is returned.";
+                std::string msg =
+                        "The construction plan does not have a valid visualization type. A OMVisualizerAbstract(nullptr) is returned.";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
@@ -92,6 +95,5 @@ namespace OMVIS
             return result;
         }
 
-    }  // End namespace Initialization
-}  // End namespace OMVIS
-
+    }  // namespace Initialization
+}  // namespace OMVIS
