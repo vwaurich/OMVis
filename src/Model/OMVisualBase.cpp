@@ -18,7 +18,6 @@
  */
 
 #include "Model/OMVisualBase.hpp"
-#include "Util/Visualize.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -64,7 +63,7 @@ namespace OMVIS
             t.seekg(0, std::ios::end);    // go to the end
             int length = t.tellg();       // report location (this is the length)
             t.seekg(0, std::ios::beg);    // go back to the beginning
-            char* buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
+            auto buffer = new char[length];    // allocate memory for a buffer of appropriate dimension
             t.read(buffer, length);       // read the whole file into the buffer
             t.close();
             std::string buff = std::string(buffer);  // strings are good
@@ -79,9 +78,9 @@ namespace OMVIS
         /// \todo Can we call std::vector<T>::reserve before pushing back all shapes?
         void OMVisualBase::initVisObjects()
         {
-            rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
-            Model::ShapeObject shape;
+            auto rootNode = _xmlDoc.first_node();
             rapidxml::xml_node<>* expNode;
+            Model::ShapeObject shape;
 
             //Begin std::vector<T>::reserve()
             //int i = 0;
@@ -91,7 +90,7 @@ namespace OMVIS
             //_shapes.reserve(i);
             // End std::vector<T>::reserve()
 
-            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode;
+            for (auto shapeNode = rootNode->first_node("shape"); nullptr != shapeNode;
                     shapeNode = shapeNode->next_sibling())
             {
                 expNode = shapeNode->first_node((const char*) "ident")->first_node();
@@ -99,7 +98,7 @@ namespace OMVIS
 
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
 
-                if (expNode == 0)
+                if (nullptr == expNode)
                 {
                     LOGGER_WRITE(
                             std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
@@ -234,7 +233,7 @@ namespace OMVIS
         void OMVisualBase::appendVisVariable(const rapidxml::xml_node<>* node,
                                              std::vector<std::string>& visVariables) const
         {
-            if (strcmp("cref", node->name()) == 0)
+            if (0 == strcmp("cref", node->name()))
             {
                 char* cref = node->value();
                 visVariables.push_back(std::string(cref));
@@ -243,7 +242,7 @@ namespace OMVIS
 
         std::vector<std::string> OMVisualBase::getVisualizationVariables() const
         {
-            rapidxml::xml_node<>* rootNode = _xmlDoc.first_node();
+            auto rootNode = _xmlDoc.first_node();
             rapidxml::xml_node<>* expNode;
             Model::ShapeObject shape;
 
@@ -251,14 +250,14 @@ namespace OMVIS
             std::vector<std::string> visVariables;
             visVariables.reserve(_shapes.size());
 
-            for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode;
+            for (auto shapeNode = rootNode->first_node("shape"); shapeNode != nullptr;
                     shapeNode = shapeNode->next_sibling())
             {
                 expNode = shapeNode->first_node((const char*) "ident")->first_node();
                 shape._id = std::string(expNode->value());
 
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
-                if (expNode == 0)
+                if (expNode == nullptr)
                 {
                     LOGGER_WRITE(
                             std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
