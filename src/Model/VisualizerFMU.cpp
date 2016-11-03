@@ -36,9 +36,9 @@ namespace OMVIS
 
         VisualizerFMU::VisualizerFMU(const std::string& modelFile, const std::string& path)
                 : VisualizerAbstract(modelFile, path, VisType::FMU),
-                  _fmu(new FMUWrapper()),
-                  _simSettings(new SimSettingsFMU()),
-                  _inputData(new InputData()),
+                  _fmu(std::make_shared<FMUWrapper>()),
+                  _simSettings(std::make_shared<SimSettingsFMU>()),
+                  _inputData(std::make_shared<InputData>()),
                   _joysticks()
         {
             LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
@@ -95,12 +95,16 @@ namespace OMVIS
         void VisualizerFMU::initJoySticks()
         {
             //Initialize SDL
-            if (SDL_Init(SDL_INIT_JOYSTICK) < 0)
+            if (0 > SDL_Init(SDL_INIT_JOYSTICK))
+            {
                 LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
+            }
 
             //Check for joysticks
-            if (SDL_NumJoysticks() < 1)
+            if (1 > SDL_NumJoysticks())
+            {
                 LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+            }
             else
             {
                 LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
@@ -115,9 +119,11 @@ namespace OMVIS
                     newJoyStick = new Control::JoystickDevice(i);
                     _joysticks.push_back(newJoyStick);
 
-                    if (newJoyStick == nullptr)
+                    if (nullptr == newJoyStick)
+                    {
                         LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),
                                      Util::LC_LOADER, Util::LL_INFO);
+                    }
                 }
             }
         }
@@ -205,18 +211,29 @@ namespace OMVIS
 
         void VisualizerFMU::setSimulationSettings(const UserSimSettingsFMU& simSetFMU)
         {
-            if (simSetFMU.solver == Solver::NONE)
+            if (Solver::NONE == simSetFMU.solver)
+            {
                 throw std::runtime_error("Solver: NONE is not a valid solver.");
+            }
             else
+            {
                 _simSettings->setSolver(simSetFMU.solver);
+            }
 
             if (0.0 >= simSetFMU.simStepSize)
-                throw std::runtime_error("Simulation step size of " + std::to_string(simSetFMU.simStepSize) + " is not valid.");
+            {
+                throw std::runtime_error(
+                        "Simulation step size of " + std::to_string(simSetFMU.simStepSize) + " is not valid.");
+            }
             else
+            {
                 _simSettings->setHdef(simSetFMU.simStepSize);
+            }
 
-            if (simSetFMU.simEndTime <= 0.0)
+            if (0.0 >= simSetFMU.simEndTime)
+            {
                 throw std::runtime_error("Solver: Simulation end time <= 0.0 is not valid.");
+            }
             else
             {
                 _timeManager->setEndTime(simSetFMU.simEndTime);
@@ -225,7 +242,8 @@ namespace OMVIS
 
         UserSimSettingsFMU VisualizerFMU::getCurrentSimSettings() const
         {
-            return {_simSettings->getSolver(), _simSettings->getHdef(), 99, _timeManager->getEndTime()};
+            return
+            {   _simSettings->getSolver(), _simSettings->getHdef(), 99, _timeManager->getEndTime()};
         }
 
         /*-----------------------------------------
@@ -236,19 +254,20 @@ namespace OMVIS
         void VisualizerFMU::simulate(Control::TimeManager& omvm)
         {
             while (omvm.getSimTime() < omvm.getRealTime() + omvm.getHVisual() && omvm.getSimTime() < omvm.getEndTime())
+            {
                 omvm.setSimTime(simulateStep(omvm.getSimTime()));
+            }
         }
 
         double VisualizerFMU::simulateStep(const double time)
         {
-            int zero_crossning_event = 0;
             _fmu->prepareSimulationStep(time);
 
             /* Check if an event indicator has triggered */
             bool zeroCrossingEvent = _fmu->checkForTriggeredEvent();
 
             /* Handle any events */
-            if (_simSettings->getCallEventUpdate() || zeroCrossingEvent || _fmu->itsEventTime())
+            if ((nullptr != _simSettings->getCallEventUpdate()) || zeroCrossingEvent || _fmu->itsEventTime())
             {
                 _fmu->handleEvents(_simSettings->getIntermediateResults());
             }
@@ -264,7 +283,7 @@ namespace OMVIS
             {
                 joystick->detectContinuousInputEvents(_inputData);
             }
-			_inputData->setInputsInFMU(_fmu->getFMU());
+            _inputData->setInputsInFMU(_fmu->getFMU());
             //_inputData->printValues();
 
             /* Solve system */
@@ -292,7 +311,7 @@ namespace OMVIS
             return _fmu->getFMUData()->_tcur;
         }
 
-        void VisualizerFMU::initializeVisAttributes(const double time)
+        void VisualizerFMU::initializeVisAttributes(const double /*time*/)
         {
             _fmu->initialize(_simSettings);
             _timeManager->setVisTime(_timeManager->getStartTime());
@@ -342,14 +361,15 @@ namespace OMVIS
                     updateObjectAttributeFMU(&shape._T[6], fmu);
                     updateObjectAttributeFMU(&shape._T[7], fmu);
                     updateObjectAttributeFMU(&shape._T[8], fmu);
-                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
-                                        osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
-                                        osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
-                                                     shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
-                                                     shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
-                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
-                                        osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
-                                        shape._length.exp, shape._type);
+                    rT = Util::rotation(
+                            osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+                            osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+                            osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp,
+                                         shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp,
+                                         shape._T[8].exp),
+                            osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+                            osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp,
+                            shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
@@ -365,16 +385,16 @@ namespace OMVIS
             }  // end try
             catch (std::exception& ex)
             {
-                std::string msg = "Error in VisualizerFMU::updateVisAttributes at time point " + std::to_string(time)
-                                                                                      + "\n" + std::string(ex.what());
+                auto msg = "Error in VisualizerFMU::updateVisAttributes at time point " + std::to_string(time) + "\n"
+                        + std::string(ex.what());
                 LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
                 throw(msg);
             }
         }
 
-        void VisualizerFMU::updateScene(const double time)
+        void VisualizerFMU::updateScene(const double /*time*/)
         {
-            _timeManager->updateTick(); //for real-time measurement
+            _timeManager->updateTick();  //for real-time measurement
 
             _timeManager->setSimTime(_timeManager->getVisTime());
             double nextStep = _timeManager->getVisTime() + _timeManager->getHVisual();
@@ -398,10 +418,9 @@ namespace OMVIS
             {
                 fmi1_real_t a = attr->exp;
                 fmi1_import_get_real(fmu, &attr->fmuValueRef, 1, &a);
-                attr->exp = (float) a;
+                attr->exp = static_cast<float>(a);
             }
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
-
+    }  // namespace Model
+}  // namespace OMVIS
