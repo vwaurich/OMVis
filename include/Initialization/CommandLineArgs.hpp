@@ -74,21 +74,24 @@ namespace OMVIS
 
             RemoteVisualizationConstructionPlan getRemoteVisualizationConstructionPlan() const;
 
-            /*!
-             * Returns true, if a valid local visualization is specified via the command line, i.e., a model file is
-             * specified and a path to the model file is given. Furthermore, it was checked that the model file exists.
+            /*! \brief Checks, if the command line arguments specify a local visualization.
+             *
+             * Returns true, if a valid local visualization is specified via the command line arguments, i.e., a model
+             * file is specified and a path to the model file is given. Furthermore, it is checked that the model file
+             * exists. If a host address and a port are specified, it is also not a local visualization.
              */
             bool localVisualization() const;
 
-            /*!
-             * Returns true, if a valid remote visualization is specified via the command line, i.e., all necessary
-             * arguments for remote visualization are given.
+            /*! \brief Checks, if the command line arguments specify a remote visualization.
+             * Returns true, if a valid remote visualization is specified via the command line arguments, i.e., all
+             * necessary arguments for remote visualization are given.
              */
             bool remoteVisualization() const;
 
-            /*!
-             * Return true if model file or path are empty. If both, model file and path, are specified, this method
-             * returns false.
+            /*! \brief Checks, if the command line is empty.
+             *
+             * We assume the command line is empty, if no model file or no path is given. If both, model file and path,
+             * are specified, this method returns false.
              */
             bool empty() const;
 
@@ -126,7 +129,7 @@ namespace OMVIS
          */
         CommandLineArgs getCommandLineArguments(int argc, char *argv[]);
 
-        void checkCommandLineArguments(const CommandLineArgs& cLineArgs);
+        void checkCommandLineArguments(const CommandLineArgs& clArgs);
 
     }  // End namespace Initialization
 }  // End namespace OMVIS

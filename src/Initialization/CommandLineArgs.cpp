@@ -21,6 +21,9 @@
 
 #include <iostream>
 
+using std::cout;
+using std::endl;
+
 namespace OMVIS
 {
     namespace Initialization
@@ -57,28 +60,27 @@ namespace OMVIS
         bool CommandLineArgs::localVisualization() const
         {
             if (modelFile.empty() || modelPath.empty())
+            {
                 return false;
-            else if (hostAddress.size() > 1 && port != -1)
-                // Remote Visualization!
+            }
+
+            // Remote Visualization!
+            if (1 < hostAddress.size() && -1 != port)
+            {
                 return false;
-            else
-                return (Util::fileExists(modelPath + modelFile));
+            }
+
+            return (Util::fileExists(modelPath + modelFile));
         }
 
         bool CommandLineArgs::remoteVisualization() const
         {
-            if (modelFile.empty() || modelPath.empty() || hostAddress.empty() || 1 > port || wDir.empty())
-                return false;
-            else
-                return true;
+            return !(modelFile.empty() || modelPath.empty() || hostAddress.empty() || 1 > port || wDir.empty());
         }
 
         bool CommandLineArgs::empty() const
         {
-            if (modelFile.empty() || modelPath.empty())
-                return true;
-            else
-                return false;
+            return (modelFile.empty() || modelPath.empty());
         }
 
         /*-----------------------------------------
@@ -89,16 +91,15 @@ namespace OMVIS
         {
             if (!empty())
             {
-                std::cout << "\nHei, the command line arguments for OMVis are as follows:" << std::endl;
-                std::cout << "  Host: " << hostAddress << std::endl;
-                std::cout << "  Port: " << port << std::endl;
-                std::cout << "  Model File: " << modelFile << std::endl;
-                std::cout << "  Model Path: " << modelPath << std::endl;
-                std::cout << "  Working Directory: " << wDir << std::endl;
+                cout << "\nHei, the command line arguments for OMVis are as follows:" << endl;
+                cout << "  Host: " << hostAddress << endl;
+                cout << "  Port: " << port << endl;
+                cout << "  Model File: " << modelFile << endl;
+                cout << "  Model Path: " << modelPath << endl;
+                cout << "  Working Directory: " << wDir << endl;
                 logSet.print();
             }
         }
-
 
         CommandLineArgs getCommandLineArguments(int argc, char *argv[])
         {
@@ -112,7 +113,7 @@ namespace OMVIS
 #endif
             result.logSet = logSet;
 
-            if (argc > 1)
+            if (1 < argc)
             {
                 std::map<std::string, Util::LogCategory> logcatmap;
                 logcatmap["loader"] = Util::LC_LOADER;
@@ -129,9 +130,20 @@ namespace OMVIS
 
                 namespace po = boost::program_options;
                 po::options_description desc("Options");
-                desc.add_options()("help,h", "Prints help message.")("path", boost::program_options::value<std::string>(), "Path where the model file is stored in.")("model", boost::program_options::value<std::string>(), "Name of the model file which should be visualized.")("remoteSimulation", boost::program_options::value<std::string>(), "Start a remote visualization.")(
-                        "host", boost::program_options::value<std::string>(), "Name or IP address of the host server for remote visualization.")("port", boost::program_options::value<int>(), "Port to use for remote visualization.")("wdir", boost::program_options::value<std::string>(), "Local working directory for remote visualization.")(
-                        "loggerSettings,l", po::value<std::vector<std::string> >(), "Specification of the logging information.\n"
+                desc.add_options()("help,h", "Prints help message.")("path",
+                                                                     boost::program_options::value<std::string>(),
+                                                                     "Path where the model file is stored in.")(
+                        "model", boost::program_options::value<std::string>(),
+                        "Name of the model file which should be visualized.")(
+                        "remoteSimulation", boost::program_options::value<std::string>(),
+                        "Start a remote visualization.")(
+                        "host", boost::program_options::value<std::string>(),
+                        "Name or IP address of the host server for remote visualization.")(
+                        "port", boost::program_options::value<int>(), "Port to use for remote visualization.")(
+                        "wdir", boost::program_options::value<std::string>(),
+                        "Local working directory for remote visualization.")(
+                        "loggerSettings,l", po::value<std::vector<std::string> >(),
+                        "Specification of the logging information.\n"
                         "Available categories: loader, controller, viewer, solver, other.\n"
                         "Available levels: error, warning, info, debug.\n"
                         "Hint: Different settings of logger category and level can be specified "
@@ -144,25 +156,26 @@ namespace OMVIS
                 {
                     po::store(po::parse_command_line(argc, argv, desc), vm);
 
-                    if (vm.count("help"))
+                    if (0u != vm.count("help"))
                     {
-                        std::cout << "Usage:" << std::endl;
-                        std::cout << " Local Visualization: OMVis --model=BouncingBall.fmu --path=/PATH/TO/BOUNCINGBALL/ " << std::endl;
-                        std::cout << "Remote Visualization: OMVis --host=HOSTNAME --port=PORT --model=BouncingBall.fmu "
-                                  "--path=/PATH/TO/BOUNCINGBALL/ --wdir=/PATH/TO/WORKINGDIR/"
-                                  << std::endl;
-                        std::cout << "\n" << std::endl;
-                        std::cout << "OMVis - An open source tool for model and simulation visualization" << std::endl;
-                        std::cout << "\n" << std::endl;
+                        cout << "Usage:" << endl;
+                        cout << " Local Visualization: OMVis --model=BouncingBall.fmu --path=/PATH/TO/BOUNCINGBALL/ "
+                             << endl;
+                        cout << "Remote Visualization: OMVis --host=HOSTNAME --port=PORT --model=BouncingBall.fmu "
+                             "--path=/PATH/TO/BOUNCINGBALL/ --wdir=/PATH/TO/WORKINGDIR/"
+                             << endl;
+                        cout << "\n" << endl;
+                        cout << "OMVis - An open source tool for model and simulation visualization" << endl;
+                        cout << "\n" << endl;
                         // Command line options
-                        std::cout << desc << std::endl;
+                        cout << desc << endl;
                         exit(0);
                         return result;
                     }
 
                     // User can overwrite logger settings via command line
                     Util::LogSettings logSet;
-                    if (vm.count("loggerSettings"))
+                    if (0u != vm.count("loggerSettings"))
                     {
                         std::vector<std::string> logVec = vm["loggerSettings"].as<std::vector<std::string>>();
                         std::vector<std::string> tmpvec;
@@ -173,48 +186,62 @@ namespace OMVIS
                             tmpvec.clear();
                             //boost::split(tmpvec, logVec[i], boost::is_any_of("="));
                             boost::split(tmpvec, logElem, boost::is_any_of("="));
-                            std::cout << i << ". " << tmpvec[0] << "\t" << tmpvec[1] << std::endl;
-                            if (tmpvec.size() > 1 && loglvlmap.find(tmpvec[1]) != loglvlmap.end() && (tmpvec[0] == "all" || logcatmap.find(tmpvec[0]) != logcatmap.end()))
+                            cout << i << ". " << tmpvec[0] << "\t" << tmpvec[1] << endl;
+                            if (tmpvec.size() > 1 && loglvlmap.find(tmpvec[1]) != loglvlmap.end()
+                                    && (tmpvec[0] == "all" || logcatmap.find(tmpvec[0]) != logcatmap.end()))
                             {
-                                if (tmpvec[0] == "all")
+                                if ("all" == tmpvec[0])
                                 {
-                                    std::cout << "All Logger Categories are set to level " << tmpvec[1] << std::endl;
+                                    cout << "All Logger Categories are set to level " << tmpvec[1] << endl;
                                     logSet.setAll(loglvlmap[tmpvec[1]]);
                                     break;
                                 }
                                 else
                                 {
-                                    std::cout << "Logger Category " << tmpvec[0] << " is set to level " << tmpvec[1] << std::endl;
+                                    cout << "Logger Category " << tmpvec[0] << " is set to level " << tmpvec[1] << endl;
                                     logSet.modes[logcatmap[tmpvec[0]]] = loglvlmap[tmpvec[1]];
                                 }
                             }
                             else
+                            {
                                 throw std::runtime_error("loggerSettings flags not supported: " + logElem + "\n");
+                            }
 
                             ++i;
                         }
                         result.logSet = logSet;
                     }
 
-                    if (vm.count("host"))
+                    if (0u != vm.count("host"))
+                    {
                         result.hostAddress = vm["host"].as<std::string>();
+                    }
 
-                    if (vm.count("port"))
+                    if (0u != vm.count("port"))
+                    {
                         result.port = vm["port"].as<int>();
+                    }
 
-                    if (vm.count("model"))
+                    if (0u != vm.count("model"))
+                    {
                         result.modelFile = vm["model"].as<std::string>();
+                    }
 
-                    if (vm.count("path"))
+                    if (0u != vm.count("path"))
+                    {
                         result.modelPath = vm["path"].as<std::string>();
+                    }
 
-                    if (vm.count("wdir"))
+                    if (0u != vm.count("wdir"))
+                    {
                         result.wDir = vm["wdir"].as<std::string>();
+                    }
 
                 }
                 catch (po::error& e)
                 {
-                    throw std::runtime_error((std::string("Cannot parse command line arguments. ") + std::string(e.what())).c_str());
+                    throw std::runtime_error(
+                            (std::string("Cannot parse command line arguments. ") + std::string(e.what())).c_str());
                 }
 
                 try
@@ -223,7 +250,8 @@ namespace OMVIS
                 }
                 catch (po::error& e)
                 {
-                    throw std::runtime_error((std::string("Error with command lines:") + std::string(e.what())).c_str());
+                    throw std::runtime_error(
+                            (std::string("Error with command lines:") + std::string(e.what())).c_str());
                 }
             }
 
@@ -234,29 +262,43 @@ namespace OMVIS
         {
             // Both, local and remote visualization, need a path and a model file.
             if (clArgs.modelFile.empty())
+            {
                 throw std::runtime_error("No model file given. Use --model=MODELFILE.");
+            }
             else if (clArgs.modelPath.empty())
+            {
                 throw std::runtime_error("No path to model file given. Use --path=/PATH/TO/MODELFILE/.");
+            }
             else
             {
                 if (!Util::fileExists(clArgs.modelPath + clArgs.modelFile))
+                {
                     throw std::runtime_error("The model file " + clArgs.modelFile + " does not exists.");
+                }
             }
 
-            // We assume the user wants remote visualization if one of the following parameter is specified: host, port, wdir.
+            // We assume the user wants remote visualization if one of the following parameter is specified:
+            // host, port, wdir.
             bool remoteVis = !clArgs.hostAddress.empty() || -1 < clArgs.port || !clArgs.wDir.empty();
             if (remoteVis)
             {
                 if (clArgs.hostAddress.empty())
+                {
                     throw std::runtime_error("No host for remote visualization given. Use --host=HOSTNAME.");
+                }
 
                 if (1 > clArgs.port)
+                {
                     throw std::runtime_error("No port for remote visualization given. Use --port=PORT.");
+                }
 
                 if (clArgs.wDir.empty())
-                    throw std::runtime_error("No (local) working directory for remote visualization given. Use --wdir=/PATH/TO/WORKDING/DIR/.");
+                {
+                    throw std::runtime_error(
+                            "No (local) working directory for remote visualization given. Use --wdir=/PATH/TO/WORKDING/DIR/.");
+                }
             }
         }
 
-    }  // End namespace Initialization
-}  // End namespace OMVIS
+    }  // namespace Initialization
+}  // namespace OMVIS
