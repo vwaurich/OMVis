@@ -18,7 +18,6 @@
  */
 
 #include "Control/JoystickDevice.hpp"
-#include "Model/InputData.hpp"
 #include "Util/Logger.hpp"
 
 #include <SDL.h>
@@ -46,22 +45,30 @@ namespace OMVIS
             //    LOGGER_WRITE(std::string("SDL could not be initialized."),  Util::LC_LOADER, Util::LL_ERROR);
 
             //Check for joysticks
-            if (SDL_NumJoysticks() < 1)
+            if (1 > SDL_NumJoysticks())
+            {
                 LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+            }
             else
             {
-                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"), Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
+                             Util::LC_LOADER, Util::LL_INFO);
                 //Load joystick
                 _joystick = SDL_JoystickOpen(joyID);
-                if (_joystick == nullptr)
-                    LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER, Util::LL_INFO);
+                if (nullptr == _joystick)
+                {
+                    LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(), Util::LC_LOADER,
+                                 Util::LL_INFO);
+                }
             }
         }
 
         JoystickDevice::~JoystickDevice()
         {
-            if (_joystick != nullptr)
+            if (nullptr != _joystick)
+            {
                 SDL_JoystickClose(_joystick);
+            }
         }
 
         /*-----------------------------------------
@@ -72,27 +79,27 @@ namespace OMVIS
         {
             SDL_PollEvent(&_inputEvent);
 
-			inputKey key;
+            inputKey key;
 
-            if (_inputEvent.type == SDL_JOYAXISMOTION)
+            if (SDL_JOYAXISMOTION == _inputEvent.type)
             {
                 //Motion on first joystick
                 if (_inputEvent.jaxis.which == _joystickId)
                 {
                     //X axis motion
-                    if (_inputEvent.jaxis.axis == 0)
+                    if (0 == _inputEvent.jaxis.axis)
                     {
                         _xDir = _inputEvent.jaxis.value;
-						key = inputKey(0 + (_joystickId * 2));
-						//std::cout << "set x " << _joystickId << " to " << key << std::endl;
+                        key = inputKey(0 + (_joystickId * 2));
+                        //std::cout << "set x " << _joystickId << " to " << key << std::endl;
                         inputInfo->setRealInputValueForInputKey(key, _xDir);
                     }
                     //Y axis motion
-                    else if (_inputEvent.jaxis.axis == 1)
+                    else if (1 == _inputEvent.jaxis.axis)
                     {
                         _yDir = _inputEvent.jaxis.value;
-					    key = inputKey(1 + (_joystickId * 2));
-						//std::cout << "set y " << _joystickId << " to "<< key <<std::endl;
+                        key = inputKey(1 + (_joystickId * 2));
+                        //std::cout << "set y " << _joystickId << " to "<< key <<std::endl;
                         inputInfo->setRealInputValueForInputKey(key, _yDir);
                     }
                     else
@@ -118,5 +125,5 @@ namespace OMVIS
             return _yDir;
         }
 
-    }  // End namespace Control
-}  // End namespace OMVIS
+    }  // namespace Control
+}  // namespace OMVIS
