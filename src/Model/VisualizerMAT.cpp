@@ -66,8 +66,10 @@ namespace OMVIS
         void VisualizerMAT::initializeVisAttributes(const double time)
         {
             if (0.0 > time)
-                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."),
-                                                                         Util::LC_LOADER, Util::LL_ERROR);
+            {
+                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER,
+                             Util::LL_ERROR);
+            }
             updateVisAttributes(time);
         }
 
@@ -78,7 +80,7 @@ namespace OMVIS
             // Check if the MAT file exists.
             if (!Util::fileExists(resFileName))
             {
-                std::string msg = "Could not find MAT file" + resFileName + ".";
+                auto msg = "Could not find MAT file" + resFileName + ".";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }
@@ -87,7 +89,7 @@ namespace OMVIS
                 // Read mat file.
                 auto ret = omc_new_matlab4_reader(resFileName.c_str(), &_matReader);
                 // Check return value.
-                if (0 != ret)
+                if (nullptr != ret)
                 {
                     std::string msg(ret);
                     LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
@@ -153,16 +155,17 @@ namespace OMVIS
                     updateObjectAttributeMAT(&shape._color[2], time, tmpReaderPtr);
 
                     updateObjectAttributeMAT(&shape._specCoeff, time, tmpReaderPtr);
-					updateObjectAttributeMAT(&shape._extra, time, tmpReaderPtr);
+                    updateObjectAttributeMAT(&shape._extra, time, tmpReaderPtr);
 
-                    rT = Util::rotation(osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
-                                        osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
-                                        osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp,
-                                                     shape._T[3].exp, shape._T[4].exp, shape._T[5].exp,
-                                                     shape._T[6].exp, shape._T[7].exp, shape._T[8].exp),
-                                        osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
-                                        osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp),
-                                        shape._length.exp, shape._type);
+                    rT = Util::rotation(
+                            osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
+                            osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
+                            osg::Matrix3(shape._T[0].exp, shape._T[1].exp, shape._T[2].exp, shape._T[3].exp,
+                                         shape._T[4].exp, shape._T[5].exp, shape._T[6].exp, shape._T[7].exp,
+                                         shape._T[8].exp),
+                            osg::Vec3f(shape._lDir[0].exp, shape._lDir[1].exp, shape._lDir[2].exp),
+                            osg::Vec3f(shape._wDir[0].exp, shape._wDir[1].exp, shape._wDir[2].exp), shape._length.exp,
+                            shape._type);
 
                     Util::assemblePokeMatrix(shape._mat, rT._T, rT._r);
 
@@ -178,18 +181,20 @@ namespace OMVIS
             }
             catch (std::exception& ex)
             {
-                std::string msg = "Error in VisualizerMAT::updateVisAttributes at time point " + std::to_string(time)
-                                  + "\n" + std::string(ex.what());
-                   LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
-                   throw(msg);
+                auto msg = "Error in VisualizerMAT::updateVisAttributes at time point " + std::to_string(time) + "\n"
+                        + std::string(ex.what());
+                LOGGER_WRITE(msg, Util::LC_SOLVER, Util::LL_WARNING);
+                throw(msg);
             }
         }
 
         void VisualizerMAT::updateScene(const double time)
         {
             if (0.0 > time)
+            {
                 LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER,
                              Util::LL_ERROR);
+            }
 
             _timeManager->updateTick();  //for real-time measurement
             double visTime = _timeManager->getRealTime();
@@ -201,10 +206,13 @@ namespace OMVIS
             _timeManager->setRealTimeFactor(_timeManager->getHVisual() / visTime);
         }
 
-        void VisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader)
+        void VisualizerMAT::updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time,
+                                                     ModelicaMatReader* reader)
         {
-			if (!attr->isConst)
+            if (!attr->isConst)
+            {
                 attr->exp = omcGetVarValue(reader, attr->cref.c_str(), time);
+            }
         }
 
         double VisualizerMAT::omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time)
@@ -213,10 +221,17 @@ namespace OMVIS
             ModelicaMatVariable_t* var = nullptr;
             var = omc_matlab4_find_var(reader, varName);
             if (var == nullptr)
-                LOGGER_WRITE(std::string("Did not get variable from result file. Variable name is "
-                             + std::string(varName) + "."), Util::LC_SOLVER, Util::LL_ERROR);
+            {
+                LOGGER_WRITE(
+                        std::string(
+                                "Did not get variable from result file. Variable name is " + std::string(varName)
+                                        + "."),
+                        Util::LC_SOLVER, Util::LL_ERROR);
+            }
             else
+            {
                 omc_matlab4_val(&val, reader, var, time);
+            }
 
             return val;
         }
@@ -227,5 +242,5 @@ namespace OMVIS
             _timeManager->setHVisual(newVal);
         }
 
-    }  // End namepsace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS

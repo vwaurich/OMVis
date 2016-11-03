@@ -55,7 +55,7 @@ namespace OMVIS
              * \param fileName  Model file name without path.
              * \param path      Path to the model file.
              */
-            VisualizerMAT(const std::string& fileName, const std::string& path);
+            VisualizerMAT(const std::string& modelFile, const std::string& path);
 
             virtual ~VisualizerMAT() = default;
 
