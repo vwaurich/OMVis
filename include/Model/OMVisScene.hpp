@@ -51,6 +51,7 @@ namespace OMVIS
             ~OMVisScene() = default;
 
             OMVisScene(const OMVisScene& omvv) = delete;
+
             OMVisScene& operator=(const OMVisScene& omvv) = delete;
 
             /*-----------------------------------------
