@@ -17,9 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Model/InfoVisitor.hpp"
 #include "Model/OMVisScene.hpp"
-
+#include "Model/InfoVisitor.hpp"
 
 namespace OMVIS
 {
@@ -42,7 +41,7 @@ namespace OMVIS
         void OMVisScene::dumpOSGTreeDebug()
         {
             // The node traverser which dumps the tree
-            View::InfoVisitor infoVisitor;
+            InfoVisitor infoVisitor;
             _scene.getRootNode()->accept(infoVisitor);
         }
 
