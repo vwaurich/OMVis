@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Control/TimeManager.hpp>
+#include "Control/TimeManager.hpp"
 
 #include <cmath>
 
@@ -30,8 +30,9 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        TimeManager::TimeManager(const double simTime, const double realTime, const double realTimeFactor, const double visTime,
-                                 const double hVisual, const double startTime, const double endTime)
+        TimeManager::TimeManager(const double simTime, const double realTime, const double realTimeFactor,
+                                 const double visTime, const double hVisual, const double startTime,
+                                 const double endTime)
                 : _simTime(simTime),
                   _realTime(realTime),
                   _realTimeFactor(realTimeFactor),
@@ -129,7 +130,6 @@ namespace OMVIS
             _hVisual = hVis;
         }
 
-
         double TimeManager::getRealTime() const
         {
             return _realTime;
@@ -155,5 +155,5 @@ namespace OMVIS
             _pause = status;
         }
 
-    }  // End namespace Control
-}  // End namespace OMVIS
+    }  // namespace Control
+}  // namespace OMVIS
