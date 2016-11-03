@@ -89,7 +89,7 @@ namespace OMVIS
 
         Solver SimSettingsFMU::getSolver() const
         {
-          return _solver;
+            return _solver;
         }
 
         fmi1_boolean_t* SimSettingsFMU::getCallEventUpdate()
