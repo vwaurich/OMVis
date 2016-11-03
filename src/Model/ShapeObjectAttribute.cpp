@@ -42,8 +42,9 @@ namespace OMVIS
 
         std::string ShapeObjectAttribute::getValueString() const
         {
-            return std::to_string(exp) + "  (" + std::to_string(fmuValueRef) + ") " + std::to_string(isConst) + " ";
+            return std::to_string(exp) + "  (" + std::to_string(fmuValueRef) + ") "
+                    + std::to_string(static_cast<int>(isConst)) + " ";
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
