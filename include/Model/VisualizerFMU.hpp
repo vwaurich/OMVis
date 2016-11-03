@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_OMVISUALIZERFMU_HPP_
-#define INCLUDE_OMVISUALIZERFMU_HPP_
+#ifndef INCLUDE_VISUALIZERFMU_HPP_
+#define INCLUDE_VISUALIZERFMU_HPP_
 
 #include "Model/SimSettings.hpp"
 #include "Model/SimSettingsFMU.hpp"
@@ -175,7 +175,7 @@ namespace OMVIS
     }  // End namespace Model
 }  // End namespace OMVIS
 
-#endif /* INCLUDE_OMVISUALIZERFMU_HPP_ */
+#endif /* INCLUDE_VISUALIZERFMU_HPP_ */
 /**
  * @}
  */
