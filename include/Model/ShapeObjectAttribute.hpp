@@ -61,8 +61,8 @@ namespace OMVIS
             //if true, check the exp, if wrong check the cref
             bool isConst;
             float exp;
-            std::string cref;
-            fmi1_value_reference_t fmuValueRef;
+            std::string cref; 			///< Only for MAT and CSV (future)
+            fmi1_value_reference_t fmuValueRef; ///< For (all) FMI versions
         };
 
     }  // End namespace Util

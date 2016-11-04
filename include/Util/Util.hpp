@@ -112,11 +112,14 @@ namespace OMVIS
          * \param b Bool to convert.
          * \return "true" or "false".
          */
-        inline const char* boolToString(bool b)
+//        inline const char* boolToString(bool b)
+//        {
+//            return b ? "true" : "false";
+//        }
+        inline std::string boolToString(bool b)
         {
-            return b ? "true" : "false";
+            return b ? std::string("true") : std::string("false");
         }
-
         /*! \brief Returns absolute path for the given path.
          *
          * \remark: It seems to be no other platform independent way than boost::filesystem.
@@ -143,14 +146,12 @@ namespace OMVIS
 
             if (result != 0)
             {
-                LOGGER_WRITE(ipAddress + std::string(" is a valid IPv4 address."), Util::LC_GUI, Util::LL_WARNING);
+                LOGGER_WRITE(ipAddress + " is a valid IPv4 address.", Util::LC_GUI, Util::LL_WARNING);
                 return true;
             }
-            else
-            {
-                LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv4 address."), Util::LC_GUI, Util::LL_WARNING);
-                return false;
-            }
+            LOGGER_WRITE(ipAddress + " is not a valid IPv4 address.", Util::LC_GUI, Util::LL_WARNING);
+            return false;
+
 #elif _WIN32
             LOGGER_WRITE("isValidIpAddressV4 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
             return false;
@@ -174,17 +175,12 @@ namespace OMVIS
 
             if (result != 0)
             {
-                LOGGER_WRITE(ipAddress + std::string(" is a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
+                LOGGER_WRITE(ipAddress + " is a valid IPv6 address.", Util::LC_GUI, Util::LL_WARNING);
                 return true;
             }
-            else
-            {
-                LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
-                return false;
-            }
-            LOGGER_WRITE(ipAddress + std::string(" is not a valid IPv6 address."), Util::LC_GUI, Util::LL_WARNING);
-            // Short way without logger usage.
-            //return result != 0;
+
+            LOGGER_WRITE(ipAddress + " is not a valid IPv6 address.", Util::LC_GUI, Util::LL_WARNING);
+            return false;
 #elif _WIN32
             LOGGER_WRITE("isValidIpAddressV6 has not been implemented for Windows", Util::LC_GUI, Util::LL_WARNING);
             return false;
@@ -194,9 +190,8 @@ namespace OMVIS
         /// \todo Implement me!
         inline bool isValidServerName(const std::string& serverName)
         {
-            LOGGER_WRITE(
-                    serverName + std::string(" is assumed to be a valid Server Name. TODO: Implement a proper check!"),
-                    Util::LC_GUI, Util::LL_WARNING);
+            LOGGER_WRITE(serverName + " is assumed to be a valid Server Name. TODO: Implement a proper check!",
+                         Util::LC_GUI, Util::LL_WARNING);
             return true;
         }
 
@@ -249,10 +244,14 @@ namespace OMVIS
             int signsOff(0);
             // modelFoo.fmu --> -4 sings
             if (isFMU(modelFile))
+            {
                 signsOff = 4;
+            }
             // modelFoo_res.mat --> -8 signs
             else if (isMAT(modelFile))
+            {
                 signsOff = 8;
+            }
             // Mhh, what kind of file? Or new pattern?
             else
             {
@@ -278,8 +277,8 @@ namespace OMVIS
             return Util::fileExists(xmlFileName);
         }
 
-    }  // End namespace Util
-}  // End namespace OMVIS
+    }  // namespace Util
+}  // namespace OMVIS
 
 #endif /* INCLUDE_UTIL_HPP_ */
 /**

@@ -67,7 +67,7 @@ namespace OMVIS
         {
             if (0.0 > time)
             {
-                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_LOADER,
+                LOGGER_WRITE("Cannot load visualization attributes for time point < 0.0.", Util::LC_LOADER,
                              Util::LL_ERROR);
             }
             updateVisAttributes(time);
@@ -192,7 +192,7 @@ namespace OMVIS
         {
             if (0.0 > time)
             {
-                LOGGER_WRITE(std::string("Cannot load visualization attributes for time point < 0.0."), Util::LC_SOLVER,
+                LOGGER_WRITE("Cannot load visualization attributes for time point < 0.0.", Util::LC_SOLVER,
                              Util::LL_ERROR);
             }
 
@@ -222,11 +222,8 @@ namespace OMVIS
             var = omc_matlab4_find_var(reader, varName);
             if (var == nullptr)
             {
-                LOGGER_WRITE(
-                        std::string(
-                                "Did not get variable from result file. Variable name is " + std::string(varName)
-                                        + "."),
-                        Util::LC_SOLVER, Util::LL_ERROR);
+                LOGGER_WRITE("Did not get variable from result file. Variable name is " + std::string(varName) + ".",
+                             Util::LC_SOLVER, Util::LL_ERROR);
             }
             else
             {

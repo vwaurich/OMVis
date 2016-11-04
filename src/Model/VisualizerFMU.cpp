@@ -41,7 +41,7 @@ namespace OMVIS
                   _inputData(std::make_shared<InputData>()),
                   _joysticks()
         {
-            LOGGER_WRITE(std::string("Initialize joysticks"), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE("Initialize joysticks", Util::LC_LOADER, Util::LL_INFO);
             initJoySticks();
         }
 
@@ -68,12 +68,10 @@ namespace OMVIS
 
             //load and initialize fmu
             _fmu->load(modelFile, path);
-            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully loaded."), Util::LC_LOADER,
-                         Util::LL_DEBUG);
+            LOGGER_WRITE("VisualizerFMU::loadFMU: FMU was successfully loaded.", Util::LC_LOADER, Util::LL_DEBUG);
 
             _fmu->initialize(_simSettings);
-            LOGGER_WRITE(std::string("VisualizerFMU::loadFMU: FMU was successfully initialized."), Util::LC_LOADER,
-                         Util::LL_DEBUG);
+            LOGGER_WRITE("VisualizerFMU::loadFMU: FMU was successfully initialized.", Util::LC_LOADER, Util::LL_DEBUG);
 
             _inputData->initializeInputs(_fmu->getFMU());
             _inputData->printValues();
@@ -97,31 +95,31 @@ namespace OMVIS
             //Initialize SDL
             if (0 > SDL_Init(SDL_INIT_JOYSTICK))
             {
-                LOGGER_WRITE(std::string("SDL could not be initialized."), Util::LC_LOADER, Util::LL_ERROR);
+                LOGGER_WRITE("SDL could not be initialized.", Util::LC_LOADER, Util::LL_ERROR);
             }
 
             //Check for joysticks
             if (1 > SDL_NumJoysticks())
             {
-                LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE("No joysticks connected!", Util::LC_LOADER, Util::LL_WARNING);
             }
             else
             {
-                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
-                             Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE("Found " + std::to_string(SDL_NumJoysticks()) + " joystick(s)", Util::LC_LOADER,
+                             Util::LL_INFO);
 
                 //Load joystick
                 LOGGER_WRITE(std::string("START LOADING JOYSTICKS!!!!!!!!!"), Util::LC_LOADER, Util::LL_INFO);
                 Control::JoystickDevice* newJoyStick(nullptr);
                 for (int i = 0; i < SDL_NumJoysticks(); ++i)
                 {
-                    LOGGER_WRITE(std::string("LOAD JOYSTICK # ") + std::to_string(i), Util::LC_LOADER, Util::LL_INFO);
+                    LOGGER_WRITE("LOAD JOYSTICK # " + std::to_string(i), Util::LC_LOADER, Util::LL_INFO);
                     newJoyStick = new Control::JoystickDevice(i);
                     _joysticks.push_back(newJoyStick);
 
                     if (nullptr == newJoyStick)
                     {
-                        LOGGER_WRITE(std::string("Unable to open joystick! SDL Error: ") + SDL_GetError(),
+                        LOGGER_WRITE("Unable to open joystick! SDL Error: " + std::string(SDL_GetError()),
                                      Util::LC_LOADER, Util::LL_INFO);
                     }
                 }
@@ -202,8 +200,8 @@ namespace OMVIS
 
             catch (std::exception& e)
             {
-                LOGGER_WRITE(std::string("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes"),
-                             Util::LC_SOLVER, Util::LL_WARNING);
+                LOGGER_WRITE("Something went wrong in OMVisualizer::setVarReferencesInVisAttributes", Util::LC_SOLVER,
+                             Util::LL_WARNING);
                 isOk = 1;
             }
             return isOk;

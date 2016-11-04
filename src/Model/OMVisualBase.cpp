@@ -71,7 +71,7 @@ namespace OMVIS
             buff2.append("</visualization>");
             char* buff3 = strdup(buff2.c_str());  // cast to char*
             _xmlDoc.parse<0>(buff3);
-            LOGGER_WRITE(std::string("Reading the visxml file ") + _xmlFileName + " was successful.", Util::LC_LOADER,
+            LOGGER_WRITE("Reading the visxml file " + _xmlFileName + " was successful.", Util::LC_LOADER,
                          Util::LL_DEBUG);
         }
 
@@ -100,9 +100,8 @@ namespace OMVIS
 
                 if (nullptr == expNode)
                 {
-                    LOGGER_WRITE(
-                            std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
-                            Util::LC_LOADER, Util::LL_DEBUG);
+                    LOGGER_WRITE("The type of  " + shape._id + " is not supported right in the visxml file.",
+                                 Util::LC_LOADER, Util::LL_DEBUG);
                 }
                 else
                 {
@@ -259,9 +258,8 @@ namespace OMVIS
                 expNode = shapeNode->first_node((const char*) "type")->first_node();
                 if (expNode == nullptr)
                 {
-                    LOGGER_WRITE(
-                            std::string("The type of  ") + shape._id + " is not supported right in the visxml file.",
-                            Util::LC_LOADER, Util::LL_DEBUG);
+                    LOGGER_WRITE("The type of  " + shape._id + " is not supported right in the visxml file.",
+                                 Util::LC_LOADER, Util::LL_DEBUG);
                     break;
                 }
 
@@ -331,7 +329,7 @@ namespace OMVIS
                 expNode = shapeNode->first_node((const char*) "specCoeff")->first_node();
                 appendVisVariable(expNode, visVariables);
             }
-            LOGGER_WRITE(std::string("There are ") + std::to_string(visVariables.size()) + " visualization variables.",
+            LOGGER_WRITE("There are " + std::to_string(visVariables.size()) + " visualization variables.",
                          Util::LC_LOADER, Util::LL_INFO);
             return visVariables;
         }

@@ -47,12 +47,12 @@ namespace OMVIS
             //Check for joysticks
             if (1 > SDL_NumJoysticks())
             {
-                LOGGER_WRITE(std::string("No joysticks connected!"), Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE("No joysticks connected!", Util::LC_LOADER, Util::LL_WARNING);
             }
             else
             {
-                LOGGER_WRITE(std::string("Found ") + std::to_string(SDL_NumJoysticks()) + std::string(" joystick(s)"),
-                             Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE("Found " + std::to_string(SDL_NumJoysticks()) + " joystick(s)", Util::LC_LOADER,
+                             Util::LL_INFO);
                 //Load joystick
                 _joystick = SDL_JoystickOpen(joyID);
                 if (nullptr == _joystick)

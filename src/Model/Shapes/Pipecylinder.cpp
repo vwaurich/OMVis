@@ -129,5 +129,5 @@ namespace OMVIS
             }
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS

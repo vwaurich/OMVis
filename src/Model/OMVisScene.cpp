@@ -50,5 +50,5 @@ namespace OMVIS
             return &_scene;
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS

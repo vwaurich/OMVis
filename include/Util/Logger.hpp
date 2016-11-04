@@ -88,14 +88,18 @@ namespace OMVIS
              */
             void setAll(LogLevel level)
             {
-                for (unsigned i = 0; i < modes.size(); ++i)
-                    modes[i] = level;
+                for (auto& mode : modes)
+                {
+                    mode = level;
+                }
             }
 
             void print()
             {
                 for (unsigned i = 0; i < modes.size(); ++i)
+                {
                     std::cout << "Category: " << i << " Level: " << modes[i] << std::endl;
+                }
             }
         };
 
@@ -109,7 +113,7 @@ namespace OMVIS
             /**
              * Destroy the logger object.
              */
-            virtual ~Logger();
+            virtual ~Logger() = default;
 
             /**
              * Get the singleton instance.
@@ -117,9 +121,10 @@ namespace OMVIS
              */
             static Logger& getInstance()
             {
-                if (instance == nullptr)
+                if (nullptr == instance)
+                {
                     initialize(LogSettings());
-
+                }
                 return *instance;
             }
 
@@ -129,8 +134,10 @@ namespace OMVIS
              */
             static void initialize(LogSettings settings)
             {
-                if (instance != nullptr)
+                if (nullptr != instance)
+                {
                     delete instance;
+                }
 
                 instance = new Logger(settings, true);
             }
@@ -150,11 +157,13 @@ namespace OMVIS
              * @param category The category of the message.
              * @param level The significance of the given message.
              */
-            static inline void write(std::string message, LogCategory category, LogLevel level)
+            static inline void write(const std::string& message, LogCategory category, LogLevel level)
             {
                 Logger& instance = getInstance();
                 if (instance.isEnabled())
+                {
                     instance.writeInternal(message, category, level);
+                }
             }
 
             /**
@@ -163,7 +172,7 @@ namespace OMVIS
              * @param message The message that should be written.
              * @param mode The category and significance indicator encapsulated as one pair.
              */
-            static inline void write(std::string message, std::pair<LogCategory, LogLevel> mode)
+            static inline void write(const std::string& message, std::pair<LogCategory, LogLevel> mode)
             {
                 write(message, mode.first, mode.second);
             }
@@ -221,7 +230,7 @@ namespace OMVIS
              * @param category The category of the message.
              * @param level The significance of the given message.
              */
-            virtual void writeInternal(std::string message, LogCategory category, LogLevel level);
+            virtual void writeInternal(const std::string& message, LogCategory category, LogLevel level);
             /**
              * Enable or disable the logger.
              * @param enabled True if the logger should be enabled.

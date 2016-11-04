@@ -48,7 +48,7 @@ namespace OMVIS
             {
                 case (osgGA::GUIEventAdapter::KEYDOWN):
                 {
-                    LOGGER_WRITE(std::string("KEYDOWN"), Util::LC_CTR, Util::LL_DEBUG);
+                    LOGGER_WRITE("KEYDOWN", Util::LC_CTR, Util::LL_DEBUG);
                     unsigned int keyboardValue = ea.getKey();  // the ascii value corresponding to the pressed key
 
                     auto keyboardmapValue = _inputs->getKeyboardMap()->find(keyboardValue);
@@ -61,16 +61,15 @@ namespace OMVIS
                         //this key is not assigned as input
                         if (iter == _inputs->getKeyMap()->end())
                         {
-                            LOGGER_WRITE(std::string("Wrong key ") + std::to_string(keyboardValue), Util::LC_CTR,
-                                         Util::LL_DEBUG);
+                            LOGGER_WRITE("Wrong key " + std::to_string(keyboardValue), Util::LC_CTR, Util::LL_DEBUG);
                             //set the input variable
                         }
                         else
                         {
                             KeyMapValue iterValue = iter->second;
                             LOGGER_WRITE(
-                                    std::string("Got the right key ") + std::to_string(keyboardValue)
-                                            + " and base type " + std::to_string((int )iterValue._baseType),
+                                    "Got the right key " + std::to_string(keyboardValue) + " and base type "
+                                            + std::to_string((int )iterValue._baseType),
                                     Util::LC_CTR, Util::LL_DEBUG);
                             int baseTypeIdx = static_cast<int>(iterValue._baseType);
                             switch (baseTypeIdx)
@@ -101,5 +100,5 @@ namespace OMVIS
             return false;
         }
 
-    }  // End namespace Control
-}  // End namespace OMVIS
+    }  // namespace Control
+}  // namespace OMVIS

@@ -124,21 +124,20 @@ namespace OMVIS
 
         void InputData::initializeHelper()
         {
-            LOGGER_WRITE(std::string("Number of Reals: ") + std::to_string(_inputVals._namesReal.size()),
-                         Util::LC_LOADER, Util::LL_INFO);
-            LOGGER_WRITE(std::string("Number of Integers: ") + std::to_string(_inputVals._namesInteger.size()),
-                         Util::LC_LOADER, Util::LL_INFO);
-            LOGGER_WRITE(std::string("Number of Booleans: ") + std::to_string(_inputVals._namesBool.size()),
-                         Util::LC_LOADER, Util::LL_INFO);
-            LOGGER_WRITE(std::string("Number of Strings: ") + std::to_string(_inputVals._namesString.size()),
-                         Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE("Number of Reals: " + std::to_string(_inputVals._namesReal.size()), Util::LC_LOADER,
+                         Util::LL_INFO);
+            LOGGER_WRITE("Number of Integers: " + std::to_string(_inputVals._namesInteger.size()), Util::LC_LOADER,
+                         Util::LL_INFO);
+            LOGGER_WRITE("Number of Booleans: " + std::to_string(_inputVals._namesBool.size()), Util::LC_LOADER,
+                         Util::LL_INFO);
+            LOGGER_WRITE("Number of Strings: " + std::to_string(_inputVals._namesString.size()), Util::LC_LOADER,
+                         Util::LL_INFO);
 
             LOGGER_WRITE(
-                    std::string("There are ") + std::to_string(_inputVals.getNumBoolean())
-                            + std::string(" boolean inputs, ") + std::to_string(_inputVals.getNumReal())
-                            + std::string(" real inputs, ") + std::to_string(_inputVals.getNumInteger())
-                            + std::string(" integer inputs and ") + std::to_string(_inputVals.getNumString())
-                            + std::string(" string inputs."),
+                    "There are " + std::to_string(_inputVals.getNumBoolean()) + " boolean inputs, "
+                            + std::to_string(_inputVals.getNumReal()) + " real inputs, "
+                            + std::to_string(_inputVals.getNumInteger()) + " integer inputs and "
+                            + std::to_string(_inputVals.getNumString()) + " string inputs.",
                     Util::LC_LOADER, Util::LL_INFO);
 
             // The values for the inputs per type.
@@ -167,9 +166,9 @@ namespace OMVIS
             {
                 _keyToInputMap[keys_real[r]] =
                 {   fmi1_base_type_real, r};
-                LOGGER_WRITE(std::string("Assign real input ") + std::to_string(r) + std::string(" to key ")
+                LOGGER_WRITE("Assign real input " + std::to_string(r) + " to key "
                         + std::to_string(keys_real[r]), Util::LC_LOADER, Util::LL_INFO);
-                LOGGER_WRITE(std::string("min ") + std::to_string(_inputVals._attrReal[r]._min) + std::string(" max ")
+                LOGGER_WRITE("min " + std::to_string(_inputVals._attrReal[r]._min) + " max "
                         + std::to_string(_inputVals._attrReal[r]._max), Util::LC_LOADER, Util::LL_INFO);
                 ++k;
             }
@@ -183,7 +182,7 @@ namespace OMVIS
             {
                 _keyToInputMap[keys_bool[r]] =
                 {   fmi1_base_type_bool, r};
-                LOGGER_WRITE(std::string("Assign boolean input ") + Util::boolToString(r) + std::string(" to key ")
+                LOGGER_WRITE("Assign boolean input " + Util::boolToString(r) + " to key "
                         + std::to_string(keys_bool[r]), Util::LC_LOADER, Util::LL_INFO);
                 ++k;
             }
@@ -197,9 +196,8 @@ namespace OMVIS
             for (auto iter = _keyToInputMap.begin(); iter != _keyToInputMap.end(); ++iter)
             {
                 LOGGER_WRITE(
-                        std::string("Key: ") + std::to_string(iter->first) + std::string(" --> Values: ")
-                                + std::to_string(iter->second._baseType) + std::string(" ")
-                                + std::to_string(iter->second._valueIdx),
+                        "Key: " + std::to_string(iter->first) + " --> Values: " + std::to_string(iter->second._baseType)
+                                + " " + std::to_string(iter->second._valueIdx),
                         Util::LC_LOADER, Util::LL_INFO);
             }
         }
@@ -302,7 +300,7 @@ namespace OMVIS
                     return true;
                 }
 
-                LOGGER_WRITE(std::string("The value is not for a real input."), Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE("The value is not for a real input.", Util::LC_LOADER, Util::LL_WARNING);
                 return false;
 
             }
@@ -333,28 +331,28 @@ namespace OMVIS
             for (auto r = 0u; r < _inputVals.getNumReal(); ++r)
             {
                 LOGGER_WRITE(
-                        std::string("Real input ") + std::to_string(r) + " (" + _inputVals._namesReal[r] + ") is "
+                        "Real input " + std::to_string(r) + " (" + _inputVals._namesReal[r] + ") is "
                                 + std::to_string(_inputVals._valuesReal[r]),
                         Util::LC_CTR, Util::LL_DEBUG);
             }
             for (auto i = 0u; i < _inputVals.getNumInteger(); ++i)
             {
                 LOGGER_WRITE(
-                        std::string("Integer input ") + std::to_string(i) + " (" + _inputVals._namesInteger[i] + ") is "
+                        "Integer input " + std::to_string(i) + " (" + _inputVals._namesInteger[i] + ") is "
                                 + std::to_string(_inputVals._valuesInteger[i]),
                         Util::LC_CTR, Util::LL_DEBUG);
             }
             for (auto b = 0u; b < _inputVals.getNumBoolean(); ++b)
             {
                 LOGGER_WRITE(
-                        std::string("Boolean input ") + Util::boolToString(b) + " (" + _inputVals._namesBool[b]
-                                + ") is " + std::to_string(_inputVals._valuesBoolean[b]),
+                        "Boolean input " + Util::boolToString(b) + " (" + _inputVals._namesBool[b] + ") is "
+                                + std::to_string(_inputVals._valuesBoolean[b]),
                         Util::LC_CTR, Util::LL_DEBUG);
             }
             for (auto s = 0u; s < _inputVals.getNumString(); ++s)
             {
                 LOGGER_WRITE(
-                        std::string("String input ") + std::to_string(s) + " (" + _inputVals._namesString[s] + ") is "
+                        "String input " + std::to_string(s) + " (" + _inputVals._namesString[s] + ") is "
                                 + _inputVals._valuesString[s],
                         Util::LC_CTR, Util::LL_DEBUG);
             }
@@ -362,7 +360,7 @@ namespace OMVIS
 
         void InputData::printKeyToInputMap() const
         {
-            LOGGER_WRITE(std::string("KEY TO INPUT MAP"), Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("KEY TO INPUT MAP", Util::LC_CTR, Util::LL_DEBUG);
             for (auto it = _keyToInputMap.begin(); it != _keyToInputMap.end(); ++it)
             {
                 LOGGER_WRITE(std::to_string(it->first) + " " + keyMapValueToString(it->second), Util::LC_CTR,

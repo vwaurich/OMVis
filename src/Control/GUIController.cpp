@@ -50,7 +50,7 @@ namespace OMVIS
         void GUIController::loadModel(const Initialization::VisualizationConstructionPlan& cP,
                                       const int timeSliderStart, const int timeSliderEnd)
         {
-            LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("GUIController::loadModel()", Util::LC_CTR, Util::LL_DEBUG);
 
             // Check for XML description file.
             bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.path);
@@ -63,10 +63,9 @@ namespace OMVIS
             }
 
             // Some useful output for the user and developer.
-            LOGGER_WRITE(std::string("Path to model: ") + cP.path, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Model file: ") + cP.modelFile, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR,
-                         Util::LL_DEBUG);
+            LOGGER_WRITE("Path to model: " + cP.path, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("Model file: " + cP.modelFile, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("XML file exists: " + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
@@ -74,9 +73,9 @@ namespace OMVIS
             if (modelIsLoaded() && cP.path == _modelVisualizer->getBaseData()->getPath()
                     && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
-                LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
-                                         "The model will be initialized again."),
-                             Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE(
+                        "You tried to load the same model that is already loaded in OMVis. The model will be initialized again.",
+                        Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else
@@ -88,7 +87,7 @@ namespace OMVIS
         void GUIController::loadModel(const Initialization::RemoteVisualizationConstructionPlan& cP,
                                       const int timeSliderStart, const int timeSliderEnd)
         {
-            LOGGER_WRITE(std::string("GUIController::loadModel()"), Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("GUIController::loadModel()", Util::LC_CTR, Util::LL_DEBUG);
 
             // Check for XML description file. For remote visualization this file needs to be on the localhost.
             bool xmlExists = Util::checkForXMLFile(cP.modelFile, cP.wDir);
@@ -100,13 +99,12 @@ namespace OMVIS
             }
 
             // Some useful output for the user and developer.
-            LOGGER_WRITE(std::string("IP address: ") + cP.hostAddress, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Model file: ") + cP.modelFile, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Path of model file: ") + cP.path, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Port number: ") + std::to_string(cP.port), Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("Local working directory: ") + cP.wDir, Util::LC_CTR, Util::LL_DEBUG);
-            LOGGER_WRITE(std::string("XML file exists: ") + Util::boolToString(xmlExists), Util::LC_CTR,
-                         Util::LL_DEBUG);
+            LOGGER_WRITE("IP address: " + cP.hostAddress, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("Model file: " + cP.modelFile, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("Path of model file: " + cP.path, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("Port number: " + std::to_string(cP.port), Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("Local working directory: " + cP.wDir, Util::LC_CTR, Util::LL_DEBUG);
+            LOGGER_WRITE("XML file exists: " + Util::boolToString(xmlExists), Util::LC_CTR, Util::LL_DEBUG);
 
             // Corner case: The chosen model is the very same that is already loaded. In case of FMUs this means
             // unpacking an already unpacked shared object, which leads to a segmentation fault. Thats why we test for
@@ -114,9 +112,9 @@ namespace OMVIS
             if (modelIsLoaded() && cP.wDir == _modelVisualizer->getBaseData()->getPath()
                     && cP.modelFile == _modelVisualizer->getBaseData()->getModelFile())
             {
-                LOGGER_WRITE(std::string("You tried to load the same model that is already loaded in OMVis. "
-                                         "The model will be initialized again."),
-                             Util::LC_LOADER, Util::LL_WARNING);
+                LOGGER_WRITE(
+                        "You tried to load the same model that is already loaded in OMVis. The model will be initialized again.",
+                        Util::LC_LOADER, Util::LL_WARNING);
                 initVisualization();
             }
             else

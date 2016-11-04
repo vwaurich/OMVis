@@ -91,5 +91,5 @@ namespace OMVIS
                       << "\n  extra: \t" << _extra.getValueString() << std::endl;
         }
 
-    }  // End namespace Model
+    }  // namespace Model
 }  // namespace OMVIS

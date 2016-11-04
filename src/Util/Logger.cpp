@@ -20,6 +20,7 @@
 #include "Util/Logger.hpp"
 
 #include <iostream>
+#include <utility>
 
 namespace OMVIS
 {
@@ -29,7 +30,7 @@ namespace OMVIS
         Logger* Logger::instance = nullptr;
 
         Logger::Logger(LogSettings settings, bool enabled)
-                : _settings(settings),
+                : _settings(std::move(settings)),
                   _textDecorator(4, std::tuple<std::string, std::string>("", "")),
                   _isEnabled(enabled)
         {
@@ -45,11 +46,7 @@ namespace OMVIS
         {
         }
 
-        Logger::~Logger()
-        {
-        }
-
-        void Logger::writeInternal(std::string message, LogCategory category, LogLevel level)
+        void Logger::writeInternal(const std::string& message, LogCategory category, LogLevel level)
         {
             if (isOutput(category, level))
             {
@@ -79,14 +76,14 @@ namespace OMVIS
 
         std::string Logger::getPrefix(LogCategory category, LogLevel level) const
         {
-            std::string prefix = std::get < 0 > (_textDecorator[level]);
+            std::string prefix = std::get<0>(_textDecorator[level]);
             prefix += std::string("[") + logCategoryToString(category) + std::string("]");
             return prefix;
         }
 
         std::string Logger::getSuffix(LogLevel level) const
         {
-            std::string suffix = std::get < 1 > (_textDecorator[level]);
+            std::string suffix = std::get<1>(_textDecorator[level]);
             return suffix;
         }
 
@@ -128,5 +125,5 @@ namespace OMVIS
             }
         }
 
-    }  // End namespace Util
-}  // End namespace OMVIS
+    }  // namespace Util
+}  // namespace OMVIS

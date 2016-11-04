@@ -124,5 +124,5 @@ namespace OMVIS
 			traverse(node);
         }
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS

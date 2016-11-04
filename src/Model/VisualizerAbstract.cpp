@@ -87,8 +87,8 @@ namespace OMVIS
         void VisualizerAbstract::setUpScene()
         {
             // Build scene graph.
-            LOGGER_WRITE(std::string("Setup scene for ") + std::to_string(_baseData->_shapes.size()) + " shapes.",
-                         Util::LC_LOADER, Util::LL_DEBUG);
+            LOGGER_WRITE("Setup scene for " + std::to_string(_baseData->_shapes.size()) + " shapes.", Util::LC_LOADER,
+                         Util::LL_DEBUG);
             _viewerStuff->getScene()->setUpScene(_baseData->_shapes);
         }
 
@@ -130,27 +130,25 @@ namespace OMVIS
             if (_timeManager->getVisTime() < _timeManager->getEndTime() - 1.e-6)
             {
                 _timeManager->setPause(false);
-                LOGGER_WRITE(std::string("Start visualization ..."), Util::LC_CTR, Util::LL_INFO);
+                LOGGER_WRITE("Start visualization ...", Util::LC_CTR, Util::LL_INFO);
             }
             else
             {
-                LOGGER_WRITE(std::string("There is nothing left to visualize. Initialize the model first."),
-                             Util::LC_CTR, Util::LL_INFO);
+                LOGGER_WRITE("There is nothing left to visualize. Initialize the model first.", Util::LC_CTR,
+                             Util::LL_INFO);
             }
         }
 
         void VisualizerAbstract::pauseVisualization()
         {
-            LOGGER_WRITE(
-                    std::string("Pause visualization at ") + std::to_string(_timeManager->getVisTime())
-                            + std::string("."),
-                    Util::LC_CTR, Util::LL_INFO);
+            LOGGER_WRITE("Pause visualization at " + std::to_string(_timeManager->getVisTime()) + std::string("."),
+                         Util::LC_CTR, Util::LL_INFO);
             _timeManager->setPause(true);
         }
 
         void VisualizerAbstract::initVisualization()
         {
-            LOGGER_WRITE(std::string("Initialize visualization."), Util::LC_CTR, Util::LL_INFO);
+            LOGGER_WRITE("Initialize visualization.", Util::LC_CTR, Util::LL_INFO);
             initializeVisAttributes(_timeManager->getStartTime());
             _timeManager->setVisTime(_timeManager->getStartTime());
             _timeManager->setRealTimeFactor(0.0);
@@ -167,13 +165,13 @@ namespace OMVIS
                 _timeManager->setVisTime(_timeManager->getVisTime() + _timeManager->getHVisual());
 
                 LOGGER_WRITE(
-                        std::string("Update scene at ") + std::to_string(_timeManager->getVisTime())
-                                + std::string(" simTime ") + std::to_string(_timeManager->getSimTime())
-                                + std::string(" _visStepSize ") + std::to_string(_timeManager->getHVisual()),
+                        "Update scene at " + std::to_string(_timeManager->getVisTime()) + " simTime "
+                                + std::to_string(_timeManager->getSimTime()) + " _visStepSize "
+                                + std::to_string(_timeManager->getHVisual()),
                         Util::LC_CTR, Util::LL_INFO);
                 if (_timeManager->getVisTime() >= _timeManager->getEndTime() - 1.e-6)
                 {
-                    LOGGER_WRITE(std::string("The End."), Util::LC_CTR, Util::LL_INFO);
+                    LOGGER_WRITE("The End.", Util::LC_CTR, Util::LL_INFO);
                     _timeManager->setPause(true);
                 }
             }

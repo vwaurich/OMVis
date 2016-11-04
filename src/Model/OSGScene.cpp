@@ -58,7 +58,7 @@ namespace OMVIS
             for (auto& shape : allShapes)
             {
                 type = shape._type;
-                LOGGER_WRITE(std::string("Shape: ") + shape._id + std::string(", type: ") + type, Util::LC_LOADER, Util::LL_DEBUG);
+                LOGGER_WRITE("Shape: " + shape._id + std::string(", type: ") + type, Util::LC_LOADER, Util::LL_DEBUG);
 
                 // Color
                 material = new osg::Material();
