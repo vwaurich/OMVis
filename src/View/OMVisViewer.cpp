@@ -17,10 +17,10 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Util/Logger.hpp"
-#include "Util/Algebra.hpp"
 #include "View/OMVisViewer.hpp"
 #include "View/Dialogs.hpp"
+#include "Util/Logger.hpp"
+#include "Util/Algebra.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/FMUWrapper.hpp"
 #include "Model/VisualizerFMU.hpp"
@@ -58,7 +58,7 @@ namespace OMVIS
          *---------------------------------------*/
 
         OMVisViewer::OMVisViewer(QWidget* parent, const Initialization::CommandLineArgs& clArgs)
-            : OMVisViewer(parent, osgViewer::CompositeViewer::SingleThreaded, clArgs)
+                : OMVisViewer(parent, osgViewer::CompositeViewer::SingleThreaded, clArgs)
         {
 
         }
@@ -93,7 +93,7 @@ namespace OMVIS
                   _centralWidget(new QWidget()),
                   _mainLayout(new QVBoxLayout(_centralWidget)),
                   _visTimer(),
-                  _guiController(new Control::GUIController())
+                  _guiController(std::make_unique<Control::GUIController>())
         {
             // Yeah, setting QLocale did not help to convert atof("0.05") to double(0.05) when the (bash) environment is german.
             setlocale(LC_ALL, "en_US.UTF-8");
@@ -173,7 +173,7 @@ namespace OMVIS
             _mainLayout->addWidget(_timeSlider);
             _mainLayout->addWidget(_controlElementWidget);
             _centralWidget->setLayout(_mainLayout);
-            setCentralWidget( _centralWidget );
+            setCentralWidget(_centralWidget);
         }
 
         void OMVisViewer::createActions()
@@ -259,12 +259,15 @@ namespace OMVIS
             //the osg-viewer widget
             osg::ref_ptr<osgQt::GraphicsWindowQt> window = createGraphicsWindow(0, 0, 100, 100);
 
-            if (rootNode == nullptr)
-                std::cout << "Something went wrong loading the osg file." << std::endl;
+            if (nullptr == rootNode)
+            {
+                LOGGER_WRITE("Something went wrong loading the osg file.", Util::LC_GUI, Util::LL_INFO);
+            }
             return setupViewWidget(window, rootNode);
         }
 
-        QWidget* OMVisViewer::setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw, const osg::ref_ptr<osg::Node> rootNode)
+        QWidget* OMVisViewer::setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw,
+                                              const osg::ref_ptr<osg::Node> rootNode)
         {
             _sceneView = new osgViewer::View();
             addView(_sceneView.get());
@@ -276,8 +279,8 @@ namespace OMVIS
 
             camera->setClearColor(osg::Vec4(0.2, 0.2, 0.6, 1.0));
             camera->setViewport(new osg::Viewport(0, 0, traits->width, traits->height));
-            camera->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height),
-                                                     1.0f, 10000.0f);
+            camera->setProjectionMatrixAsPerspective(
+                    30.0f, static_cast<double>(traits->width) / static_cast<double>(traits->height), 1.0f, 10000.0f);
 
             _sceneView->setSceneData(rootNode);
             _sceneView->addEventHandler(new osgViewer::StatsHandler());
@@ -288,7 +291,8 @@ namespace OMVIS
         }
 
         osg::ref_ptr<osgQt::GraphicsWindowQt> OMVisViewer::createGraphicsWindow(int x, int y, int w, int h,
-                                                                                const std::string& name, bool windowDecoration)
+                                                                                const std::string& name,
+                                                                                bool windowDecoration)
         {
             osg::ref_ptr<osg::DisplaySettings> ds = osg::DisplaySettings::instance().get();
             osg::ref_ptr<osg::GraphicsContext::Traits> traits = new osg::GraphicsContext::Traits();
@@ -301,15 +305,15 @@ namespace OMVIS
             traits->doubleBuffer = true;
             traits->alpha = ds->getMinimumNumAlphaBits();
             traits->stencil = ds->getMinimumNumStencilBits();
-            traits->sampleBuffers = ds->getMultiSamples();
+            traits->sampleBuffers = static_cast<unsigned int>(ds->getMultiSamples());
             traits->samples = ds->getNumMultiSamples();
 
             return new osgQt::GraphicsWindowQt(traits.get());
         }
 
-        void OMVisViewer::paintEvent(QPaintEvent* event)
+        void OMVisViewer::paintEvent(QPaintEvent* /*event*/)
         {
-                frame();
+            frame();
         }
 
         void OMVisViewer::setupTimeSliderWidget()
@@ -324,24 +328,26 @@ namespace OMVIS
             // By default, the time slider cannot be moved by the user. This enabled, when a MAT result file is loaded.
             _timeSlider->setEnabled(false);
 
-            LOGGER_WRITE(std::string("min ") + std::to_string(_timeSlider->minimum()) + std::string(" and max ")
-                         + std::to_string(_timeSlider->maximum()), Util::LC_GUI, Util::LL_INFO);
+            LOGGER_WRITE(
+                    "min " + std::to_string(_timeSlider->minimum()) + " and max "
+                            + std::to_string(_timeSlider->maximum()),
+                    Util::LC_GUI, Util::LL_INFO);
 
             QObject::connect(_timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
         }
 
         QWidget* OMVisViewer::setupControlElementWidget()
         {
-            QPushButton* playButton = new QPushButton("Play", this);
-            QPushButton* pauseButton = new QPushButton("Pause", this);
-            QPushButton* initButton = new QPushButton("Initialize", this);
+            auto playButton = new QPushButton("Play", this);
+            auto pauseButton = new QPushButton("Pause", this);
+            auto initButton = new QPushButton("Initialize", this);
 
             _timeDisplay->setText(QString("Time [s]: ").append(QString::fromStdString("")));
             _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::fromStdString("")));
 
             //the button row
-            QHBoxLayout* buttonRowLayOut = new QHBoxLayout();
-            QGroupBox* buttonRowBox = new QGroupBox();
+            auto buttonRowLayOut = new QHBoxLayout();
+            auto buttonRowBox = new QGroupBox();
             buttonRowLayOut->addWidget(initButton);
             buttonRowLayOut->addWidget(playButton);
             buttonRowLayOut->addWidget(pauseButton);
@@ -411,12 +417,14 @@ namespace OMVIS
                 // Let the GUIController load the model.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
 
-                LOGGER_WRITE(std::string("The model has been successfully loaded and initialized."), Util::LC_GUI, Util::LL_INFO);
+                LOGGER_WRITE("The model has been successfully loaded and initialized.", Util::LC_GUI, Util::LL_INFO);
 
                 // Set up the osg viewer widget
                 osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
-                if (rootNode == nullptr)
-                    LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
+                if (nullptr == rootNode)
+                {
+                    LOGGER_WRITE("Scene root node is null pointer.", Util::LC_GUI, Util::LL_ERROR);
+                }
                 _sceneView->setSceneData(rootNode);
 
                 //start the timer to trigger model and scene update
@@ -425,7 +433,8 @@ namespace OMVIS
                 //set the inputData to handle Keyboard-events as inputs
                 if (_guiController->visTypeIsFMU())
                 {
-                    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+                    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(
+                            _guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
                     disableTimeSlider();
                 }
@@ -437,11 +446,11 @@ namespace OMVIS
                 // Update the slider and the time displays.
                 updateTimingElements();
 
-                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE("OSGViewUpdated", Util::LC_LOADER, Util::LL_INFO);
             }
             catch (std::exception& ex)
             {
-                QMessageBox::critical(0, QString("Error"), QString(ex.what()));
+                QMessageBox::critical(nullptr, QString("Error"), QString(ex.what()));
                 std::cout << ex.what();
             }
 
@@ -475,13 +484,15 @@ namespace OMVIS
                 // and initialize the simulation.
                 _guiController->loadModel(constructionPlan, _timeSlider->minimum(), _timeSlider->maximum());
 
-                LOGGER_WRITE(std::string("The model has been successfully loaded and initialized for remote visualization."),
+                LOGGER_WRITE("The model has been successfully loaded and initialized for remote visualization.",
                              Util::LC_GUI, Util::LL_INFO);
 
                 // Set up the osg viewer widget
                 osg::ref_ptr<osg::Node> rootNode = _guiController->getSceneRootNode();
-                if (rootNode == nullptr)
-                    LOGGER_WRITE(std::string("Scene root node is null pointer."), Util::LC_GUI, Util::LL_ERROR);
+                if (nullptr == rootNode)
+                {
+                    LOGGER_WRITE("Scene root node is null pointer.", Util::LC_GUI, Util::LL_ERROR);
+                }
                 _sceneView->setSceneData(rootNode);
 
                 //start the timer to trigger model and scene update
@@ -490,18 +501,19 @@ namespace OMVIS
                 //set the inputData to handle Keyboard-events as inputs
                 if (_guiController->visTypeIsFMURemote())
                 {
-                    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(_guiController->getInputData());
+                    Control::KeyboardEventHandler* kbEventHandler = new Control::KeyboardEventHandler(
+                            _guiController->getInputData());
                     _sceneView->addEventHandler(kbEventHandler);
                 }
 
                 // Update the slider and the time displays.
                 updateTimingElements();
 
-                LOGGER_WRITE(std::string("OSGViewUpdated"), Util::LC_LOADER, Util::LL_INFO);
+                LOGGER_WRITE("OSGViewUpdated", Util::LC_LOADER, Util::LL_INFO);
             }
             catch (std::exception& ex)
             {
-                QMessageBox::critical(0, QString("Error OMVis"), QString(ex.what()));
+                QMessageBox::critical(nullptr, QString("Error OMVis"), QString(ex.what()));
                 std::cout << ex.what();
             }
 
@@ -511,12 +523,12 @@ namespace OMVIS
 
         void OMVisViewer::unloadModel()
         {
-            LOGGER_WRITE(std::string("Unload model..."), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE("Unload model...", Util::LC_LOADER, Util::LL_INFO);
             _guiController->unloadModel();
 
             _visTimer.stop();
             resetTimingElements();
-            LOGGER_WRITE(std::string("Model unloaded."), Util::LC_LOADER, Util::LL_INFO);
+            LOGGER_WRITE("Model unloaded.", Util::LC_LOADER, Util::LL_INFO);
 
             // If a model is unloaded, we can disable some buttons
             _simSettingsAct->setEnabled(false);
@@ -529,7 +541,7 @@ namespace OMVIS
 
         void OMVisViewer::exportVideo()
         {
-            QMessageBox::warning(0, QString("Information"), QString("This functionality might come soon."));
+            QMessageBox::warning(nullptr, QString("Information"), QString("This functionality might come soon."));
         }
 
         void OMVisViewer::openDialogInputMapper()
@@ -553,10 +565,10 @@ namespace OMVIS
             // FMU
             else
             {
-                QDialog* inputDialog = new QDialog(this);
+                auto inputDialog = new QDialog(this);
 
                 // The first way of adding the buttons Apply and Close
-                QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+                auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
                 connect(buttonBox, SIGNAL(accepted()), inputDialog, SLOT(accept()));
                 connect(buttonBox, SIGNAL(rejected()), inputDialog, SLOT(reject()));
 
@@ -575,24 +587,25 @@ namespace OMVIS
                 //X4        buttonBox->addButton(close, QDialogButtonBox::RejectRole);
                 //X4        buttonBox->addButton(apply, QDialogButtonBox::AcceptRole);
 
-                QVBoxLayout* mainLayout = new QVBoxLayout();
+                auto mainLayout = new QVBoxLayout();
                 QGroupBox* qgroupBox;
 
-                std::shared_ptr<Model::InputData> inputData = _guiController->getInputData();
+                auto inputData = _guiController->getInputData();
                 const Model::InputValues* inputValues = inputData->getInputValues();
 
                 // Boolean inputs
-                if (inputValues->getNumBoolean() > 0)
+                if (0 < inputValues->getNumBoolean())
                 {
                     qgroupBox = new QGroupBox(tr("Boolean Inputs"), this);
-                    QFormLayout* layout = new QFormLayout();
+                    auto layout = new QFormLayout();
                     // layout->addRow(new QLabel(tr("Line 1:")), new QLineEdit);
                     // layout->addRow(new QLabel(tr("Line 2, long text:")), new QComboBox);
                     // layout->addRow(new QLabel(tr("Line 3:")), new QSpinBox);
 
                     for (size_t inputIdx = 0; inputIdx < inputValues->getNumBoolean(); ++inputIdx)
                     {
-                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesBool[inputIdx], "bool");
+                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesBool[inputIdx],
+                                                                     "bool");
                         layout->addRow(inputRow);
                     }
                     qgroupBox->setLayout(layout);
@@ -600,13 +613,14 @@ namespace OMVIS
                 }
 
                 // Real inputs
-                if (inputValues->getNumReal() > 0)
+                if (0 < inputValues->getNumReal())
                 {
                     qgroupBox = new QGroupBox(tr("Real Inputs"), this);
-                    QFormLayout* layout = new QFormLayout();
+                    auto layout = new QFormLayout();
                     for (size_t inputIdx = 0; inputIdx < inputValues->getNumReal(); ++inputIdx)
                     {
-                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesReal[inputIdx], "real");
+                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesReal[inputIdx],
+                                                                     "real");
                         layout->addRow(inputRow);
                     }
                     qgroupBox->setLayout(layout);
@@ -614,13 +628,14 @@ namespace OMVIS
                 }
 
                 // Integer inputs
-                if (inputValues->getNumInteger() > 0)
+                if (0 < inputValues->getNumInteger())
                 {
                     qgroupBox = new QGroupBox(tr("Integer Inputs"), this);
-                    QFormLayout* layout = new QFormLayout();
+                    auto layout = new QFormLayout();
                     for (size_t inputIdx = 0; inputIdx < inputValues->getNumInteger(); ++inputIdx)
                     {
-                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesInteger[inputIdx], "integer");
+                        QHBoxLayout* inputRow = createInputMapperRow(inputIdx, inputValues->_namesInteger[inputIdx],
+                                                                     "integer");
                         layout->addRow(inputRow);
                     }
                     qgroupBox->setLayout(layout);
@@ -641,17 +656,17 @@ namespace OMVIS
             }
         }
 
-        QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::string& varName, const std::string& type) const
+        QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::string& varName,
+                                                       const std::string& type) const
         {
-            QHBoxLayout* inputRow = new QHBoxLayout();
-            QLabel* inputLabel = new QLabel(QString("Input ").append(QString::number(inputIdx)));
-            QLabel* varLabel = new QLabel(QString::fromStdString(varName));
-            QLabel* typeLabel = new QLabel(QString::fromStdString(type));
-            QComboBox* inputText = new QComboBox();
+            auto inputRow = new QHBoxLayout();
+            auto inputLabel = new QLabel(QString("Input ").append(QString::number(inputIdx)));
+            auto varLabel = new QLabel(QString::fromStdString(varName));
+            auto typeLabel = new QLabel(QString::fromStdString(type));
+            auto inputText = new QComboBox();
             if (type == "bool")
             {
                 QObject::connect(inputText, SIGNAL(currentIndexChanged(QString)), SLOT(updateKeyMapValue(QString)));
-
                 inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_W"));
                 inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_A"));
                 inputText->addItem(QString("bool").append(QString::number(inputIdx)).append(" -> KEY_S"));
@@ -660,14 +675,15 @@ namespace OMVIS
             else if (type == "real")
             {
                 QObject::connect(inputText, SIGNAL(currentIndexChanged(QString)), SLOT(updateKeyMapValue(QString)));
-
                 inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_1_X")));
                 inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_1_Y")));
                 inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_2_X")));
                 inputText->addItem((QString("real").append(QString::number(inputIdx)).append(" -> JOY_2_Y")));
             }
             else
+            {
                 inputText->addItem("IMPLEMENT ME", "IMPLEMENT ME");
+            }
 
             inputText->setMaximumHeight(20);
             inputLabel->setMaximumHeight(20);
@@ -678,7 +694,7 @@ namespace OMVIS
             return inputRow;
         }
 
-        void OMVisViewer::updateKeyMapValue(QString varToKey)
+        void OMVisViewer::updateKeyMapValue(QString /*varToKey*/)
         {
 //    std::string varToKeyString = varToKey.toStdString();
 //    int posKey = varToKeyString.find(" -> ");
@@ -700,7 +716,7 @@ namespace OMVIS
         void OMVisViewer::perspectiveDialog()
         {
             PerspectiveSettingDialog dialog(this);
-            if (dialog.exec())
+            if (0 != dialog.exec())
             {
                 Perspective newPerspective = dialog.getResult();
                 switch (newPerspective)
@@ -730,7 +746,7 @@ namespace OMVIS
                     // SimSettingDialogFMU dialog(this);
                     auto simSet = _guiController->getCurrentSimSettings();
                     SimSettingDialogFMU dialog(this, simSet);
-                    if (dialog.exec())
+                    if (0 != dialog.exec())
                     {
                         Model::UserSimSettingsFMU simSetFMU = dialog.getSimSettings();
                         _guiController->handleSimulationSettings(simSetFMU);
@@ -742,7 +758,7 @@ namespace OMVIS
                 else if (_guiController->visTypeIsMAT() || _guiController->visTypeIsMATRemote())
                 {
                     SimSettingDialogMAT dialog(this);
-                    if (dialog.exec())
+                    if (0 != dialog.exec())
                     {
                         Model::UserSimSettingsMAT simSetMAT = dialog.getSimSettings();
                         // Currently, the user can only specify a speed up and slow down, respectively.
@@ -755,28 +771,33 @@ namespace OMVIS
         void OMVisViewer::backgroundColorDialog()
         {
             BackgroundColorSettingDialog dialog(this);
-            if (dialog.exec())
+            if (0 != dialog.exec())
             {
                 BackgroundColor newColor = dialog.getResult();
                 osg::Vec4 colVec;
                 switch (newColor)
                 {
                     case blue:
-                        colVec = osg::Vec4(0.0f, 0.0f, 100.0f, 1.0f);
+                        colVec =
+                        {   0.0f, 0.0f, 100.0f, 1.0f};
                         break;
-                    case lila:
-                        colVec = osg::Vec4(150.0f, 0.0f, 200.0f, 10.0f);
+                        case lila:
+                        colVec =
+                        {   150.0f, 0.0f, 200.0f, 10.0f};
                         break;
-                    case white:
-                        colVec = osg::Vec4(255.0f, 255.0f, 255.0f, 0.0f);
+                        case white:
+                        colVec =
+                        {   255.0f, 255.0f, 255.0f, 0.0f};
                         break;
-                    case green:
-                        colVec = osg::Vec4(0.0f, 200.0f, 0.0f, 0.0f);
+                        case green:
+                        colVec =
+                        {   0.0f, 200.0f, 0.0f, 0.0f};
                         break;
-                    case black:
-                        colVec = osg::Vec4(0.0f, 0.0f, 0.0f, 0.0f);
+                        case black:
+                        colVec =
+                        {   0.0f, 0.0f, 0.0f, 0.0f};
                         break;
-                }
+                    }
                 _sceneView->getCamera()->setClearColor(colVec);
             }
         }
@@ -785,16 +806,15 @@ namespace OMVIS
         {
             resetCamera();
             //the new orientation
-            osg::Matrix3 newOrient = osg::Matrix3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+            osg::Matrix3 newOrient = { 1, 0, 0, 0, 1, 0, 0, 0, 1 };
 
             osg::ref_ptr<osgGA::CameraManipulator> manipulator = _sceneView->getCameraManipulator();
             osg::Matrixd mat = manipulator->getMatrix();
 
             //assemble
-            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
-                               newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
-                               newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
-                               abs(mat(3, 0)), abs(mat(3, 2)), abs(mat(3, 1)), 1);
+            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0, newOrient(1, 0), newOrient(1, 1),
+                               newOrient(1, 2), 0, newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0, abs(mat(3, 0)),
+                               abs(mat(3, 2)), abs(mat(3, 1)), 1);
             manipulator->setByMatrix(mat);
         }
 
@@ -803,16 +823,15 @@ namespace OMVIS
             //to get the correct distance of the bodies, reset to home position and use the values of this camera position
             resetCamera();
             //the new orientation
-            osg::Matrix3 newOrient = osg::Matrix3(0, 1, 0, 0, 0, 1, 1, 0, 0);
+            osg::Matrix3 newOrient = { 0, 1, 0, 0, 0, 1, 1, 0, 0 };
 
             osg::ref_ptr<osgGA::CameraManipulator> manipulator = _sceneView->getCameraManipulator();
             osg::Matrixd mat = manipulator->getMatrix();
 
             //assemble
-            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
-                               newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
-                               newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
-                               abs(mat(3, 1)), abs(mat(3, 2)), abs(mat(3, 0)), 1);
+            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0, newOrient(1, 0), newOrient(1, 1),
+                               newOrient(1, 2), 0, newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0, abs(mat(3, 1)),
+                               abs(mat(3, 2)), abs(mat(3, 0)), 1);
             manipulator->setByMatrix(mat);
         }
 
@@ -821,16 +840,15 @@ namespace OMVIS
             //to get the correct distance of the bodies, reset to home position and use the values of this camera position
             resetCamera();
             //the new orientation
-            osg::Matrix3 newOrient = osg::Matrix3(1, 0, 0, 0, 0, 1, 0, -1, 0);
+            osg::Matrix3 newOrient = { 1, 0, 0, 0, 0, 1, 0, -1, 0 };
 
             osg::ref_ptr<osgGA::CameraManipulator> manipulator = _sceneView->getCameraManipulator();
             osg::Matrixd mat = manipulator->getMatrix();
 
             //assemble
-            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0,
-                               newOrient(1, 0), newOrient(1, 1), newOrient(1, 2), 0,
-                               newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0,
-                               abs(mat(3, 0)), -abs(mat(3, 1)), abs(mat(3, 2)), 1);
+            mat = osg::Matrixd(newOrient(0, 0), newOrient(0, 1), newOrient(0, 2), 0, newOrient(1, 0), newOrient(1, 1),
+                               newOrient(1, 2), 0, newOrient(2, 0), newOrient(2, 1), newOrient(2, 2), 0, abs(mat(3, 0)),
+                               -abs(mat(3, 1)), abs(mat(3, 2)), 1);
             manipulator->setByMatrix(mat);
         }
 
@@ -876,8 +894,7 @@ namespace OMVIS
                                 "<li> Press Start button </li>"
                                 "<li> Left click the scene view (model) </li>"
                                 "<li> Press buttons and move joystick device, respectively to steer the model </li>"
-                                "</ol>"
-                                );
+                                "</ol>");
             QMessageBox msgBox(QMessageBox::Information, tr("Help"), information);
             msgBox.setStandardButtons(QMessageBox::Close);
             msgBox.exec();
@@ -914,18 +931,20 @@ namespace OMVIS
             // Check if newPos in the sliders range. If not give out a warning and reset position.
             if (_timeSlider->minimum() > newPos)
             {
-                LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos)
-                             + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum())
-                             + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to minimum."),
-                             Util::LC_GUI, Util::LL_WARNING);
+                LOGGER_WRITE(
+                        "New position of time slider is out of range! New value " + std::to_string(newPos)
+                                + " is not in the sliders range [" + std::to_string(_timeSlider->minimum()) + ", "
+                                + std::to_string(_timeSlider->maximum()) + "]. Set slider to minimum.",
+                        Util::LC_GUI, Util::LL_WARNING);
                 newPos = _timeSlider->minimum();
             }
             else if (_timeSlider->maximum() < newPos)
             {
-                LOGGER_WRITE(std::string("New position of time slider is out of range! New value ") + std::to_string(newPos)
-                             + std::string(" is not in the sliders range [") + std::to_string(_timeSlider->minimum())
-                             + std::string(", ") + std::to_string(_timeSlider->maximum()) + std::string("]. Set slider to maximum."),
-                             Util::LC_GUI, Util::LL_WARNING);
+                LOGGER_WRITE(
+                        "New position of time slider is out of range! New value " + std::to_string(newPos)
+                                + " is not in the sliders range [" + std::to_string(_timeSlider->minimum()) + ", "
+                                + std::to_string(_timeSlider->maximum()) + "]. Set slider to maximum.",
+                        Util::LC_GUI, Util::LL_WARNING);
                 newPos = _timeSlider->maximum();
             }
 
@@ -945,5 +964,5 @@ namespace OMVIS
             _timeSlider->setEnabled(true);
         }
 
-    }  // End namespace View
-}  // End namespace OMVIS
+    }  // namespace View
+}  // namespace OMVIS
