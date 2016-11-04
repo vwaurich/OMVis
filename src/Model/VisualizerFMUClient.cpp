@@ -378,8 +378,6 @@ namespace OMVIS
             {
                 //std::cout<<"simulate "<<omvManager->_simTime<<" to "<<nextStep<<std::endl;
                 //_inputData.printValues();
-                std::cout << "Press Enter to Continue";
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 _timeManager->setSimTime(simulateStep(_timeManager->getSimTime()));
             }
             _timeManager->updateTick();                     //for real-time measurement
