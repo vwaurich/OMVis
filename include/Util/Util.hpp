@@ -52,28 +52,28 @@ namespace OMVIS
             return (type.size() >= 12 && std::string(type.begin(), type.begin() + 11) == "modelica://");
         }
 
-		/*! \brief Checks if the given type is a dxf file
-		*/
-		inline bool dxfFileType(const std::string& typeName)
-		{
-			return typeName.substr(typeName.size() - 3) == std::string("dxf");
-		}
+        /*! \brief Checks if the given type is a dxf file
+         */
+        inline bool dxfFileType(const std::string& typeName)
+        {
+            return typeName.substr(typeName.size() - 3) == std::string("dxf");
+        }
 
-		/*! \brief Checks if the given type is a stl file
-		*/
-		inline bool stlFileType(const std::string& typeName)
-		{
-			return typeName.substr(typeName.size() - 3) == std::string("stl");
-		}
+        /*! \brief Checks if the given type is a stl file
+         */
+        inline bool stlFileType(const std::string& typeName)
+        {
+            return typeName.substr(typeName.size() - 3) == std::string("stl");
+        }
 
         /*! \brief Get file name of the cad file
          */
-		inline std::string extractCADFilename(const std::string& s)
-		{
-			std::string fileKey = "modelica://";
-			std::string s2 = s.substr(fileKey.length(), s.length());
-			return s2;
-		}
+        inline std::string extractCADFilename(const std::string& s)
+        {
+            std::string fileKey = "modelica://";
+            std::string s2 = s.substr(fileKey.length(), s.length());
+            return s2;
+        }
 
         /*! \brief Gets the type of the shape.
          */
@@ -194,7 +194,9 @@ namespace OMVIS
         /// \todo Implement me!
         inline bool isValidServerName(const std::string& serverName)
         {
-            LOGGER_WRITE(serverName + std::string(" is assumed to be a valid Server Name. TODO: Implement a proper check!"), Util::LC_GUI, Util::LL_WARNING);
+            LOGGER_WRITE(
+                    serverName + std::string(" is assumed to be a valid Server Name. TODO: Implement a proper check!"),
+                    Util::LC_GUI, Util::LL_WARNING);
             return true;
         }
 
