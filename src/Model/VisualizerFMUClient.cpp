@@ -137,8 +137,8 @@ namespace OMVIS
 
                     if (nullptr == newJoyStick)
                     {
-                        LOGGER_WRITE("Unable to open joystick! SDL Error: " + std::string(SDL_GetError()), Util::LC_LOADER,
-                                     Util::LL_INFO);
+                        LOGGER_WRITE("Unable to open joystick! SDL Error: " + std::string(SDL_GetError()),
+                                     Util::LC_LOADER, Util::LL_INFO);
                     }
                 }
             }
@@ -166,6 +166,12 @@ namespace OMVIS
         std::shared_ptr<InputData> VisualizerFMUClient::getInputData()
         {
             return _inputData;
+        }
+
+        UserSimSettingsFMU VisualizerFMUClient::getCurrentSimSettings() const
+        {
+            return
+            {   _simSettings->getSolver(), _simSettings->getHdef(), 99, _timeManager->getEndTime()};
         }
 
         /*-----------------------------------------
@@ -268,8 +274,8 @@ namespace OMVIS
 
             catch (std::exception& e)
             {
-                LOGGER_WRITE("Something went wrong in Visualizer::setVarReferencesInVisAttributes",
-                             Util::LC_SOLVER, Util::LL_WARNING);
+                LOGGER_WRITE("Something went wrong in Visualizer::setVarReferencesInVisAttributes", Util::LC_SOLVER,
+                             Util::LL_WARNING);
                 isOk = 1;
             }
             return isOk;

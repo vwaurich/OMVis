@@ -83,6 +83,8 @@ namespace OMVIS
 
             std::shared_ptr<InputData> getInputData();
 
+            UserSimSettingsFMU getCurrentSimSettings() const;
+
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/

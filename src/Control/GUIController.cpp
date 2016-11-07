@@ -272,8 +272,16 @@ namespace OMVIS
 
         Model::UserSimSettingsFMU GUIController::getCurrentSimSettings() const
         {
-            auto omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
-            return omVisFMU->getCurrentSimSettings();
+            if (visTypeIsFMU())
+            {
+                auto omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMU>(_modelVisualizer);
+                return omVisFMU->getCurrentSimSettings();
+            }
+            if (visTypeIsFMURemote())
+            {
+                auto omVisFMU = std::dynamic_pointer_cast<Model::VisualizerFMUClient>(_modelVisualizer);
+                return omVisFMU->getCurrentSimSettings();
+            }
         }
 
         bool GUIController::modelIsLoaded()
