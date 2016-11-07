@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_OMVISUALIZERMAT_HPP_
-#define INCLUDE_OMVISUALIZERMAT_HPP_
+#ifndef INCLUDE_VISUALIZERMAT_HPP_
+#define INCLUDE_VISUALIZERMAT_HPP_
 
 #include "Model/VisualizerAbstract.hpp"
 #include <read_matlab4.h>
@@ -67,24 +67,33 @@ namespace OMVIS
              * INITIALIZATION METHODS
              *---------------------------------------*/
 
-            /*! \brief
-             *
-             */
-            void initData();
+            void setSimulationSettings(const UserSimSettingsMAT& simSetMAT);
 
-            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial position.
-             */
-            void initializeVisAttributes(const double time = -1.0);
+         private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            ModelicaMatReader _matReader;
+
+            /*-----------------------------------------
+             * PRIVATE METHODS
+             *---------------------------------------*/
+
+            void initData() override;
+
+            /*! \brief Initializes the visualization attributes in order to set the scene to the initial position. */
+            void initializeVisAttributes(const double time = -1.0) override;
 
             void readMat(const std::string& modelFile, const std::string& path);
-
-            void setSimulationSettings(const Model::UserSimSettingsMAT& simSetMAT);
 
             /*-----------------------------------------
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            void simulate(Control::TimeManager& omvm){ };
+            void simulate(Control::TimeManager& omvm) override
+            {
+            }
 
             /*! \brief This method updates the visualization attributes after a time step has been performed.
              *
@@ -96,7 +105,7 @@ namespace OMVIS
 
             /*! \brief For MAT file based visualization, nothing has to be done. Just get the visualizationAttributes.
              */
-            void updateScene(const double time);
+            void updateScene(const double time) override;
 
             /*! \brief Update the attribute of the Object using a MAT result file. */
             void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader* reader);
@@ -112,19 +121,12 @@ namespace OMVIS
              * \return Value of the variable at the specified time.
              */
             double omcGetVarValue(ModelicaMatReader* reader, const char* varName, double time);
-
-         private:
-            /*-----------------------------------------
-             * MEMBERS
-             *---------------------------------------*/
-
-            ModelicaMatReader _matReader;
         };
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
-#endif /* INCLUDE_OMVISUALIZERMAT_HPP_ */
+#endif /* INCLUDE_VISUALIZERMAT_HPP_ */
 /**
  * @}
  */

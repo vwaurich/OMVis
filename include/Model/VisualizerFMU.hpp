@@ -46,6 +46,8 @@ namespace OMVIS
          *
          * In contrast to \ref OMVisualizerMAT, this class provides user interaction via joystick devices to enable
          * steering the model.
+         *
+         * The end time for FMU visualization is 100. This is set while allocation of the TimeManager object.
          */
         class VisualizerFMU : public VisualizerAbstract
         {
@@ -82,49 +84,39 @@ namespace OMVIS
              */
             void loadFMU(const std::string& modelFile, const std::string& path);
 
-            /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place!
-             */
-            void initData() override;
-
-            /*! \brief This methods resets the input values of a FMU to default ("zero") values.
-             *
-             */
-            void resetInputs();
-
-            /*! \brief Initializes the attached joysticks.
-             */
-            void initJoySticks();
-
-            /*! \brief Implementation for OMVisualizerAbstract::initializeVisAttributes to set the scene to initial
-             *         position.
-             *
-             * \remark The parameter \a time is not used, just inherited from
-             *         \ref OMVisualizerAbstract::initializeVisAttributes(const double).
-             */
-            void initializeVisAttributes(const double time = 0.0) override;
-
             void setSimulationSettings(const UserSimSettingsFMU& simSetFMU);
 
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
 
-            /*! Returns const pointer to \ref FMU member. */
+            /*! Returns const. pointer to \ref FMU member. */
             const FMUWrapper* getFMU() const;
 
-            // const InputData* getInputData() const;
             std::shared_ptr<InputData> getInputData() const;
 
-            /*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
-            */
-            fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
-
-            /*! \brief Implementation for OMVisualizerAbstract::setVarReferencesInVisAttributes to set the variable
-             *         references in the visattributes
-            */
-            int setVarReferencesInVisAttributes();
-
             UserSimSettingsFMU getCurrentSimSettings() const;
+
+         private:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            /*! The encapsulated FMU data. */
+            std::shared_ptr<FMUWrapper> _fmu;
+            /*! Simulation settings, e.g., start and end time. */
+            std::shared_ptr<SimSettingsFMU> _simSettings;
+
+            std::shared_ptr<InputData> _inputData;
+
+         public:
+            /// \todo Remove, we do not need it because we have inputData.
+            std::vector<Control::JoystickDevice*> _joysticks;
+
+         private:
+            /*-----------------------------------------
+             * PRIVATE METHODS
+             *---------------------------------------*/
 
             /*-----------------------------------------
              * SIMULATION METHODS
@@ -148,32 +140,42 @@ namespace OMVIS
              * called by the method \ref VisualizerAbstract::sceneUpdate, which does the time handling (visTime,
              * simTime) around.
              *
-             * \remark: Parameter time is not used, just inherited from \ref OMVisualizerAbstract::updateScene(const double).
+             * \remark Parameter time is not used, just inherited from \ref VisualizerAbstract::updateScene(const double).
              */
             void updateScene(const double time = 0.0) override;
 
+            /*! \todo Quick and dirty hack, move initialization of _simSettings to a more appropriate place! */
+            void initData() override;
+
+            /*! \brief This methods resets the input values of a FMU to default ("zero") values. */
+            void resetInputs();
+
+            /*! \brief Initializes the attached joysticks. */
+            void initJoySticks();
+
+            /*! \brief Implementation for VisualizerAbstract::initializeVisAttributes to set the scene to initial position.
+             *
+             * \remark The parameter \a time is not used, just inherited from
+             *         \ref VisualizerAbstract::initializeVisAttributes(const double).
+             */
+            void initializeVisAttributes(const double time = 0.0) override;
+
+            /*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
+             */
+            fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
+
+            /*! \brief Sets the variable references in the visualization attributes.
+             *
+             * \remark The vis. attributes are encapsulated in the inherited member _baseData of class type OMVisualBase.
+             */
+            int setVarReferencesInVisAttributes();
+
             /*! \brief Update the attributes of a shape. */
-            void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, fmi1_import_t* fmu);
-
-         private:
-            /*-----------------------------------------
-             * MEMBERS
-             *---------------------------------------*/
-
-            /*! The encapsulated FMU data. */
-            std::shared_ptr<FMUWrapper> _fmu;
-            /*! Simulation settings, e.g., start and end time. */
-            std::shared_ptr<SimSettingsFMU> _simSettings;
-
-            std::shared_ptr<InputData> _inputData;
-
-         public:
-            /// \todo Remove, we do not need it because we have inputData.
-            std::vector<Control::JoystickDevice*> _joysticks;
+            void updateObjectAttributeFMU(ShapeObjectAttribute* attr, fmi1_import_t* fmu);
         };
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_VISUALIZERFMU_HPP_ */
 /**

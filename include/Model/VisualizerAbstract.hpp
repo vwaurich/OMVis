@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2016, Volker Waurich
+ * Copyright (C) 2016, Volker Waurich
  *
  * This file is part of OMVis.
  *
@@ -24,8 +24,8 @@
  *  \date Feb 2016
  */
 
-#ifndef INCLUDE_OMVISUALIZERABSTRACT_HPP_
-#define INCLUDE_OMVISUALIZERABSTRACT_HPP_
+#ifndef INCLUDE_VISUALIZERABSTRACT_HPP_
+#define INCLUDE_VISUALIZERABSTRACT_HPP_
 
 #include "Control/TimeManager.hpp"
 #include "Model/OMVisScene.hpp"
@@ -51,6 +51,10 @@ namespace OMVIS
          *      - \ref VisualizerFMU for visualization of models encapsulated as FMU
          *      - \ref VisualizerMAT for visualization of simulation result files in MAT format
          *      - \ref VisualizerFMUClient for remote visualization of models encapsulated as FMU
+         *
+         * The VisualizerAbstract class holds a shared pointer to the Control::TimeManager object. Moreover, the
+         * VisualizerAbstract constructs this TimeManager object and sets the default end time to 100.
+         *
          */
         class VisualizerAbstract
         {
@@ -62,22 +66,20 @@ namespace OMVIS
             /// The default constructor.
             VisualizerAbstract();
 
-            /*! \brief Constructs OMVisualizerAbstract object from arguments.
+            /*! \brief Constructs a VisualizerAbstract object from arguments.
              *
              * \remark The model file and its corresponding visual XML file need to be in the same directory.
              *
              * \param[in] modelFile Name of the model file.
              * \param[in] path Path to the FMU or result file and corresponding XML file.
              */
-            VisualizerAbstract(const std::string& modelFile, const std::string& path, const VisType visType = VisType::NONE);
+            VisualizerAbstract(const std::string& modelFile, const std::string& path, const VisType visType =
+                                       VisType::NONE);
 
-            /// Destructs OMVisualizer object.
             virtual ~VisualizerAbstract() = default;
 
-            /// The copy constructor is forbidden.
             VisualizerAbstract(const VisualizerAbstract& rhs) = delete;
 
-            /// The assignment operator is forbidden.
             VisualizerAbstract& operator=(const VisualizerAbstract& rhs) = delete;
 
             /*-----------------------------------------
@@ -89,26 +91,6 @@ namespace OMVIS
              * Encapsulates the three stages/methods of initialization process into one single method.
              */
             virtual void initialize();
-
-            /*! \brief Initializes OMVisualizer object.
-             *
-             * The visual XML file is parsed and the values of the attributes are set.
-             * The viewer is initialized and the scene is set up.
-             * The FMU is loaded if used, or the MAT file is read.
-             *
-             * This method calls \ref clearXMLDoc, \ref initXMLDoc and \ref initVisObjects, which all throw
-             * a std::runtime_error in case of failure.
-             */
-            virtual void initData();
-
-            /*! \brief Sets up the scene. */
-            void setUpScene();
-
-            /*! \brief Virtual method to initialize the scene. Is implemented either by using FMU or MAT file.
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             */
-            virtual void initializeVisAttributes(const double time) = 0;
 
             /*! \brief Sets the scene to start position.
              */
@@ -135,42 +117,25 @@ namespace OMVIS
 
             /*! \brief In case of FMU visualization, this methods performs a simulation step.
              *
-             * \remark All classes that derive from OMVisualizerAbstract
+             * \remark All classes that derive from VisualizerAbstract
              * \param omvm
              */
             virtual void simulate(Control::TimeManager& omvm) = 0;
 
-            /*! \brief This method updates the visualization attributes after a time step has been performed.
-             *
-             * This method is pure virtual and needs to be implemented by derived classes, e.g., \ref OMVsiualizerFMU
-             * and \ref OMVisualizerMAT.
-             *
-             * \param time  The visualization time.
-             */
-            virtual void updateVisAttributes(const double time) = 0;
-
-            /*! \brief Virtual Prepares everything to make the correct visualization attributes available for that time
-             *         step (i.e. simulate the FMU)
-             *
-             * \remark All classes that derive from OMVisualizerAbstract
-             */
-            virtual void updateScene(const double time) = 0;
-
             /*! \brief Starts the visualization.
              *
-             * If the simulation end time is not yet reached, the OMVisManager object is set  to "unpause". Thus,
-             * the simulation is continued.
+             * If the simulation end time is not yet reached, the TimeManager object is set  to "unpause". Thus, the
+             * simulation is continued.
              */
             virtual void startVisualization();
 
             /*! \brief Pauses the visualization.
              *
-             * The OMVisManager is set to "pause" and the simulation stops.
+             * The TimeManager is set to "pause" and the simulation stops.
              */
             virtual void pauseVisualization();
 
-            /*! \brief Calls for a scene update.
-             */
+            /*! \brief Calls for a scene update. */
             void sceneUpdate();
 
          protected:
@@ -184,13 +149,62 @@ namespace OMVIS
             std::shared_ptr<OMVisScene> _viewerStuff;
             std::shared_ptr<UpdateVisitor> _nodeUpdater;
             std::shared_ptr<Control::TimeManager> _timeManager;
+
+            /*-----------------------------------------
+             * PROTECTED METHODS
+             *---------------------------------------*/
+
+            /*-----------------------------------------
+             * INITIALIZATION METHODS
+             *---------------------------------------*/
+
+            /*! \brief Initializes the OMVisualBase object.
+             *
+             * The visual XML file is parsed and the values of the attributes are set.
+             * The viewer is initialized and the scene is set up.
+             * The FMU is loaded if used, or the MAT file is read.
+             *
+             * This method calls \ref clearXMLDoc, \ref initXMLDoc and \ref initVisObjects, which all throw
+             * a std::runtime_error in case of failure.
+             */
+            virtual void initData();
+
+            /*! \brief Sets up the scene. */
+            void setUpScene();
+
+            /*! \brief Initializes the scene.
+             *
+             * This method is implemented either by using FMU or MAT file.
+             *
+             * \remark All classes that derive from VisualizerAbstract
+             */
+            virtual void initializeVisAttributes(const double time) = 0;
+
+            /*-----------------------------------------
+             * SIMULATION METHODS
+             *---------------------------------------*/
+
+            /*! \brief Updates the visualization attributes after a time step has been performed.
+             *
+             * This method is pure virtual and needs to be implemented by derived classes, e.g., \ref VsiualizerFMU
+             * and \ref VisualizerMAT.
+             *
+             * \param time  The visualization time.
+             */
+            virtual void updateVisAttributes(const double time) = 0;
+
+            /*! \brief Prepares everything to make the correct visualization attributes available for that time step (i.e. simulate the FMU).
+             *
+             * \remark All classes that derive from VisualizerAbstract
+             */
+            virtual void updateScene(const double time) = 0;
+
         };
 
+    }  // namespace Model
+}  // namespace OMVIS
 
-    }  // End namespace Model
-}  // End namespace OMVIS
-
-#endif /* INCLUDE_OMVISUALIZERABSTRACT_HPP_ */
+#endif /* INCLUDE_VISUALIZERABSTRACT_HPP_ */
 /**
  * @}
  */
