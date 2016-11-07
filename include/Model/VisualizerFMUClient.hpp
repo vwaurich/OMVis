@@ -70,7 +70,7 @@ namespace OMVIS
              */
             VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP);
 
-            virtual ~VisualizerFMUClient() = default;
+            virtual ~VisualizerFMUClient();
 
             VisualizerFMUClient(const VisualizerFMUClient& rhs) = delete;
 
@@ -82,6 +82,8 @@ namespace OMVIS
              *---------------------------------------*/
 
             std::shared_ptr<InputData> getInputData();
+
+            void setSimulationSettings(const UserSimSettingsFMU& simSetFMU);
 
             UserSimSettingsFMU getCurrentSimSettings() const;
 

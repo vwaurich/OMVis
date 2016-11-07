@@ -315,7 +315,9 @@ namespace OMVIS
             }
             else if (visTypeIsFMURemote())
             {
-                LOGGER_WRITE("Not yet implemented for FMU Remote visualization.", Util::LC_CTR, Util::LL_INFO);
+                std::dynamic_pointer_cast<Model::VisualizerFMUClient>(_modelVisualizer)->setSimulationSettings(
+                        simSetFMU);
+                initVisualization();
             }
             else
             {

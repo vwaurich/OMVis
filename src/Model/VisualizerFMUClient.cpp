@@ -25,6 +25,10 @@ namespace OMVIS
     namespace Model
     {
 
+        /*-----------------------------------------
+         * CONSTRUCTORS
+         *---------------------------------------*/
+
         VisualizerFMUClient::VisualizerFMUClient(const Initialization::RemoteVisualizationConstructionPlan* cP)
                 : VisualizerAbstract(cP->modelFile, cP->wDir, VisType::FMU_REMOTE),
                   _noFC(cP->hostAddress, cP->port),
@@ -37,6 +41,13 @@ namespace OMVIS
         {
             LOGGER_WRITE("Initialize joysticks", Util::LC_LOADER, Util::LL_INFO);
             initJoySticks();
+        }
+
+        VisualizerFMUClient::~VisualizerFMUClient()
+        {
+            LOGGER_WRITE("Calling NetOff::SimulationClient::deinitialize() ... ", Util::LC_LOADER, Util::LL_DEBUG);
+            _noFC.deinitialize();
+            LOGGER_WRITE("SimulationClient successfully deinitialized. ", Util::LC_LOADER, Util::LL_DEBUG);
         }
 
         /*-----------------------------------------
@@ -166,6 +177,37 @@ namespace OMVIS
         std::shared_ptr<InputData> VisualizerFMUClient::getInputData()
         {
             return _inputData;
+        }
+
+        void VisualizerFMUClient::setSimulationSettings(const UserSimSettingsFMU& simSetFMU)
+        {
+            if (Solver::NONE == simSetFMU.solver)
+            {
+                throw std::runtime_error("Solver: NONE is not a valid solver.");
+            }
+            else
+            {
+                _simSettings->setSolver(simSetFMU.solver);
+            }
+
+            if (0.0 >= simSetFMU.simStepSize)
+            {
+                throw std::runtime_error(
+                        "Simulation step size of " + std::to_string(simSetFMU.simStepSize) + " is not valid.");
+            }
+            else
+            {
+                _simSettings->setHdef(simSetFMU.simStepSize);
+            }
+
+            if (0.0 >= simSetFMU.simEndTime)
+            {
+                throw std::runtime_error("Solver: Simulation end time <= 0.0 is not valid.");
+            }
+            else
+            {
+                _timeManager->setEndTime(simSetFMU.simEndTime);
+            }
         }
 
         UserSimSettingsFMU VisualizerFMUClient::getCurrentSimSettings() const
