@@ -141,17 +141,16 @@ namespace OMVIS
                     Util::LC_LOADER, Util::LL_INFO);
 
             // The values for the inputs per type.
-            _inputVals._valuesReal =
-                    reinterpret_cast<fmi1_real_t*>(calloc(_inputVals.getNumReal(), sizeof(fmi1_real_t)));
-            _inputVals._valuesInteger = reinterpret_cast<fmi1_integer_t*>(calloc(_inputVals.getNumInteger(),
-                                                                                 sizeof(fmi1_integer_t)));
-            _inputVals._valuesBoolean = reinterpret_cast<fmi1_boolean_t*>(calloc(_inputVals.getNumBoolean(),
-                                                                                 sizeof(fmi1_boolean_t)));
-            _inputVals._valuesString = reinterpret_cast<fmi1_string_t*>(calloc(_inputVals.getNumString(),
-                                                                               sizeof(fmi1_string_t)));
+            _inputVals._valuesReal = static_cast<fmi1_real_t*>(calloc(_inputVals.getNumReal(), sizeof(fmi1_real_t)));
+            _inputVals._valuesInteger = static_cast<fmi1_integer_t*>(calloc(_inputVals.getNumInteger(),
+                                                                            sizeof(fmi1_integer_t)));
+            _inputVals._valuesBoolean = static_cast<fmi1_boolean_t*>(calloc(_inputVals.getNumBoolean(),
+                                                                            sizeof(fmi1_boolean_t)));
+            _inputVals._valuesString = static_cast<fmi1_string_t*>(calloc(_inputVals.getNumString(),
+                                                                          sizeof(fmi1_string_t)));
             // malloc attributes
-            _inputVals._attrReal = reinterpret_cast<AttributesReal*>(calloc(_inputVals.getNumReal(),
-                                                                            sizeof(AttributesReal)));
+            _inputVals._attrReal =
+                    static_cast<AttributesReal*>(calloc(_inputVals.getNumReal(), sizeof(AttributesReal)));
 
             // init keymap and attributes
             // ------------------

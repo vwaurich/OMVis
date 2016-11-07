@@ -152,12 +152,11 @@ namespace OMVIS
                     "n_states: " + std::to_string(_fmuData._nStates) + " " + std::to_string(_fmuData._nEventIndicators),
                     Util::LC_LOADER, Util::LL_INFO);
 
-            _fmuData._states = reinterpret_cast<fmi1_real_t*>(calloc(_fmuData._nStates, sizeof(double)));
-            _fmuData._statesDer = reinterpret_cast<fmi1_real_t*>(calloc(_fmuData._nStates, sizeof(double)));
-            _fmuData._eventIndicators = reinterpret_cast<fmi1_real_t*>(calloc(_fmuData._nEventIndicators,
-                                                                              sizeof(double)));
-            _fmuData._eventIndicatorsPrev = reinterpret_cast<fmi1_real_t*>(calloc(_fmuData._nEventIndicators,
-                                                                                  sizeof(double)));
+            _fmuData._states = static_cast<fmi1_real_t*>(calloc(_fmuData._nStates, sizeof(double)));
+            _fmuData._statesDer = static_cast<fmi1_real_t*>(calloc(_fmuData._nStates, sizeof(double)));
+            _fmuData._eventIndicators = static_cast<fmi1_real_t*>(calloc(_fmuData._nEventIndicators, sizeof(double)));
+            _fmuData._eventIndicatorsPrev =
+                    static_cast<fmi1_real_t*>(calloc(_fmuData._nEventIndicators, sizeof(double)));
 
             // Instantiate model
             jm_status_enu_t jmstatus = fmi1_import_instantiate_model(_fmu.get(), "Test ME model instance");
