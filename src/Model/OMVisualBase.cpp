@@ -93,10 +93,11 @@ namespace OMVIS
             for (auto shapeNode = rootNode->first_node("shape"); nullptr != shapeNode;
                     shapeNode = shapeNode->next_sibling())
             {
-                expNode = shapeNode->first_node((const char*) "ident")->first_node();
+                expNode = shapeNode->first_node("ident")->first_node();
                 shape._id = std::string(expNode->value());
 
-                expNode = shapeNode->first_node((const char*) "type")->first_node();
+//                expNode = shapeNode->first_node((const char*) "type")->first_node();
+                expNode = shapeNode->first_node("type")->first_node();
 
                 if (nullptr == expNode)
                 {
@@ -127,49 +128,49 @@ namespace OMVIS
                     //std::cout<<"type "<<shape._id<<std::endl;
                     //std::cout<<"type "<<shape._type<<std::endl;
 
-                    expNode = shapeNode->first_node((const char*) "length")->first_node();
+                    expNode = shapeNode->first_node("length")->first_node();
                     shape._length = Util::getObjectAttributeForNode(expNode);
-                    expNode = shapeNode->first_node((const char*) "width")->first_node();
+                    expNode = shapeNode->first_node("width")->first_node();
                     shape._width = Util::getObjectAttributeForNode(expNode);
-                    expNode = shapeNode->first_node((const char*) "height")->first_node();
+                    expNode = shapeNode->first_node("height")->first_node();
                     shape._height = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "lengthDir")->first_node();
+                    expNode = shapeNode->first_node("lengthDir")->first_node();
                     shape._lDir[0] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._lDir[1] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._lDir[2] = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "widthDir")->first_node();
+                    expNode = shapeNode->first_node("widthDir")->first_node();
                     shape._wDir[0] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._wDir[1] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._wDir[2] = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "r")->first_node();
+                    expNode = shapeNode->first_node("r")->first_node();
                     shape._r[0] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._r[1] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._r[2] = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "r_shape")->first_node();
+                    expNode = shapeNode->first_node("r_shape")->first_node();
                     shape._rShape[0] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._rShape[1] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._rShape[2] = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "color")->first_node();
+                    expNode = shapeNode->first_node("color")->first_node();
                     shape._color[0] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._color[1] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._color[2] = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "T")->first_node();
+                    expNode = shapeNode->first_node("T")->first_node();
                     shape._T[0] = Util::getObjectAttributeForNode(expNode);
                     expNode = expNode->next_sibling();
                     shape._T[1] = Util::getObjectAttributeForNode(expNode);
@@ -188,9 +189,9 @@ namespace OMVIS
                     expNode = expNode->next_sibling();
                     shape._T[8] = Util::getObjectAttributeForNode(expNode);
 
-                    expNode = shapeNode->first_node((const char*) "specCoeff")->first_node();
+                    expNode = shapeNode->first_node("specCoeff")->first_node();
                     shape._specCoeff = Util::getObjectAttributeForNode(expNode);
-                    expNode = shapeNode->first_node((const char*) "extra")->first_node();
+                    expNode = shapeNode->first_node("extra")->first_node();
                     shape._extra = Util::getObjectAttributeForNode(expNode);
 
                     _shapes.push_back(shape);
@@ -252,10 +253,10 @@ namespace OMVIS
             for (auto shapeNode = rootNode->first_node("shape"); shapeNode != nullptr;
                     shapeNode = shapeNode->next_sibling())
             {
-                expNode = shapeNode->first_node((const char*) "ident")->first_node();
+                expNode = shapeNode->first_node("ident")->first_node();
                 shape._id = std::string(expNode->value());
 
-                expNode = shapeNode->first_node((const char*) "type")->first_node();
+                expNode = shapeNode->first_node("type")->first_node();
                 if (expNode == nullptr)
                 {
                     LOGGER_WRITE("The type of  " + shape._id + " is not supported right in the visxml file.",
@@ -265,49 +266,49 @@ namespace OMVIS
 
                 shape._type = std::string(expNode->value());
 
-                expNode = shapeNode->first_node((const char*) "length")->first_node();
+                expNode = shapeNode->first_node("length")->first_node();
                 appendVisVariable(expNode, visVariables);
-                expNode = shapeNode->first_node((const char*) "width")->first_node();
+                expNode = shapeNode->first_node("width")->first_node();
                 appendVisVariable(expNode, visVariables);
-                expNode = shapeNode->first_node((const char*) "height")->first_node();
-                appendVisVariable(expNode, visVariables);
-
-                expNode = shapeNode->first_node((const char*) "lengthDir")->first_node();
-                appendVisVariable(expNode, visVariables);
-                expNode = expNode->next_sibling();
-                appendVisVariable(expNode, visVariables);
-                expNode = expNode->next_sibling();
+                expNode = shapeNode->first_node("height")->first_node();
                 appendVisVariable(expNode, visVariables);
 
-                expNode = shapeNode->first_node((const char*) "widthDir")->first_node();
+                expNode = shapeNode->first_node("lengthDir")->first_node();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
 
-                expNode = shapeNode->first_node((const char*) "r")->first_node();
+                expNode = shapeNode->first_node("widthDir")->first_node();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
 
-                expNode = shapeNode->first_node((const char*) "r_shape")->first_node();
+                expNode = shapeNode->first_node("r")->first_node();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
 
-                expNode = shapeNode->first_node((const char*) "color")->first_node();
+                expNode = shapeNode->first_node("r_shape")->first_node();
+                appendVisVariable(expNode, visVariables);
+                expNode = expNode->next_sibling();
+                appendVisVariable(expNode, visVariables);
+                expNode = expNode->next_sibling();
+                appendVisVariable(expNode, visVariables);
+
+                expNode = shapeNode->first_node("color")->first_node();
                 shape._color[0] = Util::getObjectAttributeForNode(expNode);
                 expNode = expNode->next_sibling();
                 shape._color[1] = Util::getObjectAttributeForNode(expNode);
                 expNode = expNode->next_sibling();
                 shape._color[2] = Util::getObjectAttributeForNode(expNode);
 
-                expNode = shapeNode->first_node((const char*) "T")->first_node();
+                expNode = shapeNode->first_node("T")->first_node();
                 appendVisVariable(expNode, visVariables);
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
@@ -326,7 +327,7 @@ namespace OMVIS
                 expNode = expNode->next_sibling();
                 appendVisVariable(expNode, visVariables);
 
-                expNode = shapeNode->first_node((const char*) "specCoeff")->first_node();
+                expNode = shapeNode->first_node("specCoeff")->first_node();
                 appendVisVariable(expNode, visVariables);
             }
             LOGGER_WRITE("There are " + std::to_string(visVariables.size()) + " visualization variables.",
