@@ -24,8 +24,8 @@
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
-#include <osgDB/ReadFile>
 #include <osg/Material>
+#include <osgDB/ReadFile>
 #include <osg/LineWidth>
 #include <osg/Point>
 
