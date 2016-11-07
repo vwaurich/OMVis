@@ -59,5 +59,5 @@ namespace OMVIS
             --_level;
         }
 
-    }  // namespace View
+    }  // namespace Model
 }  // namespace OMVIS
