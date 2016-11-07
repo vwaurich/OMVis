@@ -1,45 +1,20 @@
 /*
-* Copyright (C) 2016, Volker Waurich
-*
-* This file is part of OMVis.
-*
-* OMVis is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* OMVis is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/**
+ * Copyright (C) 2016, Volker Waurich
  *
+ * This file is part of OMVis.
  *
- * Purpose: Calculates the total of 6 checks
+ * OMVis is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * @author Volker Waurich
- * @version 0.1
+ * OMVis is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *
- * General todos:
- * \todo Pass arguments to functions by reference
- * \todo Const correctness
- * \todo Attributes private if possible
- * \todo Use forward declaration where possible
- * \todo Remove unused includes.
- */
-
-/**
- *
- *
- * \todo What can be reused of the Parallel FMU program? Or, what classes and functions can
- * Parallel FMU Program and OMVIS share in the sense of unique file location?
- *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "OMVIS.hpp"
@@ -47,6 +22,8 @@
 #include <stdexcept>
 #include <iostream>
 #include <clocale>
+
+using namespace OMVIS;
 
 int main(int argc, char* argv[])
 {
@@ -56,24 +33,24 @@ int main(int argc, char* argv[])
     try
     {
         // Parse command line arguments for logger specific settings.
-        OMVIS::Initialization::CommandLineArgs clArgs = OMVIS::Initialization::getCommandLineArguments(argc, argv);
+        Initialization::CommandLineArgs clArgs = Initialization::getCommandLineArguments(argc, argv);
 
         // Initialize logger with logger settings from command line.
         clArgs.print();
-        OMVIS::Util::Logger::initialize(clArgs.logSet);
-        OMVIS::Util::Logger logger = OMVIS::Util::Logger::getInstance();
+        Util::Logger::initialize(clArgs.logSet);
+        Util::Logger logger = Util::Logger::getInstance();
 
-        LOGGER_WRITE(std::string("Okay, let's create the main widget..."), OMVIS::Util::LC_OTHER, OMVIS::Util::LL_INFO);
+        LOGGER_WRITE("Okay, let's create the main widget...", Util::LC_OTHER, Util::LL_INFO);
         QApplication app(argc, argv);
 
-        OMVIS::View::OMVisViewer omvisViewer(Q_NULLPTR, clArgs);
+        View::OMVisViewer omvisViewer(Q_NULLPTR, clArgs);
         omvisViewer.show();
 
         app.exec();
     }
     catch (std::exception &ex)
     {
-        LOGGER_WRITE(std::string("Execution failed. Error: ") + std::string(ex.what()), OMVIS::Util::LC_OTHER, OMVIS::Util::LL_ERROR);
+        LOGGER_WRITE("Execution failed. Error: " + std::string(ex.what()), Util::LC_OTHER, Util::LL_ERROR);
         return -1;
     }
 
