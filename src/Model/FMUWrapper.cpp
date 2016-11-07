@@ -169,15 +169,8 @@ namespace OMVIS
 
             //initialize
             _fmuData._fmiStatus = fmi1_import_set_time(_fmu.get(), simSettings->getTstart());
-            try
-            {
-                _fmuData._fmiStatus = fmi1_import_initialize(_fmu.get(), simSettings->getToleranceControlled(),
-                                                             simSettings->getRelativeTolerance(), &_fmuData._eventInfo);
-            }
-            catch (std::exception &ex)
-            {
-                std::cout << __FILE__ << " : " << __LINE__ << " Exception: " << ex.what() << std::endl;
-            }
+            _fmuData._fmiStatus = fmi1_import_initialize(_fmu.get(), simSettings->getToleranceControlled(),
+                                                         simSettings->getRelativeTolerance(), &_fmuData._eventInfo);
             _fmuData._fmiStatus = fmi1_import_get_continuous_states(_fmu.get(), _fmuData._states, _fmuData._nStates);
             _fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu.get(), _fmuData._eventIndicatorsPrev,
                                                                    _fmuData._nEventIndicators);
@@ -264,7 +257,7 @@ namespace OMVIS
 
         void FMUWrapper::handleEvents(const fmi1_boolean_t intermediateResults)
         {
-            LOGGER_WRITE("Handle event at " + std::to_string(_fmuData._tcur), Util::LC_CTR, Util::LL_DEBUG);
+            // LOGGER_WRITE("Handle event at " + std::to_string(_fmuData._tcur), Util::LC_CTR, Util::LL_DEBUG);
             _fmuData._fmiStatus = fmi1_import_eventUpdate(_fmu.get(), intermediateResults, &_fmuData._eventInfo);
             _fmuData._fmiStatus = fmi1_import_get_continuous_states(_fmu.get(), _fmuData._states, _fmuData._nStates);
             _fmuData._fmiStatus = fmi1_import_get_event_indicators(_fmu.get(), _fmuData._eventIndicators,
