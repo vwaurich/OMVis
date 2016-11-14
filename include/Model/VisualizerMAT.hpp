@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Model
- *  @{
+/** \addtogroup Model
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -50,10 +50,10 @@ namespace OMVIS
 
             /*! \brief Constructs a OMVisualizerMAT object from the given arguments.
              *
-             * Essentially, a MAT file and its path need to be specified.
+             * Essentially a MAT file and its path need to be specified.
              *
-             * \param fileName  Model file name without path.
-             * \param path      Path to the model file.
+             * \param modelFile  Model file name without path.
+             * \param path       Path to the model file.
              */
             VisualizerMAT(const std::string& modelFile, const std::string& path);
 
@@ -99,12 +99,11 @@ namespace OMVIS
              *
              * The method updates the actual data for the visualization bodies by using variables from the MAT file.
              *
-             * \param time The visualization time.
+             * \param time  The visualization time.
              */
             void updateVisAttributes(const double time) override;
 
-            /*! \brief For MAT file based visualization, nothing has to be done. Just get the visualizationAttributes.
-             */
+            /*! \brief For MAT file based visualization, nothing has to be done. Just get the visualizationAttributes. */
             void updateScene(const double time) override;
 
             /*! \brief Update the attribute of the Object using a MAT result file. */
@@ -112,8 +111,8 @@ namespace OMVIS
 
             /*! \brief Fetches the value of a variable at a certain time.
              *
-             * \todo: The method omc_matlab4_val which is called inside this method returns 0 on success. Thus, we
-             *        should test the return value.
+             * \todo The method omc_matlab4_val which is called inside this method returns 0 on success. Thus, we
+             *       should test the return value.
              *
              * \param reader    The ModelicaMatReader object to use for reading the MAT file.
              * \param varName   The name of the variable to fetch the value for.
@@ -128,5 +127,5 @@ namespace OMVIS
 
 #endif /* INCLUDE_VISUALIZERMAT_HPP_ */
 /**
- * @}
+ * \}
  */

@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Model
- *  @{
+/** \addtogroup Model
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -91,28 +91,28 @@ namespace OMVIS
 
             /*! \brief Initializes all input data including the keymap for the given FMU.
              *
-             * This method is used in case of FMU visualization by the class \ref OMVIsualizerFMU.
+             * This method is used in case of FMU visualization by the class \ref VisualizerFMU.
              *
-             * \input fmu The FMU to initialize the data for.
+             * \param fmu   The FMU to initialize the data for.
              */
             void initializeInputs(fmi1_import_t* fmu);
 
             /*! \brief Initializes all input data including the keymap in case of remote visualization.
              *
-             * This method is used in case of remote FMU visualization by the class \ref OMVIsualizerFMUClient.
+             * This method is used in case of remote FMU visualization by the class \ref VisualizerFMUClient.
              *
-             * \input inputVars The input variables to initialize the data for.
+             * \param inputVars     The input variables to initialize the data for.
              */
             void initializeInputs(const NetOff::VariableList& inputVars);
 
             /*! \brief This is a helper function for the two initialize functions.
              *
-             * This helper holds code, that both functions share. Thus, it reduces code and improves the
-             * maintainability.
+             * This helper holds code, that both functions share. Thus, it reduces code and improves the maintainability.
              */
             void initializeHelper();
 
             /*! \brief Resets the input values to default values.
+             *
              * This is:
              *      - real values to 0.0
              *      - integer values to 0
@@ -133,7 +133,7 @@ namespace OMVIS
 
             /*! \brief Gets the names of the variables and stores them in the given vector varNames.
              *
-             * \remark: The variable names are added via push_back method at the end of the given vector.
+             * \remark The variable names are added via push_back method at the end of the given vector.
              */
             void getVariableNames(fmi1_import_variable_list_t* varLst, const int numVars, std::vector<std::string>& varNames);
 
@@ -183,20 +183,16 @@ namespace OMVIS
 
         std::string keyMapValueToString(KeyMapValue);
 
-        /*! \brief Checks the causality of the var and outputs 1 if they are equal, 0 otherwise.
-         *
-         */
+        /*! \brief Checks the causality of the var and outputs 1 if they are equal, 0 otherwise. */
         int causalityEqual(fmi1_import_variable_t* var, void* enumIdx);
 
-        /*! \brief Checks the type of the var and outputs 1 if they are equal.
-         *
-         */
+        /*! \brief Checks the type of the var and outputs 1 if they are equal. */
         int baseTypeEqual(fmi1_import_variable_t* var, void* refBaseType);
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_INPUTDATA_HPP_ */
 /**
- * @}
+ * \}
  */

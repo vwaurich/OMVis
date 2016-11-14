@@ -17,14 +17,14 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup OMVis
- *  @{
+/** \file
+ *
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
  *
- *  This file comprises declarations of methods that have two manifestations: One serves for the \ref OMvisualizerFMU
- *  and the other one for \ref OMVisualizerMat objects.
+ *  This file comprises declarations of methods that have two manifestations: One serves for the
+ *  \ref OMVIS::Model::VisualizerFMU and the other one for \ref OMVIS::Model::VisualizerMAT objects.
  */
 
 #ifndef INCLUDE_VISUALIZE_HPP_
@@ -84,8 +84,8 @@ namespace OMVIS
          *******************************/
 
         /*! \brief Modelica.Math.Vectors.normalize
-         * @param
-         * @return
+         * \param
+         * \return
          */
         osg::Vec3f normalize(const osg::Vec3f& vec);
 
@@ -97,80 +97,33 @@ namespace OMVIS
          */
         osg::Vec3f cross(const osg::Vec3f& vec1, const osg::Vec3f& vec2);
 
-        /*! \brief Bla Bla
-         *
-         * @param
-         * @return
-         */
         Directions fixDirections(const osg::Vec3f& lDir, const osg::Vec3f& wDir);
 
         //-----------------------
         // FUNCTIONS
         //-----------------------
 
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         */
-        //X13 unused?
-        //osg::Matrix3 getShapeMatrixMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         *
-         * \todo Currently unused.
-         */
-//X13 unused?
-//        osg::Matrix3 getShapeMatrixFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         *
-         * \todo Currently unused.
-         */
-        //X13 unused?
-        //osg::Vec3f getShapeVectorMAT(char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-        /*! \brief Gets the vector of the indicated node exp of the shape.
-         *
-         * \todo Currently unused.
-         */
-//X13 unused?
-//        osg::Vec3f getShapeVectorFMU(char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
-        /*! \brief Gets the value of the indicated node exp.
-         *
-         * \todo Currently unused.
-         */
-        //X13 unused
-        //X13 double getShapeAttrMAT(const char* attr, rapidxml::xml_node<>* node, double time, ModelicaMatReader reader);
-//        /*! \brief Update the attribute of the Object using a mat-file result
-//         */
-//        void updateObjectAttributeMAT(Model::ShapeObjectAttribute* attr, double time, ModelicaMatReader reader);
-        /*! \brief Update the attribute of the Object using a mat-file result
-         */
+        /*! \brief Update the attribute of the object using a MAT file result. */
         void updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, double time, fmi1_import_t* fmu);
 
-        /*! \brief Update the attribute of the Object using remote FMU visualization.
-         */
+        /*! \brief Update the attribute of the object using remote FMU visualization. */
         void updateObjectAttributeFMUClient(Model::ShapeObjectAttribute& attr, const NetOff::ValueContainer& _outputCont);
 
-        /*! \brief Gets the value of the indicated node exp.
-         */
+        /*! \brief Gets the value of the indicated node exp. */
         double getShapeAttrFMU(const char* attr, rapidxml::xml_node<>* node, double time, fmi1_import_t* fmu);
 
-        /*! \brief Gets the ObjectAttribute for a certain node
-         */
+        /*! \brief Gets the ObjectAttribute for a certain node. */
         Model::ShapeObjectAttribute getObjectAttributeForNode(const rapidxml::xml_node<>*);
 
         //osg::Matrix
         void assemblePokeMatrix(osg::Matrix& M, const osg::Matrix3& T, const osg::Vec3f& r);
 
-        /*! \brief Updates r and T to cope with the directions.
-         *
-         * @param
-         * @return
-         */
+        /*! \brief Updates r and T to cope with the directions. */
         rAndT rotation(const osg::Vec3f& r, const osg::Vec3f& r_shape, const osg::Matrix3& T,
                        const osg::Vec3f& lDirIn, const osg::Vec3f& wDirIn,
                        const float length, const std::string& type);
 
-    }  // End namespace Util
-}  // End namespace OMVIS
+    }  //  namespace Util
+}  //  namespace OMVIS
 
 #endif /* INCLUDE_VISUALIZE_HPP_ */
-/**
- * @}
- */

@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Control
- *  @{
+/** \addtogroup Control
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -42,17 +42,17 @@ namespace OMVIS
     namespace Control
     {
 
-        /*! \brief This is a controller class that handles the user interaction with OMVis via GUI.
+        /*! \brief This is a controller class that handles the user interaction with OMVIS via GUI.
          *
-         * Thus, this class serves as the(!) interface between the user and OMVis. A GUIcontroller object receives the
+         * Thus, this class serves as the(!) interface between the user and OMVIS. A GUIcontroller object receives the
          * user input (,e.g., clicking a menu point), processes it and induces the appropriate action. Therefore, the
-         * GuiController class implements most of the slot functions of \ref Model::OMVisVisViewer.
+         * GuiController class implements most of the slot functions of \ref Model::OMVISViewer.
          *
          * The GuiController class encapsulates the model data structures from the GUI elements and classes. It holds
          * the pointer to the concrete model visualization object.
          *
-         * \remark: If we want to visualize multiple models in the future, _modelVisualizer will have to be a vector of
-         *          pointers of type \ref Model::VisualizerAbstract to these models.
+         * \remark If we want to visualize multiple models in the future, _modelVisualizer will have to be a vector of
+         *         pointers of type \ref Model::VisualizerAbstract to these models.
          *
          */
         class GUIController
@@ -98,9 +98,9 @@ namespace OMVIS
             /*! \brief This method loads a FMU model for remote visualization.
              *
              * This method gets a construction plan for remote visualization and asks the \ref Initialization::Factory
-             * to create an appropriate VisualizerClient object. If this OMVisualizerClient object can be initialized
+             * to create an appropriate VisualizerClient object. If this VisualizerClient object can be initialized
              * without errors, it is taken as new visualization model.
-             * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
+             * If a model is already loaded into  and the new model cannot be loaded, for instance due to a
              * compatibility issue, than the old model is kept. If the already load and the new model are the very
              * same, no information/message is thrown. We just load it and destroy the current settings.
              *
@@ -125,22 +125,21 @@ namespace OMVIS
              * SIMULATION METHODS
              *---------------------------------------*/
 
-            /*! \brief Asks the OMVisualizer object to start the simulation. */
+            /*! \brief Asks the Visualizer object to start the simulation. */
             void startVisualization();
 
-            /*! \brief Asks the OMVisualizer object to pause the simulation. */
+            /*! \brief Asks the Visualizer object to pause the simulation. */
             void pauseVisualization();
 
-            /*! \brief Asks the OMVisualizer object to (re-)initialize the simulation.
+            /*! \brief Asks the Visualizer object to (re-)initialize the simulation.
              *
-             * \todo: Check if input variables need to be specified in order to interact with the FMU. If so,
-             *        open a GUI.
+             * \todo Check if input variables need to be specified in order to interact with the FMU. If so, open a GUI.
              */
             void initVisualization();
 
-            /*! \brief Asks the OMVisualizer object to update the scene.
+            /*! \brief Asks the Visualizer object to update the scene.
              *
-             * This method is triggered by \ref View::OMVisViewer::sceneUpdate which is frequently called from Qt.
+             * This method is triggered by \ref View::OMVISViewer::updateScene which is frequently called from Qt.
              */
             void sceneUpdate();
 
@@ -226,7 +225,7 @@ namespace OMVIS
             /*! \brief Pointer to the Visualizer object, which handles the model visualization.
              *
              * OMVis provides three concrete implementations of \ref Model::VisualizerAbstract class:
-             *  1. \ref Model::VisualizerMat for visualization of simulation results present in MAT file format.
+             *  1. \ref Model::VisualizerMAT for visualization of simulation results present in MAT file format.
              *  2. \ref Model::VisualizerFMU for FMU simulations.
              *  3. \ref Model::VisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system.
              *
@@ -235,10 +234,10 @@ namespace OMVIS
             std::shared_ptr<Model::VisualizerAbstract> _modelVisualizer;
         };
 
-    }  // End namespace Control
-}  // End namespace OMVIS
+    }  //  namespace Control
+}  //  namespace OMVIS
 
 #endif /* INCLUDE_GUICONTROLLER_HPP_ */
 /**
- * @}
+ * \}
  */

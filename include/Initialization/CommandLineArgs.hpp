@@ -44,8 +44,7 @@ namespace OMVIS
     {
 
         /*! \brief This class holds the settings specified by the user via command line.
-         * \Remark: This is not longer supported.
-         * \todo: Volker, do we want to remove this code from source?
+         *
          */
         class CommandLineArgs
         {
@@ -54,7 +53,7 @@ namespace OMVIS
              * CONSTRUCTORS
              *---------------------------------------*/
 
-            /// Default constructor. Attributes are initialized with default values;
+            /// Default constructor. Attributes are initialized with default values.
             CommandLineArgs();
 
             ~CommandLineArgs() = default;
@@ -83,6 +82,7 @@ namespace OMVIS
             bool localVisualization() const;
 
             /*! \brief Checks, if the command line arguments specify a remote visualization.
+             *
              * Returns true, if a valid remote visualization is specified via the command line arguments, i.e., all
              * necessary arguments for remote visualization are given.
              */
@@ -123,9 +123,9 @@ namespace OMVIS
          *      --useFMU                        OMVIS uses a FMU if specified for visualization.
          *      --loggersettings="loader=warning"
          *
-         * @param argc
-         * @param argv
-         * @return Returns the parsed arguments.
+         * \param argc
+         * \param argv
+         * \return Returns the parsed arguments.
          */
         CommandLineArgs getCommandLineArguments(int argc, char *argv[]);
 

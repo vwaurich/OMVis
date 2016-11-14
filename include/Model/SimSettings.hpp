@@ -17,6 +17,13 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/** \file
+ *
+ *  \copyright TU Dresden. All rights reserved.
+ *  \authors Volker Waurich, Martin Flehmig
+ *  \date Feb 2016
+ */
+
 #ifndef INCLUDE_SIMSETTINGS_HPP_
 #define INCLUDE_SIMSETTINGS_HPP_
 
@@ -36,8 +43,8 @@ namespace OMVIS
 
         /*! \brief This struct holds the simulation settings the user can chose via the GUI for a FMU.
          *
-         * The user can specify the settings of a FMU based simulation via the \ref View::SimSettingDialog. The user
-         * can specify the solver that should be used for integration, the simulation step size the simulation end time
+         * The user can specify the settings of a FMU based simulation via the \ref OMVIS::View::SimSettingDialog. The
+         * user can specify the solver that should be used for integration, the simulation step size the simulation end time
          * and the visualization step size. The later determines the interval to call the sceneUpdate() method.
          */
         struct UserSimSettingsFMU
@@ -50,7 +57,7 @@ namespace OMVIS
 
         /*! \brief This struct holds the simulation settings the user can chose via the GUI for a MAT file.
          *
-         * The user can specify the settings of a MAT result file based simulation via the \ref View::SimSettingDialog.
+         * The user can specify the settings of a MAT result file based simulation via the \ref OMVIS::View::SimSettingDialog.
          * The user can specifically specify the speedup of the simulation, i.e., a speedup less than one will slow
          * down the simulation, a speed up greater than one, will speed it up.
          */
@@ -59,7 +66,7 @@ namespace OMVIS
             double speedup;
         };
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_SIMSETTINGS_HPP_ */

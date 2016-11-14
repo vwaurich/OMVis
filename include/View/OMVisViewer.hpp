@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup View
- *  @{
+/** \addtogroup View
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -56,11 +56,11 @@ namespace OMVIS
     namespace View
     {
 
-        /*! \brief This class holds the OMVis GUI.
+        /*! \brief This class holds the OMVIS GUI.
          *
-         * OMVis is a open source tool for model and simulation visualization. What shall be visualized is described
+         * OMVIS is a open source tool for model and simulation visualization. What shall be visualized is described
          * in a XML file and the result files (in MAT format) provide the corresponding data. Besides the animation
-         * of result files, there is a possibility to animate multibody-systems with a FMU interactively.
+         * of result files, there is a possibility to animate multi-body-systems with a FMU interactively.
          *
          * Since we use a toolbar, we have to derive from QMainWindow. In order to visualize the models, we have to
          * inherit from osgViewer::CompositeViewer.
@@ -75,7 +75,8 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! \brief Constructs the OMVisViewer from command line arguments. */
-            OMVisViewer(QWidget* parent = Q_NULLPTR, const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
+            OMVisViewer(QWidget* parent = Q_NULLPTR, const Initialization::CommandLineArgs& clArgs =
+                                Initialization::CommandLineArgs());
 
             OMVisViewer(const OMVisViewer& rhs) = delete;
 
@@ -83,21 +84,22 @@ namespace OMVIS
 
             /*! \brief Destructs the OMVisViewer object and frees memory.
              *
-             * Since we use smart pointers where possible, we do not need to call delete explicitely.
-             * The Qt stuff uses the parent-child model and thus memory is freed automaticaly.
+             * Since we use smart pointers where possible, we do not need to call delete explicitly.
+             * The Qt stuff uses the parent-child model and thus memory is freed automatically.
              */
             ~OMVisViewer() = default;
 
          private:
             /*! \brief Constructs the OMVisViewer object from arguments.
              *
-             * A empty OMVis GUI is created and the model has to be loaded via the file open dialog.
+             * A empty OMVIS GUI is created and the model has to be loaded via the file open dialog.
              *
              * \param parent            Parent for initialization of QWidget Baseclass.
              * \param flags             Window flags for initialization of QWidget Baseclass.
              * \param threadingModel    The threading model.
              */
-            OMVisViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel = osgViewer::CompositeViewer::SingleThreaded,
+            OMVisViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel =
+                                osgViewer::CompositeViewer::SingleThreaded,
                         const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             /*-----------------------------------------
@@ -106,29 +108,30 @@ namespace OMVIS
 
             /*! \brief Adds an empty view-widget to the main-widget
              *
-             * @param gw The graphical window.
-             * @return The widget for the osg-viewer.
+             * \param gw        The graphical window.
+             * \param rootNode  The root node of the scene.
+             * \return The widget for the osg-viewer.
              */
             QWidget* setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw, const osg::ref_ptr<osg::Node> rootNode);
 
-            /*! \brief Creates a default osg-viewer-widget
-             */
+            /*! \brief Creates a default osg-viewer-widget. */
             QWidget* setupOSGViewerWidget(const osg::ref_ptr<osg::Node> rootNode);
 
-            /*! \brief Creates a osgQt::createGraphicsWindow
+            /*! \brief Creates a osgQt::createGraphicsWindow.
              *
-             * @param x
-             * @param y
-             * @param w The width.
-             * @param h The height.
-             * @param name The name of the window.
-             * @param windowDecoration
-             * @return The osgQt::GraphicsWindowQt - window.
+             * \param x
+             * \param y
+             * \param w     The width.
+             * \param h     The height.
+             * \param name  The name of the window.
+             * \param windowDecoration
+             * \return The osgQt::GraphicsWindowQt - window.
              */
-            osg::ref_ptr<osgQt::GraphicsWindowQt> createGraphicsWindow(int x, int y, int w, int h, const std::string& name = "", bool windowDecoration = false);
+            osg::ref_ptr<osgQt::GraphicsWindowQt> createGraphicsWindow(int x, int y, int w, int h,
+                                                                       const std::string& name = "",
+                                                                       bool windowDecoration = false);
 
-            /*! \brief Renders the widget in case of a paint event
-             */
+            /*! \brief Renders the widget in case of a paint event. */
             virtual void paintEvent(QPaintEvent* event);
 
             /*! \brief This function sets up the widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
@@ -137,7 +140,7 @@ namespace OMVIS
              */
             void setupWidgets();
 
-            /*! \brief Creates the layout which is used for OMVis.
+            /*! \brief Creates the layout which is used for OMVIS.
              *
              * We use a row layout consisting of the three widgets _timeSliderWidget, _osgViewerWidget and _controlElementwidget.
              */
@@ -153,8 +156,7 @@ namespace OMVIS
             /*! \brief Creates the menu actions and connects them to the corresponding slot functions. */
             void createActions();
 
-            /*! \brief Creates the control widget (play, pause,...)
-             */
+            /*! \brief Creates the control widget (play, pause,...). */
             QWidget* setupControlElementWidget();
 
             /*! \brief Creates and sets up the time slider widget.
@@ -166,9 +168,9 @@ namespace OMVIS
              */
             void setupTimeSliderWidget();
 
-            /*! \brief Creates a GUI element to set the mapping for a input value.
-             */
-            QHBoxLayout* createInputMapperRow(const int inputIdx, const std::string& varName, const std::string& type) const;
+            /*! \brief Creates a GUI element to set the mapping for a input value. */
+            QHBoxLayout* createInputMapperRow(const int inputIdx, const std::string& varName,
+                                              const std::string& type) const;
 
             /*! \brief Updates the time slider to the position which corresponds to the current visualization time.
              *
@@ -190,7 +192,7 @@ namespace OMVIS
              *
              * In case of MAT result file visualization, the user can move the time slider and the appropriate
              * simulation status will be loaded.
-             * \todo: This is a todo!
+             * \todo This is a todo!
              */
             void enableTimeSlider();
 
@@ -202,7 +204,7 @@ namespace OMVIS
 
             /*! \brief Function that updates the timing elements, i.e., the slider and the visualization time information.
              *
-             * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplay().
+             * Calls \ref updateTimeSliderPosition() and \ref updateTimeDisplays().
              */
             void updateTimingElements();
 
@@ -212,37 +214,34 @@ namespace OMVIS
 
          private slots:
 
-            /*! \brief Function that is triggered by the play-button.
-             */
+            /*! \brief Function that is triggered by the play-button. */
             void playSlotFunction();
 
-            /*! \brief Function that is triggered by the pause-button.
-             */
+            /*! \brief Function that is triggered by the pause-button. */
             void pauseSlotFunction();
 
-            /*! \brief Function that is triggered by the init-button.
-             */
+            /*! \brief Function that is triggered by the initialize-button. */
             void initSlotFunction();
 
             /*! \brief Function that is triggered the scene-update timer.
              */
             void updateScene();
 
-            /*! \brief Function that is triggered the scene-update timer.
-             */
+            /*! \brief Function that is triggered the scene-update timer. */
             void setVisTimeSlotFunction(int val);
 
             /*! \brief Function that opens a new model from file for visualization.
              *
-             * The model which should be loaded is chosen via a file open dialog. The user can specify whether
-             * to load a FMU or a MAT file for visualization.
+             * The model which should be loaded is chosen via a file open dialog. The user can specify whether to load
+             * a FMU or a MAT file for visualization.
              *
-             * @param visFMU
+             * \param clArgs    The parsed command line arguments.
              */
             void open(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 
             /*! \brief Open remote connection. */
-            void openRemoteConnection(const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
+            void openRemoteConnection(const Initialization::CommandLineArgs& clArgs =
+                    Initialization::CommandLineArgs());
 
             void unloadModel();
 
@@ -284,8 +283,8 @@ namespace OMVIS
              */
             void updateKeyMapValue(QString key);
 
-            /*! \brief Shows information about OMVis. */
-            void aboutOMVis() const;
+            /*! \brief Shows information about OMVIS. */
+            void aboutOMVIS() const;
 
             void help() const;
 
@@ -308,7 +307,7 @@ namespace OMVIS
             QAction* _exitAct;
             QAction* _mapInputAct;
             QAction* _dontCareAct;
-            QAction* _aboutOMVisAct;
+            QAction* _aboutOMVISAct;
             QAction* _helpAct;
             QAction* _perspectiveAct;
             QAction* _bgcAct;
@@ -340,9 +339,9 @@ namespace OMVIS
 
             /*! \brief This timer controls the frequency of the scene updates.
              *
-             * Its timeout() signal is connected to the \ref sceneUpdate method in order to trigger a scene update
-             * at constant time. The default value is 100 ms. It can be changed by the user via the simulation
-             * settings dialog.
+             * Its timeout() signal is connected to the \ref updateScene method in order to trigger a scene update at
+             * constant time. The default value is 100 ms. It can be changed by the user via the simulation settings
+             * dialog.
              */
             QTimer _visTimer;
 
@@ -353,14 +352,14 @@ namespace OMVIS
              */
             std::unique_ptr<Control::GUIController> _guiController;
 
-            /*! \brief The name of the logo file of OMVis. */
+            /*! \brief The name of the logo file of OMVIS. */
             const std::string _logo = "logo.osg";
         };
 
-    }  // End namespace View
-}  // End namespace OMVIS
+    }  // namespace View
+}  // namespace OMVIS
 
 #endif /* INCLUDE_OMVISVIEWER_HPP_ */
 /**
- * @}
+ * \}
  */

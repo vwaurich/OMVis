@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Util
- *  @{
+/** \addtogroup Util
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -34,31 +34,19 @@ namespace OMVIS
     namespace Util
     {
 
-        /*! \brief Multiplication of 3x3 Matrix and 3-Vector.
-         *
-         @param
-         @return
-         */
+        /*! \brief Multiplication of 3x3 Matrix and 3-Vector. */
         osg::Vec3f Mat3mulV3(const osg::Matrix3& M, const osg::Vec3f& V);
 
-        /*! \brief Multiplication of 3x3 Matrix and 3x3 Matrix.
-         *
-         @param
-         @return
-         */
+        /*! \brief Multiplication of 3x3 Matrix and 3x3 Matrix. */
         osg::Matrix3 Mat3mulMat3(const osg::Matrix3& M1, const osg::Matrix3& M2);
 
-        /*! \brief Multiplication of 3-col-Vector and a 3x3 Matrix.
-         *
-         * @param
-         @return
-         */
+        /*! \brief Multiplication of 3-col-Vector and a 3x3 Matrix. */
         osg::Vec3f V3mulMat3(const osg::Vec3f& V, const osg::Matrix3& M);
 
-    }  // End namespace Util
-}  // End namespace OMVIS
+    }  // namespace Util
+}  // namespace OMVIS
 
 #endif /* INCLUDE_ALGEBRA_HPP_ */
 /**
- * @}
+ * \}
  */

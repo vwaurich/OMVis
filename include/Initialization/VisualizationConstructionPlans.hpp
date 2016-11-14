@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Initialization
- *  @{
+/** \addtogroup Initialization
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Jun 2016
@@ -124,7 +124,7 @@ namespace OMVIS
              * \param path          Path to the model file.
              * \param hostAddress   Host address of the remote server.
              * \param port          The port to use for the connection to the remote server.
-             * \param workingDir    Local working directory for the remote visualization.
+             * \param wDir          Local working directory for the remote visualization.
              */
             RemoteVisualizationConstructionPlan(const std::string& modelFile, const std::string& path,
                                                 const std::string& hostAddress, const int port,
@@ -147,10 +147,10 @@ namespace OMVIS
             std::string wDir;
         };
 
-    }  // End namespace Initialization
-}  // End namespace OMVIS
+    }  // namespace Initialization
+}  // namespace OMVIS
 
 #endif /* INCLUDE_INITIALIZATION_VISUALIZATIONCONSTRUCTIONPLANS_HPP_ */
 /**
- * @}
+ * \}
  */

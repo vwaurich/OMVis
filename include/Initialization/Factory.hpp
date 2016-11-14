@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Initialization
- *  @{
+/** \addtogroup Initialization
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -40,7 +40,7 @@ namespace OMVIS
         /*! \brief The factory creates concrete OMVisualizer objects for model visualization from a given construction plan.
          *
          * In order to let the factory create a OMVisualizer object for the visualization of a FMU or MAT file or for
-         * remote FMU visualization, just call the method \ref createVisualizationObject with an appropriate
+         * remote FMU visualization, just call the method \ref createVisualizerObject with an appropriate
          * construction plan. See \ref VisualizationConstructionPlan and \ref RemoteVisualizationConstructionPlan for
          * more information about construction plans.
          */
@@ -84,10 +84,10 @@ namespace OMVIS
             std::shared_ptr<Model::VisualizerAbstract> createVisualizerObject(const VisualizationConstructionPlan* cP);
         };
 
-    }  // End namespace Initialization
-}  // End namespace OMVIS
+    }  //  namespace Initialization
+}  //  namespace OMVIS
 
 #endif /* INCLUDE_FACTORY_HPP_ */
 /**
- * @}
+ * \}
  */

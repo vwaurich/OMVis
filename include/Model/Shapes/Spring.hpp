@@ -20,8 +20,8 @@
 #ifndef INCLUDE_MODEL_SHAPES_SPRING_HPP_
 #define INCLUDE_MODEL_SHAPES_SPRING_HPP_
 
-/** @addtogroup Model
- *  @{
+/** \addtogroup Model
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -70,7 +70,10 @@ namespace OMVIS
             osg::ref_ptr<osg::Vec3Array> _splineVertices;
         };
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_MODEL_SHAPES_SPRING_HPP_ */
+/**
+ * \}
+ */

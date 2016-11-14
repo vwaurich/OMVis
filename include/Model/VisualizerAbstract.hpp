@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Model
- *  @{
+/** \addtogroup Model
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -70,8 +70,9 @@ namespace OMVIS
              *
              * \remark The model file and its corresponding visual XML file need to be in the same directory.
              *
-             * \param[in] modelFile Name of the model file.
-             * \param[in] path Path to the FMU or result file and corresponding XML file.
+             * \param modelFile  Name of the model file.
+             * \param path       Path to the FMU or result file and corresponding XML file.
+             * \param visType    The visualization type.
              */
             VisualizerAbstract(const std::string& modelFile, const std::string& path, const VisType visType =
                                        VisType::NONE);
@@ -164,8 +165,8 @@ namespace OMVIS
              * The viewer is initialized and the scene is set up.
              * The FMU is loaded if used, or the MAT file is read.
              *
-             * This method calls \ref clearXMLDoc, \ref initXMLDoc and \ref initVisObjects, which all throw
-             * a std::runtime_error in case of failure.
+             * This method calls \ref OMVisualBase::clearXMLDoc, \ref OMVisualBase::initXMLDoc and
+             * \ref OMVisualBase::initVisObjects. Each of this functions throws a std::runtime_error in case of failure.
              */
             virtual void initData();
 
@@ -186,7 +187,7 @@ namespace OMVIS
 
             /*! \brief Updates the visualization attributes after a time step has been performed.
              *
-             * This method is pure virtual and needs to be implemented by derived classes, e.g., \ref VsiualizerFMU
+             * This method is pure virtual and needs to be implemented by derived classes, e.g., \ref VisualizerFMU
              * and \ref VisualizerMAT.
              *
              * \param time  The visualization time.
@@ -206,5 +207,5 @@ namespace OMVIS
 
 #endif /* INCLUDE_VISUALIZERABSTRACT_HPP_ */
 /**
- * @}
+ * \}
  */

@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Util
- *  @{
+/** \addtogroup Util
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -45,29 +45,25 @@ namespace OMVIS
     namespace Util
     {
 
-        /*! \brief Checks if the given type is a cad file
-         */
+        /*! \brief Checks if the given type is a cad file. */
         inline bool isCADType(const std::string& type)
         {
             return (type.size() >= 12 && std::string(type.begin(), type.begin() + 11) == "modelica://");
         }
 
-        /*! \brief Checks if the given type is a dxf file
-         */
+        /*! \brief Checks if the given type is a dxf file. */
         inline bool dxfFileType(const std::string& typeName)
         {
             return typeName.substr(typeName.size() - 3) == std::string("dxf");
         }
 
-        /*! \brief Checks if the given type is a stl file
-         */
+        /*! \brief Checks if the given type is a stl file. */
         inline bool stlFileType(const std::string& typeName)
         {
             return typeName.substr(typeName.size() - 3) == std::string("stl");
         }
 
-        /*! \brief Get file name of the cad file
-         */
+        /*! \brief Get file name of the cad file. */
         inline std::string extractCADFilename(const std::string& s)
         {
             std::string fileKey = "modelica://";
@@ -75,27 +71,11 @@ namespace OMVIS
             return s2;
         }
 
-        /*! \brief Gets the type of the shape.
-         */
+        /*! \brief Gets the type of the shape. */
         inline std::string getShapeType(rapidxml::xml_node<>* node)
         {
             return node->first_node("type")->value();
         }
-
-//        inline bool exists(const std::string& name)
-//        {
-//            osgDB::ifstream f(name.c_str());
-//            if (f.good())
-//            {
-//                f.close();
-//                return true;
-//            }
-//            else
-//            {
-//                f.close();
-//                return false;
-//            }
-//        }
 
         /*! \brief Checks if the file is accessible. */
         inline bool fileExists(const std::string& file)
@@ -122,9 +102,9 @@ namespace OMVIS
         }
         /*! \brief Returns absolute path for the given path.
          *
-         * \remark: It seems to be no other platform independent way than boost::filesystem.
-         *          With the use of some ifdefs to encapsulate the platform dependent functions,
-         *          we could resolve the dependency from boost::filesystem. Or we wait for C++17 :-)
+         * \remark It seems to be no other platform independent way than boost::filesystem.
+         *         With the use of some ifdefs to encapsulate the platform dependent functions,
+         *         we could resolve the dependency from boost::filesystem. Or we wait for C++17 :-)
          */
         inline std::string makeAbsolutePath(const std::string& path)
         {
@@ -135,8 +115,8 @@ namespace OMVIS
 
         /*! \brief Functions that tests the given string to be a valid IPv4 address.
          *
-         * @param ipAddress The address to be tested.
-         * @return Boolean.
+         * \param ipAddress   The address to be tested.
+         * \return Boolean.
          */
         inline bool isValidIPv4(const std::string& ipAddress)
         {
@@ -163,8 +143,8 @@ namespace OMVIS
 
         /*! \brief Functions that tests the given string to be a valid IPv6 address.
          *
-         * @param ipAddress The address to be tested.
-         * @return Boolean.
+         * \param ipAddress   The address to be tested.
+         * \return Boolean.
          */
         inline bool isValidIPv6(const std::string& ipAddress)
         {
@@ -199,7 +179,7 @@ namespace OMVIS
          *
          * Example: /home/user/models/modelX.fmu --> /home/user/models/
          *
-         * @param[in] fileIn A full specified file, i.e., including path.
+         * \param fileIn   A full specified file, i.e., including path.
          */
         inline std::string getPath(const std::string& fileIn)
         {
@@ -212,7 +192,7 @@ namespace OMVIS
          *
          * Example: /home/user/models/modelX.fmu --> modelX.fmu
          *
-         * @param[in] fileIn A full specified file, i.e., including path.
+         * \param fileIn    A full specified file, i.e., including path.
          */
         inline std::string getFileName(const std::string& fileIn)
         {
@@ -235,9 +215,9 @@ namespace OMVIS
 
         /*! \brief Creates the name of the xml visual file from model name and path.
          *
-         * @param[in] modelFile Name of the file containing the model, e.g., modelFoo.fmu
-         * @param[in] path Path where the model file is stored, e.g., /home/usr/models/
-         * @return XML file name, e.g., /home/usr/models/modelFoo_visual.xml
+         * \param modelFile   Name of the file containing the model, e.g., modelFoo.fmu
+         * \param path        Path where the model file is stored, e.g., /home/usr/models/
+         * \return XML file name, e.g., /home/usr/models/modelFoo_visual.xml
          */
         inline std::string getXMLFileName(const std::string& modelFile, const std::string& path)
         {
@@ -266,9 +246,9 @@ namespace OMVIS
 
         /*! Checks if the visual XML file for the given model and path is present.
          *
-         * @param[in] modelFile Name of the file containing the model, e.g., modelFoo.fmu
-         * @param[in] path Path where the model file is stored, e.g., /home/usr/models/
-         * @return True, if the visual XML file exists in the path.
+         * \param modelFile   Name of the file containing the model, e.g., modelFoo.fmu
+         * \param path        Path where the model file is stored, e.g., /home/usr/models/
+         * \return True, if the visual XML file exists in the path.
          */
         inline bool checkForXMLFile(const std::string& modelFile, const std::string& path)
         {
@@ -277,10 +257,30 @@ namespace OMVIS
             return Util::fileExists(xmlFileName);
         }
 
+        /*! \brief Gets the number of shapes from a visual XML file.
+         *
+         * \param rootNode The root node of the XML file.
+         * \return The number of shape nodes.
+         */
+        inline unsigned int numShapes(rapidxml::xml_node<>* rootNode)
+        {
+            unsigned int num = 0;
+
+            if (nullptr != rootNode->first_node("shape"))
+            {
+                for (rapidxml::xml_node<>* shapeNode = rootNode->first_node("shape"); shapeNode; shapeNode = shapeNode->next_sibling())
+                {
+                    ++num;
+                }
+            }
+
+            return num;
+        }
+
     }  // namespace Util
 }  // namespace OMVIS
 
 #endif /* INCLUDE_UTIL_HPP_ */
 /**
- * @}
+ * \}
  */

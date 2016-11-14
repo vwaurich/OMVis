@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Model
- *  @{
+/** \addtogroup Model
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -151,7 +151,10 @@ namespace OMVIS
             AttributesReal* _attrReal;
         };
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_INPUTVALUES_HPP_ */
+/**
+ * \}
+ */

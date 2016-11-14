@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup View
- *  @{
+/** \addtogroup View
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -62,10 +62,7 @@ namespace OMVIS
              * INITIALIZATION METHODS
              *---------------------------------------*/
 
-            /*! \brief Sets up all nodes initially.
-             *
-             * \param
-             */
+            /*! \brief Sets up all nodes initially. */
             void setUpScene(const std::vector<Model::ShapeObject>& allShapes);
 
             /*-----------------------------------------
@@ -93,10 +90,10 @@ namespace OMVIS
             std::string _path;
         };
 
-    }  // End namespace Model
-}  // End namespace OMVIS
+    }  // namespace Model
+}  // namespace OMVIS
 
 #endif /* INCLUDE_OSGSCENE_HPP_ */
 /**
- * @}
+ * \}
  */

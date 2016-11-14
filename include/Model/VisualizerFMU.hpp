@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Model
- *  @{
+/** \addtogroup Model
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -44,10 +44,10 @@ namespace OMVIS
 
         /*! \brief This class handles the visualization of FMUs.
          *
-         * In contrast to \ref OMVisualizerMAT, this class provides user interaction via joystick devices to enable
+         * In contrast to \ref VisualizerMAT, this class provides user interaction via joystick devices to enable
          * steering the model.
          *
-         * The end time for FMU visualization is 100. This is set while allocation of the TimeManager object.
+         * The end time for FMU visualization is 100. This is set while allocation of the \ref Control::TimeManager object.
          */
         class VisualizerFMU : public VisualizerAbstract
         {
@@ -58,12 +58,12 @@ namespace OMVIS
 
             VisualizerFMU() = delete;
 
-            /*! \brief Constructs a OMVisualizerFMU object from the given arguments.
+            /*! \brief Constructs a VisualizerFMU object from the given arguments.
              *
              * Essentially, a FMU file and its path need to be specified.
              *
-             * \param fileName  Model file name without path.
-             * \param path      Path to the model file.
+             * \param modelFile  Model file name without path.
+             * \param path       Path to the model file.
              */
             VisualizerFMU(const std::string& modelFile, const std::string& path);
 
@@ -160,8 +160,7 @@ namespace OMVIS
              */
             void initializeVisAttributes(const double time = 0.0) override;
 
-            /*! \brief Helper function for OMVisualizerAbstract::setVarReferencesInVisAttributes
-             */
+            /*! \brief Helper function setVarReferencesInVisAttributes. */
             fmi1_value_reference_t getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr);
 
             /*! \brief Sets the variable references in the visualization attributes.
@@ -179,5 +178,5 @@ namespace OMVIS
 
 #endif /* INCLUDE_VISUALIZERFMU_HPP_ */
 /**
- * @}
+ * \}
  */

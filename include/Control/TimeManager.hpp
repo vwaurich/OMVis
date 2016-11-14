@@ -17,8 +17,8 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/** @addtogroup Control
- *  @{
+/** \addtogroup Control
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -54,12 +54,13 @@ namespace OMVIS
 
             /*! \brief Constructs a OMVisManager from the given arguments.
              *
-             * \param simTime       Current simulation time. In general, this is equal to the simulation start time.
-             * \param realTime      Current real time.
-             * \param visTime       Time of current scene update.
-             * \param hVisual       Step size for the scene updates.
-             * \param startTime     Simulation start time.
-             * \param endTime       Simulation end time.
+             * \param simTime         Current simulation time. In general, this is equal to the simulation start time.
+             * \param realTime        Current real time.
+             * \param realTimeFactor  Current real time factor.
+             * \param visTime         Time of current scene update.
+             * \param hVisual         Step size for the scene updates.
+             * \param startTime       Simulation start time.
+             * \param endTime         Simulation end time.
              *
              * \todo Can we remove some arguments? E.g., visTime might be set to a default value all time.
              */
@@ -162,10 +163,10 @@ namespace OMVIS
             int _sliderRange;
         };
 
-    }  // End namespace Control
-}  // End namespace OMVIS
+    }  // namespace Control
+}  // namespace OMVIS
 
 #endif /* INCLUDE_TIMEMANAGER_HPP_ */
 /**
- * @}
+ * \}
  */

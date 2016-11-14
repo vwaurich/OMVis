@@ -77,7 +77,7 @@ namespace OMVIS
                   _exitAct(nullptr),
                   _mapInputAct(nullptr),
                   _dontCareAct(nullptr),
-                  _aboutOMVisAct(nullptr),
+                  _aboutOMVISAct(nullptr),
                   _helpAct(nullptr),
                   _perspectiveAct(nullptr),
                   _bgcAct(nullptr),
@@ -213,8 +213,8 @@ namespace OMVIS
             //QObject::connect(_dontCareAct, SIGNAL(triggered()), this, SLOT());
 
             // Menu caption "Help".
-            _aboutOMVisAct = new QAction(tr("About OMVis..."), this);
-            QObject::connect(_aboutOMVisAct, SIGNAL(triggered()), this, SLOT(aboutOMVis()));
+            _aboutOMVISAct = new QAction(tr("About OMVis..."), this);
+            QObject::connect(_aboutOMVISAct, SIGNAL(triggered()), this, SLOT(aboutOMVIS()));
             _helpAct = new QAction(tr("Help..."), this);
             QObject::connect(_helpAct, SIGNAL(triggered()), this, SLOT(help()));
         }
@@ -244,7 +244,7 @@ namespace OMVIS
 
             // Menu caption "Help".
             _helpMenu = new QMenu(tr("&Help"), this);
-            _helpMenu->addAction(_aboutOMVisAct);
+            _helpMenu->addAction(_aboutOMVISAct);
             _helpMenu->addAction(_helpAct);
 
             // Add the menus to the menubar.
@@ -857,7 +857,7 @@ namespace OMVIS
             _sceneView->home();
         }
 
-        void OMVisViewer::aboutOMVis() const
+        void OMVisViewer::aboutOMVIS() const
         {
             QString information("OMVis - An open source tool for model and simulation visualization.<br><br>"
                                 "Copyright (C) 2016 Volker Waurich and Martin Flehmig,<br>"
