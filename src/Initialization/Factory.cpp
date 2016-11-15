@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Model/VisualizerFMU.hpp"
@@ -61,7 +61,7 @@ namespace OMVIS
             if (cP->visType == Model::VisType::FMU)
             {
                 result = std::shared_ptr<Model::VisualizerAbstract>(new Model::VisualizerFMU(cP->modelFile, cP->path));
-                LOGGER_WRITE("Initialize OMVisualizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
+                LOGGER_WRITE("Initialize VisualizerFMU.", Util::LC_LOADER, Util::LL_DEBUG);
             }
             // MAT file based visualization
             else if (cP->visType == Model::VisType::MAT)
@@ -81,13 +81,13 @@ namespace OMVIS
             else if (cP->visType == Model::VisType::MAT_REMOTE)
             {
                 // result = std::shared_ptr<Model::OMVisualizerAbstract> (new Model::OMVisualizerMATClient(cP.modelFile, cP.workingDirectory));
-                LOGGER_WRITE("Initialize OMVisualizerMAT. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER,
+                LOGGER_WRITE("Initialize VisualizerMATClient. Argh, wait. This is not yet implemented!!!", Util::LC_LOADER,
                              Util::LL_ERROR);
             }
             else
             {
                 std::string msg =
-                        "The construction plan does not have a valid visualization type. A OMVisualizerAbstract(nullptr) is returned.";
+                        "The construction plan does not have a valid visualization type. A VisualizerAbstract(nullptr) is returned.";
                 LOGGER_WRITE(msg, Util::LC_LOADER, Util::LL_ERROR);
                 throw std::runtime_error(msg);
             }

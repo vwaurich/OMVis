@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "Initialization/CommandLineArgs.hpp"
@@ -91,7 +91,7 @@ namespace OMVIS
         {
             if (!empty())
             {
-                cout << "\nHei, the command line arguments for OMVis are as follows:" << endl;
+                cout << "\nHei, the command line arguments for OMVIS are as follows:" << endl;
                 cout << "  Host: " << hostAddress << endl;
                 cout << "  Port: " << port << endl;
                 cout << "  Model File: " << modelFile << endl;
@@ -159,13 +159,13 @@ namespace OMVIS
                     if (0u != vm.count("help"))
                     {
                         cout << "Usage:" << endl;
-                        cout << " Local Visualization: OMVis --model=BouncingBall.fmu --path=/PATH/TO/BOUNCINGBALL/ "
+                        cout << " Local Visualization: OMVIS --model=BouncingBall.fmu --path=/PATH/TO/BOUNCINGBALL/ "
                              << endl;
-                        cout << "Remote Visualization: OMVis --host=HOSTNAME --port=PORT --model=BouncingBall.fmu "
+                        cout << "Remote Visualization: OMVIS --host=HOSTNAME --port=PORT --model=BouncingBall.fmu "
                              "--path=/PATH/TO/BOUNCINGBALL/ --wdir=/PATH/TO/WORKINGDIR/"
                              << endl;
                         cout << "\n" << endl;
-                        cout << "OMVis - An open source tool for model and simulation visualization" << endl;
+                        cout << "OMVIS - An open source tool for model and simulation visualization" << endl;
                         cout << "\n" << endl;
                         // Command line options
                         cout << desc << endl;

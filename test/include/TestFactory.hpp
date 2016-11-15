@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef TEST_INCLUDE_TESTFACTORY_HPP_
@@ -29,11 +29,11 @@
 #include <gtest/gtest.h>
 
 
-/*! \brief Class to test the factory of OMVis \ref OMVIS::Initialization::Factory.
+/*! \brief Class to test the factory of OMVIS \ref OMVIS::Initialization::Factory.
  *
  * The test fixtures test that the factory creates the right "product", i.e., if we visualize a
- * FMU we want a OMVisualizerFMU object to be created and if we visualize a MAT file we want a
- * OMVisualizerMAT object to be created. The default case is to create OMVisualizerAbstract object.
+ * FMU we want a VisualizerFMU object to be created and if we visualize a MAT file we want a
+ * VisualizerMAT object to be created. The default case is to create VisualizerAbstract object.
  */
 class TestOMVisFactory : public TestCommon
 {
@@ -61,7 +61,7 @@ class TestOMVisFactory : public TestCommon
     }
 };
 
-/*! Test the creation of an OMVisualizerFMU object by the factory. */
+/*! Test the creation of an VisualizerFMU object by the factory. */
 TEST_F (TestOMVisFactory, CreateOMVisualizerFMU)
 {
     // FMU.
@@ -69,7 +69,7 @@ TEST_F (TestOMVisFactory, CreateOMVisualizerFMU)
     EXPECT_EQ(OMVIS::Model::VisType::FMU, _omvisualizerAbstract->getVisType());
 }
 
-/*! Test the creation of an OMVisualizerMAT object by the factory. */
+/*! Test the creation of an VisualizerMAT object by the factory. */
 TEST_F (TestOMVisFactory, CreateOMVisualizerMAT)
 {
     // MAT.
