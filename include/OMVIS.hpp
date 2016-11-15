@@ -17,8 +17,8 @@
 * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/** @addtogroup OMVis
- *  @{
+/** \addtogroup OMVIS
+ *  \{
  *  \copyright TU Dresden. All rights reserved.
  *  \authors Volker Waurich, Martin Flehmig
  *  \date Feb 2016
@@ -30,9 +30,10 @@
 
 /*! \file OMVIS.hpp
  *
- * Header file that encapsulates all OMVis headers in order to provide one header to the application.
+ * Header file that encapsulates all OMVIS headers in order to provide one header to the application.
  */
 
+#include "View/OMVISViewer.hpp"
 #include "Model/SimSettingsFMU.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Model/InfoVisitor.hpp"
@@ -40,7 +41,6 @@
 #include "Control/TimeManager.hpp"
 #include "Initialization/CommandLineArgs.hpp"
 #include "Initialization/Factory.hpp"
-#include "View/OMVisViewer.hpp"
 #include "Util/Visualize.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
@@ -49,5 +49,5 @@
 
 #endif /* INCLUDE_OMVIS_HPP_ */
 /**
- * @}
+ * \}
  */

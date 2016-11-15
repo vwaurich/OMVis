@@ -65,7 +65,7 @@ namespace OMVIS
          * Since we use a toolbar, we have to derive from QMainWindow. In order to visualize the models, we have to
          * inherit from osgViewer::CompositeViewer.
          */
-        class OMVisViewer : public QMainWindow, public osgViewer::CompositeViewer
+        class OMVISViewer : public QMainWindow, public osgViewer::CompositeViewer
         {
         Q_OBJECT
 
@@ -75,19 +75,19 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! \brief Constructs the OMVisViewer from command line arguments. */
-            OMVisViewer(QWidget* parent = Q_NULLPTR, const Initialization::CommandLineArgs& clArgs =
+            OMVISViewer(QWidget* parent = Q_NULLPTR, const Initialization::CommandLineArgs& clArgs =
                                 Initialization::CommandLineArgs());
 
-            OMVisViewer(const OMVisViewer& rhs) = delete;
+            OMVISViewer(const OMVISViewer& rhs) = delete;
 
-            OMVisViewer& operator=(const OMVisViewer& rhs) = delete;
+            OMVISViewer& operator=(const OMVISViewer& rhs) = delete;
 
             /*! \brief Destructs the OMVisViewer object and frees memory.
              *
              * Since we use smart pointers where possible, we do not need to call delete explicitly.
              * The Qt stuff uses the parent-child model and thus memory is freed automatically.
              */
-            ~OMVisViewer() = default;
+            ~OMVISViewer() = default;
 
          private:
             /*! \brief Constructs the OMVisViewer object from arguments.
@@ -98,7 +98,7 @@ namespace OMVIS
              * \param flags             Window flags for initialization of QWidget Baseclass.
              * \param threadingModel    The threading model.
              */
-            OMVisViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel =
+            OMVISViewer(QWidget* parent = Q_NULLPTR, osgViewer::ViewerBase::ThreadingModel threadingModel =
                                 osgViewer::CompositeViewer::SingleThreaded,
                         const Initialization::CommandLineArgs& clArgs = Initialization::CommandLineArgs());
 

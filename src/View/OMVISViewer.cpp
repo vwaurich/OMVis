@@ -17,7 +17,7 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "View/OMVisViewer.hpp"
+#include "View/OMVISViewer.hpp"
 #include "View/Dialogs.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Algebra.hpp"
@@ -57,13 +57,13 @@ namespace OMVIS
          * CONSTRUCTORS
          *---------------------------------------*/
 
-        OMVisViewer::OMVisViewer(QWidget* parent, const Initialization::CommandLineArgs& clArgs)
-                : OMVisViewer(parent, osgViewer::CompositeViewer::SingleThreaded, clArgs)
+        OMVISViewer::OMVISViewer(QWidget* parent, const Initialization::CommandLineArgs& clArgs)
+                : OMVISViewer(parent, osgViewer::CompositeViewer::SingleThreaded, clArgs)
         {
 
         }
 
-        OMVisViewer::OMVisViewer(QWidget* parent, osgViewer::ViewerBase::ThreadingModel threadingModel,
+        OMVISViewer::OMVISViewer(QWidget* parent, osgViewer::ViewerBase::ThreadingModel threadingModel,
                                  const Initialization::CommandLineArgs& clArgs)
                 : QMainWindow(parent, Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint),
                   osgViewer::CompositeViewer(),
@@ -149,7 +149,7 @@ namespace OMVIS
          * INITIALIZATION FUNCTIONS
          *---------------------------------------*/
 
-        void OMVisViewer::setupWidgets()
+        void OMVISViewer::setupWidgets()
         {
             // Show logo
             osg::ref_ptr<osg::Node> rootNode = osgDB::readNodeFile(_logo);
@@ -165,7 +165,7 @@ namespace OMVIS
         }
 
         // Assemble the widgets to a layout and create the father of all widgets with this layout.
-        void OMVisViewer::createLayout()
+        void OMVISViewer::createLayout()
         {
             assert(_osgViewerWidget != nullptr);
             assert(_controlElementWidget != nullptr);
@@ -176,7 +176,7 @@ namespace OMVIS
             setCentralWidget(_centralWidget);
         }
 
-        void OMVisViewer::createActions()
+        void OMVISViewer::createActions()
         {
             // Menu caption "File".
             _openAct = new QAction(tr("Open..."), this);
@@ -213,13 +213,13 @@ namespace OMVIS
             //QObject::connect(_dontCareAct, SIGNAL(triggered()), this, SLOT());
 
             // Menu caption "Help".
-            _aboutOMVISAct = new QAction(tr("About OMVis..."), this);
+            _aboutOMVISAct = new QAction(tr("About OMVIS..."), this);
             QObject::connect(_aboutOMVISAct, SIGNAL(triggered()), this, SLOT(aboutOMVIS()));
             _helpAct = new QAction(tr("Help..."), this);
             QObject::connect(_helpAct, SIGNAL(triggered()), this, SLOT(help()));
         }
 
-        void OMVisViewer::createMenuBar()
+        void OMVISViewer::createMenuBar()
         {
             // Menu caption "File".
             _fileMenu = new QMenu(tr("&File"), this);
@@ -254,7 +254,7 @@ namespace OMVIS
             menuBar()->addMenu(_helpMenu);
         }
 
-        QWidget* OMVisViewer::setupOSGViewerWidget(const osg::ref_ptr<osg::Node> rootNode)
+        QWidget* OMVISViewer::setupOSGViewerWidget(const osg::ref_ptr<osg::Node> rootNode)
         {
             //the osg-viewer widget
             osg::ref_ptr<osgQt::GraphicsWindowQt> window = createGraphicsWindow(0, 0, 100, 100);
@@ -266,7 +266,7 @@ namespace OMVIS
             return setupViewWidget(window, rootNode);
         }
 
-        QWidget* OMVisViewer::setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw,
+        QWidget* OMVISViewer::setupViewWidget(osg::ref_ptr<osgQt::GraphicsWindowQt> gw,
                                               const osg::ref_ptr<osg::Node> rootNode)
         {
             _sceneView = new osgViewer::View();
@@ -290,7 +290,7 @@ namespace OMVIS
             return gw->getGLWidget();
         }
 
-        osg::ref_ptr<osgQt::GraphicsWindowQt> OMVisViewer::createGraphicsWindow(int x, int y, int w, int h,
+        osg::ref_ptr<osgQt::GraphicsWindowQt> OMVISViewer::createGraphicsWindow(int x, int y, int w, int h,
                                                                                 const std::string& name,
                                                                                 bool windowDecoration)
         {
@@ -311,12 +311,12 @@ namespace OMVIS
             return new osgQt::GraphicsWindowQt(traits.get());
         }
 
-        void OMVisViewer::paintEvent(QPaintEvent* /*event*/)
+        void OMVISViewer::paintEvent(QPaintEvent* /*event*/)
         {
             frame();
         }
 
-        void OMVisViewer::setupTimeSliderWidget()
+        void OMVISViewer::setupTimeSliderWidget()
         {
             _timeSlider = new QSlider(Qt::Horizontal, this);
             _timeSlider->setFixedHeight(30);
@@ -336,7 +336,7 @@ namespace OMVIS
             QObject::connect(_timeSlider, SIGNAL(sliderMoved(int)), this, SLOT(setVisTimeSlotFunction(int)));
         }
 
-        QWidget* OMVisViewer::setupControlElementWidget()
+        QWidget* OMVISViewer::setupControlElementWidget()
         {
             auto playButton = new QPushButton("Play", this);
             auto pauseButton = new QPushButton("Pause", this);
@@ -368,35 +368,35 @@ namespace OMVIS
          * SLOT FUNCTIONS
          *---------------------------------------*/
 
-        void OMVisViewer::playSlotFunction()
+        void OMVISViewer::playSlotFunction()
         {
             _guiController->startVisualization();
         }
 
-        void OMVisViewer::pauseSlotFunction()
+        void OMVISViewer::pauseSlotFunction()
         {
             _guiController->pauseVisualization();
         }
 
-        void OMVisViewer::initSlotFunction()
+        void OMVISViewer::initSlotFunction()
         {
             _guiController->initVisualization();
         }
 
-        void OMVisViewer::updateScene()
+        void OMVISViewer::updateScene()
         {
             _guiController->sceneUpdate();
             updateTimingElements();
         }
 
-        void OMVisViewer::setVisTimeSlotFunction(int val)
+        void OMVISViewer::setVisTimeSlotFunction(int val)
         {
             _guiController->setVisTime(val);
             _guiController->sceneUpdate();
         }
 
         /// \todo FIXME We the user clicks "Cancel" the error message is shown.
-        void OMVisViewer::open(const Initialization::CommandLineArgs& clArgs)
+        void OMVISViewer::open(const Initialization::CommandLineArgs& clArgs)
         {
             try
             {
@@ -459,7 +459,7 @@ namespace OMVIS
         }
 
         //MF: Compute on a server, visualize on localhost
-        void OMVisViewer::openRemoteConnection(const Initialization::CommandLineArgs& clArgs)
+        void OMVISViewer::openRemoteConnection(const Initialization::CommandLineArgs& clArgs)
         {
             try
             {
@@ -513,7 +513,7 @@ namespace OMVIS
             }
             catch (std::exception& ex)
             {
-                QMessageBox::critical(nullptr, QString("Error OMVis"), QString(ex.what()));
+                QMessageBox::critical(nullptr, QString("Error OMVIS"), QString(ex.what()));
                 std::cout << ex.what();
             }
 
@@ -521,7 +521,7 @@ namespace OMVIS
             _simSettingsAct->setEnabled(true);
         }
 
-        void OMVisViewer::unloadModel()
+        void OMVISViewer::unloadModel()
         {
             LOGGER_WRITE("Unload model...", Util::LC_LOADER, Util::LL_INFO);
             _guiController->unloadModel();
@@ -539,17 +539,17 @@ namespace OMVIS
             _sceneView->setSceneData(rootNode);
         }
 
-        void OMVisViewer::exportVideo()
+        void OMVISViewer::exportVideo()
         {
             QMessageBox::warning(nullptr, QString("Information"), QString("This functionality might come soon."));
         }
 
-        void OMVisViewer::openDialogInputMapper()
+        void OMVISViewer::openDialogInputMapper()
         {
             // Proceed, if a model is already loaded. Otherwise give the user a hint to load a model first.
             if (!_guiController->modelIsLoaded())
             {
-                QString information("Please load a model into OMVis first.");
+                QString information("Please load a model into OMVIS first.");
                 QMessageBox msgBox(QMessageBox::Information, tr("No Model Loaded"), information, QMessageBox::NoButton);
                 msgBox.setStandardButtons(QMessageBox::Close);
                 msgBox.exec();
@@ -656,7 +656,7 @@ namespace OMVIS
             }
         }
 
-        QHBoxLayout* OMVisViewer::createInputMapperRow(const int inputIdx, const std::string& varName,
+        QHBoxLayout* OMVISViewer::createInputMapperRow(const int inputIdx, const std::string& varName,
                                                        const std::string& type) const
         {
             auto inputRow = new QHBoxLayout();
@@ -694,7 +694,7 @@ namespace OMVIS
             return inputRow;
         }
 
-        void OMVisViewer::updateKeyMapValue(QString /*varToKey*/)
+        void OMVISViewer::updateKeyMapValue(QString /*varToKey*/)
         {
 //    std::string varToKeyString = varToKey.toStdString();
 //    int posKey = varToKeyString.find(" -> ");
@@ -713,7 +713,7 @@ namespace OMVIS
 //    fmuVisualizer->_inputData.printKeyToInputMap();
         }
 
-        void OMVisViewer::perspectiveDialog()
+        void OMVISViewer::perspectiveDialog()
         {
             PerspectiveSettingDialog dialog(this);
             if (0 != dialog.exec())
@@ -737,7 +737,7 @@ namespace OMVIS
             }
         }
 
-        void OMVisViewer::simSettingsDialog()
+        void OMVISViewer::simSettingsDialog()
         {
             if (_guiController->modelIsLoaded())
             {
@@ -768,7 +768,7 @@ namespace OMVIS
             }
         }
 
-        void OMVisViewer::backgroundColorDialog()
+        void OMVISViewer::backgroundColorDialog()
         {
             BackgroundColorSettingDialog dialog(this);
             if (0 != dialog.exec())
@@ -802,7 +802,7 @@ namespace OMVIS
             }
         }
 
-        void OMVisViewer::cameraPositionXY()
+        void OMVISViewer::cameraPositionXY()
         {
             resetCamera();
             //the new orientation
@@ -818,7 +818,7 @@ namespace OMVIS
             manipulator->setByMatrix(mat);
         }
 
-        void OMVisViewer::cameraPositionYZ()
+        void OMVISViewer::cameraPositionYZ()
         {
             //to get the correct distance of the bodies, reset to home position and use the values of this camera position
             resetCamera();
@@ -835,7 +835,7 @@ namespace OMVIS
             manipulator->setByMatrix(mat);
         }
 
-        void OMVisViewer::cameraPositionXZ()
+        void OMVISViewer::cameraPositionXZ()
         {
             //to get the correct distance of the bodies, reset to home position and use the values of this camera position
             resetCamera();
@@ -852,32 +852,32 @@ namespace OMVIS
             manipulator->setByMatrix(mat);
         }
 
-        void OMVisViewer::resetCamera()
+        void OMVISViewer::resetCamera()
         {
             _sceneView->home();
         }
 
-        void OMVisViewer::aboutOMVIS() const
+        void OMVISViewer::aboutOMVIS() const
         {
-            QString information("OMVis - An open source tool for model and simulation visualization.<br><br>"
+            QString information("OMVIS - An open source tool for model and simulation visualization<br><br>"
                                 "Copyright (C) 2016 Volker Waurich and Martin Flehmig,<br>"
                                 "TU Dresden, Federal Republic of Germany"
                                 "<p>Version: 0.01 <br>"
                                 "License: GPLv3, see LICENSE file<br>"
                                 "Website: https://github.com/vwaurich/OMVis<br></p>"
-                                "<p><b>OMVis</b> is a tool to visualize and animate simulation models. "
+                                "<p><b>OMVIS</b> is a tool to visualize and animate simulation models. "
                                 "It is meant to visualize models from different simulation tools. "
-                                "What shall be visualized is described in a XML-file and the result files "
+                                "What shall be visualized is described in a XML file and the result files "
                                 "provide the corresponding data."
                                 "Besides the animation of result files, there is a possibility to animate "
                                 "multibody-systems with a FMU interactively.</p>");
 
-            QMessageBox msgBox(QMessageBox::Information, tr("About OMVis"), information, QMessageBox::NoButton);
+            QMessageBox msgBox(QMessageBox::Information, tr("About OMVIS"), information, QMessageBox::NoButton);
             msgBox.setStandardButtons(QMessageBox::Close);
             msgBox.exec();
         }
 
-        void OMVisViewer::help() const
+        void OMVISViewer::help() const
         {
             QString information("<p><b>Useful Keyboard Bindings:</b>"
                                 "<ul>"
@@ -904,20 +904,20 @@ namespace OMVIS
          * OTHER FUNCTIONS
          *---------------------------------------*/
 
-        void OMVisViewer::resetTimingElements()
+        void OMVISViewer::resetTimingElements()
         {
             _timeSlider->setSliderPosition(0);
             _timeDisplay->setText(QString("Time [s]: ").append(QString::fromStdString("")));
             _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::fromStdString("")));
         }
 
-        void OMVisViewer::updateTimingElements()
+        void OMVISViewer::updateTimingElements()
         {
             updateTimeDisplays();
             updateTimeSliderPosition();
         }
 
-        void OMVisViewer::updateTimeDisplays()
+        void OMVISViewer::updateTimeDisplays()
         {
             double visTime = _guiController->getVisTime();
             double rtf = _guiController->getRealTimeFactor();
@@ -925,7 +925,7 @@ namespace OMVIS
             _RTFactorDisplay->setText(QString("RT-Factor: ").append(QString::number(rtf)));
         }
 
-        void OMVisViewer::updateTimeSliderPosition()
+        void OMVISViewer::updateTimeSliderPosition()
         {
             int newPos = _guiController->getTimeProgress();
             // Check if newPos in the sliders range. If not give out a warning and reset position.
@@ -952,13 +952,13 @@ namespace OMVIS
             _timeSlider->setSliderPosition(newPos);
         }
 
-        void OMVisViewer::disableTimeSlider()
+        void OMVISViewer::disableTimeSlider()
         {
             //_timeSlider->blockSignals(true);
             _timeSlider->setEnabled(false);
         }
 
-        void OMVisViewer::enableTimeSlider()
+        void OMVISViewer::enableTimeSlider()
         {
             _timeSlider->blockSignals(false);
             _timeSlider->setEnabled(true);
