@@ -17,10 +17,10 @@
  * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEST_INCLUDE_TESTOMVISUALBASE_HPP_
-#define TEST_INCLUDE_TESTOMVISUALBASE_HPP_
+#ifndef TEST_INCLUDE_TESTVISUALBASE_HPP_
+#define TEST_INCLUDE_TESTVISUALBASE_HPP_
 
-#include "Model/OMVisualBase.hpp"
+#include <Model/VisualBase.hpp>
 #include "TestCommon.hpp"
 #include "Util/Util.hpp"
 
@@ -29,7 +29,7 @@
 class TestOMVisualBase : public TestCommon
 {
  public:
-    OMVIS::Model::OMVisualBase* _omVisualBase;
+    OMVIS::Model::VisualBase* _omVisualBase;
     static const std::string modelFile;
     static const std::string path;
 
@@ -37,7 +37,7 @@ class TestOMVisualBase : public TestCommon
             : TestCommon(modelFile, path),
               _omVisualBase(nullptr)
     {
-        _omVisualBase = new OMVIS::Model::OMVisualBase(constructionPlan->modelFile, constructionPlan->path);
+        _omVisualBase = new OMVIS::Model::VisualBase(constructionPlan->modelFile, constructionPlan->path);
     }
 
     void SetUp()
@@ -100,4 +100,4 @@ TEST_F (TestOMVisualBase, clearXMLDoc)
 }
 
 
-#endif /* TEST_INCLUDE_TESTOMVISUALBASE_HPP_ */
+#endif /* TEST_INCLUDE_TESTVISUALBASE_HPP_ */

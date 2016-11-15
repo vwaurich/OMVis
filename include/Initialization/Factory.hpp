@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \addtogroup Initialization
@@ -37,9 +37,9 @@ namespace OMVIS
     namespace Initialization
     {
 
-        /*! \brief The factory creates concrete OMVisualizer objects for model visualization from a given construction plan.
+        /*! \brief The factory creates concrete Visualizer objects for model visualization from a given construction plan.
          *
-         * In order to let the factory create a OMVisualizer object for the visualization of a FMU or MAT file or for
+         * In order to let the factory create a Visualizer object for the visualization of a FMU or MAT file or for
          * remote FMU visualization, just call the method \ref createVisualizerObject with an appropriate
          * construction plan. See \ref VisualizationConstructionPlan and \ref RemoteVisualizationConstructionPlan for
          * more information about construction plans.
@@ -69,9 +69,9 @@ namespace OMVIS
 
             /*! \brief Creates a new visualization object according to the given construction plan.
              *
-             * According to the given construction plan, a OMVisualizerFMU, OMVisualizerMAT or OMVisualizerFMUClient
-             * object is created and a pointer to this object is returned. If the construction fails, a nullptr is
-             * returned. The caller method is responsible to handle this.
+             * According to the given construction plan, a VisualizerFMU, VisualizerMAT or VisualizerFMUClient object
+             * is created and a pointer to this object is returned. If the construction fails, a nullptr is returned.
+             * The caller method is responsible to handle this.
              * The construction plan can be of type \ref VisualizationConstructionPlan or
              * \ref RemoteVisualizationConstructionPlan for remote visualization.
              *
@@ -79,7 +79,7 @@ namespace OMVIS
              *         exception of type std::runtime_error is thrown.
              *
              * \param   cP Construction plan for visualization.
-             * \return  Pointer to allocated OMVisualizer object or nullptr if OMVisualizer object cannot be created.
+             * \return  Pointer to allocated Visualizer object or nullptr if Visualizer object cannot be created.
              */
             std::shared_ptr<Model::VisualizerAbstract> createVisualizerObject(const VisualizationConstructionPlan* cP);
         };

@@ -19,13 +19,13 @@
 
 #include <gtest/gtest.h>
 #include <TestFactory.hpp>
+#include <TestVisualBase.hpp>
 #include <TestVisualizerFMU.hpp>
 
 #include "Util/Logger.hpp"
 #include "TestUtil.hpp"
 #include "TestVisualizationConstructionPlans.hpp"
 #include "TestCommon.hpp"
-#include "TestOMVisualBase.hpp"
 #include "TestTimeManager.hpp"
 
 

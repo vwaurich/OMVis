@@ -1,8 +1,20 @@
 /*
- * OkCancelHelpButtonBox.hpp
+ * Copyright (C) 2016, Volker Waurich
  *
- *  Created on: 17.10.2016
- *      Author: mf
+ * This file is part of OMVIS.
+ *
+ * OMVIS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OMVIS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef INCLUDE_VIEW_DIALOGS_OKCANCELHELPBUTTONBOX_HPP_
@@ -53,7 +65,7 @@ namespace OMVIS
             QVBoxLayout* _okCancelHelpButtonLayout;
         };
 
-    }  // End namespace View
-}  // End namespace OMVIS
+    }  // namespace View
+}  // namespace OMVIS
 
 #endif /* INCLUDE_VIEW_DIALOGS_OKCANCELHELPBUTTONBOX_HPP_ */

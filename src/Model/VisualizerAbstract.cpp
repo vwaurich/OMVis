@@ -47,7 +47,7 @@ namespace OMVIS
                                                const VisType visType)
                 : _visType(visType),
                   _baseData(nullptr),
-                  _viewerStuff(std::make_shared<OMVisScene>()),
+                  _viewerStuff(std::make_shared<OMVISScene>()),
                   _nodeUpdater(std::make_shared<Model::UpdateVisitor>()),
                   _timeManager(std::make_shared<Control::TimeManager>(0.0, 0.0, 0.0, 0.0, 0.1, 0.0, 100.0))
         {
@@ -59,7 +59,7 @@ namespace OMVIS
             std::string fullPath = bPath.string();
 
             // Now we can use the full path.
-            _baseData = std::make_shared<OMVisualBase>(modelFile, fullPath);
+            _baseData = std::make_shared<VisualBase>(modelFile, fullPath);
             _viewerStuff->getScene()->setPath(fullPath);
         }
 
@@ -101,7 +101,7 @@ namespace OMVIS
             return _visType;
         }
 
-        std::shared_ptr<OMVisualBase> VisualizerAbstract::getBaseData() const
+        std::shared_ptr<VisualBase> VisualizerAbstract::getBaseData() const
         {
             return _baseData;
         }
@@ -111,7 +111,7 @@ namespace OMVIS
             return _timeManager;
         }
 
-        std::shared_ptr<OMVisScene> VisualizerAbstract::getOMVisScene() const
+        std::shared_ptr<OMVISScene> VisualizerAbstract::getOMVISScene() const
         {
             return _viewerStuff;
         }

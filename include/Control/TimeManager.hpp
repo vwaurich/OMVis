@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \addtogroup Control
@@ -34,14 +34,14 @@ namespace OMVIS
     namespace Control
     {
 
-        /*! \brief This class manages the timing for OMVis.
+        /*! \brief This class manages the timing for OMVIS.
          *
-         * Since we have at least three different time levels, namely simulation time, visualization time and
-         * real time, we need a manager to properly handle them.
+         * Since we have at least three different time levels, namely simulation time, visualization time and real
+         * time, we need a manager to properly handle them.
          *
-         * The OMVisManager object also stores the time slider range of the GUI and computes its position during
-         * the simulation run. On the other hand, if the user moves the time slider, the OMVisManager computes the
-         * according simulation time from the new position of the slider.
+         * The TimeManager object also stores the time slider range of the GUI and computes its position during the
+         * simulation run. On the other hand, if the user moves the time slider, the TimeManager computes the according
+         * simulation time from the new position of the slider.
          */
         class TimeManager
         {
@@ -52,7 +52,7 @@ namespace OMVIS
 
             TimeManager() = delete;
 
-            /*! \brief Constructs a OMVisManager from the given arguments.
+            /*! \brief Constructs a TimeManager from the given arguments.
              *
              * \param simTime         Current simulation time. In general, this is equal to the simulation start time.
              * \param realTime        Current real time.

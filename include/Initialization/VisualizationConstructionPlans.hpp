@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \addtogroup Initialization
@@ -41,7 +41,7 @@ namespace OMVIS
 
         /*! \brief This class represents a construction plan for a local visualization of a simulation.
          *
-         * This class holds the necessary information to let the factory create a OMVisualizer object. The computation
+         * This class holds the necessary information to let the factory create a Visualizer object. The computation
          * and visualization is done on the localhost.
          *
          * A construction plan is fully specified by the name of the FMU or MAT file. The name includes the path to the
@@ -89,7 +89,7 @@ namespace OMVIS
 
         /*! \brief This class represents a construction plan for a remote visualization of a simulation.
          *
-         * This class holds the necessary information to let the factory create a OMVisualizer[FMU|MAT]Client object.
+         * This class holds the necessary information to let the factory create a Visualizer[FMU|MAT]Client object.
          * The computation is performed on the remote server whereas the visualization is done on the localhost.
          *
          * A construction plan is fully specified by the following attributes:

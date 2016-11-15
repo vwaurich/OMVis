@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \addtogroup Control
@@ -80,7 +80,7 @@ namespace OMVIS
              * This method gets a construction plan and asks the \ref Initialization::Factory to create an
              * appropriate Visualizer object. If this Visualizer object can be initialized without errors, it is
              * taken as new visualization model.
-             * If a model is already loaded into OMVis and the new model cannot be loaded, for instance due to a
+             * If a model is already loaded into OMVIS and the new model cannot be loaded, for instance due to a
              * compatibility issue, than the old model is kept. If the already load and the new model are the very
              * same, no information/message is thrown. We just load it and destroy the current settings.
              *
@@ -157,9 +157,9 @@ namespace OMVIS
              */
             osg::ref_ptr<osg::Node> getSceneRootNode() const;
 
-            /*! \brief Sets the visualization time handled by the OMVisManager object.
+            /*! \brief Sets the visualization time handled by the TimeManager object.
              *
-             * This method is called by \ref View::OMVisViewer if the user moves the time slider.
+             * This method is called by \ref View::OMVISViewer if the user moves the time slider.
              *
              * \param val   The new value of the time slider.
              */
@@ -183,7 +183,7 @@ namespace OMVIS
             /*! \brief Returns name of the model. */
             std::string getModelFile() const;
 
-            /*! \brief Returns true, if a model is loaded into OMVis, i.e., the Visualizer object is not nullptr. */
+            /*! \brief Returns true, if a model is loaded into OMVIS, i.e., the Visualizer object is not nullptr. */
             bool modelIsLoaded();
 
             /*! \brief Gets the InputData from the Visualizer object in case of FMU or remote FMU visualization.
@@ -224,7 +224,7 @@ namespace OMVIS
 
             /*! \brief Pointer to the Visualizer object, which handles the model visualization.
              *
-             * OMVis provides three concrete implementations of \ref Model::VisualizerAbstract class:
+             * OMVIS provides three concrete implementations of \ref Model::VisualizerAbstract class:
              *  1. \ref Model::VisualizerMAT for visualization of simulation results present in MAT file format.
              *  2. \ref Model::VisualizerFMU for FMU simulations.
              *  3. \ref Model::VisualizerFMUClient for FMU simulations whereas the FMU is computed on a remote system.

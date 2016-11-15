@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 2016, Volker Waurich
  *
- * This file is part of OMVis.
+ * This file is part of OMVIS.
  *
- * OMVis is free software: you can redistribute it and/or modify
+ * OMVIS is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * OMVis is distributed in the hope that it will be useful,
+ * OMVIS is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OMVis.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OMVIS.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /** \addtogroup Model
@@ -27,9 +27,9 @@
 #ifndef INCLUDE_VISUALIZERABSTRACT_HPP_
 #define INCLUDE_VISUALIZERABSTRACT_HPP_
 
+#include <Model/OMVISScene.hpp>
+#include <Model/VisualBase.hpp>
 #include "Control/TimeManager.hpp"
-#include "Model/OMVisScene.hpp"
-#include "Model/OMVisualBase.hpp"
 #include "Model/UpdateVisitor.hpp"
 #include "Model/VisualizationTypes.hpp"
 #include "Model/SimSettings.hpp"
@@ -104,11 +104,11 @@ namespace OMVIS
             /*! \brief Returns VisType::NONE. */
             VisType getVisType() const;
 
-            std::shared_ptr<OMVisualBase> getBaseData() const;
+            std::shared_ptr<VisualBase> getBaseData() const;
 
             std::shared_ptr<Control::TimeManager> getTimeManager() const;
 
-            std::shared_ptr<OMVisScene> getOMVisScene() const;
+            std::shared_ptr<OMVISScene> getOMVISScene() const;
 
             std::string getModelFile() const;
 
@@ -146,8 +146,8 @@ namespace OMVIS
 
             /** \brief Every Visualizer object knows its type, i.e., the visualization mode. */
             const VisType _visType;
-            std::shared_ptr<OMVisualBase> _baseData;
-            std::shared_ptr<OMVisScene> _viewerStuff;
+            std::shared_ptr<VisualBase> _baseData;
+            std::shared_ptr<OMVISScene> _viewerStuff;
             std::shared_ptr<UpdateVisitor> _nodeUpdater;
             std::shared_ptr<Control::TimeManager> _timeManager;
 
@@ -159,14 +159,14 @@ namespace OMVIS
              * INITIALIZATION METHODS
              *---------------------------------------*/
 
-            /*! \brief Initializes the OMVisualBase object.
+            /*! \brief Initializes the VisualBase object.
              *
              * The visual XML file is parsed and the values of the attributes are set.
              * The viewer is initialized and the scene is set up.
              * The FMU is loaded if used, or the MAT file is read.
              *
-             * This method calls \ref OMVisualBase::clearXMLDoc, \ref OMVisualBase::initXMLDoc and
-             * \ref OMVisualBase::initVisObjects. Each of this functions throws a std::runtime_error in case of failure.
+             * This method calls \ref VisualBase::clearXMLDoc, \ref VisualBase::initXMLDoc and
+             * \ref VisualBase::initVisObjects. Each of this functions throws a std::runtime_error in case of failure.
              */
             virtual void initData();
 
