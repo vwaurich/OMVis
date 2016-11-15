@@ -353,7 +353,7 @@ namespace OMVIS
             std::unique_ptr<Control::GUIController> _guiController;
 
             /*! \brief The name of the logo file of OMVIS. */
-            const std::string _logo = "logo.osg";
+            const std::string _logo = "OMVISLogo.osg";
         };
 
     }  // namespace View
