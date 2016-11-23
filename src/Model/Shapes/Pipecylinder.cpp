@@ -21,6 +21,7 @@
 
 #define _USE_MATH_DEFINES // for C++
 #include <cmath>
+#include <math.h>
 
 #include <iostream>
 

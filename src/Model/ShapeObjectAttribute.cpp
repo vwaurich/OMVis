@@ -33,9 +33,9 @@ namespace OMVIS
         {
         }
 
-        ShapeObjectAttribute::ShapeObjectAttribute(const float value)
+        ShapeObjectAttribute::ShapeObjectAttribute(double value)
                 : isConst(true),
-                  exp(value),
+                  exp((float)value),
                   cref("NONE"),
                   fmuValueRef(0)
         {
