@@ -42,7 +42,7 @@ namespace OMVIS
 
             ShapeObjectAttribute();
 
-            ShapeObjectAttribute(const float value);
+            ShapeObjectAttribute(double value);
 
             ~ShapeObjectAttribute() = default;
 
