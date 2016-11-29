@@ -113,7 +113,7 @@ namespace OMVIS
 				//std::cout<<"SHAPE "<<draw->getShape()->className()<<std::endl;
 				node.addDrawable(draw.get());
 			}
-			if (_shape._type.compare("unknown") != 0)
+			if (_shape._type.compare("dxf") != 0)
 			{
 				//std::cout << "set color for " << _shape._id << std::endl;
 				//osg::Material *material = dynamic_cast<osg::Material*>(ss->getAttribute(osg::StateAttribute::MATERIAL));

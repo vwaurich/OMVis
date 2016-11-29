@@ -84,9 +84,9 @@ namespace OMVIS
 					DXFile* shape = new DXFile(name);
 					geode = new osg::Geode();
 					geode->addDrawable(shape);
-					osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
-					ss->setAttribute(material.get());
-					geode->setStateSet(ss);
+					//osg::ref_ptr<osg::StateSet> ss = geode->getOrCreateStateSet();
+					//ss->setAttribute(material.get());
+					//geode->setStateSet(ss);
 					transf->addChild(geode);
 				}
                 // Geode with shape drawable

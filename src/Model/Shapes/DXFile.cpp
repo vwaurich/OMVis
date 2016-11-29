@@ -36,25 +36,25 @@ namespace OMVIS
 			switch (colorCode)
 			{
 			case(0) :
-				col = osg::Vec4f(0 / 255, 0 / 255, 0 / 255, 1.0);
+				col = osg::Vec4f(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0);
 				break;
 			case(1) :
-				col = osg::Vec4f(255 / 255, 0 / 255, 0 / 255, 1.0);
+				col = osg::Vec4f(255.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0);
 				break;
 			case(2) :
-				col = osg::Vec4f(255 / 255, 255 / 255, 0 / 255, 1.0);
+				col = osg::Vec4f(255.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f, 1.0);
 				break;
 			case(3) :
-				col = osg::Vec4f(0 / 255, 255 / 255, 0 / 255, 1.0);
+				col = osg::Vec4f(0.0f / 255.0f, 255.0f / 255.0f, 0.0f / 255.0f, 1.0);
 				break;
 			case(4) :
-				col = osg::Vec4f(0 / 255, 255 / 255, 255 / 255, 1.0);
+				col = osg::Vec4f(0.0f / 255.0f, 255.0f / 255.0f, 255.0f / 255.0f, 1.0);
 				break;
 			case(30) :
-				col = osg::Vec4f(255 / 255, 127 / 255, 0 / 255, 1.0);
+				col = osg::Vec4f(255.0f / 255.0f, 127.0f / 255.0f, 0.f / 255.0f, 1.0);
 				break;
 			case(251) :
-				col = osg::Vec4f(80 / 255, 80 / 255, 80 / 255, 1.0);
+				col = osg::Vec4f(80.0f / 255.0f, 80.0f / 255.0f, 80.0f / 255.0f, 1.0);
 				break;
 			default:
 				col = osg::Vec4f(0 / 255, 0 / 255, 0 / 255, 1.0);
@@ -82,11 +82,13 @@ namespace OMVIS
 
 		void DXF3dFace::dumpDXF3DFace()
 		{
+			/*
 			std::cout << "3-DFACE (" << vec1[0] <<", " << vec1[1]<<", "<< vec1[2]<<")"
 				               <<"(" << vec2[0] <<", " << vec2[1]<<", "<< vec2[2]<<")" 
 				               << "("<< vec3[0] << ", "<< vec3[1]<<", "<< vec3[2] << ")"
 				               <<"(" << vec4[0] << ", "<< vec4[1]<<", "<< vec4[2]<< ")" <<std::endl;
-
+							   */
+			std::cout << "3-DFACE "<<"colorCode: "<<colorCode<<"(" << color[0] << ", " << color[1] << ", " << color[2] << ")"<< std::endl;
 		}
 
 
@@ -176,6 +178,13 @@ namespace OMVIS
 		}
 
 
+		osg::Vec3f DXF3dFace::calcNormals()
+		{
+			osg::Vec3f v1 = osg::Vec3f(vec1[0]- vec2[0], vec1[1] - vec2[1], vec1[2] - vec2[2]);
+			osg::Vec3f v2 = osg::Vec3f(vec1[0] - vec3[0], vec1[1] - vec3[1], vec1[2] - vec3[2]);
+			osg::Vec3f normal =  Util::normalize(Util::cross(Util::normalize(v1), Util::normalize(v2)));
+			return normal;
+		}
 
 
 		DXFile::DXFile(std::string filename)
@@ -196,6 +205,7 @@ namespace OMVIS
 				// prepare drawing objects
 				osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array(num3dFaces * 4);
 				osg::ref_ptr<osg::Vec4Array> colors = new osg::Vec4Array(num3dFaces * 4);
+				osg::ref_ptr<osg::Vec3Array> normals = new osg::Vec3Array(num3dFaces * 4);
 
 				// fill face objects
 				DXF3dFace* faces = new DXF3dFace[num3dFaces];
@@ -229,6 +239,11 @@ namespace OMVIS
 						(*colors)[(faceIdx * 4) + 1] = faces[faceIdx].color;
 						(*colors)[(faceIdx * 4) + 2] = faces[faceIdx].color;
 						(*colors)[(faceIdx * 4) + 3] = faces[faceIdx].color;
+						//add normals
+						(*normals)[(faceIdx * 4) + 0] = faces[faceIdx].calcNormals();
+						(*normals)[(faceIdx * 4) + 1] = faces[faceIdx].calcNormals();
+						(*normals)[(faceIdx * 4) + 2] = faces[faceIdx].calcNormals();
+						(*normals)[(faceIdx * 4) + 3] = faces[faceIdx].calcNormals();
 
 						faceIdx = faceIdx + 1;
 					}
@@ -257,6 +272,10 @@ namespace OMVIS
 						(*facette)[1] = (i * 4) + 1;
 						(*facette)[2] = (i * 4) + 2;
 						this->addPrimitiveSet(facette);
+
+						//normal calculation
+						osg::Vec3f normal =  faces[i].calcNormals();
+
 					}
 					else
 					{
@@ -269,106 +288,13 @@ namespace OMVIS
 						this->addPrimitiveSet(facette);
 					}
 				}
+				//add normals
+				this->setNormalArray(normals);
+				this->setNormalBinding(osg::Geometry::BIND_PER_VERTEX);
 				//add colors
 				this->setColorArray(colors);
 				this->setColorBinding(osg::Geometry::BIND_PER_VERTEX);
 			}
 		}
-
-			/*
-            //VERTICES
-            osg::ref_ptr<osg::Vec3Array> vertices = new osg::Vec3Array(4*nEdges);
-
-            for (int i = 0; i < nEdges; ++i)
-            {
-                // inner base ring
-                (*vertices)[i] = osg::Vec3(sin(phi * i) * rI, cos(phi * i) * rI, 0);
-
-                // outer base ring
-                (*vertices)[i+nEdges] = osg::Vec3(sin(phi * i) * rO, cos(phi * i) * rO, 0);
-
-                // inner end ring
-                (*vertices)[i+2*nEdges] = osg::Vec3(sin(phi * i) * rI, cos(phi * i) * rI, l);
-
-                // outer end ring
-                (*vertices)[i+3*nEdges] = osg::Vec3(sin(phi * i) * rO, cos(phi * i) * rO, l);
-            }
-            this->setVertexArray(vertices);
-
-            //PLANES
-            // base plane bottom
-            osg::ref_ptr<osg::DrawElementsUInt> basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-            (*basePlane)[0] = 0;
-            (*basePlane)[1] = nEdges - 1;
-            (*basePlane)[2] = (2 * nEdges - 1);
-            (*basePlane)[3] = (nEdges);
-            this->addPrimitiveSet(basePlane);
-
-            for (int i = 0; i < (nEdges - 1); ++i)
-            {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-                (*basePlane)[0] = i;
-                (*basePlane)[1] = i + 1;
-                (*basePlane)[2] = nEdges + 1 + i;
-                (*basePlane)[3] = nEdges + i;
-                this->addPrimitiveSet(basePlane);
-            }
-
-            // base plane top
-            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-            (*basePlane)[0] = 2 * nEdges;
-            (*basePlane)[1] = nEdges - 1 + 2 * nEdges;
-            (*basePlane)[2] = 2 * nEdges - 1 + 2 * nEdges;
-            (*basePlane)[3] = nEdges + 2 * nEdges;
-            this->addPrimitiveSet(basePlane);
-
-            for (int i = (2 * nEdges); i < (nEdges - 1 + (2 * nEdges)); ++i)
-            {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-                (*basePlane)[0] = i;
-                (*basePlane)[1] = i + 1;
-                (*basePlane)[2] = nEdges +1 + i;
-                (*basePlane)[3] = nEdges + i;
-                this->addPrimitiveSet(basePlane);
-            }
-
-            //inner lateral planes
-            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-            (*basePlane)[0] = 0;
-            (*basePlane)[1] = nEdges - 1;
-            (*basePlane)[2] = 3 * nEdges - 1;
-            (*basePlane)[3] = 2 * nEdges;
-            this->addPrimitiveSet(basePlane);
-
-            for (int i = 0; i < (nEdges - 1); ++i)
-            {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-                (*basePlane)[0] = i;
-                (*basePlane)[1] = i + 1;
-                (*basePlane)[2] = i + 1 + 2 * nEdges;
-                (*basePlane)[3] = i + 2 * nEdges;
-                this->addPrimitiveSet(basePlane);
-            }
-
-            //outer lateral planes
-            basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-            (*basePlane)[0] = nEdges;
-            (*basePlane)[1] = 2 * nEdges - 1;
-            (*basePlane)[2] = 4 * nEdges - 1;
-            (*basePlane)[3] = 3 * nEdges;
-            this->addPrimitiveSet(basePlane);
-
-            //outer lateral planes
-            for (int i = nEdges; i < (2 * nEdges - 1); ++i)
-            {
-                basePlane = new osg::DrawElementsUInt(osg::PrimitiveSet::QUADS, 4);
-                (*basePlane)[0] = i;
-                (*basePlane)[1] = i + 1;
-                (*basePlane)[2] = i + 1 + 2 * nEdges;
-                (*basePlane)[3] = i + 2 * nEdges;
-                this->addPrimitiveSet(basePlane);
-            }		
-			*/
-
     }  // namespace Model
 }  // namespace OMVIS

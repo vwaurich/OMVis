@@ -27,6 +27,8 @@
 #ifndef INCLUDE_DXFILE_HPP
 #define INCLUDE_DXFILE_HPP
 
+#include "Util\Visualize.hpp"
+
 #include <osg/Geometry>
 #include <string>
 #include <qstring>
@@ -45,6 +47,7 @@ namespace OMVIS
 			~DXF3dFace();
 			QString fill3dFace(QTextStream* stream);
 			void dumpDXF3DFace();
+			osg::Vec3f calcNormals();
 		public:
 			osg::Vec3 vec1;
 			osg::Vec3 vec2;
