@@ -113,8 +113,9 @@ namespace OMVIS
 				//std::cout<<"SHAPE "<<draw->getShape()->className()<<std::endl;
 				node.addDrawable(draw.get());
 			}
-			if (_shape._type.compare("dxf") != 0)
+			if (_shape._type.compare("unknown") != 0)
 			{
+				//std::cout << "set color for " << _shape._id << std::endl;
 				//osg::Material *material = dynamic_cast<osg::Material*>(ss->getAttribute(osg::StateAttribute::MATERIAL));
 				osg::ref_ptr<osg::Material> material = new osg::Material;
 				material->setDiffuse(osg::Material::FRONT, osg::Vec4f(_shape._color[0].exp / 255, _shape._color[1].exp / 255, _shape._color[2].exp / 255, 1.0));
