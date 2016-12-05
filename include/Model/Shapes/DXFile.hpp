@@ -30,33 +30,47 @@
 #include "Util/Visualize.hpp"
 
 #include <osg/Geometry>
-#include <string>
+
 #include <QString>
 #include <QTextStream>
-//#include <qfile.h>
+
+#include <string>
 
 namespace OMVIS
 {
     namespace Model
     {
 
-		class DXF3dFace
-		{
-		public:
-			DXF3dFace();
-			~DXF3dFace();
-			QString fill3dFace(QTextStream* stream);
-			void dumpDXF3DFace();
-			osg::Vec3f calcNormals();
-		public:
-			osg::Vec3 vec1;
-			osg::Vec3 vec2;
-			osg::Vec3 vec3;
-			osg::Vec3 vec4;
-			std::string layer;
-			int colorCode;
-			osg::Vec4f color;
-		};
+        class DXF3dFace
+        {
+         public:
+            /*-----------------------------------------
+             * CONSTRUCTORS
+             *---------------------------------------*/
+
+            DXF3dFace();
+
+            ~DXF3dFace() = default;
+
+            QString fill3dFace(QTextStream* stream);
+
+            void dumpDXF3DFace();
+
+            osg::Vec3f calcNormals();
+
+         public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            osg::Vec3 vec1;
+            osg::Vec3 vec2;
+            osg::Vec3 vec3;
+            osg::Vec3 vec4;
+            std::string layer;
+            int colorCode;
+            osg::Vec4f color;
+        };
 
         class DXFile : public osg::Geometry
         {
@@ -64,12 +78,17 @@ namespace OMVIS
             /*-----------------------------------------
              * CONSTRUCTORS
              *---------------------------------------*/
-			 DXFile(std::string filename);
-             ~DXFile() = default;
 
-			//members
-		public:
-		    std::string fileName;
+            DXFile(std::string filename);
+
+            ~DXFile() = default;
+
+         public:
+            /*-----------------------------------------
+             * MEMBERS
+             *---------------------------------------*/
+
+            std::string fileName;
         };
 
     }  // namespace Model
