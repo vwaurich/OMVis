@@ -165,14 +165,14 @@ IF(WIN32) # Check if we are on Windows
     SET(LIBRARIES_EXTRA "imm32.lib;winmm.lib;Ws2_32.lib;version.lib;${FMILIB_SHARED};${SDL2_MAIN}")
   ELSEIF(CMAKE_COMPILER_IS_GNUCXX)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mwindows") # Tell the project how to behave in this environment
-  ELSE()
+  ELSE(MSVC)
     MESSAGE(SEND_ERROR "You are using an unsupported Windows compiler! (Not MSVC or GCC)")
-  ENDIF()
+  ENDIF(MSVC)
 ELSEIF(UNIX)
   #ADD_EXECUTABLE(Test Test.cpp) # Tell the project how to behave in this environment
-ELSE()
+ELSE(WIN32)
   MESSAGE(SEND_ERROR "You are on an unsupported platform! (Not Win32 or Unix)")
-ENDIF()
+ENDIF(WIN32)
 
 
 # ---------------------------
@@ -224,10 +224,25 @@ ADD_CUSTOM_TARGET(buildExamples
 )
 
 
-
 # ---------------------------
 # Setup Build
 # ---------------------------
+
+# Full RPATH [https://cmake.org/Wiki/CMake_RPATH_handling]
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+# the RPATH to be used when installing, but only if it's not a system directory
+LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+IF("${isSystemDir}" STREQUAL "-1")
+   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+ENDIF("${isSystemDir}" STREQUAL "-1")
 
 # Dependencies
 ADD_SUBDIRECTORY(thirdparty/gtest-1.7.0/)
@@ -247,7 +262,6 @@ QT5_WRAP_CPP(MOC_SETTINGSDIALOGS include/View/Dialogs/OkCancelHelpButtonBox.hpp)
 
 
 FILE(GLOB_RECURSE SRCS_TESTS "src/Model/*.cpp" "src/Control/*.cpp" "src/Initialization/*.cpp" "src/Util/*.cpp")
-
 ADD_EXECUTABLE(OMVIS ${SRCS} ${MOC_SETTINGSDIALOGS} ${MOC_OMVISVIEWER} ${OMC_MATLAB_READER_C} "src/Main.cpp")
 ADD_EXECUTABLE(OMVISTests EXCLUDE_FROM_ALL ${SRCS_TESTS} ${OMC_MATLAB_READER_C} "test/Main.cpp")
 
@@ -271,3 +285,5 @@ TARGET_LINK_LIBRARIES(OMVISTests ${LINKLIBRARIES} "gtest" "netoff")
 ADD_CUSTOM_COMMAND(TARGET OMVIS PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/OMVISLogo.osg ${PROJECT_BINARY_DIR})
 
+INSTALL(TARGETS OMVIS DESTINATION "bin")
+INSTALL(FILES ${CMAKE_SOURCE_DIR}/OMVISLogo.osg DESTINATION "bin")
