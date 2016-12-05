@@ -27,13 +27,13 @@
 #ifndef INCLUDE_DXFILE_HPP
 #define INCLUDE_DXFILE_HPP
 
-#include "Util\Visualize.hpp"
+#include "Util/Visualize.hpp"
 
 #include <osg/Geometry>
 #include <string>
-#include <qstring>
-#include <qtextstream>
-#include <qfile.h>
+#include <QString>
+#include <QTextStream>
+//#include <qfile.h>
 
 namespace OMVIS
 {

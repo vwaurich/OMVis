@@ -23,6 +23,8 @@
 #include <cmath>
 #include <math.h>
 
+#include <QFile>
+
 #include <iostream>
 
 namespace OMVIS
