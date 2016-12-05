@@ -72,6 +72,9 @@ ENDIF(OPENSCENEGRAPH_FOUND)
 FIND_PACKAGE(SDL2 REQUIRED sdl2)
 IF(SDL2_FOUND)
   MESSAGE(STATUS "SDL2 library found.")
+  MESSAGE(STATUS "SDL2_INCLUDE_DIRS = ${SDL2_INCLUDE_DIRS}")
+  MESSAGE(STATUS "SDL2_LIBRARIES = ${SDL2_LIBRARIES}")
+  MESSAGE(STATUS "SDL2_VERSION_STRING = ${SDL2_VERSION_STRING}")
 ELSEIF(SDL2_FOUND)
   MESSAGE(FATAL_ERROR "SDL2 not found but required. Set SDL2DIR to the location containing lib and include folder of \
                        SDL2 library.")
@@ -80,6 +83,7 @@ FIND_PACKAGE(SDL2_net)
 IF(NOT(SDL2_NET_FOUND))
   MESSAGE(FATAL_ERROR "SDL2_net required")
 ENDIF(NOT(SDL2_NET_FOUND))
+
 
 # Find Boost
 FIND_PACKAGE(Boost REQUIRED COMPONENTS filesystem program_options system)
@@ -112,7 +116,10 @@ ELSEIF(MATLABREADER)
       SET(MATLABREADER_FOUND YES)
     ELSE()
       SET(MATLABREADER_FOUND NO)
+      MESSAGE (FATAL_ERROR "read_matlab4.c not found but required. Use -DMATLABREADER=/PATH/TO/read_matlab4.[h,c].")
     ENDIF()
+  ELSE()
+    MESSAGE (FATAL_ERROR "read_matlab4.h not found but required. Use -DMATLABREADER=/PATH/TO/read_matlab4.[h,c].")
   ENDIF()
 ELSE(DEFINED ENV{OPENMODELICAHOME})
   MESSAGE(WARNING "OpenModelica not found. You can specify the environment variable OPENMODELICA_HOME pointing to your \
