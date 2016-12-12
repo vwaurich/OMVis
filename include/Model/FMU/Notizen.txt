@@ -1,0 +1,2 @@
+Es muessen die FMU-Standards: FMU1_ME, FMU1_CS, FMU2_ME, FMU2_CS hinzugefuegt werden.
+Hier wird das per virtuelle Vererbung getan, d.h. es gibt eine FMUAbstract Klasse und alle erben davon
