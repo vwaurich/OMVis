@@ -22,7 +22,7 @@
 #include "Util/Logger.hpp"
 #include "Util/Algebra.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
-#include "Model/FMUWrapper.hpp"
+//#include "Model/FMU/FMUAbstract.hpp"
 #include "Model/VisualizerFMU.hpp"
 #include "Model/SimSettings.hpp"
 

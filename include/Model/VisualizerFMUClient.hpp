@@ -28,7 +28,7 @@
 #define INCLUDE_MODEL_VISUALIZERFMUCLIENT_HPP_
 
 #include "Model/SimSettingsFMU.hpp"
-#include "Model/FMUWrapper.hpp"
+#include "Model/FMU/FMUAbstract.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Initialization/VisualizationConstructionPlans.hpp"
 #include "Model/InputData.hpp"

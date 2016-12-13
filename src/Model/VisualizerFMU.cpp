@@ -18,6 +18,8 @@
  */
 
 #include "Model/VisualizerFMU.hpp"
+#include "Model/FMU/FMU_ME_1.hpp"
+#include "Model/FMU/FMU_ME_2.hpp"
 #include "Util/Logger.hpp"
 #include "Util/Util.hpp"
 
@@ -36,7 +38,7 @@ namespace OMVIS
 
         VisualizerFMU::VisualizerFMU(const std::string& modelFile, const std::string& path)
                 : VisualizerAbstract(modelFile, path, VisType::FMU),
-                  _fmu(std::make_shared<FMUWrapper>()),
+                  _fmu(nullptr),
                   _simSettings(std::make_shared<SimSettingsFMU>()),
                   _inputData(std::make_shared<InputData>()),
                   _joysticks()
@@ -62,27 +64,66 @@ namespace OMVIS
 
         void VisualizerFMU::loadFMU(const std::string& modelFile, const std::string& path)
         {
-            //setup fmu-simulation stuff
-            //_simSettings = new SimSettings;
-            //std::string fmuFileName = dir + model + ".fmu";
+            //load fmu
+            allocateContext(modelFile, path);
+            if (_fmuVersion == fmi_version_1_enu)
+            {
+              std::cout<<"Loading FMU 1.0."<<std::endl;
+              _fmu = new FMU_ME_1();
+              _fmu->load(modelFile, path, _context.get());
+            }
+            else if (_fmuVersion == fmi_version_2_0_enu)
+            {
+              std::cout<<"Loading FMU 2.0"<<std::endl;
+              _fmu = new FMU_ME_2();
+              _fmu->load(modelFile, path, _context.get());
+            }
+            else
+            {
+              std::cout<<"Unknown FMU version. Exciting."<<std::endl;
+            }
+            std::cout<<"VisualizerFMU::loadFMU: FMU was successfully loaded."<<std::endl;
 
-            //load and initialize fmu
-            _fmu->load(modelFile, path);
-            LOGGER_WRITE("VisualizerFMU::loadFMU: FMU was successfully loaded.", Util::LC_LOADER, Util::LL_DEBUG);
+//X11            //setup fmu-simulation stuff
+//X11            //_simSettings = new SimSettings;
+//            //std::string fmuFileName = dir + model + ".fmu";
+//
+//            //load and initialize fmu
+//            _fmu->load(modelFile, path,);
+//            LOGGER_WRITE("VisualizerFMU::loadFMU: FMU was successfully loaded.", Util::LC_LOADER, Util::LL_DEBUG);
+//
+//            _fmu->initialize(_simSettings);
+//            LOGGER_WRITE("VisualizerFMU::loadFMU: FMU was successfully initialized.", Util::LC_LOADER, Util::LL_DEBUG);
+//
+////x11            _inputData->initializeInputs(_fmu->getFMU());
+//            _inputData->printValues();
+//            //assign interactive inputs
+//            //for (unsigned int i = 0; i < inputs.n_inputs; i++){
+//            //string key = "";
+//            //std::cout<<"assign input "<<i<<" :"<<std::endl;
+//            //getline(cin,key);
+//            //int keyInt = getchar();
+//            //std::cout<<"the key is "<<keyInt<<" !"<<std::endl;
+//X11            //}
+        }
 
-            _fmu->initialize(_simSettings);
-            LOGGER_WRITE("VisualizerFMU::loadFMU: FMU was successfully initialized.", Util::LC_LOADER, Util::LL_DEBUG);
-
-            _inputData->initializeInputs(_fmu->getFMU());
-            _inputData->printValues();
-            //assign interactive inputs
-            //for (unsigned int i = 0; i < inputs.n_inputs; i++){
-            //string key = "";
-            //std::cout<<"assign input "<<i<<" :"<<std::endl;
-            //getline(cin,key);
-            //int keyInt = getchar();
-            //std::cout<<"the key is "<<keyInt<<" !"<<std::endl;
-            //}
+        void VisualizerFMU::allocateContext(const std::string& modelFile, const std::string& path)
+        {
+          // First we need to define the callbacks and set up the context.
+          _callbacks.malloc = malloc;
+          _callbacks.calloc = calloc;
+          _callbacks.realloc = realloc;
+          _callbacks.free = free;
+          _callbacks.logger = jm_default_logger;
+          _callbacks.log_level = jm_log_level_debug;  // jm_log_level_error;
+          _callbacks.context = 0;
+          #ifdef FMILIB_GENERATE_BUILD_STAMP
+            std::cout << "Library build stamp: \n" << fmilib_get_build_stamp() << std::endl;
+          #endif
+          _context = std::shared_ptr<fmi_import_context_t>(fmi_import_allocate_context(&_callbacks), fmi_import_free_context);
+          //get version
+          std::string fmuFileName = path + modelFile;
+          _fmuVersion = fmi_import_get_fmi_version(_context.get(), fmuFileName.c_str(), path.c_str());
         }
 
         void VisualizerFMU::resetInputs()
@@ -130,9 +171,9 @@ namespace OMVIS
          * GETTERS and SETTERS
          *---------------------------------------*/
 
-        const FMUWrapper* VisualizerFMU::getFMU() const
+        const FMUAbstract* VisualizerFMU::getFMU() const
         {
-            return _fmu.get();
+            return _fmu;
         }
 
         std::shared_ptr<InputData> VisualizerFMU::getInputData() const
@@ -142,11 +183,12 @@ namespace OMVIS
 
         fmi1_value_reference_t VisualizerFMU::getVarReferencesForObjectAttribute(ShapeObjectAttribute* attr)
         {
-            fmi1_value_reference_t vr = 0;
+            unsigned int vr = 0;
             if (!attr->isConst)
             {
-                fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmu->getFMU(), attr->cref.c_str());
-                vr = fmi1_import_get_variable_vr(var);
+                vr = _fmu->fmi_get_variable_by_name(attr->cref.c_str());
+//X11                fmi1_import_variable_t* var = fmi1_import_get_variable_by_name(_fmu->getFMU(), attr->cref.c_str());
+//X11                vr = fmi1_import_get_variable_vr(var);
             }
             return vr;
         }
@@ -192,7 +234,7 @@ namespace OMVIS
                     shape._T[7].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[7]);
                     shape._T[8].fmuValueRef = getVarReferencesForObjectAttribute(&shape._T[8]);
 
-                    //shape.dumpVisAttributes();
+                    shape.dumpVisAttributes();
                     _baseData->_shapes.at(i) = shape;
                     ++i;
                 }  //end for
@@ -274,14 +316,14 @@ namespace OMVIS
             _fmu->updateNextTimeStep(_simSettings->getHdef());
 
             /* last step */
-            _fmu->updateTimes(_simSettings->getTend());
+            _fmu->setLastStepSize(_simSettings->getTend());
 
             // Set inputs.
             for (auto& joystick : _joysticks)
             {
                 joystick->detectContinuousInputEvents(_inputData);
             }
-            _inputData->setInputsInFMU(_fmu->getFMU());
+//X11            _inputData->setInputsInFMU(_fmu->getFMU());
             //_inputData->printValues();
 
             /* Solve system */
@@ -306,7 +348,7 @@ namespace OMVIS
 
             //vw: since we are detecting changing inputs, we have to keep the values during the steps. do not reset it
             _inputData->resetDiscreteInputValues();
-            return _fmu->getFMUData()->_tcur;
+            return _fmu->getTcur();
         }
 
         void VisualizerFMU::initializeVisAttributes(const double /*time*/)
@@ -325,40 +367,41 @@ namespace OMVIS
             osg::ref_ptr<osg::Node> child = nullptr;
             try
             {
-                fmi1_import_t* fmu = _fmu->getFMU();
+//X11                fmi1_import_t* fmu = _fmu->getFMU();
                 size_t i = 0;
                 for (auto& shape : _baseData->_shapes)
                 {
                     // Get the values for the scene graph objects
-                    updateObjectAttributeFMU(&shape._length, fmu);
-                    updateObjectAttributeFMU(&shape._width, fmu);
-                    updateObjectAttributeFMU(&shape._height, fmu);
+                    updateObjectAttributeFMU(&shape._length, _fmu);
+                    updateObjectAttributeFMU(&shape._width, _fmu);
+                    updateObjectAttributeFMU(&shape._height, _fmu);
 
-                    updateObjectAttributeFMU(&shape._lDir[0], fmu);
-                    updateObjectAttributeFMU(&shape._lDir[1], fmu);
-                    updateObjectAttributeFMU(&shape._lDir[2], fmu);
+                    updateObjectAttributeFMU(&shape._lDir[0], _fmu);
+                    updateObjectAttributeFMU(&shape._lDir[1], _fmu);
+                    updateObjectAttributeFMU(&shape._lDir[2], _fmu);
 
-                    updateObjectAttributeFMU(&shape._wDir[0], fmu);
-                    updateObjectAttributeFMU(&shape._wDir[1], fmu);
-                    updateObjectAttributeFMU(&shape._wDir[2], fmu);
+                    updateObjectAttributeFMU(&shape._wDir[0], _fmu);
+                    updateObjectAttributeFMU(&shape._wDir[1], _fmu);
+                    updateObjectAttributeFMU(&shape._wDir[2], _fmu);
 
-                    updateObjectAttributeFMU(&shape._r[0], fmu);
-                    updateObjectAttributeFMU(&shape._r[1], fmu);
-                    updateObjectAttributeFMU(&shape._r[2], fmu);
+                    updateObjectAttributeFMU(&shape._r[0], _fmu);
+                    updateObjectAttributeFMU(&shape._r[1], _fmu);
+                    updateObjectAttributeFMU(&shape._r[2], _fmu);
 
-                    updateObjectAttributeFMU(&shape._rShape[0], fmu);
-                    updateObjectAttributeFMU(&shape._rShape[1], fmu);
-                    updateObjectAttributeFMU(&shape._rShape[2], fmu);
+                    updateObjectAttributeFMU(&shape._rShape[0], _fmu);
+                    updateObjectAttributeFMU(&shape._rShape[1], _fmu);
+                    updateObjectAttributeFMU(&shape._rShape[2], _fmu);
 
-                    updateObjectAttributeFMU(&shape._T[0], fmu);
-                    updateObjectAttributeFMU(&shape._T[1], fmu);
-                    updateObjectAttributeFMU(&shape._T[2], fmu);
-                    updateObjectAttributeFMU(&shape._T[3], fmu);
-                    updateObjectAttributeFMU(&shape._T[4], fmu);
-                    updateObjectAttributeFMU(&shape._T[5], fmu);
-                    updateObjectAttributeFMU(&shape._T[6], fmu);
-                    updateObjectAttributeFMU(&shape._T[7], fmu);
-                    updateObjectAttributeFMU(&shape._T[8], fmu);
+                    updateObjectAttributeFMU(&shape._T[0], _fmu);
+                    updateObjectAttributeFMU(&shape._T[1], _fmu);
+                    updateObjectAttributeFMU(&shape._T[2], _fmu);
+                    updateObjectAttributeFMU(&shape._T[3], _fmu);
+                    updateObjectAttributeFMU(&shape._T[4], _fmu);
+                    updateObjectAttributeFMU(&shape._T[5], _fmu);
+                    updateObjectAttributeFMU(&shape._T[6], _fmu);
+                    updateObjectAttributeFMU(&shape._T[7], _fmu);
+                    updateObjectAttributeFMU(&shape._T[8], _fmu);
+
                     rT = Util::rotation(
                             osg::Vec3f(shape._r[0].exp, shape._r[1].exp, shape._r[2].exp),
                             osg::Vec3f(shape._rShape[0].exp, shape._rShape[1].exp, shape._rShape[2].exp),
@@ -410,12 +453,12 @@ namespace OMVIS
         }
 
         // Todo pass by const ref
-        void VisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, fmi1_import_t* fmu)
+        void VisualizerFMU::updateObjectAttributeFMU(Model::ShapeObjectAttribute* attr, FMUAbstract* fmuAbstract)
         {
             if (!attr->isConst)
             {
-                fmi1_real_t a = attr->exp;
-                fmi1_import_get_real(fmu, &attr->fmuValueRef, 1, &a);
+                double a = attr->exp;
+                fmuAbstract->fmi_get_real(&attr->fmuValueRef, &a);
                 attr->exp = static_cast<float>(a);
             }
         }

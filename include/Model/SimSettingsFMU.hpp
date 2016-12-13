@@ -71,19 +71,19 @@ namespace OMVIS
              * Set end time for the simulation
              * \param t
              */
-            void setTend(const fmi1_real_t t);
-            fmi1_real_t getTend() const;
+            void setTend(const double t);
+            double getTend() const;
 
-            void setTstart(const fmi1_real_t t);
-            fmi1_real_t getTstart() const;
+            void setTstart(const double t);
+            double getTstart() const;
 
-            void setHdef(const fmi1_real_t h);
-            fmi1_real_t getHdef() const;
+            void setHdef(const double h);
+            double getHdef() const;
 
-            void setRelativeTolerance(const fmi1_real_t t);
-            fmi1_real_t getRelativeTolerance();
+            void setRelativeTolerance(const double t);
+            double getRelativeTolerance();
 
-            fmi1_boolean_t getToleranceControlled() const;
+            int getToleranceControlled() const;
 
             void setSolver(const Solver& solver);
             Solver getSolver() const;
@@ -94,26 +94,35 @@ namespace OMVIS
              *
              * \return Pointer to member _callEventUpdate.
              */
-            fmi1_boolean_t* getCallEventUpdate();
+            int* getCallEventUpdate();
 
             /*!
              * \return Member _intermediateResults.
              */
-            fmi1_boolean_t getIntermediateResults();
+            int getIntermediateResults();
 
          private:
             /*-----------------------------------------
              * MEMBERS
              *---------------------------------------*/
 
-            fmi1_boolean_t _callEventUpdate;
-            fmi1_boolean_t _toleranceControlled;
-            fmi1_boolean_t _intermediateResults;
+//X11            fmi1_boolean_t _callEventUpdate;
+//X11            fmi1_boolean_t _toleranceControlled;
+//X11            fmi1_boolean_t _intermediateResults;
+//
+//            fmi1_real_t _tstart;
+//            fmi1_real_t _hdef;
+//            fmi1_real_t _tend;
+//X11            fmi1_real_t _relativeTolerance;
 
-            fmi1_real_t _tstart;
-            fmi1_real_t _hdef;
-            fmi1_real_t _tend;
-            fmi1_real_t _relativeTolerance;
+            int _callEventUpdate;
+            int _toleranceControlled;
+            int _intermediateResults;
+
+            double _tstart;
+            double _hdef;
+            double _tend;
+            double _relativeTolerance;
 
             /// \todo Implement me. Currently, only the Euler Forward algorithm is implemented.
             Solver _solver;

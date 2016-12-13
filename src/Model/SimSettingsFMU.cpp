@@ -18,7 +18,7 @@
  */
 
 #include "Model/SimSettingsFMU.hpp"
-#include "Model/FMUWrapper.hpp"
+//#include "Model/FMUWrapper.hpp"
 
 namespace OMVIS
 {
@@ -37,47 +37,47 @@ namespace OMVIS
         {
         }
 
-        void SimSettingsFMU::setTend(const fmi1_real_t t)
+        void SimSettingsFMU::setTend(const double t)
         {
             _tend = t;
         }
 
-        void SimSettingsFMU::setTstart(const fmi1_real_t t)
+        void SimSettingsFMU::setTstart(const double t)
         {
             _tstart = t;
         }
 
-        void SimSettingsFMU::setHdef(const fmi1_real_t h)
+        void SimSettingsFMU::setHdef(const double h)
         {
             _hdef = h;
         }
 
-        void SimSettingsFMU::setRelativeTolerance(const fmi1_real_t t)
+        void SimSettingsFMU::setRelativeTolerance(const double t)
         {
             _relativeTolerance = t;
         }
 
-        fmi1_real_t SimSettingsFMU::getTend() const
+        double SimSettingsFMU::getTend() const
         {
             return _tend;
         }
 
-        fmi1_real_t SimSettingsFMU::getTstart() const
+        double SimSettingsFMU::getTstart() const
         {
             return _tstart;
         }
 
-        fmi1_real_t SimSettingsFMU::getHdef() const
+        double SimSettingsFMU::getHdef() const
         {
             return _hdef;
         }
 
-        fmi1_real_t SimSettingsFMU::getRelativeTolerance()
+        double SimSettingsFMU::getRelativeTolerance()
         {
             return _relativeTolerance;
         }
 
-        fmi1_boolean_t SimSettingsFMU::getToleranceControlled() const
+        int SimSettingsFMU::getToleranceControlled() const
         {
             return _toleranceControlled;
         }
@@ -92,12 +92,12 @@ namespace OMVIS
             return _solver;
         }
 
-        fmi1_boolean_t* SimSettingsFMU::getCallEventUpdate()
+        int* SimSettingsFMU::getCallEventUpdate()
         {
             return &_callEventUpdate;
         }
 
-        fmi1_boolean_t SimSettingsFMU::getIntermediateResults()
+        int SimSettingsFMU::getIntermediateResults()
         {
             return _intermediateResults;
         }

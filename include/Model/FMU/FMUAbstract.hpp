@@ -28,7 +28,7 @@
 #define INCLUDE_FMUABSTRACT_HPP_
 
 #include "Model/SimSettingsFMU.hpp"
-//#include "WrapperFMILib.hpp"
+#include "WrapperFMILib.hpp"
 
 #include <string>
 #include <memory>
@@ -43,7 +43,8 @@ namespace OMVIS
          *
          * \remark: We do not use smart pointers at this point because of performance.
          */
-/*        typedef struct
+        /*
+        typedef struct
         {
             fmi1_real_t* _states;
             fmi1_real_t* _statesDer;
@@ -52,13 +53,14 @@ namespace OMVIS
             size_t _nStates;
             size_t _nEventIndicators;
             fmi1_status_t _fmiStatus;
+            fmi2_status_t _fmiStatus2;
             fmi1_event_info_t _eventInfo;
             fmi1_real_t _tcur;
             fmi1_real_t _hcur;
-        } FMUData;
-*/
+        } FMUDataBasic;
+        */
 
-        /// MF: \todo Complete this class and remove the structs and free functions.
+
         /*! \brief This class represents a FMU that can be loaded into OMVIS for visualization.
          *
          * This class allocates the necessary memory for the FMU and its data.
@@ -81,7 +83,7 @@ namespace OMVIS
             /*! \brief The destructor frees memory allocated in FMUData. */
             virtual ~FMUAbstract();
 
-            FMUAbstract(const FMUWrapper&) = delete;
+            FMUAbstract(const FMUAbstract&) = delete;
 
             FMUAbstract& operator=(const FMUAbstract&) = delete;
 
@@ -90,26 +92,29 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! \brief Loads the FMU given by name and path into memory. */
-            virtual void load(const std::string& modelFile, const std::string& path);
+            virtual void load(const std::string& modelFile, const std::string& path, fmi_import_context_t* mpContext) = 0;
 
             /*! \brief Initializes the FMU with the given simulation settings. */
-            virtual void initialize(const std::shared_ptr<Model::SimSettingsFMU> simSettings);
+            virtual void initialize(const std::shared_ptr<Model::SimSettingsFMU> simSettings) = 0;
 
             /*-----------------------------------------
              * GETTERS and SETTERS
              *---------------------------------------*/
 
 //            /*! \brief Returns constant pointer to FMUData in order to allow (read) access to it. */
-            const FMUData* getFMUData() const;
+//            const FMUData* getFMUData() const;
 
 //            /*! \brief Returns constant pointer to FMU in order to allow (read) access to it. */
-//            fmi1_import_t* getFMU() const;
+//X11            fmi1_import_t* getFMU() const;
+//X11            fmi2_import_t* getFMU() const;
 
 //            /*! \brief Returns the current simulation time. */
-//            double getTcur() const;
+            double getTcur() const;
 
 //            /*! \brief Wraps fmi1_import_set_continuous_states. */
             virtual void setContinuousStates() = 0;
+
+            virtual void setLastStepSize(const double simTimeEnd);
 
             /*-----------------------------------------
              * SIMULATION METHODS
@@ -119,7 +124,7 @@ namespace OMVIS
              *
              * \return True, if an event indicator has triggered. Otherwise, return false.
              */
-            virtual bool checkForTriggeredEvent() const = 0;
+            virtual bool checkForTriggeredEvent() const;
 
             /*! \brief Checks if an event is registered for the current time.
              *
@@ -127,19 +132,19 @@ namespace OMVIS
              */
             virtual bool itsEventTime() const = 0;
 
-            virtual void updateNextTimeStep(const int hdef) = 0;
+            virtual void updateNextTimeStep(const double hdef) = 0;
 
             /*! \brief Wraps fmi1_import_get_derivatives and updates _fmiStatus. */
 //            void fmi1ImportGetDerivatives();
 
             /*! \brief Handles events. */
-//            void handleEvents(const fmi1_boolean_t intermediateResults) = 0;
+            virtual void handleEvents(const int intermediateResults) = 0;
 
             /*! \brief Prepares FMU for new simulation step at given time.
              *
              * Wraps fmi1_import_set_time and fmi1_import_get_event_indicators. _fmiStatus is updated.
              */
-//            void prepareSimulationStep(const double time) = 0;
+            virtual void prepareSimulationStep(const double time) = 0;
 
             /*! \brief Updates times _hcur and _tcur.
              *
@@ -154,18 +159,32 @@ namespace OMVIS
             virtual void solveSystem() = 0;
 
             /*! \brief Performs a step of the Forward Euler algorithm to determine the state values. */
-            virtual void doEulerStep() = 0;
+            virtual void doEulerStep();
 
             /*! \brief Wraps fmi1_import_completed_integrator_step. */
             virtual void completedIntegratorStep(int* callEventUpdate) = 0;
 
-         private:
+
+//            virtual const FMUData* getFMUData()  = 0;
+            virtual void fmi_get_real(unsigned int* valueRef, double* res) = 0;
+            virtual unsigned int fmi_get_variable_by_name(const char* name) = 0;
+
+         protected:
             /*-----------------------------------------
              * MEMBERS
              *---------------------------------------*/
 
+            double* _states;
+            double* _statesDer;
+            double* _eventIndicators;
+            double* _eventIndicatorsPrev;
+            size_t _nStates;
+            size_t _nEventIndicators;
+            double _tcur;
+            double _hcur;
+
             /*! The encapsulated FMU data. */
-            FMUData _fmuData;
+            // FMUData _fmuData;
         };
 
 

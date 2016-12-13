@@ -29,7 +29,7 @@
 
 #include "Model/SimSettings.hpp"
 #include "Model/SimSettingsFMU.hpp"
-#include "Model/FMUWrapper.hpp"
+#include "Model/FMU/FMUAbstract.hpp"
 #include "Model/VisualizerAbstract.hpp"
 #include "Model/InputData.hpp"
 #include "Control/JoystickDevice.hpp"
@@ -84,6 +84,8 @@ namespace OMVIS
              */
             void loadFMU(const std::string& modelFile, const std::string& path);
 
+            void allocateContext(const std::string& modelFile, const std::string& path);
+
             void setSimulationSettings(const UserSimSettingsFMU& simSetFMU);
 
             /*-----------------------------------------
@@ -91,7 +93,7 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! Returns const. pointer to \ref FMU member. */
-            const FMUWrapper* getFMU() const;
+            const FMUAbstract* getFMU() const;
 
             std::shared_ptr<InputData> getInputData() const;
 
@@ -103,11 +105,18 @@ namespace OMVIS
              *---------------------------------------*/
 
             /*! The encapsulated FMU data. */
-            std::shared_ptr<FMUWrapper> _fmu;
+            /// \todo todo Should it be a smart pointer?! A Unique one?
+//            std::shared_ptr<FMUAbstract> _fmu;
+            FMUAbstract* _fmu;
+
             /*! Simulation settings, e.g., start and end time. */
             std::shared_ptr<SimSettingsFMU> _simSettings;
 
             std::shared_ptr<InputData> _inputData;
+
+            std::shared_ptr<fmi_import_context_t> _context;
+            jm_callbacks _callbacks;
+            fmi_version_enu_t _fmuVersion;
 
          public:
             /// \todo Remove, we do not need it because we have inputData.
@@ -170,7 +179,7 @@ namespace OMVIS
             int setVarReferencesInVisAttributes();
 
             /*! \brief Update the attributes of a shape. */
-            void updateObjectAttributeFMU(ShapeObjectAttribute* attr, fmi1_import_t* fmu);
+            void updateObjectAttributeFMU(ShapeObjectAttribute* attr, FMUAbstract* fmuAbstract);
         };
 
     }  // namespace Model

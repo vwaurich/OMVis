@@ -129,6 +129,7 @@ namespace OMVIS
              *---------------------------------------*/
 
             const fmi1_value_reference_t* _vrReal;
+            //const fmi2_value_reference_t* _vrReal2;
             const fmi1_value_reference_t* _vrInteger;
             const fmi1_value_reference_t* _vrBoolean;
             const fmi1_value_reference_t* _vrString;
